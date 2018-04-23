@@ -254,7 +254,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		}
 
 		imgObject->Draw();
-		imgObject->SetPos(-500, 0, 0);
+		imgObject->SetPos(0, 0, 0);
 
 		//camera->SetPos(cPos);
 		//offsetPos.x = static_cast<float>(abs(100 - (int)(++offsetX) % 200));
