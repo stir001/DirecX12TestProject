@@ -86,7 +86,7 @@ TextureMgr::~TextureMgr()
 ID3D12DescriptorHeap* TextureMgr::CreateTextureDescHeap(std::string modelpath, int texturecount)
 {
 	DX12CTRL_INSTANCE
-	auto& itr = modelTextureDescHeaps.find(modelpath);
+	auto itr = modelTextureDescHeaps.find(modelpath);
 	if (itr != modelTextureDescHeaps.end()) return itr->second;
 
 	D3D12_DESCRIPTOR_HEAP_DESC texDescHeapDesc = {};
@@ -105,7 +105,7 @@ ID3D12DescriptorHeap* TextureMgr::CreateTextureDescHeap(std::string modelpath, i
 
 void TextureMgr::ReleaseDescHeap(std::string modelpath)
 {
-	auto& itr = modelTextureDescHeaps.find(modelpath);
+	auto itr = modelTextureDescHeaps.find(modelpath);
 	if (itr == modelTextureDescHeaps.end()) return;
 	itr->second->Release();
 	modelTextureDescHeaps.erase(itr);
@@ -113,7 +113,7 @@ void TextureMgr::ReleaseDescHeap(std::string modelpath)
 
 ID3D12DescriptorHeap* TextureMgr::GetDescHeap(std::string modelpath)
 {
-	auto& itr = modelTextureDescHeaps.find(modelpath);
+	auto itr = modelTextureDescHeaps.find(modelpath);
 	if (itr == modelTextureDescHeaps.end()) return nullptr;
 	return itr->second;
 }

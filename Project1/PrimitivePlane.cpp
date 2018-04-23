@@ -60,10 +60,18 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 	XMStoreFloat3(&rdPos, rightDown + center);
 
 	vertices.reserve(4);
-	vertices.push_back(PrimitiveVertex(luPos, norm, DirectX::XMFLOAT2(0, 0)));
-	vertices.push_back(PrimitiveVertex(ruPos, norm, DirectX::XMFLOAT2(1, 0)));
-	vertices.push_back(PrimitiveVertex(ldPos, norm, DirectX::XMFLOAT2(0, 1)));
-	vertices.push_back(PrimitiveVertex(rdPos, norm, DirectX::XMFLOAT2(1, 1)));
+	DirectX::XMFLOAT2 uv = { 0,0 };
+	vertices.push_back(PrimitiveVertex(luPos, norm, uv));
+
+	uv.x = 1;
+	vertices.push_back(PrimitiveVertex(ruPos, norm, uv));
+
+	uv.x = 0;
+	uv.y = 1;
+	vertices.push_back(PrimitiveVertex(ldPos, norm,uv));
+
+	uv.x = 1;
+	vertices.push_back(PrimitiveVertex(rdPos, norm, uv));
 
 	int size = sizeof(PrimitiveVertex);
 

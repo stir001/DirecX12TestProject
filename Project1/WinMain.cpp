@@ -61,7 +61,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	VMDMotion* motion = vmdloader.LoadMotion(vmdPath);
 	model->SetMotion(motion);
 	model->PlayMotion(true);
-	DirectionalLight* dirLight = new DirectionalLight(DirectX::XMFLOAT3(-20, 0, -20), DirectX::XMFLOAT3(1.5, -0.5, 1));
+	XMFLOAT3 t_lightpos = { -20,0,-20 };
+	XMFLOAT3 t_lightdir = { 1.5f,-0.5f,1.0f };
+	DirectionalLight* dirLight = new DirectionalLight(t_lightpos, t_lightdir);
 
 	ImageLoader imgLoader;
 	std::string imgpath = "texturesample.bmp";

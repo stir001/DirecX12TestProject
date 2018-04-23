@@ -88,6 +88,7 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	}
 
 	d12->CmdQueueSignal();
+	d12->GetCmdList()->Reset(d12->GetCmdAllocator(), d12->GetPiplineState(pso_notTex));
 	rtn->filepath = filepath;
 	textures[filepath] = rtn;
 	return rtn;

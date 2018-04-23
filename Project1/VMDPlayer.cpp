@@ -36,8 +36,8 @@ void VMDPlayer::PlayingUpdate()
 	{
 		currentBoneMatrix[i] = identity;
 	}
-	auto& bitr = poses->begin();
-	auto& eitr = poses->end();
+	auto bitr = poses->begin();
+	auto eitr = poses->end();
 	for (; bitr != eitr; bitr++)
 	{
 		auto findritr = bitr->second.rbegin();
@@ -56,7 +56,8 @@ void VMDPlayer::PlayingUpdate()
 		{
 			float t = (static_cast<float>(frame) * 0.5f - static_cast<float>(findritr->frameNo)) / static_cast<float>(findritr.base()->frameNo - findritr->frameNo);
 			XMVECTOR q = XMQuaternionSlerp(XMLoadFloat4(&findritr->quoternion), XMLoadFloat4(&findritr.base()->quoternion), t);
-			VMDBoneRotation(bitr->first, XMMatrixRotationQuaternion(q));
+			DirectX::XMMATRIX mat = XMMatrixRotationQuaternion(q);
+			VMDBoneRotation(bitr->first, mat);
 		}
 	}
 	/*for (auto& p : *poses)

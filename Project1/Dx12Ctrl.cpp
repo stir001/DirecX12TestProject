@@ -74,6 +74,15 @@ ID3D12Device* Dx12Ctrl::GetDev()
 
 bool Dx12Ctrl::Dx12Init()
 {
+#ifdef _DEBUG
+	{
+		ID3D12Debug* debug;
+		D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
+		debug->EnableDebugLayer();
+		debug->Release();
+	}
+#endif
+
 
 	D3D_FEATURE_LEVEL levels[] = {
 		D3D_FEATURE_LEVEL_12_1,
