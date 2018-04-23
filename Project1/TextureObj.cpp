@@ -21,8 +21,8 @@ TextureObj::~TextureObj()
 void TextureObj::SetBuffer()
 {
 	DX12CTRL_INSTANCE
-	//d12->GetCmdList()->SetDescriptorHeaps(1, &texSRVDescHeap);
-	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_texture, gpuHandle/*texSRVDescHeap->GetGPUDescriptorHandleForHeapStart()*/);
+	
+	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_texture, gpuHandle);
 }
 
 //ID3D12DescriptorHeap* TextureObj::GetDescHeap()

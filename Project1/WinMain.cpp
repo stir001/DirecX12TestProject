@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DirectionalLight* dirLight = new DirectionalLight(t_lightpos, t_lightdir);
 
 	ImageLoader imgLoader;
-	std::string imgpath = "texturesample.bmp";
+	std::string imgpath = "Action18/img/splatterhouse.png";
 	ImageObject* imgObject = imgLoader.LoadImageData(imgpath);
 #pragma region  シャドウマップ関係 未実装
 	//D3D12_RANGE cbvRange = { 0,0 };
@@ -252,6 +252,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		{
 			camera->TurnUpDown(-2.0f);
 		}
+
+		imgObject->Draw();
+		imgObject->SetPos(-500, 0, 0);
 
 		//camera->SetPos(cPos);
 		//offsetPos.x = static_cast<float>(abs(100 - (int)(++offsetX) % 200));

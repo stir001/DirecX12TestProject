@@ -36,6 +36,9 @@ DirectionalLight::~DirectionalLight()
 
 void DirectionalLight::SetLight()
 {
+	DX12CTRL_INSTANCE
+	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_notTex));
+	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(0));
 	cbuffer->SetDescHeap();
 	cbuffer->SetBuffer();
 }

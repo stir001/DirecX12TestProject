@@ -67,7 +67,7 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	rtn->textureBuffer->WriteToSubresource(0, &box, rtn->subresource.pData, box.right * 4, box.bottom * 4);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC wicSrvDesc = {};
-	wicSrvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	wicSrvDesc.Format = desc.Format;
 	wicSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	wicSrvDesc.Texture2D.MipLevels = 1;
 	wicSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;

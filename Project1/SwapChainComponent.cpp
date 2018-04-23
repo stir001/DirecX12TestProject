@@ -17,11 +17,17 @@ SwapChainComponent::SwapChainComponent(HWND& hwnd):swapchain(nullptr),rtvDescrip
 	heapIncrementsize = d12->GetDev()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	renderTargets.resize(swdesc.BufferCount);
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuhandle = rtvDescriptorHeap->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
+	D3D12_RENDER_TARGET_VIEW_DESC rtdesc;
+	rtdesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	rtdesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+	rtdesc.Texture2D.MipSlice = 0;
+	rtdesc.Texture2D.PlaneSlice = 0;
+	
 	for (int i = 0; i < renderTargets.size(); i++)
 	{
 		d12->result = swapchain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		D12RESULTCHECK
-		d12->GetDev()->CreateRenderTargetView(renderTargets[i], nullptr, cpuhandle);
+		d12->GetDev()->CreateRenderTargetView(renderTargets[i], &rtdesc, cpuhandle);
 		cpuhandle.ptr += (heapIncrementsize);
 	}
 

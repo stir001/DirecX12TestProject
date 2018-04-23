@@ -13,6 +13,7 @@
 #include <dxgi1_4.h>
 #include <d3dcompiler.h>
 #include <tchar.h>
+#include <DirectXMath.h>
 
 #include <functional>
 
@@ -244,6 +245,8 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.InputLayout.pInputElementDescs = imageinputDescs;
 	gpsDesc.VS = GetShader(si_VS_image);
 	gpsDesc.PS = GetShader(si_PS_image);
+	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	gpsDesc.pRootSignature = GetRootSignature(1);
 	piplinestateObjects[pso_image].CreatePiplineState(gpsDesc);
 }
 
@@ -503,6 +506,9 @@ void Dx12Ctrl::InitMainCmdList()
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvhandle = GetCurrentRTVHeap();
 	cmdList->OMSetRenderTargets(1, &rtvhandle, false, &depthBuffer->GetCPUAdress());
 	cmdList->ClearDepthStencilView(depthBuffer->GetCPUAdress() , D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, &rect);
+	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentRenderTarget(),
+		D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATE_RENDER_TARGET));
 	cmdList->ClearRenderTargetView(rtvhandle, clrcolor, 0, &rect);
 	cmdList->SetGraphicsRootSignature(GetRootSignature());
 
@@ -522,6 +528,7 @@ void Dx12Ctrl::SetCameraBuffer()
 
 void Dx12Ctrl::ExcuteAndPresent()
 {
+	ID3D12Resource* renderTarget = GetCurrentRenderTarget();
 	GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentRenderTarget(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET,
 		D3D12_RESOURCE_STATE_PRESENT)); //読み込み中に書き込みをされないようにする
@@ -534,6 +541,12 @@ void Dx12Ctrl::ExcuteAndPresent()
 	}
 
 	SwapChainPresent(1, 0);
+}
+
+DirectX::XMFLOAT2 Dx12Ctrl::GetWindowSize()
+{
+	DirectX::XMFLOAT2 size = { static_cast<float>(wWidth), static_cast<float>(wHeight) };
+	return size;
 }
 
 //テスト用関数

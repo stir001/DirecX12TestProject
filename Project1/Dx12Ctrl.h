@@ -24,6 +24,11 @@ class TextureObj;
 class DepthBufferObject;
 class Dx12Camera;
 
+namespace DirectX
+{
+ struct XMFLOAT2;
+};
+
 enum DescriptorHeapDescType
 {
 	dhdt_dsv,//depth stencil view desc
@@ -112,6 +117,8 @@ public:
 	bool Dx12Init();
 	void InitMainCmdList();
 	void ExcuteAndPresent();
+	DirectX::XMFLOAT2 GetWindowSize();
+
 	HRESULT GetDeviceRemoveReason();
 	HRESULT CheckResult();
 	HRESULT CheckResult(HRESULT r);
