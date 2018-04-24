@@ -16,6 +16,9 @@ class ImageObject
 private:
 	int width;
 	int height;
+	float scale;
+	float rota;
+	DirectX::XMFLOAT3 center;
 	ImageVertex vertex[4];
 	VertexBufferObject* vertexBuffer;
 	ID3D12DescriptorHeap* texDescHeap;
@@ -27,6 +30,8 @@ private:
 public:
 	void SetPos(float x, float y, float z);
 	void SetPos(DirectX::XMFLOAT3& setPos);
+	void SetScale(float s);
+	void SetRota(float deg);
 	void Draw();
 	~ImageObject();
 };

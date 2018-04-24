@@ -2,14 +2,23 @@
 #include "Dx12Ctrl.h"
 #include "VertexBufferObject.h"
 #include "TextureObj.h"
+#include "XMFloat3Operators.h"
+
+void RotationXY(DirectX::XMFLOAT3& pos, float rad)
+{
+	DirectX::XMFLOAT3 rtn = {};
+	rtn.x = pos.x * cos(rad) - pos.y * sin(rad);
+	rtn.y = pos.x * sin(rad) + pos.y * cos(rad);
+	pos = rtn;
+}
 
 ImageObject::ImageObject(int inwidth, int inheight, TextureObj* intexObj, ID3D12DescriptorHeap* intexDescHeap) :width(inwidth), height(inheight)
 , vertex{ {{0.f, 0.f, 0.f },{0.f, 0.f }}/* v1 */, {{ static_cast<float>(width), 0.f, 0.f },{1.f, 0.f }}/* v2 */,{ {0.0f, static_cast<float>(-height), 0.0f},{0.f, 1.f} }/* v3 */,{ { static_cast<float>(width), static_cast<float>(-height), 0.f },{1.f, 1.f } }/* v4 */ }
 , vertexBuffer(new VertexBufferObject(sizeof(ImageVertex), 4))
-,texObj(intexObj), texDescHeap(intexDescHeap)
+, texObj(intexObj), texDescHeap(intexDescHeap)
+, scale(1.0f), rota(0.0f), center{ static_cast<float>(width) / 2.0f, static_cast<float>(height) / 2.0f, 0.0f }
 {
 	SetPos(vertex[0].pos);
-	UpdateBuffer();
 }
 
 ImageObject::~ImageObject()
@@ -37,26 +46,58 @@ void ImageObject::SetPos(float x, float y, float z)
 {
 	DX12CTRL_INSTANCE
 	DirectX::XMFLOAT2 size = d12->GetWindowSize();
-	vertex[0].pos.x = x / size.x;
-	vertex[0].pos.y = y / size.y;
+	center.x = x;
+	center.y = y;
+	center.z = z;
+	DirectX::XMFLOAT2 halfsize = { static_cast<float>(width) * scale/ 2.0f , static_cast<float>(height) * scale / 2.0f };
+	vertex[0].pos.x = (center.x - halfsize.x) / size.x;
+	vertex[0].pos.y = (center.y + halfsize.y) / size.y;
 	vertex[0].pos.z = z;
 
-	vertex[1].pos.x = (x + static_cast<float>(width)) / size.x;
-	vertex[1].pos.y = y / size.y;
+	vertex[1].pos.x = (center.x + halfsize.x) / size.x;
+	vertex[1].pos.y = (center.y + halfsize.y) / size.y;
 	vertex[1].pos.z = z;
 
-	vertex[2].pos.x = x / size.x;
-	vertex[2].pos.y = (y + static_cast<float>(-height)) / size.y;
+	vertex[2].pos.x = (center.x - halfsize.x) / size.x;
+	vertex[2].pos.y = (center.y - halfsize.y) / size.y;
 	vertex[2].pos.z = z;
 
-	vertex[3].pos.x = (x + static_cast<float>(width)) / size.x;
-	vertex[3].pos.y = (y + static_cast<float>(-height)) / size.y;
+	vertex[3].pos.x = (center.x + halfsize.x) / size.x;
+	vertex[3].pos.y = (center.y - halfsize.y) / size.y;
 	vertex[3].pos.z = z;
 
-	UpdateBuffer();
+	float tmprota = rota;
+	rota = 0.0f;
+	SetRota(DirectX::XMConvertToDegrees(tmprota));
+
+	//UpdateBuffer();
 }
 
 void ImageObject::SetPos(DirectX::XMFLOAT3& setPos)
 {
 	SetPos(setPos.x, setPos.y, setPos.z);
+}
+
+void ImageObject::SetScale(float s)
+{
+	scale = s;
+	SetPos(center);
+}
+
+void ImageObject::SetRota(float deg)
+{
+	//DirectX::XMFLOAT2 halfsize = { static_cast<float>(width) / 2.0f, static_cast<float>(height) / 2.0f };
+	//DirectX::XMFLOAT3 center = { vertex[0].pos.x + (halfsize.x * cos(rota) - halfsize.y * sin(rota)), vertex[0].pos.y - (halfsize.x * sin(rota) + halfsize.y * cos(rota)), vertex[0].pos.z };
+	//DirectX::XMFLOAT3 center = { center };
+
+	float subrota = DirectX::XMConvertToRadians(deg) - rota;
+	rota = DirectX::XMConvertToRadians(deg);
+	DirectX::XMFLOAT3 t_vec;
+	for (int i = 0; i < 4; ++i)
+	{
+		t_vec = vertex[i].pos - center;
+		RotationXY(t_vec, subrota);
+		vertex[i].pos = center + t_vec;
+	}
+	UpdateBuffer();
 }

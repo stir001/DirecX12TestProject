@@ -55,19 +55,21 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	MSG msg = {};
 
-	std::string vmdPath = "vmd/charge.vmd";
+	//std::string vmdPath = "vmd/charge.vmd";
 
-	VMDLoader vmdloader;
-	VMDMotion* motion = vmdloader.LoadMotion(vmdPath);
-	model->SetMotion(motion);
-	model->PlayMotion(true);
+	//VMDLoader vmdloader;
+	//VMDMotion* motion = vmdloader.LoadMotion(vmdPath);
+	//model->SetMotion(motion);
+	//model->PlayMotion(true);
 	XMFLOAT3 t_lightpos = { -20,0,-20 };
 	XMFLOAT3 t_lightdir = { 1.5f,-0.5f,1.0f };
 	DirectionalLight* dirLight = new DirectionalLight(t_lightpos, t_lightdir);
 
 	ImageLoader imgLoader;
 	std::string imgpath = "Action18/img/splatterhouse.png";
+	std::string playerImagePath = "Action18/img/rick.png";
 	ImageObject* imgObject = imgLoader.LoadImageData(imgpath);
+	ImageObject* player = imgLoader.LoadImageData(playerImagePath);
 #pragma region  シャドウマップ関係 未実装
 	//D3D12_RANGE cbvRange = { 0,0 };
 
@@ -195,6 +197,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	Dx12Camera* camera = d12->GetCamera();
 
+	float rota = 1.0f;
+	float scale = 1.0f;
+	DirectX::XMFLOAT3 imgpos = { 0,0,0 };
 	//メインループ
 	while (true) {
 		CallStartPerGameLoop();
@@ -205,56 +210,76 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		if (input.GetKeyState()[vki_LSHIFT] & ksc_DOWN)
 		{
-			camera->MoveUp(-0.1f);
+			scale *= 1.1f;
+			imgObject->SetScale(scale);
+			//camera->MoveUp(-0.1f);
 		}
 
 		if (input.GetKeyState()[vki_SPACE] & ksc_DOWN)
 		{
-			camera->MoveUp(0.1f);
+			scale *= 0.9f;
+			imgObject->SetScale(scale);
+			//camera->MoveUp(0.1f);
 		}
 
 		if (input.GetKeyState()[vki_W] & ksc_DOWN)
 		{
-			camera->MoveFront(0.1f);
+			//camera->MoveFront(0.1f);
+			imgpos.y += 10.0f;
+			imgObject->SetPos(imgpos);
 		}
 
 		if (input.GetKeyState()[vki_S] & ksc_DOWN)
 		{
-			camera->MoveFront(-0.1f);
+			//camera->MoveFront(-0.1f);
+			imgpos.y -= 10.0f;
+			imgObject->SetPos(imgpos);
 		}
 
 		if (input.GetKeyState()[vki_A] & ksc_DOWN)
 		{
-			camera->MoveSide(0.1f);
+			//camera->MoveSide(0.1f);
+			imgpos.x -= 10.0f;
+			imgObject->SetPos(imgpos);
 		}
 
 		if (input.GetKeyState()[vki_D] & ksc_DOWN)
 		{
-			camera->MoveSide(-0.1f);
+			imgpos.x += 10.0f;
+			imgObject->SetPos(imgpos);
+			//camera->MoveSide(-0.1f);
 		}
 
 		if (input.GetKeyState()[vki_LEFT] & ksc_DOWN)
 		{
-			camera->TurnRightLeft(2.0f);
+			//camera->TurnRightLeft(2.0f);
 		}
 
 		if (input.GetKeyState()[vki_RIGHT] & ksc_DOWN)
 		{
-			camera->TurnRightLeft(-2.0f);
+			//camera->TurnRightLeft(-2.0f);
 		}
 
 		if (input.GetKeyState()[vki_UP] & ksc_DOWN)
 		{
-			camera->TurnUpDown(2.0f);
+			rota += 1.0f;
+			imgObject->SetRota(rota);
+			//camera->TurnUpDown(2.0f);
 		}
 
 		if (input.GetKeyState()[vki_DOWN] & ksc_DOWN)
 		{
-			camera->TurnUpDown(-2.0f);
+			rota -= 1.0f;
+			imgObject->SetRota(rota);
+			//camera->TurnUpDown(-2.0f);
 		}
 
+		player->Draw();
 		imgObject->Draw();
-		imgObject->SetPos(0, 0, 0);
+		
+		//imgObject->SetPos(0, 0, 0);
+		//imgObject->SetScale(2);
+		
 
 		//camera->SetPos(cPos);
 		//offsetPos.x = static_cast<float>(abs(100 - (int)(++offsetX) % 200));
@@ -311,10 +336,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//d12->SetCameraBuffer();
 		//d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_notTex));
 
-		dirLight->SetLight();
-		model->Draw();
+		//dirLight->SetLight();
+		//model->Draw();
 
-		priMgr.Draw();
+		//priMgr.Draw();
 
 		CallEndPerGameLoop();
 

@@ -26,6 +26,8 @@ ImageOutput ImageVS(float4 pos : POSITION, float2 uv : TEXCOORD)
 
 float4 ImagePS(ImageOutput input) : SV_Target
 {
-    return tex.Sample(smp, input.uv);
+    float4 color = tex.Sample(smp, input.uv);
+    if (!color.a) discard;
+    return color;
     //return float4(input.uv, 1, 1);
 }
