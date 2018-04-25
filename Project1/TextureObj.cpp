@@ -5,7 +5,7 @@
 #include <d3d12.h>
 
 
-TextureObj::TextureObj() :textureBuffer(nullptr)//, texSRVDescHeap(nullptr)
+TextureObj::TextureObj() :textureBuffer(nullptr)
 {
 	ZeroMemory(&subresource, sizeof(subresource));
 }
@@ -24,11 +24,6 @@ void TextureObj::SetBuffer()
 	
 	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_texture, gpuHandle);
 }
-
-//ID3D12DescriptorHeap* TextureObj::GetDescHeap()
-//{
-//	return texSRVDescHeap;
-//}
 
 int TextureObj::GetWidth()
 {

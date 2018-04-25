@@ -46,6 +46,14 @@ enum PSOIndex
 	pso_max
 };
 
+enum RootSignatureIndex
+{
+	rsi_pmd,
+	rsi_prm,
+	rsi_image,
+	rsi_max
+};
+
 enum ShaderIndex
 {
 	si_VS_basic,

@@ -1,5 +1,5 @@
 #define PMDRS "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT)" \
-	", DescriptorTable(SRV(t0), visibility = SHADER_VISIBILITY_PIXEL)" \
+    ", DescriptorTable(SRV(t0), visibility = SHADER_VISIBILITY_PIXEL)" \
 	", DescriptorTable(CBV(b0), visibility = SHADER_VISIBILITY_ALL)" \
 	", DescriptorTable(CBV(b1), visibility = SHADER_VISIBILITY_ALL)" \
 	", DescriptorTable(CBV(b2), visibility = SHADER_VISIBILITY_ALL)" \
@@ -11,7 +11,10 @@
 Texture2D<float4> tex:register(t0);
 Texture2D<float> shadowmap:register(t1);
 SamplerState smp:register(s0);
-cbuffer mat:register(b0) {
+
+#include "CameraLightcBuffer.hlsl"
+
+cbuffer mat:register(b2) {
 	float3 diffuse;
 	float alpha;
 	float specularity;
@@ -20,24 +23,10 @@ cbuffer mat:register(b0) {
 	float3 offsetPos;
 }
 
-//ボーン用行列(レジスタ1番)
-cbuffer bone : register(b1) {
+cbuffer bone : register(b3) {
 	matrix bones[256];
 }
 
-cbuffer camera : register(b2)
-{
-	float3 eye;
-	float3 target;
-	matrix c_world;
-	matrix c_viewproj;
-}
-
-cbuffer directionalLight : register(b3)
-{ 
-    float3 dir;
-    matrix viewProj;
-}
 
 struct Output {
 	float4 svpos : SV_POSITION;
@@ -48,14 +37,14 @@ struct Output {
 	float2 uv :TEXCOORD;
 };
 
-struct PriOutput {
-	float4 svpos : SV_POSITION;
-	float4 pos : POSITION0;
-	float4 shadowpos : POSITION1;
-	float3 normal : NORMAL;
-	float3 color : COLOR;
-	float2 uv :TEXCOORD;
-};
+//struct PriOutput {
+//	float4 svpos : SV_POSITION;
+//	float4 pos : POSITION0;
+//	float4 shadowpos : POSITION1;
+//	float3 normal : NORMAL;
+//	float3 color : COLOR;
+//	float2 uv :TEXCOORD;
+//};
 
 struct MRTOut
 {
@@ -106,29 +95,29 @@ float4 ExitTexPS(Output data):SV_Target
 }
 
 
-PriOutput PrimitiveVS(float4 pos : POSITION, float3 normal : NORMAL, float3 color : COLOR, float2 uv : TEXCOORD)
-{
-	PriOutput po;
-	po.svpos = mul(mul(c_viewproj, c_world), pos);
-	po.pos = po.svpos;
-	po.shadowpos = mul(mul(viewProj,c_world),pos);
-	po.color = color;
-	po.uv = (float2(1, 1) + po.shadowpos.xy * float2(1, -1)) * 0.5;
-    po.normal = normal;
-	return po;
-}
+//PriOutput PrimitiveVS(float4 pos : POSITION, float3 normal : NORMAL, float3 color : COLOR, float2 uv : TEXCOORD)
+//{
+//	PriOutput po;
+//	po.svpos = mul(mul(c_viewproj, c_world), pos);
+//	po.pos = po.svpos;
+//	po.shadowpos = mul(mul(viewProj,c_world),pos);
+//	po.color = color;
+//	po.uv = (float2(1, 1) + po.shadowpos.xy * float2(1, -1)) * 0.5;
+//    po.normal = normal;
+//	return po;
+//}
 
 
-float4 PrimitivePS(PriOutput data) : SV_Target
-{
-	float2 s_uv = (float2(1, 1) + data.shadowpos.xy * float2(1, -1)) * 0.5;
-	//if (data.shadowpos.z > shadowmap.Sample(smp, data.uv))
-	//{
-	//	data.color *= 0.7;
-	//}
-    // * dot(data.normal, -lightvec)
-    //return float4(dir.x, abs(dir.y), dir.z, 1);
-    //return float4(dot(data.normal, -dir),1,1, 1);
-    return float4(data.color * dot(data.normal, -dir), 1);
-}
+//float4 PrimitivePS(PriOutput data) : SV_Target
+//{
+//	float2 s_uv = (float2(1, 1) + data.shadowpos.xy * float2(1, -1)) * 0.5;
+//	//if (data.shadowpos.z > shadowmap.Sample(smp, data.uv))
+//	//{
+//	//	data.color *= 0.7;
+//	//}
+//    // * dot(data.normal, -lightvec)
+//    //return float4(dir.x, abs(dir.y), dir.z, 1);
+//    //return float4(dot(data.normal, -dir),1,1, 1);
+//    return float4(data.color * dot(data.normal, -dir), 1);
+//}
 

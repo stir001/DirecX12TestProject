@@ -18,6 +18,8 @@ PMDController::~PMDController()
 
 void PMDController::Draw()
 {
+	DX12CTRL_INSTANCE
+	d12->SetCameraBuffer();
 	model->SetIndexBuffer();
 	model->SetVertexBuffer();
 	SetBoneBuffer();

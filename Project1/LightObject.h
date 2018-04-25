@@ -11,6 +11,7 @@ protected:
 	float length;//‹——£ŒÀŠE
 	ConstantBufferObject* cbuffer;
 public:
+	virtual void SetLight() = 0;
 	LightObject();
 	virtual ~LightObject();
 };

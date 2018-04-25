@@ -8,6 +8,7 @@
 #include "DepthBufferObject.h"
 #include "Dx12Camera.h"
 #include "CharToWChar.h"
+#include "HlslInclude.h"
 
 #include <d3d12.h>
 #include <dxgi1_4.h>
@@ -195,7 +196,7 @@ void  Dx12Ctrl::CreatePiplineStates()
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = {};
 	gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);	//ブレンドするか
-	gpsDesc.DepthStencilState.DepthEnable = true;			//???
+	gpsDesc.DepthStencilState.DepthEnable = true;			//デプスを使うか
 	gpsDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	gpsDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 	gpsDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
@@ -232,6 +233,7 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.InputLayout.pInputElementDescs = primitiveinputDescs;
 	gpsDesc.VS = GetShader(si_VS_primitive);
 	gpsDesc.PS = GetShader(si_PS_primitive);
+	gpsDesc.pRootSignature = GetRootSignature(rsi_prm);
 
 	piplinestateObjects[pso_primitive].CreatePiplineState(gpsDesc);//プリミティブpso作成
 
@@ -245,13 +247,13 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.InputLayout.pInputElementDescs = imageinputDescs;
 	gpsDesc.VS = GetShader(si_VS_image);
 	gpsDesc.PS = GetShader(si_PS_image);
-	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	gpsDesc.pRootSignature = GetRootSignature(1);
+	gpsDesc.pRootSignature = GetRootSignature(rsi_image);
 	piplinestateObjects[pso_image].CreatePiplineState(gpsDesc);
 }
 
 void Dx12Ctrl::CompileShaders()
 {
+	
 	shaders.resize(si_max);
 
 	//PMDSHADER
@@ -260,6 +262,7 @@ void Dx12Ctrl::CompileShaders()
 	size_t convert = ToWChar(&shaderName, size, "Shader.hlsl", size);
 	RootSignatureObject* rsObj;
 
+	HlslInclude hlslinculde;
 
 #ifdef _DEBUG
 	UINT compileflag = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
@@ -276,28 +279,37 @@ void Dx12Ctrl::CompileShaders()
 #endif
 
 	ID3D10Blob* err = nullptr;
-	result = D3DCompileFromFile(shaderName, nullptr, nullptr,
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"BasicVS", "vs_5_0", compileflag, 0, &shaders[si_VS_basic], &err);
 	outErr(err);
 
-	result = D3DCompileFromFile(shaderName, nullptr, nullptr,
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"BasicPS", "ps_5_0", compileflag, 0, &shaders[si_PS_notTex], &err);
 	outErr(err);
 
-	result = D3DCompileFromFile(shaderName, nullptr, nullptr,
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"ExitTexPS", "ps_5_0", compileflag, 0, &shaders[si_PS_exitTex], &err);
-	outErr(err);
-
-	result = D3DCompileFromFile(shaderName, nullptr, nullptr,
-		"PrimitiveVS", "vs_5_0", compileflag, 0, &shaders[si_VS_primitive], &err);
-	outErr(err);
-
-	result = D3DCompileFromFile(shaderName, nullptr, nullptr,
-		"PrimitivePS", "ps_5_0", compileflag, 0, &shaders[si_PS_primitive], &err);
 	outErr(err);
 
 	ID3DBlob* rs;
 	result = D3DGetBlobPart(shaders[si_VS_basic]->GetBufferPointer(), shaders[si_VS_basic]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
+	rsObj = new RootSignatureObject(rs);
+	rootsignature.push_back(rsObj);
+
+	delete(shaderName);
+	size = sizeof("Primitive3D.hlsl");
+	shaderName = new wchar_t[size];
+	convert = ToWChar(&shaderName, size, "Primitive3D.hlsl", size - 1);
+
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+		"PrimitiveVS", "vs_5_0", compileflag, 0, &shaders[si_VS_primitive], &err);
+	outErr(err);
+
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+		"PrimitivePS", "ps_5_0", compileflag, 0, &shaders[si_PS_primitive], &err);
+	outErr(err);
+
+	result = D3DGetBlobPart(shaders[si_VS_primitive]->GetBufferPointer(), shaders[si_VS_primitive]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
 	rsObj = new RootSignatureObject(rs);
 	rootsignature.push_back(rsObj);
 
@@ -307,10 +319,10 @@ void Dx12Ctrl::CompileShaders()
 	shaderName = new wchar_t[size];
 	convert = ToWChar(&shaderName, size, "ImageShader.hlsl", size - 1);
 
-	result = D3DCompileFromFile(shaderName, nullptr, nullptr,
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"ImageVS", "vs_5_0", compileflag, 0, &shaders[si_VS_image], &err);
 	outErr(err);
-	result = D3DCompileFromFile(shaderName, nullptr, nullptr,
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"ImagePS", "ps_5_0", compileflag, 0, &shaders[si_PS_image], &err);
 	outErr(err);
 

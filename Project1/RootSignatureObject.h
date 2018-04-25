@@ -15,10 +15,10 @@ enum D3D12_SHADER_VISIBILITY;
 enum RootParamType
 {
 	rpt_texture,	//srv
+	rpt_camera,		//カメラ
+	rpt_light,		//ライト
 	rpt_cbv,		//cbv マテリアル
 	rpt_bonematrix,	//回転行列
-	rpt_camera,		//カメラ
-	rpt_light,
 	rpt_shadow,
 	rpt_max
 };

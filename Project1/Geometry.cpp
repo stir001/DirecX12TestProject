@@ -19,7 +19,6 @@ void CallStartPerGameLoop()
 	DX12CTRL_INSTANCE
 	AnimationPlayerManager::Instance()->UpdateAnimations();
 	d12->InitMainCmdList();
-	d12->SetCameraBuffer();
 }
 
 void CallEndPerGameLoop()
