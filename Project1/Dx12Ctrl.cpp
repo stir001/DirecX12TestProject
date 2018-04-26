@@ -134,7 +134,6 @@ bool Dx12Ctrl::Dx12Init()
 	depthBuffer = new DepthBufferObject(wWidth, wHeight);
 	swapchain = new SwapChainComponent(hWnd);
 	descriptorHeapManager = new DescriptorHeapManager();
-	//roosignature = new RootSignatureObject();
 	texLoader = new TextureLoader();
 	camera = new Dx12Camera(wWidth, wHeight);
 	CreatePiplineStates();

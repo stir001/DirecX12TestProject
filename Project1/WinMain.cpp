@@ -53,8 +53,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//std::string modelpath = "”Ž—í—ì–²/reimu_F01.pmd";
 	PMDController* model = pmdloader.Load(modelpath);
 
-	MSG msg = {};
-
 	//std::string vmdPath = "vmd/charge.vmd";
 
 	//VMDLoader vmdloader;
@@ -91,7 +89,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	float scale = 1.0f;
 	DirectX::XMFLOAT3 imgpos = { 0,0,0 };
 	//ƒƒCƒ“ƒ‹[ƒv
-	while (true) {
+	while (ProcessMessage()) {
 		CallStartPerGameLoop();
 
 		input.UpdateKeyState();
@@ -178,15 +176,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		CallEndPerGameLoop();
 
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		if (msg.message == WM_QUIT)
-		{
-			break;
-		}
+	
 
 	}
 	d12->GetDev()->Release();

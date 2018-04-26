@@ -107,6 +107,8 @@ public:
 
 	//@return 256‚Ì—v‘f‚ð‚à‚Â”z—ñ‚ð•Ô‚·
 	const unsigned char* GetKeyState();
+
+	bool CheckKeyDown(VirturalKeyIndex index);
 	DxInput();
 	~DxInput();
 };

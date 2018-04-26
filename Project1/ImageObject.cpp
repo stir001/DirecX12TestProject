@@ -86,18 +86,24 @@ void ImageObject::SetScale(float s)
 
 void ImageObject::SetRota(float deg)
 {
-	//DirectX::XMFLOAT2 halfsize = { static_cast<float>(width) / 2.0f, static_cast<float>(height) / 2.0f };
-	//DirectX::XMFLOAT3 center = { vertex[0].pos.x + (halfsize.x * cos(rota) - halfsize.y * sin(rota)), vertex[0].pos.y - (halfsize.x * sin(rota) + halfsize.y * cos(rota)), vertex[0].pos.z };
-	//DirectX::XMFLOAT3 center = { center };
-
 	float subrota = DirectX::XMConvertToRadians(deg) - rota;
 	rota = DirectX::XMConvertToRadians(deg);
 	DirectX::XMFLOAT3 t_vec;
+	DX12CTRL_INSTANCE
+	DirectX::XMFLOAT2 size = d12->GetWindowSize();
+	DirectX::XMFLOAT3 normCenter = { center.x / size.x , center.y / size.y, center.z };
 	for (int i = 0; i < 4; ++i)
 	{
-		t_vec = vertex[i].pos - center;
+		t_vec = vertex[i].pos - normCenter;
+		float beforelen = DotXMFloat3(t_vec , t_vec);
 		RotationXY(t_vec, subrota);
-		vertex[i].pos = center + t_vec;
+		float afterlen =DotXMFloat3( t_vec , t_vec);
+		if (beforelen != afterlen)
+		{
+			float sublen = beforelen - afterlen;
+			bool change = true;
+		}
+		vertex[i].pos = normCenter + t_vec;
 	}
 	UpdateBuffer();
 }

@@ -32,3 +32,8 @@ const MousePos DxInput::GetMousePos()
 	GetCursorPos(&mousePos.pos);
 	return mousePos;
 }
+
+bool DxInput::CheckKeyDown(VirturalKeyIndex index)
+{
+	return keyState[index] & ksc_DOWN;
+}

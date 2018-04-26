@@ -26,3 +26,20 @@ void CallEndPerGameLoop()
 	DX12CTRL_INSTANCE
 	d12->ExcuteAndPresent();
 }
+
+bool ProcessMessage()
+{
+	MSG msg = {};
+	bool rtn = true;
+	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	if (msg.message == WM_QUIT)
+	{
+		rtn = false;
+	}
+
+	return rtn;
+}
