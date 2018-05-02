@@ -18,6 +18,8 @@ private:
 	int height;
 	float scale;
 	float rota;
+	float length[4];
+	DirectX::XMFLOAT3 normvec[4];
 	DirectX::XMFLOAT3 center;
 	ImageVertex vertex[4];
 	VertexBufferObject* vertexBuffer;

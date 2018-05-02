@@ -48,10 +48,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//std::string path = "Tda式ミク/Tda式ミク.pmx";
 	//loader.Load(path);
 
-	PMDLoader pmdloader;
-	std::string modelpath = "初音ミク.pmd";
+	//PMDLoader pmdloader;
+	//std::string modelpath = "初音ミク.pmd";
 	//std::string modelpath = "博麗霊夢/reimu_F01.pmd";
-	PMDController* model = pmdloader.Load(modelpath);
+	//PMDController* model = pmdloader.Load(modelpath);
 
 	//std::string vmdPath = "vmd/charge.vmd";
 
@@ -63,11 +63,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	XMFLOAT3 t_lightdir = { 1.5f,-0.5f,1.0f };
 	DirectionalLight* dirLight = new DirectionalLight(t_lightpos, t_lightdir);
 
+	
 	ImageLoader imgLoader;
-	std::string imgpath = "Action18/img/splatterhouse.png";
-	std::string playerImagePath = "Action18/img/rick.png";
+	std::string imgpath = "gollira.png";
+	//std::string playerImagePath = "Action18/img/rick.png";
 	ImageObject* imgObject = imgLoader.LoadImageData(imgpath);
-	ImageObject* player = imgLoader.LoadImageData(playerImagePath);
+	//ImageObject* player = imgLoader.LoadImageData(playerImagePath);
 
 	PrimitiveManager priMgr;
 	priMgr.CreatePlane(XMFLOAT3(0, 0, 0), 60, 60, XMFLOAT3(0, 1, 0));
@@ -96,73 +97,73 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		pos = input.GetMousePos();
 
-		if (input.GetKeyState()[vki_LSHIFT] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_LSHIFT))
 		{
 			scale *= 1.1f;
 			imgObject->SetScale(scale);
 			//camera->MoveUp(-0.1f);
 		}
 
-		if (input.GetKeyState()[vki_SPACE] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_SPACE))
 		{
 			scale *= 0.9f;
 			imgObject->SetScale(scale);
 			//camera->MoveUp(0.1f);
 		}
 
-		if (input.GetKeyState()[vki_W] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_W))
 		{
 			//camera->MoveFront(0.1f);
 			imgpos.y += 10.0f;
 			imgObject->SetPos(imgpos);
 		}
 
-		if (input.GetKeyState()[vki_S] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_S))
 		{
 			//camera->MoveFront(-0.1f);
 			imgpos.y -= 10.0f;
 			imgObject->SetPos(imgpos);
 		}
 
-		if (input.GetKeyState()[vki_A] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_A))
 		{
 			//camera->MoveSide(0.1f);
 			imgpos.x -= 10.0f;
 			imgObject->SetPos(imgpos);
 		}
 
-		if (input.GetKeyState()[vki_D] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_D))
 		{
 			imgpos.x += 10.0f;
 			imgObject->SetPos(imgpos);
 			//camera->MoveSide(-0.1f);
 		}
 
-		if (input.GetKeyState()[vki_LEFT] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_LEFT))
 		{
 			//camera->TurnRightLeft(2.0f);
 		}
 
-		if (input.GetKeyState()[vki_RIGHT] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_RIGHT))
 		{
 			//camera->TurnRightLeft(-2.0f);
 		}
 
-		if (input.GetKeyState()[vki_UP] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_UP))
 		{
 			rota += 1.0f;
 			imgObject->SetRota(rota);
 			//camera->TurnUpDown(2.0f);
 		}
 
-		if (input.GetKeyState()[vki_DOWN] & ksc_DOWN)
+		if (input.CheckKeyDown(vki_DOWN))
 		{
 			rota -= 1.0f;
 			imgObject->SetRota(rota);
 			//camera->TurnUpDown(-2.0f);
 		}
 
-		player->Draw();
+		//player->Draw();
 		imgObject->Draw();
 		
 		//imgObject->SetPos(0, 0, 0);
@@ -179,6 +180,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	
 
 	}
-	d12->GetDev()->Release();
+	d12->Release();
+#ifdef _DEBUG
+	ID3D12DebugDevice* debugdev = nullptr;
+	d12->GetDev()->QueryInterface(&debugdev);
+	
+	debugdev->ReportLiveDeviceObjects(D3D12_RLDO_FLAGS::D3D12_RLDO_DETAIL);
+#endif
 	UnregisterClass(APP_CLASS_NAME, hInst);
 }

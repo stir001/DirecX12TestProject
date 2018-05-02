@@ -9,6 +9,7 @@
 #include "Dx12Camera.h"
 #include "CharToWChar.h"
 #include "HlslInclude.h"
+#include "CharToWChar.h"
 
 #include <d3d12.h>
 #include <dxgi1_4.h>
@@ -111,11 +112,27 @@ bool Dx12Ctrl::Dx12Init()
 		return false;
 	}
 
+	wchar_t* name;
+	int size = sizeof("ID3D12Device");
+	ToWChar(&name, size, "ID3D12Device", size);
+
+	dev->SetName(name);
+
 	InitWindowCreate();
 
 	result = dev->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&cmdAllocator));
 
+	delete(name);
+	size = sizeof("commandAllocator");
+	ToWChar(&name, size, "commandAllocator", size);
+	cmdAllocator->SetName(name);
+
 	result = dev->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAllocator, nullptr, IID_PPV_ARGS(&cmdList));
+
+	delete(name);
+	size = sizeof("commandAllocator");
+	ToWChar(&name, size, "commandAllocator", size);
+	cmdAllocator->SetName(name);
 	
 	D3D12_COMMAND_QUEUE_DESC cmdQueueDesc = {};
 	cmdQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -257,7 +274,7 @@ void Dx12Ctrl::CompileShaders()
 
 	//PMDSHADER
 	int size = sizeof("Shader.hlsl");
-	wchar_t* shaderName = new wchar_t[size];
+	wchar_t* shaderName;
 	size_t convert = ToWChar(&shaderName, size, "Shader.hlsl", size);
 	RootSignatureObject* rsObj;
 
@@ -297,7 +314,6 @@ void Dx12Ctrl::CompileShaders()
 
 	delete(shaderName);
 	size = sizeof("Primitive3D.hlsl");
-	shaderName = new wchar_t[size];
 	convert = ToWChar(&shaderName, size, "Primitive3D.hlsl", size - 1);
 
 	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
@@ -315,7 +331,6 @@ void Dx12Ctrl::CompileShaders()
 	//IMAGESHADER
 	delete(shaderName);
 	size = sizeof("ImageShader.hlsl");
-	shaderName = new wchar_t[size];
 	convert = ToWChar(&shaderName, size, "ImageShader.hlsl", size - 1);
 
 	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
@@ -564,4 +579,19 @@ DirectX::XMFLOAT2 Dx12Ctrl::GetWindowSize()
 Dx12Camera * Dx12Ctrl::GetCamera()
 {
 	return camera;
+}
+
+void  Dx12Ctrl::Release()
+{
+	cmdQueue->Release();
+	cmdList->Release();
+	cmdAllocator->Release();
+	fence->Release();
+	factory->Release();
+	delete(swapchain);
+	for (int i = 0; i < rootsignature.size(); ++i)
+	{
+		delete(rootsignature[i]);
+	}
+	dev->Release();
 }

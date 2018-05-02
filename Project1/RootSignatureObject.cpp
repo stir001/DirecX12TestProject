@@ -35,8 +35,8 @@ RootSignatureObject::RootSignatureObject(ID3D10Blob* signatureBlob)
 RootSignatureObject::~RootSignatureObject()
 {
 	rootSignature->Release();
-	signature->Release();
-	error->Release();
+	//signature->Release();
+	//error->Release();
 	delete rootSignatureDesc;
 }
 

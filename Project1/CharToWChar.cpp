@@ -10,6 +10,8 @@ size_t ToWChar(wchar_t** ppBuf, size_t charWordLen, const char* pCharWord, size_
 {
 	setlocale(LC_ALL, "japanese");
 	size_t rtn = 0;
+	int size = charWordLen;
+	*ppBuf = new wchar_t[size];
 	mbstowcs_s(&rtn, *ppBuf, charWordLen, pCharWord, ppBufMaxCount);
 
 	return rtn;

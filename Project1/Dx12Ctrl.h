@@ -131,6 +131,8 @@ public:
 	HRESULT CheckResult();
 	HRESULT CheckResult(HRESULT r);
 
+	void Release();
+
 	//テスト用関数
 	Dx12Camera* GetCamera();
 
