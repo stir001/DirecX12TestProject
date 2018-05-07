@@ -33,12 +33,12 @@ LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
-
 Dx12Ctrl::Dx12Ctrl() :wHeight(720), wWidth(1280), swapchainBufferCount(2),clrcolor{0.5f,0.5f,0.5f,1.0f}
 , viewPort{ 0,0,static_cast<float>(wWidth),static_cast<float>(wHeight),0,1.0f},rect{0,0,wWidth,wHeight }
 ,cmdAllocator(nullptr),cmdList(nullptr),cmdQueue(nullptr),fence(nullptr),factory(nullptr)
 ,swapchain(nullptr),result(S_OK),fenceValue(0)
 ,descriptorHeapManager(new DescriptorHeapManager())
+,windowName("DirectX12")
 {
 }
 
@@ -57,6 +57,7 @@ Dx12Ctrl::~Dx12Ctrl()
 		delete(rootsignature[i]);
 	}
 	dev->Release();
+
 }
 
 Dx12Ctrl* Dx12Ctrl::Instance()
@@ -173,7 +174,7 @@ void Dx12Ctrl::InitWindowCreate()
 	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
 	HWND hwnd = CreateWindow(w.lpszClassName,
-		_T("1601295_真鍋奨一郎"),
+		_T(windowName.data()),
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
@@ -259,6 +260,10 @@ void  Dx12Ctrl::CreatePiplineStates()
 		{ "TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
 	};
 
+	D3D12_BLEND_DESC blendDesc = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	blendDesc.AlphaToCoverageEnable = true;
+	
+	gpsDesc.BlendState = blendDesc;
 	gpsDesc.InputLayout.NumElements = sizeof(imageinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
 	gpsDesc.InputLayout.pInputElementDescs = imageinputDescs;
 	gpsDesc.VS = GetShader(si_VS_image);
@@ -575,13 +580,7 @@ DirectX::XMFLOAT2 Dx12Ctrl::GetWindowSize()
 	return size;
 }
 
-//テスト用関数
-Dx12Camera * Dx12Ctrl::GetCamera()
-{
-	return camera;
-}
-
-void  Dx12Ctrl::Release()
+void Dx12Ctrl::Release()
 {
 	cmdQueue->Release();
 	cmdList->Release();
@@ -594,4 +593,26 @@ void  Dx12Ctrl::Release()
 		delete(rootsignature[i]);
 	}
 	dev->Release();
+}
+
+void Dx12Ctrl::SetWindowSize(int inw, int inh)
+{
+	wWidth = inw;
+	wHeight = inh;
+	viewPort.Width = inw;
+	viewPort.Height = inh;
+	rect.right = inw;
+	rect.bottom = inh;
+}
+
+void Dx12Ctrl::SetWindowName(std::string& inWindowName)
+{
+	windowName = inWindowName;
+}
+
+
+//テスト用関数
+Dx12Camera * Dx12Ctrl::GetCamera()
+{
+	return camera;
 }

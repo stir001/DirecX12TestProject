@@ -71,6 +71,7 @@ class Dx12Ctrl
 private:
 	int wHeight;
 	int wWidth;
+	std::string windowName;
 	int swapchainBufferCount;
 	ID3D12Device* dev;
 	ID3D12CommandAllocator* cmdAllocator;
@@ -126,6 +127,8 @@ public:
 	void InitMainCmdList();
 	void ExcuteAndPresent();
 	DirectX::XMFLOAT2 GetWindowSize();
+	void SetWindowSize(int inw, int inh);
+	void SetWindowName(std::string& inWindowName);
 
 	HRESULT GetDeviceRemoveReason();
 	HRESULT CheckResult();

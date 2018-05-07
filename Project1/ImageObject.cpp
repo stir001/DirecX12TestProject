@@ -3,6 +3,7 @@
 #include "VertexBufferObject.h"
 #include "TextureObj.h"
 #include "XMFloat3Operators.h"
+#include "Rect.h"
 
 DirectX::XMFLOAT3 RotationXY(DirectX::XMFLOAT3& pos, float rad)
 {
@@ -21,9 +22,8 @@ ImageObject::ImageObject(int inwidth, int inheight, TextureObj* intexObj, ID3D12
 	, vertexBuffer(new VertexBufferObject(sizeof(ImageVertex), 4))
 	, texObj(intexObj), texDescHeap(intexDescHeap)
 	, scale(1.0f), rota(0.0f), center{0.f,0.f,0.f}
+	, rect(new Rect(center, width, height))
 {
-	DX12CTRL_INSTANCE
-	DirectX::XMFLOAT2 size = d12->GetWindowSize();
 	DirectX::XMFLOAT3 offset = { static_cast<float>(width) / 2.0f, static_cast<float>(height) / 2.0f, 0.0f };
 	for (int i = 0; i < 4; ++i)
 	{
@@ -50,6 +50,41 @@ void ImageObject::Draw()
 	d12->GetCmdList()->DrawInstanced(4, 1, 0, 0);
 }
 
+void ImageObject::UpdateUV()
+{
+	DirectX::XMFLOAT2 leftupUV = {rect->GetLeft() / static_cast<float>(width),rect->GetDown() / static_cast<float>(height) };
+	DirectX::XMFLOAT2 rightdownUV = { rect->GetRight() / static_cast<float>(width), rect->GetUp() / static_cast<float>(height) };
+	vertex[0].uv = leftupUV;
+	vertex[1].uv.x = rightdownUV.x;
+	vertex[1].uv.y = leftupUV.y;
+	vertex[2].uv.x = leftupUV.x;
+	vertex[2].uv.y = rightdownUV.y;
+	vertex[3].uv = rightdownUV;
+}
+
+void ImageObject::UpdateNormvec()
+{
+	vertex[0].pos.x = rect->GetLeft();
+	vertex[0].pos.y = rect->GetUp();
+
+	vertex[1].pos.x = rect->GetRight();
+	vertex[1].pos.y = rect->GetUp();
+
+	vertex[2].pos.x = rect->GetLeft();
+	vertex[2].pos.y = rect->GetDown();
+
+	vertex[3].pos.x = rect->GetRight();
+	vertex[3].pos.y = rect->GetDown();
+
+	const DirectX::XMFLOAT3 offset = rect->GetCenter();
+	for (int i = 0; i < 4; ++i)
+	{
+		DirectX::XMFLOAT3 vec = vertex[i].pos - offset;
+		normvec[i] = NormalizeXMFloat3(vec);
+		length[i] = sqrt(DotXMFloat3(vec, vec));
+	}
+}
+
 void ImageObject::UpdateBuffer()
 {
 	DX12CTRL_INSTANCE
@@ -57,16 +92,24 @@ void ImageObject::UpdateBuffer()
 	for (int i = 0; i < 4; ++i)
 	{
 		vertex[i].pos = RotationXY(normvec[i], rota) * length[i] * scale + center;
-		vertex[i].pos.x /= size.x;
-		vertex[i].pos.y /= size.y;
+		vertex[i].pos.x *= 2.0f / size.x;
+		vertex[i].pos.y *= 2.0f / size.y;
 	}
 	vertexBuffer->WriteBuffer(&vertex, sizeof(ImageVertex) * 4);
 }
 
+void ImageObject::SetRect(DirectX::XMFLOAT3& inc, float inw, float inh)
+{
+	rect->SetCenter(inc);
+	rect->SetHeight(inh);
+	rect->SetWidth(inw);
+	UpdateNormvec();
+	UpdateUV();
+	UpdateBuffer();
+}
+
 void ImageObject::SetPos(float x, float y, float z)
 {
-	DX12CTRL_INSTANCE
-	DirectX::XMFLOAT2 size = d12->GetWindowSize();
 	center.x = x;
 	center.y = y;
 	center.z = z;
