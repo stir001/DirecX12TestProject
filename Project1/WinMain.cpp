@@ -8,7 +8,7 @@
 #include "DxInput.h"
 #include "DirectionalLight.h"
 #include "ImageLoader.h"
-#include "ImageObject.h"
+#include "ImageController.h"
 
 #include <algorithm>
 #include <Windows.h>
@@ -47,8 +47,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//std::string imgpath = "gollira.png";
 	std::string imgpath = "Action18/img/splatterhouse.png";
 	std::string playerImgpath = "Action18/img/rick.png";
-	ImageObject* imgObject = imgLoader.LoadImageData(imgpath);
-	ImageObject* player = imgLoader.LoadImageData(playerImgpath);
+	ImageController* imgObject = imgLoader.LoadImageData(imgpath);
+	ImageController* player = imgLoader.LoadImageData(playerImgpath);
 
 	DxInput input;
 
