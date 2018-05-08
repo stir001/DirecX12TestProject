@@ -63,7 +63,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DirectX::XMFLOAT3 t_pos{ 32,32,0 };
 	player->SetRect(t_pos, 64, 64);
 	player->SetScale(2.0f);
-	//player->Turn();
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
