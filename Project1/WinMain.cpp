@@ -23,8 +23,8 @@
 
 using namespace DirectX;
 
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
+const int WINDOW_WIDTH = 768;
+const int WINDOW_HEIGHT = 448;
 const TCHAR* APP_CLASS_NAME = _T("DirectX12Test");
 const int SCREEN_BUFFER_COUNT = 2;
 
@@ -63,6 +63,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DirectX::XMFLOAT3 t_pos{ 32,32,0 };
 	player->SetRect(t_pos, 64, 64);
 	player->SetScale(2.0f);
+	//player->Turn();
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
@@ -71,58 +72,59 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		pos = input.GetMousePos();
 
-		if (input.CheckKeyDown(vki_LSHIFT))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_LSHIFT))
 		{
 			scale *= 1.1f;
 			imgObject->SetScale(scale);
 		}
 
-		if (input.CheckKeyDown(vki_SPACE))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_SPACE))
 		{
 			scale *= 0.9f;
 			imgObject->SetScale(scale);
 		}
 
-		if (input.CheckKeyDown(vki_W))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_W))
 		{
 			imgpos.y += 10.0f;
 			imgObject->SetPos(imgpos);
 		}
 
-		if (input.CheckKeyDown(vki_S))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_S))
 		{
 			imgpos.y -= 10.0f;
 			imgObject->SetPos(imgpos);
 		}
 
-		if (input.CheckKeyDown(vki_A))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_A))
 		{
 			imgpos.x -= 10.0f;
 			imgObject->SetPos(imgpos);
 		}
 
-		if (input.CheckKeyDown(vki_D))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_D))
 		{
 			imgpos.x += 10.0f;
 			imgObject->SetPos(imgpos);
 		}
 
-		if (input.CheckKeyDown(vki_LEFT))
+		if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_LEFT))
 		{
-			
+			player->Turn();
 		}
 
-		if (input.CheckKeyDown(vki_RIGHT))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_ALT))
 		{
+			player->Turn();
 		}
 
-		if (input.CheckKeyDown(vki_UP))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_UP))
 		{
 			rota += 1.0f;
 			imgObject->SetRota(rota);
 		}
 
-		if (input.CheckKeyDown(vki_DOWN))
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
 		{
 			rota -= 1.0f;
 			imgObject->SetRota(rota);

@@ -41,6 +41,7 @@ public:
 	void SetPos(DirectX::XMFLOAT3& setPos);
 	void SetScale(float s);
 	void SetRota(float deg);
+	void Turn();
 	void Draw();
 	~ImageObject();
 };

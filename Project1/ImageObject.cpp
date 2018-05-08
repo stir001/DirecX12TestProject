@@ -134,3 +134,16 @@ void ImageObject::SetRota(float deg)
 
 	UpdateBuffer();
 }
+
+void ImageObject::Turn()
+{
+	DirectX::XMFLOAT2 uv;
+	uv = vertex[0].uv;
+	vertex[0].uv = vertex[1].uv;
+	vertex[1].uv = uv;
+
+	uv = vertex[2].uv;
+	vertex[2].uv = vertex[3].uv;
+	vertex[3].uv = uv;
+	UpdateBuffer();
+}
