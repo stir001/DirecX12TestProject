@@ -28,7 +28,7 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	rtn->cpuHandle = cpuHandle;
 	rtn->gpuHandle = gpuhandle;
 	DX12CTRL_INSTANCE
-	d12->result = DirectX::LoadWICTextureFromFile(d12->GetDev(),  filepath.data(), &rtn->textureBuffer, rtn->decodedData, rtn->subresource);
+	d12->result = DirectX::LoadWICTextureFromFile(d12->GetDev().Get(),  filepath.data(), &rtn->textureBuffer, rtn->decodedData, rtn->subresource);
 
 	if (FAILED(d12->result))
 	{
@@ -81,14 +81,14 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 		//バリアの張り方がわるいのかバリアでエラーをはくので一部バリアを書いていない(書く必要もないように感じるが...
 		//改善対象
 		//cmdList変数の寿命管理のためブロックを作っている
-		ID3D12GraphicsCommandList* cmdList = d12->GetCmdList();
+		ID3D12GraphicsCommandList* cmdList = d12->GetCmdList().Get();
 		cmdList->Close();
 		d12->GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
 
 	}
 
 	d12->CmdQueueSignal();
-	d12->GetCmdList()->Reset(d12->GetCmdAllocator(), d12->GetPiplineState(pso_notTex));
+	d12->GetCmdList()->Reset(d12->GetCmdAllocator().Get(), d12->GetPiplineState(pso_notTex).Get());
 	rtn->filepath = filepath;
 	textures[filepath] = rtn;
 	return rtn;

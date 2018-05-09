@@ -44,19 +44,6 @@ Dx12Ctrl::Dx12Ctrl() :wHeight(720), wWidth(1280), swapchainBufferCount(2),clrcol
 
 Dx12Ctrl::~Dx12Ctrl()
 {
-	cmdQueue->Release();
-	cmdList->Release();
-	cmdAllocator->Release();
-	fence->Release();
-	factory->Release();
-	swapchain->Release();
-	delete(swapchain);
-	for (int i = 0; i < rootsignature.size(); ++i)
-	{
-		rootsignature[i]->Release();
-		delete(rootsignature[i]);
-	}
-	dev->Release();
 
 }
 
@@ -71,7 +58,7 @@ Dx12Ctrl* Dx12Ctrl::Instance()
 	return dx12Ctrl;
 }
 
-ID3D12Device* Dx12Ctrl::GetDev()
+Microsoft::WRL::ComPtr<ID3D12Device> Dx12Ctrl::GetDev()
 {
 	return dev;
 }
@@ -112,7 +99,7 @@ bool Dx12Ctrl::Dx12Init()
 		dev = nullptr;
 		return false;
 	}
-
+	
 	wchar_t* name;
 	int size = sizeof("ID3D12Device");
 	ToWChar(&name, size, "ID3D12Device", size);
@@ -128,7 +115,7 @@ bool Dx12Ctrl::Dx12Init()
 	ToWChar(&name, size, "commandAllocator", size);
 	cmdAllocator->SetName(name);
 
-	result = dev->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAllocator, nullptr, IID_PPV_ARGS(&cmdList));
+	result = dev->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAllocator.Get(), nullptr, IID_PPV_ARGS(&cmdList));
 
 	delete(name);
 	size = sizeof("commandAllocator");
@@ -220,7 +207,7 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.DepthStencilState.StencilEnable = false;		//???
 	gpsDesc.InputLayout.NumElements = sizeof(inputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
 	gpsDesc.InputLayout.pInputElementDescs = inputDescs;	//要素へのポインタ(先頭?)
-	gpsDesc.pRootSignature = GetRootSignature();				//ルートシグネチャポインタ
+	gpsDesc.pRootSignature = GetRootSignature().Get();				//ルートシグネチャポインタ
 	gpsDesc.RasterizerState = rastarizer;	//ラスタライザーの設定
 	gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//
 	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -250,7 +237,7 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.InputLayout.pInputElementDescs = primitiveinputDescs;
 	gpsDesc.VS = GetShader(si_VS_primitive);
 	gpsDesc.PS = GetShader(si_PS_primitive);
-	gpsDesc.pRootSignature = GetRootSignature(rsi_prm);
+	gpsDesc.pRootSignature = GetRootSignature(rsi_prm).Get();
 
 	piplinestateObjects[pso_primitive].CreatePiplineState(gpsDesc);//プリミティブpso作成
 
@@ -268,7 +255,7 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.InputLayout.pInputElementDescs = imageinputDescs;
 	gpsDesc.VS = GetShader(si_VS_image);
 	gpsDesc.PS = GetShader(si_PS_image);
-	gpsDesc.pRootSignature = GetRootSignature(rsi_image);
+	gpsDesc.pRootSignature = GetRootSignature(rsi_image).Get();
 	piplinestateObjects[pso_image].CreatePiplineState(gpsDesc);
 }
 
@@ -350,27 +337,27 @@ void Dx12Ctrl::CompileShaders()
 	rootsignature.push_back(rsObj);
 }
 
-ID3D12CommandAllocator* Dx12Ctrl::GetCmdAllocator()
+Microsoft::WRL::ComPtr<ID3D12CommandAllocator> Dx12Ctrl::GetCmdAllocator()
 {
 	return cmdAllocator;
 }
 
-ID3D12CommandQueue* Dx12Ctrl::GetCmdQueue()
+Microsoft::WRL::ComPtr<ID3D12CommandQueue> Dx12Ctrl::GetCmdQueue()
 {
 	return cmdQueue;
 }
 
-ID3D12GraphicsCommandList* Dx12Ctrl::GetCmdList()
+Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> Dx12Ctrl::GetCmdList()
 {
 	return cmdList;
 }
 
-ID3D12Fence* Dx12Ctrl::GetFence()
+Microsoft::WRL::ComPtr<ID3D12Fence> Dx12Ctrl::GetFence()
 {
 	return fence;
 }
 
-IDXGIFactory4* Dx12Ctrl::GetFactory()
+Microsoft::WRL::ComPtr<IDXGIFactory4> Dx12Ctrl::GetFactory()
 {
 	return factory;
 }
@@ -460,12 +447,12 @@ DescriptorHeapManager* Dx12Ctrl::GetDescriptorHeapManager()
 	return descriptorHeapManager;
 }
 
-ID3D12RootSignature* Dx12Ctrl::GetRootSignature(int index)
+Microsoft::WRL::ComPtr<ID3D12RootSignature> Dx12Ctrl::GetRootSignature(int index)
 {
 	return rootsignature[index]->GetRootSignature();
 }
 
-IDXGISwapChain3* Dx12Ctrl::GetSwapChain()
+Microsoft::WRL::ComPtr<IDXGISwapChain3> Dx12Ctrl::GetSwapChain()
 {
 	return swapchain->GetSwapChain();
 }
@@ -485,7 +472,7 @@ TextureObj* Dx12Ctrl::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPTOR_HA
 	return texLoader->LoadTexture(filepath,cpuHandle,gpuhandle);
 }
 
-ID3D12PipelineState* Dx12Ctrl::GetPiplineState(PSOIndex index)
+Microsoft::WRL::ComPtr<ID3D12PipelineState> Dx12Ctrl::GetPiplineState(PSOIndex index)
 {
 	return piplinestateObjects[index].GetPiplineState();
 }
@@ -502,13 +489,17 @@ void Dx12Ctrl::SwapChainPresent(UINT SyncInterval, UINT flags)
 
 void Dx12Ctrl::CmdQueueSignal()
 {
-	cmdQueue->Signal(fence, ++fenceValue);
+	cmdQueue->Signal(fence.Get(), ++fenceValue);
 	UINT64 value = fence->GetCompletedValue();
 	UINT64 u64max = UINT64_MAX;
 	while (value != fenceValue)
 	{
 		value = fence->GetCompletedValue();
-		if(value == UINT64_MAX)GetDeviceRemoveReason();
+		if (value == UINT64_MAX)
+		{
+
+			GetDeviceRemoveReason();
+		}
 	}
 }
 
@@ -533,7 +524,7 @@ HRESULT Dx12Ctrl::CheckResult(HRESULT r)
 void Dx12Ctrl::InitMainCmdList()
 {
 	cmdAllocator->Reset();
-	cmdList->Reset(cmdAllocator, GetPiplineState(pso_notTex));
+	cmdList->Reset(cmdAllocator.Get(), GetPiplineState(pso_notTex).Get());
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvhandle = GetCurrentRTVHeap();
 	cmdList->OMSetRenderTargets(1, &rtvhandle, false, &depthBuffer->GetCPUAdress());
 	cmdList->ClearDepthStencilView(depthBuffer->GetCPUAdress() , D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, &rect);
@@ -541,7 +532,7 @@ void Dx12Ctrl::InitMainCmdList()
 		D3D12_RESOURCE_STATE_COMMON,
 		D3D12_RESOURCE_STATE_RENDER_TARGET));
 	cmdList->ClearRenderTargetView(rtvhandle, clrcolor, 0, &rect);
-	cmdList->SetGraphicsRootSignature(GetRootSignature());
+	cmdList->SetGraphicsRootSignature(GetRootSignature().Get());
 
 	cmdList->RSSetViewports(1, &viewPort);
 	cmdList->RSSetScissorRects(1, &rect);
@@ -566,7 +557,7 @@ void Dx12Ctrl::ExcuteAndPresent()
 	GetCmdList()->Close();
 
 	{
-		ID3D12CommandList* loacalcmdlist[] = { GetCmdList() };
+		ID3D12CommandList* loacalcmdlist[] = { GetCmdList().Get() };
 		GetCmdQueue()->ExecuteCommandLists(_countof(loacalcmdlist), loacalcmdlist);
 		CmdQueueSignal();//通常
 	}
@@ -582,17 +573,12 @@ DirectX::XMFLOAT2 Dx12Ctrl::GetWindowSize()
 
 void Dx12Ctrl::Release()
 {
-	cmdQueue->Release();
-	cmdList->Release();
-	cmdAllocator->Release();
-	fence->Release();
-	factory->Release();
-	delete(swapchain);
-	for (int i = 0; i < rootsignature.size(); ++i)
-	{
-		delete(rootsignature[i]);
-	}
-	dev->Release();
+	//dev.Reset();
+	cmdAllocator.Reset();
+	cmdQueue.Reset();
+	cmdList.Reset();
+	fence.Reset();
+	factory.Reset();
 }
 
 void Dx12Ctrl::SetWindowSize(int inw, int inh)

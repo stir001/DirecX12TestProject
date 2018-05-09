@@ -25,7 +25,7 @@ DirectionalLight::DirectionalLight(DirectX::XMFLOAT3 & pos, DirectX::XMFLOAT3 & 
 
 	cbuffer->WriteBuffer(&element, sizeof(element));
 	DX12CTRL_INSTANCE
-	cbuffer->SetCommandList(d12->GetCmdList());
+	cbuffer->SetCommandList(d12->GetCmdList().Get());
 	cbuffer->SetRootparameterIndex(rpt_light);
 }
 

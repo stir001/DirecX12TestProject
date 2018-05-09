@@ -9,8 +9,10 @@
 SwapChainComponent::SwapChainComponent(HWND& hwnd):swapchain(nullptr),rtvDescriptorHeap(nullptr)
 {
 	Dx12Ctrl* d12 = Dx12Ctrl::Instance();
-	d12->result = d12->GetFactory()->CreateSwapChainForHwnd(d12->GetCmdQueue(), hwnd, &(d12->GetDefaultSwapChainDesc()), nullptr, nullptr, (IDXGISwapChain1**)(&swapchain));
+	auto swap = swapchain.Get();
+	d12->result = d12->GetFactory()->CreateSwapChainForHwnd(d12->GetCmdQueue().Get(), hwnd, &(d12->GetDefaultSwapChainDesc()), nullptr, nullptr, (IDXGISwapChain1**)(&swap));
 	D12RESULTCHECK
+	swapchain = swap;
 	DXGI_SWAP_CHAIN_DESC swdesc = {};
 	swapchain->GetDesc(&swdesc);
 	rtvDescriptorHeap = new RTVDescriptorHeapObject(swdesc.BufferCount);
@@ -42,7 +44,7 @@ SwapChainComponent::~SwapChainComponent()
 	for (auto rt : renderTargets) rt->Release();
 }
 
-IDXGISwapChain3* SwapChainComponent::GetSwapChain()
+Microsoft::WRL::ComPtr<IDXGISwapChain3> SwapChainComponent::GetSwapChain()
 {
 	return swapchain;
 }

@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <wrl.h>
 
 
 #define DX12CTRL_INSTANCE Dx12Ctrl* d12 = Dx12Ctrl::Instance();
@@ -73,12 +74,12 @@ private:
 	int wWidth;
 	std::string windowName;
 	int swapchainBufferCount;
-	ID3D12Device* dev;
-	ID3D12CommandAllocator* cmdAllocator;
-	ID3D12CommandQueue* cmdQueue;
-	ID3D12GraphicsCommandList* cmdList;
-	ID3D12Fence* fence;
-	IDXGIFactory4* factory;
+	Microsoft::WRL::ComPtr<ID3D12Device> dev;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> cmdAllocator;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> cmdQueue;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<IDXGIFactory4> factory;
 	SwapChainComponent* swapchain;
 	DescriptorHeapManager* descriptorHeapManager;
 	std::vector<RootSignatureObject*> rootsignature;
@@ -104,19 +105,19 @@ public:
 	DXGI_SWAP_CHAIN_DESC1 GetDefaultSwapChainDesc();
 	D3D12_STATIC_SAMPLER_DESC GetDefaulSamplerDesc();
 	D3D12_DESCRIPTOR_HEAP_DESC MakeDescriptorHeapDesc(DescriptorHeapDescType type,int numDescriptor = 1);
-	ID3D12Device* GetDev();
-	ID3D12CommandAllocator* GetCmdAllocator();
-	ID3D12CommandQueue* GetCmdQueue();
-	ID3D12GraphicsCommandList* GetCmdList();
-	ID3D12Fence* GetFence();
-	IDXGIFactory4* GetFactory();
+	Microsoft::WRL::ComPtr<ID3D12Device> GetDev();
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> GetCmdAllocator();
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> GetCmdQueue();
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCmdList();
+	Microsoft::WRL::ComPtr<ID3D12Fence> GetFence();
+	Microsoft::WRL::ComPtr<IDXGIFactory4> GetFactory();
 	DescriptorHeapManager* GetDescriptorHeapManager();
-	ID3D12RootSignature* GetRootSignature(int index = 0);
-	IDXGISwapChain3* GetSwapChain();
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> GetRootSignature(int index = 0);
+	Microsoft::WRL::ComPtr<IDXGISwapChain3> GetSwapChain();
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentRTVHeap();
 	ID3D12Resource* GetCurrentRenderTarget();
 	TextureObj* LoadTexture(std::wstring path, D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle, D3D12_GPU_DESCRIPTOR_HANDLE gpuhandle);
-	ID3D12PipelineState* GetPiplineState(PSOIndex index);
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> GetPiplineState(PSOIndex index);
 	D3D12_SHADER_BYTECODE GetShader(ShaderIndex index);
 	ID3D12DescriptorHeap* CreateTextureDescHeap(std::string modelPath, int texturecount);
 	void SetCameraBuffer();

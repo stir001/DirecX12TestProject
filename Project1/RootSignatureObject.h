@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <d3dcommon.h>
+#include<wrl.h>
 
 struct ID3D12RootSignature;
 struct ID3D10Blob;
@@ -30,7 +31,7 @@ private:
 	int cbvRangecount;//レジスタb
 	int uavRangecount;//レジスタu
 	int smpRangecount;//レジスタs
-	ID3D12RootSignature* rootSignature;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 	ID3D10Blob* signature;
 	ID3D10Blob* error;
 	std::vector<D3D12_DESCRIPTOR_RANGE> descriptorRanges;
@@ -52,7 +53,7 @@ public:
 	void CreateRootSignature();
 
 
-	ID3D12RootSignature* GetRootSignature();
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> GetRootSignature();
 	void Release();
 	RootSignatureObject();
 	RootSignatureObject(ID3D10Blob* signatureBlob);

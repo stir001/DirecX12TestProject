@@ -155,7 +155,7 @@ void RootSignatureObject::CreateSamplers()
 	rootSignatureDesc->pStaticSamplers = &samplerDesc[0];
 }
 
-ID3D12RootSignature* RootSignatureObject::GetRootSignature()
+Microsoft::WRL::ComPtr<ID3D12RootSignature> RootSignatureObject::GetRootSignature()
 {
 	return rootSignature;
 }

@@ -155,8 +155,8 @@ void ImageController::TurnY()
 void ImageController::Draw() const
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_image));
-	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(rsi_image));
+	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_image).Get());
+	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(rsi_image).Get());
 	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	mVertexBuffer->SetBuffer();
 	mImgObj->SetImage();

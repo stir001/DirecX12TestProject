@@ -40,15 +40,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	std::string wName = "SplatterHouse";
 	d12->SetWindowName(wName);
 	d12->Dx12Init();
-	
-
 
 	ImageLoader imgLoader;
-	//std::string imgpath = "gollira.png";
-	std::string imgpath = "Action18/img/splatterhouse.png";
-	std::string playerImgpath = "Action18/img/rick.png";
-	ImageController* bg = imgLoader.LoadImageData(imgpath);
-	ImageController* player = imgLoader.LoadImageData(playerImgpath);
+	std::string imgpath = "gollira.png";
+	//std::string imgpath = "Action18/img/splatterhouse.png";
+	//std::string playerImgpath = "Action18/img/rick.png";
+	//ImageController* bg = imgLoader.LoadImageData(imgpath);
+	//ImageController* player = imgLoader.LoadImageData(playerImgpath);
+	ImageController* player = imgLoader.LoadImageData(imgpath);
 
 	DxInput input;
 
@@ -62,9 +61,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DirectX::XMFLOAT3 imgpos = { 0,0,0 };
 	DirectX::XMFLOAT3 t_pos = { 32,32,0 };
 	DirectX::XMFLOAT3 offset = {16,16,0};
-	player->SetRect(t_pos, 64, 64);
-	player->SetScale(2.0f);
-	player->SetPivot(offset);
+	//player->SetRect(t_pos, 64, 64);
+	player->SetScale(1.0f);
+	//player->SetPivot(offset);
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
@@ -132,7 +131,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		}
 
 		player->Draw();
-		bg->Draw();
+		//bg->Draw();
 
 		CallEndPerGameLoop();
 	}
@@ -140,8 +139,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 #ifdef _DEBUG
 	ID3D12DebugDevice* debugdev = nullptr;
 	d12->GetDev()->QueryInterface(&debugdev);
-	
 	debugdev->ReportLiveDeviceObjects(D3D12_RLDO_FLAGS::D3D12_RLDO_DETAIL);
 #endif
-
+	
 }
