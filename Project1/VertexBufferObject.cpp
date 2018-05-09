@@ -29,7 +29,7 @@ VertexBufferObject::~VertexBufferObject()
 {
 }
 
-void VertexBufferObject::SetBuffer()
+void VertexBufferObject::SetBuffer() const
 {
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->IASetVertexBuffers(0, 1, &vbView);

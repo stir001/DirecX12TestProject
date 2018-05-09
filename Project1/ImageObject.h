@@ -40,7 +40,7 @@ public:
 	//void SetRota(float deg);
 	//void Turn();
 	//void Draw();
-	void SetImage();
+	void SetImage() const;
 	~ImageObject();
 };
 

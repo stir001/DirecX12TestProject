@@ -15,10 +15,9 @@ private:
 	std::unique_ptr<uint8_t[]> decodedData;
 	D3D12_SUBRESOURCE_DATA subresource;
 public:
-	//ID3D12DescriptorHeap* GetDescHeap();
-	int GetWidth();
-	int GetHeight();
-	void SetBuffer();
+	int GetWidth() const;
+	int GetHeight() const;
+	void SetBuffer() const;
 	TextureObj();
 	~TextureObj();
 };

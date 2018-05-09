@@ -16,9 +16,9 @@ public:
 	float GetHeight() const;
 	const DirectX::XMFLOAT3& GetCenter() const;
 
-	void SetCenter(DirectX::XMFLOAT3& inc);
-	void SetWidth(float inw);
-	void SetHeight(float inh);
+	void SetCenter(const DirectX::XMFLOAT3& inc);
+	void SetWidth(const float inw);
+	void SetHeight(const float inh);
 private:
 	DirectX::XMFLOAT3 mCenter;
 	float mWidth;

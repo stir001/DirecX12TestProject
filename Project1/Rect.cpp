@@ -49,17 +49,17 @@ const DirectX::XMFLOAT3& Rect::GetCenter() const
 	return mCenter;
 }
 
-void Rect::SetCenter(DirectX::XMFLOAT3& inc)
+void Rect::SetCenter(const DirectX::XMFLOAT3& inc)
 {
 	mCenter = inc;
 }
 
-void Rect::SetWidth(float inw)
+void Rect::SetWidth(const float inw)
 {
 	mWidth = inw;
 }
 
-void Rect::SetHeight(float inh)
+void Rect::SetHeight(const float inh)
 {
 	mHeight = inh;
 }

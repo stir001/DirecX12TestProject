@@ -40,7 +40,37 @@ ImageController::~ImageController()
 	delete(mRect);
 }
 
-void ImageController::SetRect(DirectX::XMFLOAT3& inc, float inw, float inh)
+void ImageController::AddPos(const float x, const float y, const float z)
+{
+	mCenter.x = x;
+	mCenter.y = y;
+	mCenter.z = z;
+	UpdateBuffer();
+}
+
+void ImageController::AddPos(const DirectX::XMFLOAT3& offset)
+{
+	AddPos(offset.x, offset.y, offset.z);
+}
+
+void ImageController::AddRota(const float deg)
+{
+	mRota += DirectX::XMConvertToRadians(deg);
+	UpdateBuffer();
+}
+
+void ImageController::AddScale(const float scale)
+{
+	mScale += scale;
+	UpdateBuffer();
+}
+
+void ImageController::AddPivot(const DirectX::XMFLOAT3& offset)
+{
+
+}
+
+void ImageController::SetRect(const DirectX::XMFLOAT3& inc, const float inw, const float inh)
 {
 	mRect->SetCenter(inc);
 	mRect->SetHeight(inh);
@@ -50,7 +80,7 @@ void ImageController::SetRect(DirectX::XMFLOAT3& inc, float inw, float inh)
 	UpdateBuffer();
 }
 
-void ImageController::SetPos(float x, float y, float z)
+void ImageController::SetPos(const float x, const float y, const float z)
 {
 	mCenter.x = x;
 	mCenter.y = y;
@@ -59,28 +89,35 @@ void ImageController::SetPos(float x, float y, float z)
 	UpdateBuffer();
 }
 
-void ImageController::SetPos(DirectX::XMFLOAT3& setPos)
+void ImageController::SetPos(const DirectX::XMFLOAT3& setPos)
 {
 	SetPos(setPos.x, setPos.y, setPos.z);
 }
 
-void ImageController::SetScale(float s)
+void ImageController::SetScale(const float s)
 {
 	mScale = s;
-	SetPos(mCenter);
+	UpdateBuffer();
 }
 
-void ImageController::SetRota(float deg)
+void ImageController::SetRota(const float deg)
 {
 	mRota = DirectX::XMConvertToRadians(deg);
 	UpdateBuffer();
 }
 
-void ImageController::SetPivot(DirectX::XMFLOAT3& offset)
+void ImageController::SetPivot(const float x, const float y, const float z)
 {
-	mPivotOffset = offset;
+	mPivotOffset.x = x;
+	mPivotOffset.y = y;
+	mPivotOffset.z = z;
 	UpdateNormvec();
 	UpdateBuffer();
+}
+
+void ImageController::SetPivot(const DirectX::XMFLOAT3& offset)
+{
+	SetPivot(offset.x, offset.y, offset.z);
 }
 
 void ImageController::TurnX()
@@ -115,7 +152,7 @@ void ImageController::TurnY()
 	UpdateBuffer();
 }
 
-void ImageController::Draw()
+void ImageController::Draw() const
 {
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_image));
@@ -132,10 +169,13 @@ void ImageController::UpdateUV()
 	DirectX::XMFLOAT2 leftupUV = { mRect->GetLeft() / size.x,mRect->GetDown() / size.y };
 	DirectX::XMFLOAT2 rightdownUV = { mRect->GetRight() /size.x, mRect->GetUp() / size.y };
 	mVertex[0].uv = leftupUV;
+
 	mVertex[1].uv.x = rightdownUV.x;
 	mVertex[1].uv.y = leftupUV.y;
+
 	mVertex[2].uv.x = leftupUV.x;
 	mVertex[2].uv.y = rightdownUV.y;
+
 	mVertex[3].uv = rightdownUV;
 }
 

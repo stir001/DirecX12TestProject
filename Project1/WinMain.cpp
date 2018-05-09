@@ -35,14 +35,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	///Direct3D12‚Ì‰Šú‰»
 
-	HRESULT result = S_OK;
-
 	Dx12Ctrl* d12 = Dx12Ctrl::Instance();
 	d12->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	std::string wName = "SplatterHouse";
 	d12->SetWindowName(wName);
 	d12->Dx12Init();
 	
+
+
 	ImageLoader imgLoader;
 	//std::string imgpath = "gollira.png";
 	std::string imgpath = "Action18/img/splatterhouse.png";

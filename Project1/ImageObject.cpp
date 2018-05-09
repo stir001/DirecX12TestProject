@@ -18,10 +18,10 @@ ImageObject::~ImageObject()
 
 DirectX::XMFLOAT2 ImageObject::GetImageSize()
 {
-	return DirectX::XMFLOAT2(mWidth, mHeight);
+	return DirectX::XMFLOAT2(static_cast<float>(mWidth), static_cast<float>(mHeight));
 }
 
-void ImageObject::SetImage()
+void ImageObject::SetImage() const
 {
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->SetDescriptorHeaps(1, &mTexDescHeap);

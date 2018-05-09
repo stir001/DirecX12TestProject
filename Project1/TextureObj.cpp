@@ -18,19 +18,18 @@ TextureObj::~TextureObj()
 	subresource.pData = nullptr;
 }
 
-void TextureObj::SetBuffer()
+void TextureObj::SetBuffer() const
 {
 	DX12CTRL_INSTANCE
-	
 	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_texture, gpuHandle);
 }
 
-int TextureObj::GetWidth()
+int TextureObj::GetWidth() const
 {
 	return static_cast<int>(textureBuffer->GetDesc().Width);
 }
 
-int TextureObj::GetHeight()
+int TextureObj::GetHeight() const
 {
 	return static_cast<int>(textureBuffer->GetDesc().Height);
 }

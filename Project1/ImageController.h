@@ -18,15 +18,22 @@ public:
 	ImageController(std::shared_ptr<ImageObject> img);
 	~ImageController();
 
-	void SetRect(DirectX::XMFLOAT3& inc, float inw, float inh);
-	void SetPos(float x, float y, float z);
-	void SetPos(DirectX::XMFLOAT3& setPos);
-	void SetScale(float s);
-	void SetRota(float deg);
-	void SetPivot(DirectX::XMFLOAT3& offset);
+	void AddPos(const float x, const float y, const float z);
+	void AddPos(const DirectX::XMFLOAT3& offset);
+	void AddScale(const float scale);
+	void AddRota(const float deg);
+	void AddPivot(const DirectX::XMFLOAT3& offset);
+
+	void SetRect(const DirectX::XMFLOAT3& inc, const float inw, const float inh);
+	void SetPos(const float x, const float y, const float z);
+	void SetPos(const DirectX::XMFLOAT3& setPos);
+	void SetScale(const float s);
+	void SetRota(const float deg);
+	void SetPivot(const float x, const float y, const float z);
+	void SetPivot(const DirectX::XMFLOAT3& offset);
 	void TurnX();
 	void TurnY();
-	void Draw();
+	void Draw() const;
 private:
 	float mScale;
 	float mRota;

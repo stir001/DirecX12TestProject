@@ -12,8 +12,8 @@ class ImageLoader
 private:
 	std::map<std::string, std::shared_ptr<ImageObject>> images;
 public:
-	ImageController* LoadImageData(std::string& path);
 	ImageLoader();
+	ImageController* LoadImageData(std::string& path);
 	~ImageLoader();
 };
 
