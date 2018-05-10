@@ -15,7 +15,7 @@ public:
 
 private:
 	std::shared_ptr<DxInput> mInput;
-	ImageLoader* mImgLoader;
-	PlayerSH* mPlayer;
+	std::unique_ptr<ImageLoader> mImgLoader;
+	std::shared_ptr<PlayerSH> mPlayer;
 };
 

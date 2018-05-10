@@ -13,7 +13,7 @@ private:
 	std::map<std::string, std::shared_ptr<ImageObject>> images;
 public:
 	ImageLoader();
-	ImageController* LoadImageData(std::string& path);
+	ImageController* LoadImageData(const std::string& path);
 	~ImageLoader();
 };
 

@@ -25,7 +25,3 @@ void IDrawableObject::SetImageController(ImageController* imgCtrl)
 	}
 	mImgCtrl = imgCtrl;
 }
-
-void IDrawableObject::Update()
-{
-}

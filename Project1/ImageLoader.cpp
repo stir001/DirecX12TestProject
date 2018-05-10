@@ -14,7 +14,7 @@ ImageLoader::~ImageLoader()
 {
 }
 
-ImageController* ImageLoader::LoadImageData(std::string& path)
+ImageController* ImageLoader::LoadImageData(const std::string& path)
 {
 	ImageController* imgCtrl;
 	auto itr = images.find(path);

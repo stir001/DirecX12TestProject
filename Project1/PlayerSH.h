@@ -4,17 +4,23 @@
 #include <memory>
 
 class ImageController;
-class DxLibInput;
+class DxInput;
 
 class PlayerSH :public IDrawableObject
 {
 private:
-	std::shared_ptr<DxLibInput> mInput;
+	std::shared_ptr<DxInput> mInput;
+	DirectX::XMFLOAT3 mPos;
+	DirectX::XMFLOAT3 mVel;
+
+	void Move();
 public:
 	void Update();
 	void Draw();
+	const DirectX::XMFLOAT3& GetPlayerPos() const;
+	void OnGround(float grandLine);
 
-	PlayerSH(ImageController* imgCtrl,std::shared_ptr<DxLibInput> dlibInput);
+	PlayerSH(ImageController* imgCtrl,std::shared_ptr<DxInput> dlibInput);
 	~PlayerSH();
 };
 
