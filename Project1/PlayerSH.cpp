@@ -7,7 +7,7 @@ const float VELOCITY_X  = 2.0f;
 const float VELOCITY_Y  = 4.0f;
 const float GRAVITY		= 1.0f;
 
-PlayerSH::PlayerSH(ImageController* imgCtrl, std::shared_ptr<DxInput> dlibInput) :IDrawableObject::IDrawableObject(imgCtrl), mInput(dlibInput), mVel(0.0f, 0.0f, 0.0f), mPos(0, 0, 0)
+PlayerSH::PlayerSH(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<DxInput> dlibInput) :IDrawableObject::IDrawableObject(imgCtrl), mInput(dlibInput), mVel(0.0f, 0.0f, 0.0f), mPos(0, 0, 0)
 {
 	imgCtrl->SetPos(mPos);
 }
@@ -54,6 +54,7 @@ const DirectX::XMFLOAT3& PlayerSH::GetPlayerPos() const
 
 void PlayerSH::OnGround(float grandLine)
 {
-	
+	mVel.y = 0;
+	mPos.y = grandLine;
 }
 

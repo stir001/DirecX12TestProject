@@ -1,15 +1,17 @@
 #pragma once
+#include <memory>
+
 class ImageController;
 class IDrawableObject
 {
 protected:
-	ImageController* mImgCtrl;
+	std::shared_ptr<ImageController> mImgCtrl;
 public:
-	void SetImageController(ImageController* imgCtrl);
+	void SetImageController(std::shared_ptr<ImageController> imgCtrl);
 
 	virtual void Draw() = 0;
 	IDrawableObject();
-	IDrawableObject(ImageController* imgCtrl);
+	IDrawableObject(std::shared_ptr<ImageController> imgCtrl);
 	virtual ~IDrawableObject();
 };
 

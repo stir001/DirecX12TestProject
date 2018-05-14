@@ -163,6 +163,17 @@ void ImageController::Draw() const
 	d12->GetCmdList()->DrawInstanced(4, 1, 0, 0);
 }
 
+DirectX::XMFLOAT2 ImageController::GetImageSize()
+{
+	return mImgObj->GetImageSize();
+}
+
+std::shared_ptr<ImageController> ImageController::GetNewCopy()
+{
+	std::shared_ptr<ImageController> rtn(new ImageController(mImgObj));
+	return rtn;
+}
+
 void ImageController::UpdateUV()
 {
 	DirectX::XMFLOAT2 size = mImgObj->GetImageSize();

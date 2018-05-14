@@ -141,6 +141,7 @@
     <ClCompile Include="File.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="HeadUpDisplay.cpp" />
     <ClCompile Include="HlslInclude.cpp" />
     <ClCompile Include="IDrawableObject.cpp" />
     <ClCompile Include="ImageController.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="HeadUpDisplay.h" />
     <ClInclude Include="HlslInclude.h" />
     <ClInclude Include="IDrawableObject.h" />
     <ClInclude Include="ImageController.h" />

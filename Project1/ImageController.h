@@ -34,6 +34,9 @@ public:
 	void TurnX();
 	void TurnY();
 	void Draw() const;
+
+	DirectX::XMFLOAT2 GetImageSize();
+	std::shared_ptr<ImageController> GetNewCopy();
 private:
 	float mScale;
 	float mRota;

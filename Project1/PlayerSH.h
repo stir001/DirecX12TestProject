@@ -20,7 +20,7 @@ public:
 	const DirectX::XMFLOAT3& GetPlayerPos() const;
 	void OnGround(float grandLine);
 
-	PlayerSH(ImageController* imgCtrl,std::shared_ptr<DxInput> dlibInput);
+	PlayerSH(std::shared_ptr<ImageController> imgCtrl,std::shared_ptr<DxInput> dlibInput);
 	~PlayerSH();
 };
 

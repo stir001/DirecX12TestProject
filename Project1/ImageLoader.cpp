@@ -14,13 +14,13 @@ ImageLoader::~ImageLoader()
 {
 }
 
-ImageController* ImageLoader::LoadImageData(const std::string& path)
+std::shared_ptr<ImageController> ImageLoader::LoadImageData(const std::string& path)
 {
-	ImageController* imgCtrl;
+	std::shared_ptr<ImageController> imgCtrl;
 	auto itr = images.find(path);
 	if (itr != images.end())
 	{
-		imgCtrl = new ImageController(itr->second);
+		imgCtrl.reset(new ImageController(itr->second));
 		return imgCtrl;
 	}
 	DX12CTRL_INSTANCE
@@ -35,6 +35,6 @@ ImageController* ImageLoader::LoadImageData(const std::string& path)
 	std::shared_ptr<ImageObject> sp;
 	sp.reset(imgObj);
 	images[path] = sp;
-	imgCtrl = new ImageController(sp);
+	imgCtrl.reset(new ImageController(sp));
 	return imgCtrl;
 }
