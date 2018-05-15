@@ -150,6 +150,7 @@
     <ClCompile Include="ImageObject.cpp" />
     <ClCompile Include="IndexBufferObject.cpp" />
     <ClCompile Include="LightObject.cpp" />
+    <ClCompile Include="ActionLoader.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelController.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="ImageObject.h" />
     <ClInclude Include="IndexBufferObject.h" />
     <ClInclude Include="LightObject.h" />
+    <ClInclude Include="ActionLoader.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelController.h" />
     <ClInclude Include="ModelLoader.h" />

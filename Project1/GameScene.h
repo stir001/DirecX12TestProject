@@ -6,6 +6,7 @@ class ImageLoader;
 class PlayerSH;
 class BackGround;
 class HeadUpDisplay;
+class ActionLoader;
 
 class GameScene :
 	public Scene
@@ -22,5 +23,8 @@ private:
 	std::unique_ptr<BackGround> mBackGround;
 	std::unique_ptr<HeadUpDisplay> mTopHUD;
 	std::unique_ptr<HeadUpDisplay> mBottomHUD;
+	std::unique_ptr<ActionLoader> mActLoader;
+
+	void LoadHUD();
 };
 

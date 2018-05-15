@@ -23,6 +23,6 @@ public:
 template <typename T>
 void File::LoadFile(T* buffer, int readcount, int size)
 {
-	if (size = -1) size = sizeof(*buffer);
+	if (size == -1) size = sizeof(*buffer);
 	fread(buffer, size, readcount, fp);
 };

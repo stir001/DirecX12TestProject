@@ -21,3 +21,9 @@ void  HeadUpDisplay::Draw()
 {
 	mImgCtrl->Draw();
 }
+
+void HeadUpDisplay::SetPos(float x, float y, float z)
+{
+	mPos = { x,y,z };
+	mImgCtrl->SetPos(x, y, z);
+}
