@@ -2,6 +2,7 @@
 #include "ImageController.h"
 #include "DxInput.h"
 #include "XMFloat3Operators.h"
+#include "ActionStructs.h"
 
 const float VELOCITY_X  = 2.0f;
 const float VELOCITY_Y  = 4.0f;
@@ -61,5 +62,5 @@ void PlayerSH::OnGround(float grandLine)
 
 void PlayerSH::SetAction(std::vector<Action>& inActs)
 {
-	//mActions.swap(inActs);
+	mActions.swap(inActs);
 }

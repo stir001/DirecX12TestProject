@@ -11,7 +11,7 @@ struct Action;
 class PlayerSH :public IDrawableObject
 {
 private:
-	//std::vector<Action> mActions;
+	std::vector<Action> mActions;
 	std::shared_ptr<DxInput> mInput;
 	DirectX::XMFLOAT3 mPos;
 	DirectX::XMFLOAT3 mVel;
