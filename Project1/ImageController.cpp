@@ -19,8 +19,8 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img):mImgObj(img)
 ,{ { 0.0f,0.0f , 0.0f },{ 0.f, 1.f } }/* v3 */
 ,{ { img->GetImageSize().x, 0.0f, 0.f },{ 1.f, 1.f } }/* v4 */ }
 	, mVertexBuffer(new VertexBufferObject(sizeof(ImageVertex), 4))
-	, mScale(1.0f), mRota(0.0f), mCenter{ 0.f,0.f,0.f }, mPivotOffset(0,0,0)
-	, mRect(new Rect(mCenter, img->GetImageSize().x, img->GetImageSize().y))
+	, mScale(1.0f), mRota(0.0f), mPivot{ 0.f,0.f,0.f }, mCenterOffset(0,0,0)
+	, mRect(new Rect(mPivot, img->GetImageSize().x, img->GetImageSize().y))
 	, mTurnSign(1,1)
 {
 	DirectX::XMFLOAT2 size = mImgObj->GetImageSize();
@@ -31,7 +31,7 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img):mImgObj(img)
 		mNormvec[i] = NormalizeXMFloat3(vec);
 		mLength[i] = sqrt(DotXMFloat3(vec, vec));
 	}
-	SetPos(mCenter);
+	SetPos(mPivot);
 }
 
 ImageController::~ImageController()
@@ -42,9 +42,9 @@ ImageController::~ImageController()
 
 void ImageController::AddPos(const float x, const float y, const float z)
 {
-	mCenter.x = x;
-	mCenter.y = y;
-	mCenter.z = z;
+	mPivot.x = x;
+	mPivot.y = y;
+	mPivot.z = z;
 	UpdateBuffer();
 }
 
@@ -80,11 +80,16 @@ void ImageController::SetRect(const DirectX::XMFLOAT3& inc, const float inw, con
 	UpdateBuffer();
 }
 
+void ImageController::SetRect(const Rect& rc)
+{
+	SetRect(rc.GetCenter(), rc.GetWidth(), rc.GetHeight());
+}
+
 void ImageController::SetPos(const float x, const float y, const float z)
 {
-	mCenter.x = x;
-	mCenter.y = y;
-	mCenter.z = z;
+	mPivot.x = x;
+	mPivot.y = y;
+	mPivot.z = z;
 
 	UpdateBuffer();
 }
@@ -106,18 +111,18 @@ void ImageController::SetRota(const float deg)
 	UpdateBuffer();
 }
 
-void ImageController::SetPivot(const float x, const float y, const float z)
+void ImageController::SetCenterOffset(const float x, const float y, const float z)
 {
-	mPivotOffset.x = x;
-	mPivotOffset.y = y;
-	mPivotOffset.z = z;
+	mCenterOffset.x = x;
+	mCenterOffset.y = y;
+	mCenterOffset.z = z;
 	UpdateNormvec();
 	UpdateBuffer();
 }
 
-void ImageController::SetPivot(const DirectX::XMFLOAT3& offset)
+void ImageController::SetCenterOffset(const DirectX::XMFLOAT3& offset)
 {
-	SetPivot(offset.x, offset.y, offset.z);
+	SetCenterOffset(offset.x, offset.y, offset.z);
 }
 
 void ImageController::TurnX()
@@ -188,21 +193,44 @@ void ImageController::UpdateUV()
 	mVertex[2].uv.y = rightdownUV.y;
 
 	mVertex[3].uv = rightdownUV;
+
+	if (mTurnSign.x == -1)
+	{
+		DirectX::XMFLOAT2 uv;
+		uv = mVertex[0].uv;
+		mVertex[0].uv = mVertex[1].uv;
+		mVertex[1].uv = uv;
+
+		uv = mVertex[2].uv;
+		mVertex[2].uv = mVertex[3].uv;
+		mVertex[3].uv = uv;
+	}
+	if (mTurnSign.y == -1)
+	{
+		DirectX::XMFLOAT2 uv;
+		uv = mVertex[0].uv;
+		mVertex[0].uv = mVertex[2].uv;
+		mVertex[2].uv = uv;
+
+		uv = mVertex[1].uv;
+		mVertex[1].uv = mVertex[3].uv;
+		mVertex[3].uv = uv;
+	}
 }
 
 void ImageController::UpdateNormvec()
 {
-	mVertex[0].pos.x = mRect->GetLeft() + mPivotOffset.x * mTurnSign.x;
-	mVertex[0].pos.y = mRect->GetUp()	+ mPivotOffset.y * mTurnSign.y;
+	mVertex[0].pos.x = mRect->GetLeft() + mCenterOffset.x * mTurnSign.x;
+	mVertex[0].pos.y = mRect->GetUp()	+ mCenterOffset.y * mTurnSign.y;
 
-	mVertex[1].pos.x = mRect->GetRight() + mPivotOffset.x * mTurnSign.x;
-	mVertex[1].pos.y = mRect->GetUp() + mPivotOffset.y * mTurnSign.y;
+	mVertex[1].pos.x = mRect->GetRight() + mCenterOffset.x * mTurnSign.x;
+	mVertex[1].pos.y = mRect->GetUp() + mCenterOffset.y * mTurnSign.y;
 
-	mVertex[2].pos.x = mRect->GetLeft() + mPivotOffset.x * mTurnSign.x;
-	mVertex[2].pos.y = mRect->GetDown() + mPivotOffset.y * mTurnSign.y;
+	mVertex[2].pos.x = mRect->GetLeft() + mCenterOffset.x * mTurnSign.x;
+	mVertex[2].pos.y = mRect->GetDown() + mCenterOffset.y * mTurnSign.y;
 
-	mVertex[3].pos.x = mRect->GetRight() + mPivotOffset.x * mTurnSign.x;
-	mVertex[3].pos.y = mRect->GetDown() + mPivotOffset.y * mTurnSign.y;
+	mVertex[3].pos.x = mRect->GetRight() + mCenterOffset.x * mTurnSign.x;
+	mVertex[3].pos.y = mRect->GetDown() + mCenterOffset.y * mTurnSign.y;
 
 	const DirectX::XMFLOAT3 offset = mRect->GetCenter();
 	for (int i = 0; i < 4; ++i)
@@ -220,7 +248,7 @@ void ImageController::UpdateBuffer()
 	DirectX::XMFLOAT2 size = d12->GetWindowSize();
 	for (int i = 0; i < 4; ++i)
 	{
-		mVertex[i].pos = RotationXY(mNormvec[i], mRota) * mLength[i] * mScale + mCenter;
+		mVertex[i].pos = RotationXY(mNormvec[i], mRota) * mLength[i] * mScale + mPivot;
 		mVertex[i].pos.x *= 2.0f / size.x;
 		mVertex[i].pos.y *= 2.0f / size.y;
 	}

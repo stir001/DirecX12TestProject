@@ -25,12 +25,13 @@ public:
 	void AddPivot(const DirectX::XMFLOAT3& offset);
 
 	void SetRect(const DirectX::XMFLOAT3& inc, const float inw, const float inh);
+	void SetRect(const Rect& rc);
 	void SetPos(const float x, const float y, const float z);
 	void SetPos(const DirectX::XMFLOAT3& setPos);
 	void SetScale(const float s);
 	void SetRota(const float deg);
-	void SetPivot(const float x, const float y, const float z);
-	void SetPivot(const DirectX::XMFLOAT3& offset);
+	void SetCenterOffset(const float x, const float y, const float z);
+	void SetCenterOffset(const DirectX::XMFLOAT3& offset);
 	void TurnX();
 	void TurnY();
 	void Draw() const;
@@ -42,12 +43,12 @@ private:
 	float mRota;
 	float mLength[4];
 	DirectX::XMFLOAT2 mTurnSign;
-	DirectX::XMFLOAT3 mPivotOffset;//描画する画像の中心からの描画基準点へオフセット
+	DirectX::XMFLOAT3 mCenterOffset;//描画する画像の中心の描画基準点からのオフセット
 	DirectX::XMFLOAT3 mNormvec[4];
-	DirectX::XMFLOAT3 mCenter;//描画の際の基準点(画面座標)
+	DirectX::XMFLOAT3 mPivot;//描画の際の基準点(画面座標)回転や反転の中心
 	ImageVertex mVertex[4];
 	VertexBufferObject* mVertexBuffer;
-	Rect* mRect;//画像内の切り抜きローカル座標
+	Rect* mRect;//画像内の切り抜きローカル座標矩形
 
 	std::shared_ptr<ImageObject> mImgObj;
 
