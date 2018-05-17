@@ -195,19 +195,10 @@ public:
 	PMDRigdBody rigidBody;
 	PMDJoint joint;
 
-	//ConstantBufferObject* boneMatrixBuffer;
-	//std::vector<DirectX::XMMATRIX> boneMatrix;
-	//VMDPlayer* vmdPlayer;
 	BoneTree boneNode;
 
 	void SetMaterialBuffer();
-	/*void SetBoneBuffer();*/
 
-	//‚±‚±‚©‚ç‚Ípublic‚Ì‚Ü‚Ü
-	//void Draw();
-	//void SetMotion(VMDMotion* motion);
-	//void PlayMotion(bool loopFlag = false);
-	//void StopMotion();
 
 	~PMDModel();
 };

@@ -16,7 +16,6 @@ PiplineStateObject::PiplineStateObject():piplineState(nullptr)
 
 PiplineStateObject::~PiplineStateObject()
 {
-	piplineState->Release();
 }
 
 Microsoft::WRL::ComPtr<ID3D12PipelineState> PiplineStateObject::GetPiplineState()

@@ -139,6 +139,14 @@ public:
 
 	//テスト用関数
 	Dx12Camera* GetCamera();
+	
+	template<typename T>
+	LONG CheckComPtrRefCount(Microsoft::WRL::ComPtr<T>& comptr)
+	{
+		LONG count = comptr.Get()->AddRef() -1;
+		comptr.Get()->Release();
+		return count;
+	}
 
 	~Dx12Ctrl();
 };

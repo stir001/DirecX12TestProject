@@ -1,9 +1,13 @@
 #pragma once
-#include <KLib.h>
+#include "Model.h"
+
 #include <string>
 #include <memory>
 #include <map>
 #include <vector>
+#include <DirectXMath.h>
+
+class FbxModelDataConverter;
 
 namespace Fbx {
 
@@ -13,15 +17,15 @@ namespace Fbx {
 	};
 	
 	struct UVSet {
-		KLib::Math::Vector2 texCoord;
+		DirectX::XMFLOAT2 texCoord;
 		std::string			uvSetName;
 	};
 
 
 	struct FbxVertex {
-		KLib::Math::Vector3 pos;
-		KLib::Math::Vector3 normal;
-		KLib::Math::Vector2 texCoord;
+		DirectX::XMFLOAT3 pos;
+		DirectX::XMFLOAT3 normal;
+		DirectX::XMFLOAT2 texCoord;
 		std::vector<int>	boneIndex;
 		std::vector<float>	boneWeight;
 	};
@@ -31,20 +35,20 @@ namespace Fbx {
 	};
 
 	struct FbxMaterial {
-		KLib::Math::Vector3	ambient;
+		DirectX::XMFLOAT3	ambient;
 		float				ambientFactor;
-		KLib::Math::Vector3	diffuse;
+		DirectX::XMFLOAT3	diffuse;
 		float				diffuseFactor;
-		KLib::Math::Vector3	emissive;
+		DirectX::XMFLOAT3	emissive;
 		float				emissiveFactor;
-		KLib::Math::Vector3	bump;
+		DirectX::XMFLOAT3	bump;
 		float				bumpFactor;
-		KLib::Math::Vector3	transparent;
+		DirectX::XMFLOAT3	transparent;
 		float				transparentFactor;
-		KLib::Math::Vector3	specular;
+		DirectX::XMFLOAT3	specular;
 		float				specularFactor;
 		float				shininess;
-		KLib::Math::Vector3	reflection;
+		DirectX::XMFLOAT3	reflection;
 		float				reflectionPower;
 
 		unsigned int		surfaceVertex;
@@ -64,7 +68,7 @@ namespace Fbx {
 	};
 
 	struct FbxBoneInfo {
-		KLib::Math::Matrix	initMatrix;
+		DirectX::XMMATRIX	initMatrix;
 		int					index;
 		std::string			boneName;
 		std::vector<float>	affectedVertexWeight;
@@ -72,18 +76,33 @@ namespace Fbx {
 	};
 
 	struct FbxBone {
-		KLib::Math::Matrix	initMatrix;
+		DirectX::XMMATRIX	initMatrix;
 		int					index;
 		std::string			boneName;
 	};
 
-	struct FbxModel
+	struct FbxModelData
 	{
+		std::string modelPath;
 		FbxIndexes					indexes;
 		FbxVertexesInfo				vertexesInfo;
 		std::vector<FbxMaterial>	materials;
 		std::vector<FbxTextureInfo>	textures;
 		std::vector<FbxBone>		bones;
+	};
+
+	class FbxModel : public Model
+	{
+		friend FbxModelDataConverter;
+	public:
+		FbxModel();
+		~FbxModel();
+
+	private:
+		std::vector<int> mIndexes;
+		std::vector<FbxVertex> mVertexes;
+		std::vector<Fbx::FbxTexture> mTextures;
+		std::vector<FbxBone> mBones;
 	};
 }
 

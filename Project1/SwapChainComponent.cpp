@@ -39,7 +39,6 @@ SwapChainComponent::SwapChainComponent(HWND& hwnd):swapchain(nullptr),rtvDescrip
 
 SwapChainComponent::~SwapChainComponent()
 {
-	swapchain->Release();
 	delete rtvDescriptorHeap;
 	for (auto rt : renderTargets) rt->Release();
 }
@@ -69,7 +68,6 @@ void SwapChainComponent::SwapChainPresent(UINT SyncInterval, UINT flags)
 
 void SwapChainComponent::Release()
 {
-	swapchain->Release();
 	rtvDescriptorHeap->GetDescriptorHeap()->Release();
 	for (auto& rt : renderTargets)
 	{

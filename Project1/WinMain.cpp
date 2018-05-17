@@ -37,101 +37,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	Dx12Ctrl* d12 = Dx12Ctrl::Instance();
 	d12->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "SplatterHouse";
+	std::string wName = "FbxLoad";
 	d12->SetWindowName(wName);
 	d12->Dx12Init();
 
-	ImageLoader imgLoader;
-	std::string imgpath = "gollira.png";
-	//std::string imgpath = "Action18/img/splatterhouse.png";
-	//std::string playerImgpath = "Action18/img/rick.png";
-	//ImageController* bg = imgLoader.LoadImageData(imgpath);
-	//ImageController* player = imgLoader.LoadImageData(playerImgpath);
-	ImageController* player = imgLoader.LoadImageData(imgpath);
 
-	DxInput input;
-
-	MousePos pos;
-	XMFLOAT3 cPos = { 0,20,-30 };
-
-	Dx12Camera* camera = d12->GetCamera();
-
-	float rota = 1.0f;
-	float scale = 1.0f;
-	DirectX::XMFLOAT3 imgpos = { 0,0,0 };
-	DirectX::XMFLOAT3 t_pos = { 32,32,0 };
-	DirectX::XMFLOAT3 offset = {16,16,0};
-	//player->SetRect(t_pos, 64, 64);
-	player->SetScale(1.0f);
-	//player->SetPivot(offset);
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
 
-		input.UpdateKeyState();
-
-		pos = input.GetMousePos();
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_LSHIFT))
-		{
-			scale *= 1.1f;
-			player->SetScale(scale);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_SPACE))
-		{
-			scale *= 0.9f;
-			player->SetScale(scale);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_W))
-		{
-			imgpos.y += 10.0f;
-			player->SetPos(imgpos);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_S))
-		{
-			imgpos.y -= 10.0f;
-			player->SetPos(imgpos);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_A))
-		{
-			imgpos.x -= 10.0f;
-			player->SetPos(imgpos);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_D))
-		{
-			imgpos.x += 10.0f;
-			player->SetPos(imgpos);
-		}
-
-		if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_LEFT))
-		{
-			player->TurnX();
-		}
-
-		if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_RIGHT))
-		{
-			player->TurnY();
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_UP))
-		{
-			rota += 1.0f;
-			player->SetRota(rota);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
-		{
-			rota -= 1.0f;
-			player->SetRota(rota);
-		}
-
-		player->Draw();
-		//bg->Draw();
 
 		CallEndPerGameLoop();
 	}

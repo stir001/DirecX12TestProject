@@ -34,7 +34,6 @@ RootSignatureObject::RootSignatureObject(ID3D10Blob* signatureBlob)
 
 RootSignatureObject::~RootSignatureObject()
 {
-	rootSignature->Release();
 	//signature->Release();
 	//error->Release();
 	delete rootSignatureDesc;
@@ -162,7 +161,6 @@ Microsoft::WRL::ComPtr<ID3D12RootSignature> RootSignatureObject::GetRootSignatur
 
 void RootSignatureObject::Release()
 {
-	rootSignature->Release();
 	signature->Release();
 	error->Release();
 	delete(rootSignatureDesc);

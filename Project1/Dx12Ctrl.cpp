@@ -16,9 +16,8 @@
 #include <d3dcompiler.h>
 #include <tchar.h>
 #include <DirectXMath.h>
-
+#include <string>
 #include <functional>
-
 
 #pragma comment(lib,"d3dcompiler.lib")
 
@@ -40,6 +39,7 @@ Dx12Ctrl::Dx12Ctrl() :wHeight(720), wWidth(1280), swapchainBufferCount(2),clrcol
 ,descriptorHeapManager(new DescriptorHeapManager())
 ,windowName("DirectX12")
 {
+	setlocale(LC_ALL, "japanese");
 }
 
 Dx12Ctrl::~Dx12Ctrl()
@@ -59,7 +59,7 @@ Dx12Ctrl* Dx12Ctrl::Instance()
 }
 
 Microsoft::WRL::ComPtr<ID3D12Device> Dx12Ctrl::GetDev()
-{
+{	
 	return dev;
 }
 
@@ -73,7 +73,6 @@ bool Dx12Ctrl::Dx12Init()
 		debug->Release();
 	}
 #endif
-
 
 	D3D_FEATURE_LEVEL levels[] = {
 		D3D_FEATURE_LEVEL_12_1,
@@ -99,7 +98,7 @@ bool Dx12Ctrl::Dx12Init()
 		dev = nullptr;
 		return false;
 	}
-	
+
 	wchar_t* name;
 	int size = sizeof("ID3D12Device");
 	ToWChar(&name, size, "ID3D12Device", size);
@@ -143,8 +142,6 @@ bool Dx12Ctrl::Dx12Init()
 	camera = new Dx12Camera(wWidth, wHeight);
 	CreatePiplineStates();
 	
-
-
 	return true;
 }
 
@@ -160,8 +157,20 @@ void Dx12Ctrl::InitWindowCreate()
 	RECT wrc = { 0,0,wWidth,wHeight };
 	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
+	const char* name = windowName.data();
+	std::string strName;
+	strName. reserve(windowName.size());
+	for (auto& s : windowName)
+	{
+		strName.push_back(s);
+	}
+	strName.push_back('\0');
+	size_t size = strName.size();
+	wchar_t* buff = nullptr;
+	ToWChar(&buff, size, strName.data(), size);
+
 	HWND hwnd = CreateWindow(w.lpszClassName,
-		_T(windowName.data()),
+		buff,
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
@@ -585,8 +594,8 @@ void Dx12Ctrl::SetWindowSize(int inw, int inh)
 {
 	wWidth = inw;
 	wHeight = inh;
-	viewPort.Width = inw;
-	viewPort.Height = inh;
+	viewPort.Width = static_cast<float>(inw);
+	viewPort.Height = static_cast<float>(inh);
 	rect.right = inw;
 	rect.bottom = inh;
 }
