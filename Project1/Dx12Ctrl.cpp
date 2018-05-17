@@ -599,8 +599,8 @@ void Dx12Ctrl::SetWindowSize(int inw, int inh)
 {
 	wWidth = inw;
 	wHeight = inh;
-	viewPort.Width = inw;
-	viewPort.Height = inh;
+	viewPort.Width = static_cast<float>(inw);
+	viewPort.Height = static_cast<float>(inh);
 	rect.right = inw;
 	rect.bottom = inh;
 }

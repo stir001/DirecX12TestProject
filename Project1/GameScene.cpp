@@ -32,6 +32,7 @@ GameScene::~GameScene()
 void GameScene::Run()
 {
 	mInput->UpdateKeyState();
+	mBackGround->Update();
 	mPlayer->Update();
 
 	//mTopHUD->Draw();

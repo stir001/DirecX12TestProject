@@ -34,10 +34,14 @@ private:
 	void (PlayerSH::*mActionUpdate)();
 	std::function<void(void)> mChangeNextAction;
 
-	void ChangeAction(const std::string& actionName);
+	void ChangeAction(const char* actionName);
 	void SetActionImageData();
 	void AnimationUpdate();
 	void Walk();
 	void Neutral();
+	void Jump();
+	void Ground();
+	void Crouch();
+	void Gravity();
 };
 

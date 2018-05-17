@@ -220,17 +220,17 @@ void ImageController::UpdateUV()
 
 void ImageController::UpdateNormvec()
 {
-	mVertex[0].pos.x = mRect->GetLeft() + mCenterOffset.x * mTurnSign.x;
-	mVertex[0].pos.y = mRect->GetUp()	+ mCenterOffset.y * mTurnSign.y;
+	mVertex[0].pos.x = mRect->GetLeft() - mCenterOffset.x * mTurnSign.x;
+	mVertex[0].pos.y = mRect->GetUp()	- mCenterOffset.y * mTurnSign.y;
 
-	mVertex[1].pos.x = mRect->GetRight() + mCenterOffset.x * mTurnSign.x;
-	mVertex[1].pos.y = mRect->GetUp() + mCenterOffset.y * mTurnSign.y;
+	mVertex[1].pos.x = mRect->GetRight() - mCenterOffset.x * mTurnSign.x;
+	mVertex[1].pos.y = mRect->GetUp() - mCenterOffset.y * mTurnSign.y;
 
-	mVertex[2].pos.x = mRect->GetLeft() + mCenterOffset.x * mTurnSign.x;
-	mVertex[2].pos.y = mRect->GetDown() + mCenterOffset.y * mTurnSign.y;
+	mVertex[2].pos.x = mRect->GetLeft() - mCenterOffset.x * mTurnSign.x;
+	mVertex[2].pos.y = mRect->GetDown() - mCenterOffset.y * mTurnSign.y;
 
-	mVertex[3].pos.x = mRect->GetRight() + mCenterOffset.x * mTurnSign.x;
-	mVertex[3].pos.y = mRect->GetDown() + mCenterOffset.y * mTurnSign.y;
+	mVertex[3].pos.x = mRect->GetRight() - mCenterOffset.x * mTurnSign.x;
+	mVertex[3].pos.y = mRect->GetDown() - mCenterOffset.y * mTurnSign.y;
 
 	const DirectX::XMFLOAT3 offset = mRect->GetCenter();
 	for (int i = 0; i < 4; ++i)

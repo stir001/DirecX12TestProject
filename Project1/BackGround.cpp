@@ -3,9 +3,9 @@
 #include "ImageController.h"
 #include "Dx12Ctrl.h"
 
-const float GROUND_LINE = 200;
+const float GROUND_LINE = -100;
 
-BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<PlayerSH> spPlayer):IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE)
+BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<PlayerSH> spPlayer):IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE),mwpPlayer(spPlayer)
 {
 	DX12CTRL_INSTANCE
 	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
