@@ -46,8 +46,8 @@ Fbx::FbxModelData* FbxLoader::LoadMesh(std::string modelPath)
 
 	for (int i = 0; i < m_meshDatas.size(); i++)
 	{
-		models[i]->modelPath = modelPath;
 		models[i] = MainLoad(m_meshDatas[i], modelPath);
+		models[i]->modelPath = modelPath;
 	}
 
 	//LoadAnimation(scene);

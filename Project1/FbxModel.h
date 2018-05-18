@@ -21,6 +21,12 @@ namespace Fbx {
 		std::string			uvSetName;
 	};
 
+	struct FbxVertexElement
+	{
+		DirectX::XMFLOAT3 pos;
+		DirectX::XMFLOAT3 normal;
+		DirectX::XMFLOAT2 texCoord;
+	};
 
 	struct FbxVertex {
 		DirectX::XMFLOAT3 pos;
@@ -101,6 +107,7 @@ namespace Fbx {
 	private:
 		std::vector<int> mIndexes;
 		std::vector<FbxVertex> mVertexes;
+		std::vector<FbxVertexElement> mVertexElements;
 		std::vector<Fbx::FbxTexture> mTextures;
 		std::vector<FbxBone> mBones;
 	};

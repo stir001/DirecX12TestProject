@@ -9,6 +9,8 @@
 #include "DirectionalLight.h"
 #include "ImageLoader.h"
 #include "ImageController.h"
+#include "FbxLoader.h"
+#include "FbxModelDataCoverter.h"
 
 #include <algorithm>
 #include <Windows.h>
@@ -22,11 +24,13 @@
 #include <map>
 
 using namespace DirectX;
+using namespace Fbx;
 
 const int WINDOW_WIDTH = 768;
 const int WINDOW_HEIGHT = 448;
 const TCHAR* APP_CLASS_NAME = _T("DirectX12Test");
 const int SCREEN_BUFFER_COUNT = 2;
+const std::string FBX_MODEL_PATH = "Model/FBX/test_model/model/test_model.fbx";
 
 //LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
@@ -41,6 +45,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	d12->SetWindowName(wName);
 	d12->Dx12Init();
 
+	FbxLoader::Create();
+	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH);
+	FbxModelDataConverter* fbxconverter = new FbxModelDataConverter();
+	FbxModel* fbxModel = fbxconverter->ConvertToFbxModel(modelData);
 
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (ProcessMessage()) {

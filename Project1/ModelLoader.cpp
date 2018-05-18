@@ -10,7 +10,7 @@ ModelLoader::~ModelLoader()
 {
 }
 
-void ModelLoader::GetRelativePath(std::string& path)
+void ModelLoader::GetRelativePath(const std::string& path)
 {
 	relativePath.resize(path.size());
 	size_t num;

@@ -36,5 +36,6 @@ ImageController* ImageLoader::LoadImageData(std::string& path)
 	sp.reset(imgObj);
 	images[path] = sp;
 	imgCtrl = new ImageController(sp);
+	delete wchar;
 	return imgCtrl;
 }

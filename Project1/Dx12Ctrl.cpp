@@ -142,6 +142,10 @@ bool Dx12Ctrl::Dx12Init()
 	camera = new Dx12Camera(wWidth, wHeight);
 	CreatePiplineStates();
 	
+	if (name != nullptr)
+	{
+		delete name;
+	}
 	return true;
 }
 
@@ -182,6 +186,8 @@ void Dx12Ctrl::InitWindowCreate()
 		nullptr);
 
 	hWnd = hwnd;
+
+	delete buff;
 
 	ShowWindow(hwnd, SW_SHOW);
 }
@@ -270,7 +276,6 @@ void  Dx12Ctrl::CreatePiplineStates()
 
 void Dx12Ctrl::CompileShaders()
 {
-	
 	shaders.resize(si_max);
 
 	//PMDSHADER
@@ -344,6 +349,8 @@ void Dx12Ctrl::CompileShaders()
 	result = D3DGetBlobPart(shaders[si_VS_image]->GetBufferPointer(), shaders[si_VS_image]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
 	rsObj = new RootSignatureObject(rs);
 	rootsignature.push_back(rsObj);
+
+	delete shaderName;
 }
 
 Microsoft::WRL::ComPtr<ID3D12CommandAllocator> Dx12Ctrl::GetCmdAllocator()

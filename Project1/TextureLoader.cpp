@@ -64,7 +64,7 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	box.front = 0;
 	box.back = 1;
 
-	rtn->textureBuffer->WriteToSubresource(0, &box, rtn->subresource.pData, box.right * 4, box.bottom * 4);
+	d12->result = rtn->textureBuffer->WriteToSubresource(0, &box, rtn->subresource.pData, box.right * 4, box.bottom * 4);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC wicSrvDesc = {};
 	wicSrvDesc.Format = desc.Format;

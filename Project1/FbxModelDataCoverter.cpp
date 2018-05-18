@@ -3,6 +3,7 @@
 #include "IndexBufferObject.h"
 #include "VertexBufferObject.h"
 #include "Dx12Ctrl.h"
+#include "CharToWChar.h"
 
 using namespace Fbx;
 
@@ -18,8 +19,12 @@ FbxModel* FbxModelDataConverter::ConvertToFbxModel(const FbxModelData* data)
 {
 	mModel = new FbxModel();
 	mConvertData = data;
+	GetRelativePath(data->modelPath);
 
 	ConvertIndex();
+	ConvertVertex();
+	ConvertTexture();
+	return mModel;
 }
 
 void FbxModelDataConverter::ConvertIndex()
@@ -33,9 +38,18 @@ void FbxModelDataConverter::ConvertIndex()
 void FbxModelDataConverter::ConvertVertex()
 {
 	mModel->mVertexes = mConvertData->vertexesInfo.vertexes;
+	mModel->mVertexElements.resize(mConvertData->vertexesInfo.vertexes.size());
+	for (int i = 0; i < mModel->mVertexElements.size(); ++i)
+	{
+		mModel->mVertexElements[i].pos = mModel->mVertexes[i].pos;
+		mModel->mVertexElements[i].normal = mModel->mVertexes[i].normal;
+		mModel->mVertexElements[i].texCoord = mModel->mVertexes[i].texCoord;
+	}
 
-	mModel->vertexBuffer = new VertexBufferObject(sizeof(mModel->mVertexes[0]), mModel->mVertexes.size());
-	mModel->vertexBuffer->WriteBuffer256Alignment(&mModel->mVertexes[0], sizeof(mModel->mVertexes[0]) ,mModel->mVertexes.size());
+	size_t size = sizeof(mModel->mVertexElements[0]);
+
+	mModel->vertexBuffer = new VertexBufferObject(sizeof(mModel->mVertexElements[0]), mModel->mVertexElements.size());
+	mModel->vertexBuffer->WriteBuffer(&mModel->mVertexElements[0], sizeof(mModel->mVertexElements[0]) * mModel->mVertexElements.size());
 }
 
 void FbxModelDataConverter::ConvertTexture()
@@ -48,9 +62,36 @@ void FbxModelDataConverter::ConvertTexture()
 		texCount += texInfo.textures.size();
 	}
 	mModel->textureDescHeap = d12->CreateTextureDescHeap(mConvertData->modelPath, texCount);
+	UINT numdescs = mModel->textureDescHeap->GetDesc().NumDescriptors;
 	UINT descsize = d12->GetDev()->GetDescriptorHandleIncrementSize(mModel->textureDescHeap->GetDesc().Type);
-	for (unsigned int i = 0; i < texCount; ++i)
+	int descOffsetCount = 0;
+	for (auto& texLayer : mConvertData->textures)
 	{
+		for (auto& tex : texLayer.textures)
+		{
+			
+			std::wstring wpath;
+			std::string convertStr = tex.texturePath;
+			convertStr.push_back('\0');
+			wpath.resize(relativePath.size() + convertStr.size());
+			wchar_t* tpath = nullptr;
+			ToWChar(&(tpath), convertStr.size(), convertStr.data(), convertStr.size());
+			for (int i = 0; i < relativePath.size(); ++i)
+			{
+				wpath[i] = relativePath[i];
+			}
+			for (int i = relativePath.size(),index = 0; i < wpath.size(); ++i,++index)
+			{
+				wpath[i] = tpath[index];
+			}
+			D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = mModel->textureDescHeap->GetCPUDescriptorHandleForHeapStart();
+			cpuHandle.ptr += descOffsetCount * descsize;
+			D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = mModel->textureDescHeap->GetGPUDescriptorHandleForHeapStart();
+			gpuHandle.ptr += descOffsetCount * descsize;
+			mModel->textureObjects[descOffsetCount] = d12->LoadTexture(wpath, cpuHandle, gpuHandle);
+			++descOffsetCount;
 
+			delete tpath;
+		}
 	}
 }
