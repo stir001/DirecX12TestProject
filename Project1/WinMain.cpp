@@ -11,6 +11,7 @@
 #include "ImageController.h"
 #include "FbxLoader.h"
 #include "FbxModelDataCoverter.h"
+#include "PMDController.h"
 
 #include <algorithm>
 #include <Windows.h>
@@ -22,6 +23,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include <map>
+#include <memory>
 
 using namespace DirectX;
 using namespace Fbx;
@@ -31,8 +33,8 @@ const int WINDOW_HEIGHT = 448;
 const TCHAR* APP_CLASS_NAME = _T("DirectX12Test");
 const int SCREEN_BUFFER_COUNT = 2;
 const std::string FBX_MODEL_PATH = "Model/FBX/test_model/model/test_model.fbx";
-
-//LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+const std::string PMD_MODEL_PATH = "初音ミク.pmd";
+const std::string PMD_MODEL_PATH2 = "博麗霊夢/reimu_F01.pmd";
 
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
@@ -50,6 +52,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	FbxModelDataConverter* fbxconverter = new FbxModelDataConverter();
 	FbxModel* fbxModel = fbxconverter->ConvertToFbxModel(modelData);
 
+	//PMDLoader loader;
+	//PMDController* pmdContrl = loader.Load(PMD_MODEL_PATH2);
+	//std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
+
+	//pmdContrl->SetLight(dirLight);
 	//メインループ
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();

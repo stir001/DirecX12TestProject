@@ -17,14 +17,6 @@ PMDModel::~PMDModel()
 
 }
 
-//void PMDModel::Draw()
-//{
-//	SetIndexBuffer();
-//	SetVertexBuffer();
-//	SetBoneBuffer();
-//	SetMaterialBuffer();//‚±‚Ì’†‚ÅDraw‚Ü‚Å‚â‚é
-//}
-
 void PMDModel::SetMaterialBuffer()
 {
 	DX12CTRL_INSTANCE
@@ -43,7 +35,6 @@ void PMDModel::SetMaterialBuffer()
 			cmdList->SetPipelineState(d12->GetPiplineState(pso_exitTex).Get());
 			if (textureObjects[materials[i].texid] != nullptr)
 			{
-
 				cmdList->SetDescriptorHeaps(1, &textureDescHeap);
 				textureObjects[materials[i].texid]->SetBuffer();
 			}
@@ -60,25 +51,3 @@ void PMDModel::SetMaterialBuffer()
 	}
 }
 
-//void PMDModel::SetMotion(VMDMotion* motion)
-//{
-//	vmdPlayer->SetVMD(motion);
-//}
-//
-//void PMDModel::PlayMotion(bool loopFlag)
-//{
-//	vmdPlayer->Play(loopFlag);
-//}
-//
-//void PMDModel::StopMotion()
-//{
-//	vmdPlayer->Stop();
-//}
-//
-//void PMDModel::SetBoneBuffer()
-//{
-//	DX12CTRL_INSTANCE
-//	boneMatrixBuffer->WriteBuffer(&boneMatrix[0], sizeof(boneMatrix[0]) * boneMatrix.size());
-//	boneMatrixBuffer->SetDescHeap();
-//	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_bonematrix, boneMatrixBuffer->GetGPUDescriptorHandle());
-//}

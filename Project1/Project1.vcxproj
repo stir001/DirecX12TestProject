@@ -41,7 +41,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -68,7 +68,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>$(FBXSDK_DIR)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -85,10 +87,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(FBXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;libfbxsdk-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(FBXSDK_DIR)\lib\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,7 +130,6 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationPlayer.cpp" />
     <ClCompile Include="AnimationPlayerManager.cpp" />
-    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BmpLoader.cpp" />
     <ClCompile Include="CBVDescriptorHeapObject.cpp" />
     <ClCompile Include="ConstantBufferObject.cpp" />
@@ -138,11 +142,12 @@
     <ClCompile Include="Dx12Camera.cpp" />
     <ClCompile Include="Dx12Ctrl.cpp" />
     <ClCompile Include="DxInput.cpp" />
+    <ClCompile Include="FbxLoader.cpp" />
+    <ClCompile Include="FbxModel.cpp" />
+    <ClCompile Include="FbxModelDataCoverter.cpp" />
     <ClCompile Include="File.cpp" />
-    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="HlslInclude.cpp" />
-    <ClCompile Include="IDrawableObject.cpp" />
     <ClCompile Include="ImageController.cpp" />
     <ClCompile Include="ImageData.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
@@ -153,7 +158,6 @@
     <ClCompile Include="ModelController.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="PiplineStateObject.cpp" />
-    <ClCompile Include="PlayerSH.cpp" />
     <ClCompile Include="PMDController.cpp" />
     <ClCompile Include="PMDLoader.cpp" />
     <ClCompile Include="PMDModel.cpp" />
@@ -167,7 +171,6 @@
     <ClCompile Include="RootSignatureObject.cpp" />
     <ClCompile Include="RTVDescriptorHeapObject.cpp" />
     <ClCompile Include="CharToWChar.cpp" />
-    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SRVDescriptorHeapObject.cpp" />
     <ClCompile Include="SwapChainComponent.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
@@ -252,7 +255,6 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationPlayer.h" />
     <ClInclude Include="AnimationPlayerManager.h" />
-    <ClInclude Include="BackGround.h" />
     <ClInclude Include="BmpLoader.h" />
     <ClInclude Include="CBVDescriptorHeapObject.h" />
     <ClInclude Include="CharToWChar.h" />
@@ -266,12 +268,13 @@
     <ClInclude Include="Dx12Camera.h" />
     <ClInclude Include="Dx12Ctrl.h" />
     <ClInclude Include="DxInput.h" />
+    <ClInclude Include="FbxLoader.h" />
+    <ClInclude Include="FbxModel.h" />
+    <ClInclude Include="FbxModelDataCoverter.h" />
     <ClInclude Include="File.h" />
-    <ClInclude Include="GameScene.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="HlslInclude.h" />
-    <ClInclude Include="IDrawableObject.h" />
     <ClInclude Include="ImageController.h" />
     <ClInclude Include="ImageData.h" />
     <ClInclude Include="ImageLoader.h" />
@@ -281,9 +284,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelController.h" />
     <ClInclude Include="ModelLoader.h" />
-    <ClInclude Include="PlayerSH.h" />
     <ClInclude Include="Rect.h" />
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="XMFloat3Operators.h" />
     <ClInclude Include="PiplineStateObject.h" />
     <ClInclude Include="PMDController.h" />
@@ -309,9 +310,6 @@
     <ClInclude Include="VMDMotion.h" />
     <ClInclude Include="VMDPlayer.h" />
     <ClInclude Include="WICTextureLoader12.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Project1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

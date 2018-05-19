@@ -55,12 +55,12 @@ void FbxModelDataConverter::ConvertVertex()
 void FbxModelDataConverter::ConvertTexture()
 {
 	DX12CTRL_INSTANCE
-	mModel->textureObjects.resize(mConvertData->textures.size());
 	int texCount = 0;
 	for (auto& texInfo : mConvertData->textures)
 	{
 		texCount += texInfo.textures.size();
 	}
+	mModel->textureObjects.resize(texCount);
 	mModel->textureDescHeap = d12->CreateTextureDescHeap(mConvertData->modelPath, texCount);
 	UINT numdescs = mModel->textureDescHeap->GetDesc().NumDescriptors;
 	UINT descsize = d12->GetDev()->GetDescriptorHandleIncrementSize(mModel->textureDescHeap->GetDesc().Type);

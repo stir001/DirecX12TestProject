@@ -1,11 +1,11 @@
 #include "FbxLoader.h"
 #include "FbxModel.h"
-#include <KLib.h>
 #include <fbxsdk.h>
 #include <memory>
 #include <exception>
 #include <cassert>
 #include <algorithm>
+#include <Windows.h>
 
 
 FbxLoader* FbxLoader::instance = nullptr;

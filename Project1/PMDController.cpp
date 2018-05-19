@@ -5,6 +5,7 @@
 #include "TextureObj.h"
 #include "VMDPlayer.h"
 #include "PMDModel.h"
+#include "DirectionalLight.h"
 
 
 PMDController::PMDController()
@@ -19,6 +20,9 @@ PMDController::~PMDController()
 void PMDController::Draw()
 {
 	DX12CTRL_INSTANCE
+	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_notTex).Get());
+	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(rsi_pmd).Get());
+	dirLight->SetLight();
 	d12->SetCameraBuffer();
 	model->SetIndexBuffer();
 	model->SetVertexBuffer();
@@ -57,4 +61,9 @@ void PMDController::SetPosition(DirectX::XMFLOAT3& p)
 void PMDController::SetRota(DirectX::XMFLOAT3& rota)
 {
 	rotation = rota;
+}
+
+void PMDController::SetLight(std::shared_ptr<DirectionalLight> dlight)
+{
+	dirLight = dlight;
 }

@@ -37,22 +37,6 @@ struct Output {
 	float2 uv :TEXCOORD;
 };
 
-//struct PriOutput {
-//	float4 svpos : SV_POSITION;
-//	float4 pos : POSITION0;
-//	float4 shadowpos : POSITION1;
-//	float3 normal : NORMAL;
-//	float3 color : COLOR;
-//	float2 uv :TEXCOORD;
-//};
-
-struct MRTOut
-{
-    float4 normal : SV_Target0;
-    float4 specular : SV_Target1;
-    float4 amibent : SV_Target2;
-};
-
 //頂点しぇーだー
 [RootSignature(PMDRS)]
 Output BasicVS(float4 pos : POSITION ,float4 normal : NORMAL,float2 uv : TEXCOORD,min16uint2 boneno : BONENO,min16uint weight : WEIGHT)
@@ -74,7 +58,7 @@ Output BasicVS(float4 pos : POSITION ,float4 normal : NORMAL,float2 uv : TEXCOOR
 }
 
 //ピクセルシェーダー
-//[RootSignature(PMDRS)]
+[RootSignature(PMDRS)]
 float4 BasicPS(Output data) : SV_Target
 {
 	float3 light = dir;
@@ -87,37 +71,11 @@ float4 BasicPS(Output data) : SV_Target
     return float4(color, alpha);
 }
 
-//[RootSignature(PMDRS)]
+[RootSignature(PMDRS)]
 float4 ExitTexPS(Output data):SV_Target
 {
     float4 color = tex.Sample(smp, data.uv);
     return color * dot(data.normal.xyz, -dir) + color * float4(ambient, 1);
 }
 
-
-//PriOutput PrimitiveVS(float4 pos : POSITION, float3 normal : NORMAL, float3 color : COLOR, float2 uv : TEXCOORD)
-//{
-//	PriOutput po;
-//	po.svpos = mul(mul(c_viewproj, c_world), pos);
-//	po.pos = po.svpos;
-//	po.shadowpos = mul(mul(viewProj,c_world),pos);
-//	po.color = color;
-//	po.uv = (float2(1, 1) + po.shadowpos.xy * float2(1, -1)) * 0.5;
-//    po.normal = normal;
-//	return po;
-//}
-
-
-//float4 PrimitivePS(PriOutput data) : SV_Target
-//{
-//	float2 s_uv = (float2(1, 1) + data.shadowpos.xy * float2(1, -1)) * 0.5;
-//	//if (data.shadowpos.z > shadowmap.Sample(smp, data.uv))
-//	//{
-//	//	data.color *= 0.7;
-//	//}
-//    // * dot(data.normal, -lightvec)
-//    //return float4(dir.x, abs(dir.y), dir.z, 1);
-//    //return float4(dot(data.normal, -dir),1,1, 1);
-//    return float4(data.color * dot(data.normal, -dir), 1);
-//}
 
