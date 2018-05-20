@@ -12,6 +12,7 @@
 #include "FbxLoader.h"
 #include "FbxModelDataCoverter.h"
 #include "PMDController.h"
+#include "FbxModelController.h"
 
 #include <algorithm>
 #include <Windows.h>
@@ -50,17 +51,74 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	FbxLoader::Create();
 	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH);
 	FbxModelDataConverter* fbxconverter = new FbxModelDataConverter();
-	FbxModel* fbxModel = fbxconverter->ConvertToFbxModel(modelData);
+	std::shared_ptr<FbxModel> fbxModel(fbxconverter->ConvertToFbxModel(modelData));
+
+	FbxModelController* fbxctrl = new FbxModelController(fbxModel);
 
 	//PMDLoader loader;
 	//PMDController* pmdContrl = loader.Load(PMD_MODEL_PATH2);
-	//std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
+	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
+	fbxctrl->SetLight(dirLight);
 
 	//pmdContrl->SetLight(dirLight);
 	//ƒƒCƒ“ƒ‹[ƒv
+
+	Dx12Camera* camera = d12->GetCamera();
+	DxInput input;
+
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
+		input.UpdateKeyState();
 
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_W))
+		{
+			camera->MoveFront(1.0f);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_A))
+		{
+			camera->MoveSide(1.0f);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_D))
+		{
+			camera->MoveSide(-1.0f);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_S))
+		{
+			camera->MoveFront(-1.0f);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_SPACE))
+		{
+			camera->MoveUp(1.0f);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_LSHIFT))
+		{
+			camera->MoveUp(-1.0f);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_UP))
+		{
+			camera->TurnUpDown(1.0f);
+		}
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
+		{
+			camera->TurnUpDown(-1.0f);
+		}
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
+		{
+			camera->TurnRightLeft(-1.0f);
+		}
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_LEFT))
+		{
+			camera->TurnRightLeft(1.0f);
+		}
+
+		/*pmdContrl->Draw();*/
+		fbxctrl->Draw();
 
 		CallEndPerGameLoop();
 	}

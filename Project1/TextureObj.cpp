@@ -33,3 +33,9 @@ int TextureObj::GetHeight() const
 {
 	return static_cast<int>(textureBuffer->GetDesc().Height);
 }
+
+void TextureObj::SetBuffer(int rootparamIndex) const
+{
+	DX12CTRL_INSTANCE
+	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rootparamIndex, gpuHandle);
+}

@@ -64,7 +64,7 @@ DirectX::XMFLOAT3 CrossXMFloat3(const DirectX::XMFLOAT3& lval, const DirectX::XM
 DirectX::XMVECTOR CreateQuoternion(DirectX::XMFLOAT3 axis, float deg)
 {
 	axis = NormalizeXMFloat3(axis);
-	return DirectX::XMLoadFloat4(&DirectX::XMFLOAT4(axis.x * sinf(DirectX::XMConvertToRadians(deg / 2.0f)), axis.y * sinf(DirectX::XMConvertToRadians(deg / 20.f)), axis.z * sinf(DirectX::XMConvertToRadians(deg / 2.0f)), cosf(DirectX::XMConvertToRadians(deg / 2.0f))));
+	return DirectX::XMLoadFloat4(&DirectX::XMFLOAT4(axis.x * sinf(DirectX::XMConvertToRadians(deg / 2.0f)), axis.y * sinf(DirectX::XMConvertToRadians(deg / 2.0f)), axis.z * sinf(DirectX::XMConvertToRadians(deg / 2.0f)), cosf(DirectX::XMConvertToRadians(deg / 2.0f))));
 }
 
 DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& val)

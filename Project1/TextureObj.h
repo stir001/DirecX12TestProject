@@ -18,6 +18,7 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	void SetBuffer() const;
+	void SetBuffer(int rootparamIndex) const;
 	TextureObj();
 	~TextureObj();
 };

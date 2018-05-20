@@ -144,6 +144,7 @@
     <ClCompile Include="DxInput.cpp" />
     <ClCompile Include="FbxLoader.cpp" />
     <ClCompile Include="FbxModel.cpp" />
+    <ClCompile Include="FbxModelController.cpp" />
     <ClCompile Include="FbxModelDataCoverter.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Geometry.cpp" />
@@ -199,6 +200,16 @@
       </EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </EntryPointName>
+    </FxCompile>
+    <FxCompile Include="FbxShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="ImageShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
@@ -270,6 +281,7 @@
     <ClInclude Include="DxInput.h" />
     <ClInclude Include="FbxLoader.h" />
     <ClInclude Include="FbxModel.h" />
+    <ClInclude Include="FbxModelController.h" />
     <ClInclude Include="FbxModelDataCoverter.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="Geometry.h" />

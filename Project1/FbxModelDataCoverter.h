@@ -7,6 +7,8 @@ namespace Fbx
 	class FbxModel;
 }
 
+class FbxModelController;
+
 class FbxModelDataConverter : public ModelLoader
 {
 public:
@@ -16,6 +18,7 @@ public:
 	Fbx::FbxModel* ConvertToFbxModel(const Fbx::FbxModelData* data);
 
 private:
+	FbxModelController* mCtrl;
 	Fbx::FbxModel* mModel;
 	const Fbx::FbxModelData* mConvertData;
 

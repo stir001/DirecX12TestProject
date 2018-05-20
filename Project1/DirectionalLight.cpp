@@ -31,7 +31,7 @@ DirectionalLight::DirectionalLight(DirectX::XMFLOAT3 & pos, DirectX::XMFLOAT3 & 
 
 DirectionalLight::DirectionalLight(float dirX, float dirY, float dirZ, float length)
 {
-	pos = {0,0,0};
+	pos = {0, 0, 0};
 	this->length = length;
 	DirectX::XMFLOAT3 tdir = { dirX, dirY, dirZ };
 	element.dir = NormalizeXMFloat3(tdir);
@@ -49,7 +49,7 @@ DirectionalLight::DirectionalLight(float dirX, float dirY, float dirZ, float len
 
 	cbuffer->WriteBuffer(&element, sizeof(element));
 	DX12CTRL_INSTANCE
-		cbuffer->SetCommandList(d12->GetCmdList().Get());
+	cbuffer->SetCommandList(d12->GetCmdList().Get());
 	cbuffer->SetRootparameterIndex(rpt_light);
 }
 

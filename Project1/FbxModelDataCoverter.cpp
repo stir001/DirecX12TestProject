@@ -4,6 +4,7 @@
 #include "VertexBufferObject.h"
 #include "Dx12Ctrl.h"
 #include "CharToWChar.h"
+#include "FbxModelController.h"
 
 using namespace Fbx;
 

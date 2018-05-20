@@ -39,20 +39,20 @@ struct Output {
 
 //í∏ì_ÇµÇ•Å[ÇæÅ[
 [RootSignature(PMDRS)]
-Output BasicVS(float4 pos : POSITION ,float4 normal : NORMAL,float2 uv : TEXCOORD,min16uint2 boneno : BONENO,min16uint weight : WEIGHT)
+Output BasicVS(float3 pos : POSITION , float3 normal : NORMAL, float2 uv : TEXCOORD, min16uint2 boneno : BONENO, min16uint weight : WEIGHT)
 {
 	float wgt1 = (float)weight / 100.0;
 	float wgt2 = 1.0 - wgt1;
 	Output o;
 	matrix m = bones[boneno[0]] * wgt1 + bones[boneno[1]] * wgt2;
-	o.origpos = mul(m, pos) + float4(offsetPos,0);
-    o.pos = mul(c_viewproj, (mul(mul(c_world, m), pos) + mul(c_world, float4(offsetPos, 0))));
+    o.origpos = mul(m, float4(pos, 1)) + float4(offsetPos, 0);
+    o.pos = mul(c_viewproj, (mul(mul(c_world, m), float4(pos, 1)) + mul(c_world, float4(offsetPos, 0))));
 	o.svpos = o.pos;
-	o.shadowpos = mul(mul(viewProj, c_world), pos);
+    o.shadowpos = mul(mul(viewProj, c_world), float4(pos, 1));
     matrix n = mul(c_world, m);
     n._m03_m13_m23 = 0;
 
-    o.normal = normalize(mul(n,normal));
+    o.normal = normalize(mul(n, float4(normal, 1)));
 	o.uv = uv;
 	return o;
 }

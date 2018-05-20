@@ -104,12 +104,14 @@ namespace Fbx {
 		FbxModel();
 		~FbxModel();
 
-	private:
 		std::vector<int> mIndexes;
 		std::vector<FbxVertex> mVertexes;
 		std::vector<FbxVertexElement> mVertexElements;
 		std::vector<Fbx::FbxTexture> mTextures;
 		std::vector<FbxBone> mBones;
+
+		void SetTexture();
+	private:
 	};
 }
 

@@ -240,6 +240,24 @@ void  Dx12Ctrl::CreatePiplineStates()
 
 	piplinestateObjects[pso_exitTex].CreatePiplineState(gpsDesc);//3Dモデル テクスチャありpso作成
 
+
+	D3D12_INPUT_ELEMENT_DESC fbxinputDescs[] = {
+		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+	};
+
+	gpsDesc.VS = GetShader(si_VS_fbx);
+	gpsDesc.PS = GetShader(si_PS_fbx);
+	//rastarizer.CullMode = D3D12_CULL_MODE_BACK;
+	//gpsDesc.RasterizerState = rastarizer;
+	gpsDesc.pRootSignature = GetRootSignature(rsi_fbx).Get();
+
+	piplinestateObjects[pos_fbx].CreatePiplineState(gpsDesc);
+
+	rastarizer.CullMode = D3D12_CULL_MODE_NONE;
+	gpsDesc.RasterizerState = rastarizer;
+
 	//primitive用pso作成
 	D3D12_INPUT_ELEMENT_DESC primitiveinputDescs[] = {
 		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
@@ -272,6 +290,7 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.PS = GetShader(si_PS_image);
 	gpsDesc.pRootSignature = GetRootSignature(rsi_image).Get();
 	piplinestateObjects[pso_image].CreatePiplineState(gpsDesc);
+
 }
 
 void Dx12Ctrl::CompileShaders()
@@ -320,7 +339,7 @@ void Dx12Ctrl::CompileShaders()
 
 	delete(shaderName);
 	size = sizeof("Primitive3D.hlsl");
-	convert = ToWChar(&shaderName, size, "Primitive3D.hlsl", size - 1);
+	convert = ToWChar(&shaderName, size, "Primitive3D.hlsl", size);
 
 	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"PrimitiveVS", "vs_5_0", compileflag, 0, &shaders[si_VS_primitive], &err);
@@ -337,16 +356,33 @@ void Dx12Ctrl::CompileShaders()
 	//IMAGESHADER
 	delete(shaderName);
 	size = sizeof("ImageShader.hlsl");
-	convert = ToWChar(&shaderName, size, "ImageShader.hlsl", size - 1);
+	convert = ToWChar(&shaderName, size, "ImageShader.hlsl", size);
 
 	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"ImageVS", "vs_5_0", compileflag, 0, &shaders[si_VS_image], &err);
 	outErr(err);
+
 	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
 		"ImagePS", "ps_5_0", compileflag, 0, &shaders[si_PS_image], &err);
 	outErr(err);
 
 	result = D3DGetBlobPart(shaders[si_VS_image]->GetBufferPointer(), shaders[si_VS_image]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
+	rsObj = new RootSignatureObject(rs);
+	rootsignature.push_back(rsObj);
+
+	delete(shaderName);
+	size = sizeof("FbxShader.hlsl");
+	convert = ToWChar(&shaderName, size, "FbxShader.hlsl", size);
+
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+		"FbxVS", "vs_5_0", compileflag, 0, &shaders[si_VS_fbx], &err);
+	outErr(err);
+
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+		"FbxPS", "ps_5_0", compileflag, 0, &shaders[si_PS_fbx], &err);
+	outErr(err);
+
+	result = D3DGetBlobPart(shaders[si_VS_fbx]->GetBufferPointer(), shaders[si_VS_fbx]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
 	rsObj = new RootSignatureObject(rs);
 	rootsignature.push_back(rsObj);
 
