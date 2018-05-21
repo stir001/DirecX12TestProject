@@ -22,7 +22,7 @@ struct ActionRect
 	Rect rect;
 };
 
-struct ActionData
+struct ActionImageData
 {
 	Rect imageRect;//‰æ‘œØ‚è”²‚«î•ñ
 	DirectX::XMFLOAT2 pivot;
@@ -34,5 +34,11 @@ struct Action
 {
 	std::string actionName;
 	bool isLoop;
-	std::vector<ActionData> datas;
+	std::vector<ActionImageData> datas;
+};
+
+struct ActionData
+{
+	ActionHeader header;
+	std::vector<Action> action;
 };

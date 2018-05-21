@@ -7,7 +7,7 @@
 #include <algorithm>
 
 const float VELOCITY_X  = 2.0f;
-const float VELOCITY_Y  = 10.0f;
+const float VELOCITY_Y  = 20.0f;
 const float GRAVITY		= -1.0f;
 
 PlayerSH::PlayerSH(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<DxInput> dlibInput) :IDrawableObject::IDrawableObject(imgCtrl)
@@ -51,9 +51,9 @@ void PlayerSH::OnGround(float grandLine)
 	mVel.y = 0;
 }
 
-void PlayerSH::SetAction(std::vector<Action>& inActs)
+void PlayerSH::SetAction(ActionData& inActs)
 {
-	mActions.swap(inActs);
+	mActions.swap(inActs.action);
 	mCurrentAction = mActions.begin();
 	mFrame = 0;
 	mActionImageIndex = 0;
@@ -133,6 +133,16 @@ void PlayerSH::Walk()
 	{
 		mVel.x = 0;
 		mActionUpdate = &PlayerSH::Neutral;
+		mFrame = 0;
+		mActionImageIndex = 0;
+		SetActionImageData();
+	}
+
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
+	{
+		mVel.x = 0;
+		ChangeAction("Crouch");
+		mActionUpdate = &PlayerSH::Crouch;
 	}
 
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
@@ -140,6 +150,12 @@ void PlayerSH::Walk()
 		mVel.y = VELOCITY_Y;
 		ChangeAction("Jump");
 		mActionUpdate = &PlayerSH::Jump;
+	}
+	else if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_X))
+	{
+		mVel.x = 0;
+		ChangeAction("Punch");
+		mActionUpdate = &PlayerSH::Punch;
 	}
 
 	mPos += mVel;
@@ -150,7 +166,7 @@ void PlayerSH::Walk()
 
 void PlayerSH::Neutral()
 {
-	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_D))
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
 	{
 		mVel.x = VELOCITY_X;
 		if (mIsturn == true)
@@ -161,7 +177,7 @@ void PlayerSH::Neutral()
 		ChangeAction("Walk");
 		mActionUpdate = &PlayerSH::Walk;
 	}
-	else if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_A))
+	else if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_LEFT))
 	{
 		mVel.x = -VELOCITY_X;
 		if (mIsturn == false)
@@ -177,11 +193,24 @@ void PlayerSH::Neutral()
 		mVel.x = 0;
 	}
 
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
+	{
+		mVel.x = 0;
+		ChangeAction("Crouch");
+		mActionUpdate = &PlayerSH::Crouch;
+	}
+
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
 	{
 		mVel.y = VELOCITY_Y;
 		ChangeAction("Jump");
 		mActionUpdate = &PlayerSH::Jump;
+	}
+	else if(mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_X))
+	{
+		mVel.x = 0;
+		ChangeAction("Punch");
+		mActionUpdate = &PlayerSH::Punch;
 	}
 
 	mPos += mVel;
@@ -196,7 +225,7 @@ void PlayerSH::Jump()
 		--mActionImageIndex;
 		--mFrame;
 	};
-	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_D))
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
 	{
 		mVel.x = VELOCITY_X * 0.8f;
 		if (mIsturn == true)
@@ -206,7 +235,7 @@ void PlayerSH::Jump()
 		mIsturn = false;
 	}
 
-	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_A))
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_LEFT))
 	{
 		mVel.x = -VELOCITY_X * 0.8f;
 		if (mIsturn == false)
@@ -216,6 +245,8 @@ void PlayerSH::Jump()
 		mIsturn = true;
 	}
 	mPos += mVel;
+
+	mImgCtrl->SetPos(mPos);
 
 	AnimationUpdate();
 }
@@ -254,7 +285,7 @@ void PlayerSH::Crouch()
 		mActionUpdate = &PlayerSH::Neutral;
 	}
 
-	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_D))
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
 	{
 		if (mIsturn == true)
 		{
@@ -263,7 +294,7 @@ void PlayerSH::Crouch()
 		mIsturn = false;
 	}
 
-	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_A))
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_LEFT))
 	{
 		if (mIsturn == false)
 		{
@@ -271,6 +302,16 @@ void PlayerSH::Crouch()
 		}
 		mIsturn = true;
 	}
+
+	AnimationUpdate();
+}
+
+void PlayerSH::Punch()
+{
+	mChangeNextAction = [&](){
+		ChangeAction("Walk");
+		mActionUpdate = &PlayerSH::Neutral;
+	};
 
 	AnimationUpdate();
 }

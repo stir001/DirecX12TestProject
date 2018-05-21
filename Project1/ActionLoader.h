@@ -11,12 +11,12 @@ public:
 	ActionLoader();
 	~ActionLoader();
 
-	std::vector<Action>& LoadActionData(std::string path);
+	ActionData& LoadActionData(std::string path);
 private:
 	File* mFile;
-	std::map<std::string, std::vector<Action>> mActions;
+	std::map<std::string, ActionData> mActions;
 
-	void LoadActionHeader();
+	void LoadActionHeader(ActionHeader& header);
 	std::vector<Action> LoadActionRects();
 };
 

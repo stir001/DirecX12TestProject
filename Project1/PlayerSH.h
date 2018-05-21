@@ -9,6 +9,7 @@
 class ImageController;
 class DxInput;
 struct Action;
+struct ActionData;
 
 class PlayerSH :public IDrawableObject
 {
@@ -21,7 +22,7 @@ public:
 	void Draw();
 	const DirectX::XMFLOAT3& GetPlayerPos() const;
 	void OnGround(float grandLine);
-	void SetAction(std::vector<Action>& inActs);
+	void SetAction(ActionData& inActs);
 private:
 	std::vector<Action> mActions;
 	std::shared_ptr<DxInput> mInput;
@@ -42,6 +43,7 @@ private:
 	void Jump();
 	void Ground();
 	void Crouch();
+	void Punch();
 	void Gravity();
 };
 

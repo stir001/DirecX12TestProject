@@ -35,7 +35,7 @@ void GameScene::Run()
 	mBackGround->Update();
 	mPlayer->Update();
 
-	//mTopHUD->Draw();
+	mTopHUD->Draw();
 	mBottomHUD->Draw();
 	mPlayer->Draw();
 	mBackGround->Draw();

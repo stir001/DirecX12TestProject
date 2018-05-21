@@ -24,7 +24,7 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img):mImgObj(img)
 	, mTurnSign(1,1)
 {
 	DirectX::XMFLOAT2 size = mImgObj->GetImageSize();
-	DirectX::XMFLOAT3 offset = { size.x / 2.0f,size.y / 2.0f, 0.0f };
+	DirectX::XMFLOAT3 offset = { size.x / 2.0f, size.y / 2.0f, 0.0f };
 	for (int i = 0; i < 4; ++i)
 	{
 		DirectX::XMFLOAT3 vec = mVertex[i].pos - offset;

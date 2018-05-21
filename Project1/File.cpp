@@ -1,5 +1,6 @@
 #include "File.h"
 #include <iostream>
+#include <cassert>
 
 
 File::File(std::string path):fp(nullptr)
@@ -14,7 +15,11 @@ File::~File()
 
 void File::SetFile(std::string path)
 {
-	if (fp != nullptr) Close();
+	if (fp != nullptr)
+	{
+		Close();
+	}
+	fp = nullptr;
 	fopen_s(&fp, path.data(), "rb");
 }
 

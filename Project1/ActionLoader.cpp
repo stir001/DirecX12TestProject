@@ -11,7 +11,7 @@ ActionLoader::~ActionLoader()
 {
 }
 
-std::vector<Action>& ActionLoader::LoadActionData(std::string path)
+ActionData& ActionLoader::LoadActionData(std::string path)
 {
 	auto itr = mActions.find(path);
 	if (itr != mActions.end())
@@ -19,11 +19,15 @@ std::vector<Action>& ActionLoader::LoadActionData(std::string path)
 		return itr->second;
 	}
 	mFile = new File(path);
-	
-	LoadActionHeader();
-	std::vector<Action> act = LoadActionRects();
 
-	mActions[path] = act;
+	size_t szie = path.rfind('/');
+	
+	ActionData actData;
+
+	LoadActionHeader(actData.header);
+	actData.action = LoadActionRects();
+
+	mActions[path] = actData;
 
 	mFile->Close();
 	delete mFile;
@@ -31,9 +35,8 @@ std::vector<Action>& ActionLoader::LoadActionData(std::string path)
 	return mActions[path];
 }
 
-void ActionLoader::LoadActionHeader()
+void ActionLoader::LoadActionHeader(ActionHeader& header)
 {
-	ActionHeader header;
 	mFile->LoadFile(&header.version);
 	mFile->LoadFile(&header.fileNameSize);
 
