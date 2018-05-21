@@ -70,7 +70,6 @@ void FbxModelDataConverter::ConvertTexture()
 	{
 		for (auto& tex : texLayer.textures)
 		{
-			
 			std::wstring wpath;
 			std::string convertStr = tex.texturePath;
 			convertStr.push_back('\0');

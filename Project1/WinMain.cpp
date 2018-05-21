@@ -55,13 +55,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	FbxModelController* fbxctrl = new FbxModelController(fbxModel);
 
+	PrimitiveManager mgr;
+
+
 	//PMDLoader loader;
 	//PMDController* pmdContrl = loader.Load(PMD_MODEL_PATH2);
 	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
 	fbxctrl->SetLight(dirLight);
 
 	//pmdContrl->SetLight(dirLight);
-	//ƒƒCƒ“ƒ‹[ƒv
+
+
+
+	XMFLOAT3 pos = { 0,0,0 };
+	XMFLOAT3 normal = { 0,1,0 };
+	mgr.CreatePlane(pos, 50, 50, normal);
+	mgr.SetLightObject(dirLight);
 
 	Dx12Camera* camera = d12->GetCamera();
 	DxInput input;
@@ -117,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			camera->TurnRightLeft(1.0f);
 		}
 
-		/*pmdContrl->Draw();*/
+		mgr.Draw();
 		fbxctrl->Draw();
 
 		CallEndPerGameLoop();

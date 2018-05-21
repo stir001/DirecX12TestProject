@@ -30,7 +30,7 @@ Dx12Camera::Dx12Camera(int wWidth, int wHeight, DirectX::XMFLOAT3& eye, DirectX:
 	XMVECTOR vEye = DirectX::XMLoadFloat3(&element.eye);
 	XMVECTOR vTarget = DirectX::XMLoadFloat3(&element.target);
 	XMVECTOR vUpper = DirectX::XMLoadFloat3(&upper);
-	projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, static_cast<float>(width) / static_cast<float>(height), 1.0f, 100.f);//カメラのプロジェクション行列
+	projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, static_cast<float>(width) / static_cast<float>(height), 10.0f, 500.f);//カメラのプロジェクション行列
 	UpdateElement();
 
 	cameraBuffer = new ConstantBufferObject(sizeof(element), 1);

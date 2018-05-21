@@ -36,7 +36,7 @@ void PrimitiveManager::Draw()
 	}
 }
 
-void PrimitiveManager::SetLightObject(LightObject* inlight)
+void PrimitiveManager::SetLightObject(std::shared_ptr<LightObject> inlight)
 {
 	light = inlight;
 }

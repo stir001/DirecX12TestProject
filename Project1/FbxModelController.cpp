@@ -28,7 +28,7 @@ void FbxModelController::Draw()
 	mModel->SetIndexBuffer();
 	mModel->SetVertexBuffer();
 	mModel->SetTexture();
-	d12->GetCmdList()->DrawIndexedInstanced(mModel->mIndexes.size(), 1, 0, 0, 0);
+	d12->GetCmdList()->DrawIndexedInstanced(15, 1, 0, 0, 0);
 }
 
 void FbxModelController::SetLight(std::shared_ptr<DirectionalLight> dirlight)

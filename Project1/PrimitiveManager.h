@@ -2,6 +2,8 @@
 #include <vector>
 #include <d3dcommon.h>
 #include <DirectXMath.h>
+#include <memory>
+
 class PrimitiveObject;
 class LightObject;
 
@@ -11,9 +13,9 @@ class PrimitiveManager
 {
 private:
 	std::vector<PrimitiveObject*> objects;
-	LightObject* light;
+	std::shared_ptr<LightObject> light;
 public:
-	void SetLightObject(LightObject* inlight);
+	void SetLightObject(std::shared_ptr<LightObject> inlight);
 	void CreatePlane(DirectX::XMFLOAT3 pos,float length,float height,DirectX::XMFLOAT3 normal);
 	void Draw();
 	PrimitiveManager();
