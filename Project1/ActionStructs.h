@@ -1,6 +1,7 @@
 #pragma once
 #include "Rect.h"
 #include <vector>
+#include <string>
 
 enum eACTION_RECT_TYPE
 {
@@ -40,5 +41,6 @@ struct Action
 struct ActionData
 {
 	ActionHeader header;
+	std::string relativePath;
 	std::vector<Action> action;
 };

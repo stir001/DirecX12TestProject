@@ -15,6 +15,10 @@ class TextureLoader
 private:
 	std::map<std::wstring, TextureObj*> textures;
 	TextureMgr* texMgr;
+
+	void CreateTexWriteToSubRrsource(TextureObj*& inTex);
+	void CreateTexUpdateSubResources(TextureObj*& inTex);
+
 public:
 	ID3D12DescriptorHeap* CreateTexDescHeap(std::string modelpath, int texcount);
 	TextureObj* LoadTexture(std::wstring filepath,D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle, D3D12_GPU_DESCRIPTOR_HANDLE gpuhandle);

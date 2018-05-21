@@ -38,6 +38,24 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 
 	D3D12_RESOURCE_DESC desc = rtn->textureBuffer->GetDesc();
 
+	//CreateTexWriteToSubRrsource(rtn);
+	CreateTexUpdateSubResources(rtn);
+
+	rtn->filepath = filepath;
+	textures[filepath] = rtn;
+	return rtn;
+}
+
+ID3D12DescriptorHeap* TextureLoader::CreateTexDescHeap(std::string modelpath, int texcount)
+{
+	return texMgr->CreateTextureDescHeap(modelpath, texcount);
+}
+
+void TextureLoader::CreateTexWriteToSubRrsource(TextureObj*& inTex)
+{
+	DX12CTRL_INSTANCE
+	D3D12_RESOURCE_DESC desc = inTex->textureBuffer->GetDesc();
+
 	D3D12_HEAP_PROPERTIES heapProp = {};
 	heapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
 	heapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
@@ -45,15 +63,15 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	heapProp.CreationNodeMask = 1;
 	heapProp.VisibleNodeMask = 1;
 
-	int count = rtn->textureBuffer->Release();
-	rtn->textureBuffer = nullptr;
+	int count = inTex->textureBuffer->Release();
+	inTex->textureBuffer = nullptr;
 
 	d12->result = d12->GetDev()->CreateCommittedResource(&heapProp
 		, D3D12_HEAP_FLAG_NONE
 		, &desc
 		, D3D12_RESOURCE_STATE_GENERIC_READ
 		, nullptr
-		, IID_PPV_ARGS(&rtn->textureBuffer));
+		, IID_PPV_ARGS(&inTex->textureBuffer));
 
 
 	D3D12_BOX box = {};
@@ -64,7 +82,7 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	box.front = 0;
 	box.back = 1;
 
-	rtn->textureBuffer->WriteToSubresource(0, &box, rtn->subresource.pData, box.right * 4, box.bottom * 4);
+	d12->result = inTex->textureBuffer->WriteToSubresource(0, &box, inTex->subresource.pData, box.right * 4, box.bottom * 4);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC wicSrvDesc = {};
 	wicSrvDesc.Format = desc.Format;
@@ -72,9 +90,9 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	wicSrvDesc.Texture2D.MipLevels = 1;
 	wicSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-	d12->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(rtn->textureBuffer, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+	d12->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inTex->textureBuffer, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
-	d12->GetDev()->CreateShaderResourceView(rtn->textureBuffer, &wicSrvDesc, rtn->cpuHandle);
+	d12->GetDev()->CreateShaderResourceView(inTex->textureBuffer, &wicSrvDesc, inTex->cpuHandle);
 
 	{
 		//close()‚ð–Y‚ê‚ÄƒGƒ‰[‚ð‚Í‚¢‚Ä‚¢‚½
@@ -89,12 +107,75 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 
 	d12->CmdQueueSignal();
 	d12->GetCmdList()->Reset(d12->GetCmdAllocator(), d12->GetPiplineState(pso_notTex));
-	rtn->filepath = filepath;
-	textures[filepath] = rtn;
-	return rtn;
 }
 
-ID3D12DescriptorHeap* TextureLoader::CreateTexDescHeap(std::string modelpath, int texcount)
+void TextureLoader::CreateTexUpdateSubResources(TextureObj*& inTex)
 {
-	return texMgr->CreateTextureDescHeap(modelpath, texcount);
+	DX12CTRL_INSTANCE
+
+	ID3D12Resource* updateBuffer;
+
+	D3D12_HEAP_PROPERTIES heapProp = {};
+	heapProp.Type = D3D12_HEAP_TYPE_UPLOAD;
+	heapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapProp.CreationNodeMask = 1;
+	heapProp.VisibleNodeMask = 1;
+
+	D3D12_RESOURCE_DESC uploadDesc;
+	uploadDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	uploadDesc.Alignment = 0;
+	uploadDesc.Width = GetRequiredIntermediateSize(inTex->textureBuffer,0,1);
+	uploadDesc.Height = 1;
+	uploadDesc.DepthOrArraySize = 1;
+	uploadDesc.MipLevels = 1;
+	uploadDesc.Format = DXGI_FORMAT_UNKNOWN;
+	uploadDesc.SampleDesc.Count = 1;
+	uploadDesc.SampleDesc.Quality = 0;
+	uploadDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	uploadDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+	d12->result = d12->GetDev()->CreateCommittedResource(
+		&heapProp, 
+		D3D12_HEAP_FLAG_NONE,
+		&uploadDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&updateBuffer));
+
+	UINT64 num = UpdateSubresources(d12->GetCmdList(),
+		inTex->textureBuffer,
+		updateBuffer,
+		0,
+		0,
+		1,
+		&inTex->subresource);
+
+	D3D12_RESOURCE_BARRIER barrier;
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Transition.pResource = inTex->textureBuffer;
+	barrier.Transition.Subresource = 0;
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	d12->GetCmdList()->ResourceBarrier(1, &barrier);
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC wicSrvDesc = {};
+	wicSrvDesc.Format = inTex->textureBuffer->GetDesc().Format;
+	wicSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	wicSrvDesc.Texture2D.MipLevels = 1;
+	wicSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	d12->GetDev()->CreateShaderResourceView(inTex->textureBuffer, &wicSrvDesc, inTex->cpuHandle);
+
+	d12->GetCmdList()->Close();
+
+	{
+		ID3D12GraphicsCommandList* cmdList = d12->GetCmdList();
+		d12->GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
+	}
+
+	d12->CmdQueueSignal();
+
+	d12->GetCmdList()->Reset(d12->GetCmdAllocator(), d12->GetPiplineState(pso_exitTex ));
 }

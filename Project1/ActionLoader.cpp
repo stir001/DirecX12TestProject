@@ -1,5 +1,6 @@
 #include "ActionLoader.h"
 #include "File.h"
+#include <algorithm>
 
 
 ActionLoader::ActionLoader()
@@ -20,11 +21,17 @@ ActionData& ActionLoader::LoadActionData(std::string path)
 	}
 	mFile = new File(path);
 
-	size_t szie = path.rfind('/');
-	
+	size_t size = path.rfind('/') + 1;
+
 	ActionData actData;
+	actData.relativePath.resize(size);
+	std::copy(path.begin(), path.begin() + size, actData.relativePath.begin());
 
 	LoadActionHeader(actData.header);
+	for (auto& c : actData.header.imagefilename)
+	{
+		actData.relativePath.push_back(c);
+	}
 	actData.action = LoadActionRects();
 
 	mActions[path] = actData;

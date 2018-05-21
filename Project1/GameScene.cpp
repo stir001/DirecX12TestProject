@@ -15,12 +15,16 @@ const std::string BOTTOMHUD_IMAGE_PATH = "Action18/img/bar_bottom.png";
 const std::string PLAYER_ACTION_PATH = "Action18/Action/player.act";
 
 GameScene::GameScene(std::shared_ptr<DxInput> inInput):mInput(inInput),mImgLoader(new ImageLoader())
-,mPlayer(new PlayerSH(mImgLoader->LoadImageData(PLAYER_IMAGE_PATH), inInput))
+,mPlayer(nullptr)
 ,mBackGround(new BackGround(mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH),mPlayer))
 ,mActLoader(new ActionLoader())
 {
+	ActionData& act = mActLoader->LoadActionData(PLAYER_ACTION_PATH);
+	mPlayer.reset(new PlayerSH(mImgLoader->LoadImageData(act.relativePath), mInput));
 	LoadHUD();
-	mPlayer->SetAction(mActLoader->LoadActionData(PLAYER_ACTION_PATH));
+	mPlayer->SetAction(act);
+
+	mBackGround.reset(new BackGround(mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH), mPlayer));
 }
 
 
