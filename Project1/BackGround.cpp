@@ -37,7 +37,7 @@ void BackGround::Draw()
 
 bool BackGround::IsGroundPlayer() const
 {
-	if (mwpPlayer.lock()->GetPlayerPos().y <= mGroundLine)
+	if (mwpPlayer.lock()->GetPos().y <= mGroundLine)
 	{
 		return true;
 	}

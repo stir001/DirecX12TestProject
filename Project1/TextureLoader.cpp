@@ -38,6 +38,16 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 
 	D3D12_RESOURCE_DESC desc = rtn->textureBuffer->GetDesc();
 
+	if (desc.Format == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB ||
+		desc.Format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB)
+	{
+		rtn->gamma = 0.5f;
+	}
+	else
+	{
+		rtn->gamma = 1.0f;
+	}
+
 	//CreateTexWriteToSubRrsource(rtn);
 	CreateTexUpdateSubResources(rtn);
 

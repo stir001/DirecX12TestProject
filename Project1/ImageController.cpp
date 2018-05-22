@@ -14,10 +14,10 @@ DirectX::XMFLOAT3 RotationXY(DirectX::XMFLOAT3& pos, float rad)
 }
 
 ImageController::ImageController(std::shared_ptr<ImageObject> img):mImgObj(img)
-	, mVertex{ { { 0.f, img->GetImageSize().y, 0.f },{ 0.f, 0.f } }/* v1 */,
-{ { img->GetImageSize().x,img->GetImageSize().y, 0.f },{ 1.f, 0.f } }/* v2 */
-,{ { 0.0f,0.0f , 0.0f },{ 0.f, 1.f } }/* v3 */
-,{ { img->GetImageSize().x, 0.0f, 0.f },{ 1.f, 1.f } }/* v4 */ }
+, mVertex{ { { 0.f, img->GetImageSize().y, 0.f },{ 0.f, 0.f }, img->GetGamma() }/* v1 */,
+{ { img->GetImageSize().x,img->GetImageSize().y, 0.f },{ 1.f, 0.f }, img->GetGamma() }/* v2 */
+,{ { 0.0f,0.0f , 0.0f },{ 0.f, 1.f }, img->GetGamma() }/* v3 */
+,{ { img->GetImageSize().x, 0.0f, 0.f },{ 1.f, 1.f }, img->GetGamma() }/* v4 */ }
 	, mVertexBuffer(new VertexBufferObject(sizeof(ImageVertex), 4))
 	, mScale(1.0f), mRota(0.0f), mPivot{ 0.f,0.f,0.f }, mCenterOffset(0,0,0)
 	, mRect(new Rect(mPivot, img->GetImageSize().x, img->GetImageSize().y))

@@ -15,9 +15,11 @@ private:
 	int mHeight;
 	ID3D12DescriptorHeap* mTexDescHeap;
 	TextureObj* mTexObj;
+	float mGamma;
 
 	ImageObject(int width, int height, TextureObj* texObj,ID3D12DescriptorHeap* texDescHeap);
 public:
+	float GetGamma()const;
 	DirectX::XMFLOAT2 GetImageSize();
 	void SetImage() const;
 	~ImageObject();

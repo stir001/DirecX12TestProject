@@ -5,7 +5,7 @@
 #include <d3d12.h>
 
 
-TextureObj::TextureObj() :textureBuffer(nullptr)
+TextureObj::TextureObj() :textureBuffer(nullptr), gamma(0.0f)
 {
 	ZeroMemory(&subresource, sizeof(subresource));
 }
@@ -22,6 +22,11 @@ void TextureObj::SetBuffer() const
 {
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_texture, gpuHandle);
+}
+
+float TextureObj::GetGamma() const
+{
+	return gamma;
 }
 
 int TextureObj::GetWidth() const

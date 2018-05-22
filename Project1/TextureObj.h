@@ -14,10 +14,12 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle;
 	std::unique_ptr<uint8_t[]> decodedData;
 	D3D12_SUBRESOURCE_DATA subresource;
+	float gamma;
 public:
 	int GetWidth() const;
 	int GetHeight() const;
 	void SetBuffer() const;
+	float GetGamma() const;//ƒÁ•â³‚Ì’l‚ğ•Ô‚·,Œ»İ‚Í“K“–‚È’l‚ğ•Ô‚µ‚Ä‚¢‚é
 	TextureObj();
 	~TextureObj();
 };

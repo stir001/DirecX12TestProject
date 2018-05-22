@@ -12,21 +12,22 @@ struct ImageOutput
 	float4 svpos : SV_POSITION;
 	float4 pos : POSITION;
 	float2 uv : TEXCOORD;
+    float gamma : GAMMA;
 };
 
 [RootSignature(IMGRS)]
-ImageOutput ImageVS(float4 pos : POSITION, float2 uv : TEXCOORD)
+ImageOutput ImageVS(float4 pos : POSITION, float2 uv : TEXCOORD, float gamma : GAMMA)
 {
     ImageOutput o;
 	o.pos = pos;
 	o.svpos = pos;
 	o.uv = uv;
+    o.gamma = gamma;
 	return o;
 }
 
 float4 ImagePS(ImageOutput input) : SV_Target
 {
-    float4 color = tex.Sample(smp, input.uv);
+    float4 color = pow(tex.Sample(smp, input.uv), input.gamma);
     return color;
-    //return float4(input.uv, 1, 1);
 }

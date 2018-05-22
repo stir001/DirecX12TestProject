@@ -10,6 +10,7 @@ struct ImageVertex
 {
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 uv;
+	float gamma;
 };
 
 class ImageController

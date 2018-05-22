@@ -1,17 +1,15 @@
 #include "PlayerSH.h"
 #include "ImageController.h"
 #include "DxInput.h"
-#include "XMFloat3Operators.h"
 #include "ActionStructs.h"
-#include<iostream>
-#include <algorithm>
+
 
 const float VELOCITY_X  = 2.0f;
 const float VELOCITY_Y  = 20.0f;
 const float GRAVITY		= -1.0f;
 
-PlayerSH::PlayerSH(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<DxInput> dlibInput) :IDrawableObject::IDrawableObject(imgCtrl)
-, mInput(dlibInput), mVel(0.0f, 0.0f, 0.0f), mPos(0, 0, 0),mActionUpdate(&PlayerSH::Neutral), mIsturn(false), mFrame(0), mActionImageIndex(0)
+PlayerSH::PlayerSH(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<DxInput> dlibInput) :ICharactor::ICharactor(imgCtrl)
+, mInput(dlibInput), mActionUpdate(&PlayerSH::Neutral)
 {
 	mImgCtrl->SetPos(mPos);
 	mImgCtrl->SetScale(2.0f);
@@ -35,11 +33,6 @@ void PlayerSH::Draw()
 	mImgCtrl->Draw();
 }
 
-const DirectX::XMFLOAT3& PlayerSH::GetPlayerPos() const
-{
-	return mPos;
-}
-
 void PlayerSH::OnGround(float grandLine)
 {
 	mPos.y = grandLine;
@@ -49,58 +42,6 @@ void PlayerSH::OnGround(float grandLine)
 		mActionUpdate = &PlayerSH::Ground;
 	}
 	mVel.y = 0;
-}
-
-void PlayerSH::SetAction(ActionData& inActs)
-{
-	mActions.swap(inActs.action);
-	mCurrentAction = mActions.begin();
-	mFrame = 0;
-	mActionImageIndex = 0;
-	SetActionImageData();
-}
-
-void PlayerSH::ChangeAction(const char* actionName)
-{
-	auto itr = std::find_if(mActions.begin(), mActions.end(), [&](const Action& act) {return act.actionName == actionName; });
-	if (itr != mActions.end())
-	{
-		mCurrentAction = itr;
-		mFrame = 0;
-		mActionImageIndex = 0;
-		SetActionImageData();
-	}
-}
-
-void PlayerSH::SetActionImageData()
-{
-	DirectX::XMFLOAT2 imgSize = { mCurrentAction->datas[mActionImageIndex].imageRect.GetWidth(),mCurrentAction->datas[mActionImageIndex].imageRect.GetHeight() };
-	mImgCtrl->SetCenterOffset((mCurrentAction->datas[mActionImageIndex].pivot.x - imgSize.x / 2.0f), (-mCurrentAction->datas[mActionImageIndex].pivot.y + imgSize.y / 2.0f), 0);
-	mImgCtrl->SetRect(mCurrentAction->datas[mActionImageIndex].imageRect);
-}
-
-void PlayerSH::AnimationUpdate()
-{
-	if (++mFrame >= mCurrentAction->datas[mActionImageIndex].duraction)
-	{
-		if (++mActionImageIndex >= mCurrentAction->datas.size())
-		{
-			if (mCurrentAction->isLoop)
-			{
-				ChangeAction(mCurrentAction->actionName.data());
-			}
-			else
-			{
-				mChangeNextAction();
-				SetActionImageData();
-			}
-		}
-		else
-		{
-			mFrame = 0;
-			SetActionImageData();
-		}
-	}
 }
 
 void PlayerSH::Gravity()
@@ -151,16 +92,15 @@ void PlayerSH::Walk()
 		ChangeAction("Jump");
 		mActionUpdate = &PlayerSH::Jump;
 	}
-	else if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_X))
+	else if (mInput->IsKeyTrigger(eVIRTUAL_KEY_INDEX_X))
 	{
 		mVel.x = 0;
 		ChangeAction("Punch");
 		mActionUpdate = &PlayerSH::Punch;
 	}
 
-	mPos += mVel;
+	UpdatePostion();
 
-	mImgCtrl->SetPos(mPos);
 	AnimationUpdate();
 }
 
@@ -206,16 +146,14 @@ void PlayerSH::Neutral()
 		ChangeAction("Jump");
 		mActionUpdate = &PlayerSH::Jump;
 	}
-	else if(mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_X))
+	else if(mInput->IsKeyTrigger(eVIRTUAL_KEY_INDEX_X))
 	{
 		mVel.x = 0;
 		ChangeAction("Punch");
 		mActionUpdate = &PlayerSH::Punch;
 	}
 
-	mPos += mVel;
-
-	mImgCtrl->SetPos(mPos);
+	UpdatePostion();
 }
 
 void PlayerSH::Jump()
@@ -244,9 +182,21 @@ void PlayerSH::Jump()
 		}
 		mIsturn = true;
 	}
-	mPos += mVel;
 
-	mImgCtrl->SetPos(mPos);
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN) && mInput->IsKeyTrigger(eVIRTUAL_KEY_INDEX_X))
+	{
+		ChangeAction("Kick");
+		mActionUpdate = &PlayerSH::Kick;
+		mChangeNextAction = [&]() 
+		{
+			ChangeAction("Jump");
+			mActionImageIndex = static_cast<int>(mCurrentAction->datas.size() - 1);
+			mFrame = mCurrentAction->datas[mActionImageIndex].duraction - 1;
+		};
+
+	}
+
+	UpdatePostion();
 
 	AnimationUpdate();
 }
@@ -284,6 +234,23 @@ void PlayerSH::Crouch()
 		ChangeAction("Walk");
 		mActionUpdate = &PlayerSH::Neutral;
 	}
+	else if (mInput->IsKeyTrigger(eVIRTUAL_KEY_INDEX_X))
+	{
+		ChangeAction("Kick");
+		mActionUpdate = &PlayerSH::Kick;
+		mChangeNextAction = [&]()
+		{
+			ChangeAction("Crouch");
+			mActionUpdate = &PlayerSH::Crouch;
+		};
+	}
+
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
+	{
+		ChangeAction("Jump");
+		mActionUpdate = &PlayerSH::Jump;
+		mVel.y = VELOCITY_Y;
+	}
 
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
 	{
@@ -303,15 +270,24 @@ void PlayerSH::Crouch()
 		mIsturn = true;
 	}
 
+	UpdatePostion();
+
 	AnimationUpdate();
 }
 
 void PlayerSH::Punch()
 {
-	mChangeNextAction = [&](){
+	mChangeNextAction = [&]()
+	{
 		ChangeAction("Walk");
 		mActionUpdate = &PlayerSH::Neutral;
 	};
 
+	AnimationUpdate();
+}
+
+void PlayerSH::Kick()
+{
+	UpdatePostion();
 	AnimationUpdate();
 }

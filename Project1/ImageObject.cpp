@@ -4,10 +4,11 @@
 #include "TextureObj.h"
 #include "XMFloat3Operators.h"
 #include "Rect.h"
+#include "TextureObj.h"
 
 ImageObject::ImageObject(int inwidth, int inheight, TextureObj* intexObj, ID3D12DescriptorHeap* intexDescHeap) 
 	:mWidth(inwidth), mHeight(inheight)
-	, mTexObj(intexObj), mTexDescHeap(intexDescHeap)
+	, mTexObj(intexObj), mTexDescHeap(intexDescHeap),mGamma(intexObj->GetGamma())
 {
 
 }
@@ -26,4 +27,9 @@ void ImageObject::SetImage() const
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->SetDescriptorHeaps(1, &mTexDescHeap);
 	mTexObj->SetBuffer();
+}
+
+float ImageObject::GetGamma()const
+{
+	return mGamma;
 }

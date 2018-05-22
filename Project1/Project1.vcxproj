@@ -143,6 +143,7 @@
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="HeadUpDisplay.cpp" />
     <ClCompile Include="HlslInclude.cpp" />
+    <ClCompile Include="ICharactor.cpp" />
     <ClCompile Include="IDrawableObject.cpp" />
     <ClCompile Include="ImageController.cpp" />
     <ClCompile Include="ImageData.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="HeadUpDisplay.h" />
     <ClInclude Include="HlslInclude.h" />
+    <ClInclude Include="ICharactor.h" />
     <ClInclude Include="IDrawableObject.h" />
     <ClInclude Include="ImageController.h" />
     <ClInclude Include="ImageData.h" />
