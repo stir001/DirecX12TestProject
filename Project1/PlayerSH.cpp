@@ -5,8 +5,8 @@
 
 
 const float VELOCITY_X  = 2.0f;
-const float VELOCITY_Y  = 20.0f;
-const float GRAVITY		= -1.0f;
+const float VELOCITY_Y  = 15.0f;
+const float GRAVITY		= -0.8f;
 
 PlayerSH::PlayerSH(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<DxInput> dlibInput) :ICharactor::ICharactor(imgCtrl)
 , mInput(dlibInput), mActionUpdate(&PlayerSH::Neutral)
@@ -217,17 +217,19 @@ void PlayerSH::Ground()
 		}
 	};
 
+	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN) && mInput->IsKeyTrigger(eVIRTUAL_KEY_INDEX_X))
+	{
+		ChangeAction("Sliding");
+		mActionUpdate = &PlayerSH::Sliding;
+		mVel.x = mIsturn ? -VELOCITY_X * 1.5f: VELOCITY_X * 1.5f;
+	}
+
 	AnimationUpdate();
 }
 
 void PlayerSH::Crouch()
 {
 	mVel.x = 0;
-	mChangeNextAction = [&]()
-	{
-		--mActionImageIndex;
-		--mFrame;
-	};
 
 	if (!mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
 	{
@@ -271,8 +273,6 @@ void PlayerSH::Crouch()
 	}
 
 	UpdatePostion();
-
-	AnimationUpdate();
 }
 
 void PlayerSH::Punch()
@@ -289,5 +289,25 @@ void PlayerSH::Punch()
 void PlayerSH::Kick()
 {
 	UpdatePostion();
+	AnimationUpdate();
+}
+
+void PlayerSH::Sliding()
+{
+	mChangeNextAction = [&]()
+	{
+		if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
+		{
+			ChangeAction("Crouch");
+			mActionUpdate = &PlayerSH::Crouch;
+		}
+		else
+		{
+			ChangeAction("Walk");
+			mActionUpdate = &PlayerSH::Neutral;
+		}
+	};
+	UpdatePostion();
+
 	AnimationUpdate();
 }

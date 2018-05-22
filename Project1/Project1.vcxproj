@@ -129,6 +129,7 @@
     <ClCompile Include="BmpLoader.cpp" />
     <ClCompile Include="CBVDescriptorHeapObject.cpp" />
     <ClCompile Include="ConstantBufferObject.cpp" />
+    <ClCompile Include="DeadMan.cpp" />
     <ClCompile Include="DepthBufferObject.cpp" />
     <ClCompile Include="DescriptorHeapManager.cpp" />
     <ClCompile Include="DescriptorHeapObject.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="Dx12Camera.cpp" />
     <ClCompile Include="Dx12Ctrl.cpp" />
     <ClCompile Include="DxInput.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Geometry.cpp" />
@@ -261,6 +263,7 @@
     <ClInclude Include="CBVDescriptorHeapObject.h" />
     <ClInclude Include="CharToWChar.h" />
     <ClInclude Include="ConstantBufferObject.h" />
+    <ClInclude Include="DeadMan.h" />
     <ClInclude Include="DepthBufferObject.h" />
     <ClInclude Include="DescriptorHeapManager.h" />
     <ClInclude Include="DescriptorHeapObject.h" />
@@ -270,6 +273,7 @@
     <ClInclude Include="Dx12Camera.h" />
     <ClInclude Include="Dx12Ctrl.h" />
     <ClInclude Include="DxInput.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Geometry.h" />

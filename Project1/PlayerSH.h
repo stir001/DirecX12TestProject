@@ -19,7 +19,6 @@ public:
 	void Draw();
 	void OnGround(float grandLine);
 private:
-	
 	std::shared_ptr<DxInput> mInput;
 
 	void (PlayerSH::*mActionUpdate)();
@@ -31,6 +30,7 @@ private:
 	void Crouch();
 	void Punch();
 	void Kick();
+	void Sliding();
 	void Gravity();
 };
 
