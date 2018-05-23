@@ -247,6 +247,9 @@ void  Dx12Ctrl::CreatePiplineStates()
 		{ "TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
 	};
 
+	gpsDesc.InputLayout.NumElements = sizeof(fbxinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
+	gpsDesc.InputLayout.pInputElementDescs = fbxinputDescs;
+	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
 	gpsDesc.VS = GetShader(si_VS_fbx);
 	gpsDesc.PS = GetShader(si_PS_fbx);
 	//rastarizer.CullMode = D3D12_CULL_MODE_BACK;

@@ -32,5 +32,5 @@ void IndexBufferObject::SetBuffer()
 {
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->IASetIndexBuffer(&indexBufferView);
-	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);//‚±‚ê‚Í‚±‚±‚Å‚µ‚Ä‚¢‚¢‚Ì‚©Šm’è‚Å‚Í‚È‚¢(—‰ð•s‘«)
+	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
 }

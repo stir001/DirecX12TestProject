@@ -36,6 +36,8 @@ const int SCREEN_BUFFER_COUNT = 2;
 const std::string FBX_MODEL_PATH = "Model/FBX/test_model/model/test_model.fbx";
 const std::string PMD_MODEL_PATH = "‰‰¹ƒ~ƒN.pmd";
 const std::string PMD_MODEL_PATH2 = "”Ž—í—ì–²/reimu_F01.pmd";
+const std::string FBX_MODEL_PATH2 = "test_moedl2/FBX/test_model_low.FBX";
+const std::string FBX_MODEL_PATH3 = "test_moedl2/FBX/test/test_model_low.FBX";
 
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
@@ -49,7 +51,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	d12->Dx12Init();
 
 	FbxLoader::Create();
-	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH);
+	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH2);
 	FbxModelDataConverter* fbxconverter = new FbxModelDataConverter();
 	std::shared_ptr<FbxModel> fbxModel(fbxconverter->ConvertToFbxModel(modelData));
 
@@ -126,7 +128,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			camera->TurnRightLeft(1.0f);
 		}
 
-		mgr.Draw();
+		//mgr.Draw();
 		fbxctrl->Draw();
 
 		CallEndPerGameLoop();

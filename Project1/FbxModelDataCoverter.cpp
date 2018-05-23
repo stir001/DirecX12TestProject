@@ -24,7 +24,7 @@ FbxModel* FbxModelDataConverter::ConvertToFbxModel(const FbxModelData* data)
 
 	ConvertIndex();
 	ConvertVertex();
-	ConvertTexture();
+	//ConvertTexture();
 	return mModel;
 }
 

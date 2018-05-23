@@ -12,7 +12,7 @@ class FbxModelDataConverter;
 namespace Fbx {
 
 	struct FbxIndexes{
-		std::vector<int>			indexes;
+		std::vector<unsigned int>			indexes;
 		int							indexCount;
 	};
 	
@@ -104,7 +104,7 @@ namespace Fbx {
 		FbxModel();
 		~FbxModel();
 
-		std::vector<int> mIndexes;
+		std::vector<unsigned int> mIndexes;
 		std::vector<FbxVertex> mVertexes;
 		std::vector<FbxVertexElement> mVertexElements;
 		std::vector<Fbx::FbxTexture> mTextures;

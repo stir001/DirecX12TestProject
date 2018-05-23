@@ -18,7 +18,7 @@ VertexBufferObject::VertexBufferObject(unsigned int elementsize, unsigned int el
 
 	
 	vbView.BufferLocation = buffer->GetGPUVirtualAddress();
-	vbView.SizeInBytes = elementcount * elementsize;
+	vbView.SizeInBytes = (elementcount * elementsize + 0xff) & ~0xff;
 	vbView.StrideInBytes = elementsize;
 
 	Map();

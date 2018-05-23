@@ -14,7 +14,7 @@ Dx12Camera::Dx12Camera(int wWidth,int wHeight):width(wWidth),height(wHeight)
 	XMVECTOR vTarget = DirectX::XMLoadFloat3(&element.target);
 	XMVECTOR vUpper = DirectX::XMLoadFloat3(&upper);
 	camera = DirectX::XMMatrixLookAtLH(vEye, vTarget, vUpper);
-	projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, static_cast<float>(width) / static_cast<float>(height), 1.0f, 100.f);//カメラのプロジェクション行列
+	projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, static_cast<float>(width) / static_cast<float>(height), 1.0f, 500.f);//カメラのプロジェクション行列
 	element.viewproj = camera * projection;
 
 	cameraBuffer = new ConstantBufferObject(sizeof(element), 1);
