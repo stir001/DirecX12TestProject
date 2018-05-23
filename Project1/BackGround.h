@@ -2,15 +2,16 @@
 #include "IDrawableObject.h"
 #include <memory>
 #include <DirectXMath.h>
+#include <vector>
 
 class ImageController;
-class PlayerSH;
+class ICharactor;
 
 class BackGround :public IDrawableObject
 {
 public:
 	void Update();
-	void Draw();
+	void Draw() const ;
 	BackGround(std::shared_ptr<ImageController> imgCtrl,std::shared_ptr<PlayerSH> spPlayer);
 	~BackGround();
 
@@ -19,8 +20,8 @@ private:
 
 	std::shared_ptr<ImageController> mSecondImage;
 	DirectX::XMFLOAT3 mPos;
-	std::weak_ptr<PlayerSH> mwpPlayer;
+	std::vector<std::weak_ptr<ICharactor>> mwpCharactor;
 
-	bool IsGroundPlayer() const;
+	bool IsGroundCharactor(std::weak_ptr<ICharactor> charactor) const;
 };
 

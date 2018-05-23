@@ -4,7 +4,7 @@ class Enemy :
 	public ICharactor
 {
 public:
-	Enemy();
+	Enemy(std::shared_ptr<ImageController>& imgCtrl);
 	virtual ~Enemy();
 };
 

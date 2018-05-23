@@ -2,7 +2,7 @@
 
 
 
-Enemy::Enemy()
+Enemy::Enemy(std::shared_ptr<ImageController>& imgCtrl):ICharactor(imgCtrl)
 {
 }
 

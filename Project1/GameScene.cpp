@@ -7,24 +7,23 @@
 #include "ImageController.h"
 #include "ActionLoader.h"
 #include "Dx12Ctrl.h"
+#include "DeadMan.h"
 
-const std::string PLAYER_IMAGE_PATH = "Action18/img/rick.png";
 const std::string BACKGROUND_IMAGE_PATH = "Action18/img/splatterhouse.png";
 const std::string TOPHUD_IMAGE_PATH = "Action18/img/bar_top.png";
 const std::string BOTTOMHUD_IMAGE_PATH = "Action18/img/bar_bottom.png";
 const std::string PLAYER_ACTION_PATH = "Action18/Action/player.act";
+const std::string DEADMAN_ACTION_PATH = "Action18/Action/deadman.act";
 
 GameScene::GameScene(std::shared_ptr<DxInput> inInput):mInput(inInput),mImgLoader(new ImageLoader())
-,mPlayer(nullptr)
-,mBackGround(new BackGround(mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH),mPlayer))
+,mPlayer(nullptr), mBackGround(nullptr), mTopHUD(nullptr), mBottomHUD(nullptr)
 ,mActLoader(new ActionLoader())
 {
-	ActionData& act = mActLoader->LoadActionData(PLAYER_ACTION_PATH);
-	mPlayer.reset(new PlayerSH(mImgLoader->LoadImageData(act.relativePath), mInput));
-	LoadHUD();
-	mPlayer->SetAction(act);
-
-	mBackGround.reset(new BackGround(mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH), mPlayer));
+	CreateHUD();
+	CreatePlayer();
+	CreateEnemy(100,0,0);
+	CreateEnemy(-100,0,0);
+	CreateGround();
 }
 
 
@@ -39,13 +38,22 @@ void GameScene::Run()
 	mBackGround->Update();
 	mPlayer->Update();
 
+	for (auto& e : mEnemeys)
+	{
+		e->Update();
+	}
+
 	mTopHUD->Draw();
 	mBottomHUD->Draw();
 	mPlayer->Draw();
+	for (auto& e : mEnemeys)
+	{
+		e->Draw();
+	}
 	mBackGround->Draw();
 }
 
-void GameScene::LoadHUD()
+void GameScene::CreateHUD()
 {
 	DX12CTRL_INSTANCE
 	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
@@ -61,4 +69,31 @@ void GameScene::LoadHUD()
 	mTopHUD.reset(new HeadUpDisplay(ictrl));
 	mTopHUD->SetPos(0, (wndSize.y / 2.0f - imgSize.y / 2.0f), 0);
 
+}
+
+void GameScene::CreatePlayer()
+{
+	ActionData& act = mActLoader->LoadActionData(PLAYER_ACTION_PATH);
+	mPlayer.reset(new PlayerSH(mImgLoader->LoadImageData(act.relativePath), mInput));
+	mPlayer->SetAction(act);
+}
+
+void GameScene::CreateBackGround()
+{
+	mBackGround.reset(new BackGround(mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH), mPlayer));
+}
+
+void GameScene::CreateEnemy(float x, float y, float z)
+{
+	ActionData& act = mActLoader->LoadActionData(DEADMAN_ACTION_PATH);
+	std::shared_ptr<ImageController> imgCtrl = mImgLoader->LoadImageData(act.relativePath);
+	std::shared_ptr<Enemy> enemy(new DeadMan(imgCtrl, x, y, z));
+	enemy->SetAction(act);
+	mEnemeys.push_back(enemy);
+}
+
+void GameScene::CreateGround()
+{
+	std::shared_ptr<ImageController> imgCtrl = mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH);
+	mBackGround.reset(new BackGround(imgCtrl, mPlayer));
 }

@@ -8,7 +8,7 @@ ICharactor::ICharactor(): mIsturn(false), mFrame(0), mActionImageIndex(0), mPos(
 {
 }
 
-ICharactor::ICharactor(std::shared_ptr<ImageController> imgCtrl):IDrawableObject(imgCtrl),  mIsturn(false), mFrame(0), mActionImageIndex(0), mPos(0, 0, 0), mVel(0, 0, 0)
+ICharactor::ICharactor(std::shared_ptr<ImageController>& imgCtrl):IDrawableObject(imgCtrl),  mIsturn(false), mFrame(0), mActionImageIndex(0), mPos(0, 0, 0), mVel(0, 0, 0)
 {
 
 }
@@ -19,7 +19,7 @@ ICharactor::~ICharactor()
 
 void ICharactor::SetAction(ActionData& inActs)
 {
-	mActions.swap(inActs.action);
+	mActions = inActs.action;
 	mCurrentAction = mActions.begin();
 	mFrame = 0;
 	mActionImageIndex = 0;

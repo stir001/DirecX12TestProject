@@ -17,7 +17,7 @@ void HeadUpDisplay::SetPos(DirectX::XMFLOAT3& pos)
 	mImgCtrl->SetPos(pos);
 }
 
-void  HeadUpDisplay::Draw()
+void  HeadUpDisplay::Draw() const
 {
 	mImgCtrl->Draw();
 }

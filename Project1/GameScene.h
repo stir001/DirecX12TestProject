@@ -1,12 +1,14 @@
 #pragma once
 #include "Scene.h"
 #include <memory>
+#include <vector>
 class DxInput;
 class ImageLoader;
 class PlayerSH;
 class BackGround;
 class HeadUpDisplay;
 class ActionLoader;
+class Enemy;
 
 class GameScene :
 	public Scene
@@ -25,6 +27,12 @@ private:
 	std::unique_ptr<HeadUpDisplay> mBottomHUD;
 	std::unique_ptr<ActionLoader> mActLoader;
 
-	void LoadHUD();
+	std::vector<std::shared_ptr<Enemy>> mEnemeys;
+
+	void CreateHUD();
+	void CreatePlayer();
+	void CreateBackGround();
+	void CreateEnemy(float x, float y,float z);
+	void CreateGround();
 };
 

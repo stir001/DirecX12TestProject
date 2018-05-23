@@ -21,13 +21,14 @@ HRESULT HlslInclude::Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOI
 	str.clear();
 	UINT bytes = 0;
 	char data = 0;
+	size_t size = sizeof(data);
 	int check = -1;
 	while (true)
 	{
-		check = fread(&data, sizeof(data), 1, fp);
+		check = fread(&data, size, 1, fp);
 		if (check == 0) break;
 		str.push_back(data);
-		bytes += sizeof(data);
+		bytes += size;
 	}
 
 	fclose(fp);

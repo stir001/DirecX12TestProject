@@ -15,9 +15,11 @@ class ICharactor :
 {
 public:
 	ICharactor();
-	ICharactor(std::shared_ptr<ImageController> imgCtrl);
+	ICharactor(std::shared_ptr<ImageController>& imgCtrl);
 	virtual ~ICharactor();
 
+	virtual void OnGround(float GroundLine) = 0;
+	virtual void Update() = 0;
 
 	void SetAction(ActionData& inActs);
 	const DirectX::XMFLOAT3& GetPos() const;
@@ -30,6 +32,7 @@ protected:
 	int mActionImageIndex;
 	bool mIsturn;
 	std::function<void(void)> mChangeNextAction;
+
 	void UpdatePostion();
 	void ChangeAction(const char* actionName);
 	void SetActionImageData();

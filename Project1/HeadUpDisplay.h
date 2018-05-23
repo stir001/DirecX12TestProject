@@ -13,7 +13,7 @@ public:
 
 	void SetPos(DirectX::XMFLOAT3& pos);
 	void SetPos(float x, float y, float z);
-	void Draw();
+	void Draw() const;
 private:
 	DirectX::XMFLOAT3 mPos;
 };

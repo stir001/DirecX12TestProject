@@ -8,7 +8,7 @@ const float VELOCITY_X  = 2.0f;
 const float VELOCITY_Y  = 15.0f;
 const float GRAVITY		= -0.8f;
 
-PlayerSH::PlayerSH(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<DxInput> dlibInput) :ICharactor::ICharactor(imgCtrl)
+PlayerSH::PlayerSH(std::shared_ptr<ImageController>& imgCtrl, std::shared_ptr<DxInput> dlibInput) :ICharactor::ICharactor(imgCtrl)
 , mInput(dlibInput), mActionUpdate(&PlayerSH::Neutral)
 {
 	mImgCtrl->SetPos(mPos);
@@ -28,7 +28,7 @@ void PlayerSH::Update()
 	Gravity();
 }
 
-void PlayerSH::Draw()
+void PlayerSH::Draw() const
 {
 	mImgCtrl->Draw();
 }

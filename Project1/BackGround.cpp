@@ -2,10 +2,11 @@
 #include "PlayerSH.h"
 #include "ImageController.h"
 #include "Dx12Ctrl.h"
+#include "ICharactor.h"
 
 const float GROUND_LINE = -100;
 
-BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<PlayerSH> spPlayer):IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE),mwpPlayer(spPlayer)
+BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<PlayerSH> spPlayer):IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE)
 {
 	DX12CTRL_INSTANCE
 	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
@@ -15,6 +16,7 @@ BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr
 	mSecondImage = mImgCtrl->GetNewCopy();
 	mSecondImage->SetPos(mPos.x + imgSize.x, mPos.y, mPos.z);
 	mSecondImage->TurnX();
+	mwpCharactor.push_back(spPlayer);
 }
 
 BackGround::~BackGround()
@@ -23,21 +25,24 @@ BackGround::~BackGround()
 
 void BackGround::Update()
 {
-	if (IsGroundPlayer())
+	for (auto& c : mwpCharactor)
 	{
-		mwpPlayer.lock()->OnGround(mGroundLine);
+		if (IsGroundCharactor(c))
+		{
+			c.lock()->OnGround(mGroundLine);
+		}
 	}
 }
 
-void BackGround::Draw()
+void BackGround::Draw() const
 {
 	mImgCtrl->Draw();
 	mSecondImage->Draw();
 }
 
-bool BackGround::IsGroundPlayer() const
+bool BackGround::IsGroundCharactor(std::weak_ptr<ICharactor> charactor) const
 {
-	if (mwpPlayer.lock()->GetPos().y <= mGroundLine)
+	if (charactor.lock()->GetPos().y <= mGroundLine)
 	{
 		return true;
 	}
