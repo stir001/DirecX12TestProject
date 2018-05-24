@@ -51,28 +51,28 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	d12->Dx12Init();
 
 	FbxLoader::Create();
-	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH2);
+	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH);
 	FbxModelDataConverter* fbxconverter = new FbxModelDataConverter();
 	std::shared_ptr<FbxModel> fbxModel(fbxconverter->ConvertToFbxModel(modelData));
 
 	FbxModelController* fbxctrl = new FbxModelController(fbxModel);
 
-	PrimitiveManager mgr;
+	//PrimitiveManager mgr;
 
 
-	//PMDLoader loader;
-	//PMDController* pmdContrl = loader.Load(PMD_MODEL_PATH2);
+	PMDLoader loader;
+	PMDController* pmdContrl = loader.Load(PMD_MODEL_PATH2);
 	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
 	fbxctrl->SetLight(dirLight);
 
-	//pmdContrl->SetLight(dirLight);
+	pmdContrl->SetLight(dirLight);
 
 
 
 	XMFLOAT3 pos = { 0,0,0 };
 	XMFLOAT3 normal = { 0,1,0 };
-	mgr.CreatePlane(pos, 50, 50, normal);
-	mgr.SetLightObject(dirLight);
+	//mgr.CreatePlane(pos, 50, 50, normal);
+	//mgr.SetLightObject(dirLight);
 
 	Dx12Camera* camera = d12->GetCamera();
 	DxInput input;
@@ -128,6 +128,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			camera->TurnRightLeft(1.0f);
 		}
 
+	/*	pmdContrl->Draw();*/
 		//mgr.Draw();
 		fbxctrl->Draw();
 

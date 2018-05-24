@@ -17,7 +17,7 @@ IndexBufferObject::IndexBufferObject(unsigned int elementsize,unsigned int eleme
 	D12RESULTCHECK
 
 	indexBufferView.BufferLocation = buffer->GetGPUVirtualAddress();
-	indexBufferView.Format = DXGI_FORMAT_R16_UINT;
+	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 	indexBufferView.SizeInBytes = (elementsize * elementcount + 0xff) & ~0xff;
 
 	Map();
@@ -32,5 +32,5 @@ void IndexBufferObject::SetBuffer()
 {
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->IASetIndexBuffer(&indexBufferView);
-	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

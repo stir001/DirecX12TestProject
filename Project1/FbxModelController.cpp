@@ -27,7 +27,7 @@ void FbxModelController::Draw()
 	mDirLight->SetLight();
 	mModel->SetIndexBuffer();
 	mModel->SetVertexBuffer();
-	//mModel->SetTexture();
+	mModel->SetTexture();
 	d12->GetCmdList()->DrawIndexedInstanced(mModel->mIndexes.size(), 1, 0, 0, 0);
 }
 

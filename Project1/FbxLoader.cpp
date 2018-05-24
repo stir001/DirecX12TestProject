@@ -1,5 +1,7 @@
 #include "FbxLoader.h"
 #include "FbxModel.h"
+#include "XMFloat3Operators.h"
+
 #include <fbxsdk.h>
 #include <memory>
 #include <exception>
@@ -127,7 +129,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 
 		fbxsdk::FbxVector4 t_normal;
 		Fbx::TmpNormalUV nluv;
-		
+
 		int eIndexToDirectCount = 0;
 		switch (mappingMode)
 		{
@@ -233,7 +235,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 
 		DirectX::XMFLOAT2 t_uv;
 
-		switch (uvMappingMode)
+ 		switch (uvMappingMode)
 		{
 		case fbxsdk::FbxLayerElement::eNone:
 			break;
@@ -447,7 +449,7 @@ void FbxLoader::FixVertexInfo(Fbx::FbxModelData* model, fbxsdk::FbxMesh* mesh)
 
 	int polygonvertexcount = mesh->GetPolygonVertexCount();
 	model->indexes.indexes.reserve(polygoncount * 6);
-	//model->vertexesInfo.vertexes.resize(polygoncount * 6);
+	model->vertexesInfo.vertexes.resize(polygoncount * 6);
 
 	int index = indexBuffer[polygonvertexcount - 1];
 
@@ -460,21 +462,15 @@ void FbxLoader::FixVertexInfo(Fbx::FbxModelData* model, fbxsdk::FbxMesh* mesh)
 		switch (polygonsize)
 		{
 		case 3:
-			//model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
+			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
 
-			//model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
+			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
 
-			//model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
-
-			model->indexes.indexes.push_back(indexBuffer[pvi++]);
-
-			model->indexes.indexes.push_back(indexBuffer[pvi++]);
-
-			model->indexes.indexes.push_back(indexBuffer[pvi++]);
+			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
 
 			break;
 		case 4:
-			/*model->indexes.indexes.push_back(indexplus1 = CheckVertexDiff(indexBuffer[pvi], model->vertexesInfo.vertexes));
+			model->indexes.indexes.push_back(indexplus1 = CheckVertexDiff(indexBuffer[pvi], model->vertexesInfo.vertexes));
 
 			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi + 1], model->vertexesInfo.vertexes));
 
@@ -485,20 +481,7 @@ void FbxLoader::FixVertexInfo(Fbx::FbxModelData* model, fbxsdk::FbxMesh* mesh)
 
 			model->indexes.indexes.push_back(indexplus2);
 
-			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi + 3], model->vertexesInfo.vertexes));*/
-
-			model->indexes.indexes.push_back(indexplus1 = indexBuffer[pvi]);
-
-			model->indexes.indexes.push_back( indexBuffer[pvi + 1]);
-
-			model->indexes.indexes.push_back(indexplus2 = indexBuffer[pvi + 2]);
-
-
-			model->indexes.indexes.push_back(indexplus1);
-
-			model->indexes.indexes.push_back(indexplus2);
-
-			model->indexes.indexes.push_back(indexBuffer[pvi + 3]);
+			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi + 3], model->vertexesInfo.vertexes));
 
 			pvi += 4;
 			break;
@@ -508,31 +491,23 @@ void FbxLoader::FixVertexInfo(Fbx::FbxModelData* model, fbxsdk::FbxMesh* mesh)
 		}
 	}
 
+
 	std::vector<unsigned int>(model->indexes.indexes).swap(model->indexes.indexes);
 	
-	model->vertexesInfo.vertexes.resize(m_tmpVertices.size());
-	for (int i = 0; i < m_tmpVertices.size(); ++i)
+	auto beginitr = model->vertexesInfo.vertexes.begin();
+	auto enditr = model->vertexesInfo.vertexes.end();
+	int vindex = 0;
+	while (beginitr != enditr)
 	{
-		model->vertexesInfo.vertexes[i].pos = m_tmpVertices[i].pos;
-		model->vertexesInfo.vertexes[i].normal = m_tmpVertices[i].normalandUV[0].normal;
-		model->vertexesInfo.vertexes[i].texCoord = m_tmpVertices[i].normalandUV[0].uv;
+		if (vindex == m_tmpVertices.size())
+		{
+			break;
+		}
+		vindex++;
+		beginitr++;
 	}
-	
-
-	//auto beginitr = model->vertexesInfo.vertexes.begin();
-	//auto enditr = model->vertexesInfo.vertexes.end();
-	//int vindex = 0;
-	//while (beginitr != enditr)
-	//{
-	//	if (vindex == m_tmpVertices.size())
-	//	{
-	//		break;
-	//	}
-	//	vindex++;
-	//	beginitr++;
-	//}
-	//model->vertexesInfo.vertexes.erase(beginitr, enditr);
-	//std::vector<Fbx::FbxVertex>(model->vertexesInfo.vertexes).swap(model->vertexesInfo.vertexes);
+	model->vertexesInfo.vertexes.erase(beginitr, enditr);
+	std::vector<Fbx::FbxVertex>(model->vertexesInfo.vertexes).swap(model->vertexesInfo.vertexes);
 	//END store vertex data
 
 	//START store bone data
@@ -570,12 +545,14 @@ void FbxLoader::FixVertexInfo(Fbx::FbxModelData* model, fbxsdk::FbxMesh* mesh)
 
 void FbxLoader::StackMeshNode(fbxsdk::FbxNode* parent)
 {
-	for (int i = 0; i < parent->GetChildCount(); ++i)
+	int count = parent->GetChildCount();
+	for (int i = 0; i < count; ++i)
 	{
 		fbxsdk::FbxNodeAttribute* nodeAttribute = parent->GetChild(i)->GetNodeAttribute();
 		if (nodeAttribute == nullptr) continue;
 		
-		if (nodeAttribute->GetAttributeType() == FbxNodeAttribute::EType::eMesh)
+		FbxNodeAttribute::EType type = nodeAttribute->GetAttributeType();
+		if (type == FbxNodeAttribute::EType::eMesh)
 		{
 			m_meshDatas.push_back(parent->GetChild(i)->GetMesh());
 		}

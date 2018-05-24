@@ -47,28 +47,34 @@ Output FbxVS(Input input)
 
     matrix m = c_world;
     m._m03_m13_m23 = 0;
-    output.normal = normalize(mul(m, float4(input.normal, 1)));
+    float3 n = normalize(input.normal);
+    output.normal = (mul(m, float4(n, 1)));
 
     return output;
 }
 
-//テクスチャがB8G8R8A8の時の実装
+//テクスチャがB8G8R8A8の時の実装?
 float4 FbxPS(Output output) : SV_Target
 {
-    return float4(output.normal);
+    //return abs(float4(output.normal));
 
-    //float4 mapNormal = float4(normalize(normalmap.Sample(smp, output.uv).xyz), 1);
-    //float c = mul(output.normal, mapNormal);
-    //float rad = acos(c) / 2.0f;
-    //float3 axis = normalize(cross(mapNormal.xyz, output.normal.xyz));
-    //float q = cos(rad) + axis.x * sin(rad) + axis.y * sin(rad) + axis.z * sin(rad);
-    //float nq = cos(rad) - axis.x * sin(rad) - axis.y * sin(rad) - axis.z * sin(rad);
-    //float4 mulNormal = q * mapNormal * nq;
+    float4 mapNormal = float4(normalize(normalmap.Sample(smp, output.uv).xyz), 1);
+    float c = mul(output.normal, mapNormal);
+    float rad = acos(c) / 2.0f;
+    float3 axis = normalize(cross(mapNormal.xyz, output.normal.xyz));
+    float4 q = { axis.x * sin(rad), axis.y * sin(rad), axis.z * sin(rad), cos(rad) };
+    float4 nq = { -axis.x * sin(rad), -axis.y * sin(rad), -axis.z * sin(rad), cos(rad) };
+    float4 mulNormal = q * mapNormal * nq;
 
-    //float4 light = float4(dir, 1);
-    //float brightness = dot(mulNormal, light);
-    //float4 color = diffsemap.Sample(smp, output.uv);
-    //color = color * brightness /*+ color * ambientmap.Sample(smp, output.uv)*/;
+    float3 n_munorm = normalize(mulNormal.xyz);
 
-    //return color;
+    return abs(mulNormal);
+    return float4((n_munorm), 1);
+
+    float4 light = float4(dir, 1);
+    float brightness = dot(mulNormal, light);
+    float4 color = diffsemap.Sample(smp, output.uv);
+    color = color * brightness /*+ color * ambientmap.Sample(smp, output.uv)*/;
+
+    return color;
 }

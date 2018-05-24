@@ -249,7 +249,7 @@ void  Dx12Ctrl::CreatePiplineStates()
 
 	gpsDesc.InputLayout.NumElements = sizeof(fbxinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
 	gpsDesc.InputLayout.pInputElementDescs = fbxinputDescs;
-	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
+	//gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
 	gpsDesc.VS = GetShader(si_VS_fbx);
 	gpsDesc.PS = GetShader(si_PS_fbx);
 	//rastarizer.CullMode = D3D12_CULL_MODE_BACK;

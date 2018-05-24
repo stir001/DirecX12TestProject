@@ -24,7 +24,7 @@ FbxModel* FbxModelDataConverter::ConvertToFbxModel(const FbxModelData* data)
 
 	ConvertIndex();
 	ConvertVertex();
-	//ConvertTexture();
+	ConvertTexture();
 	return mModel;
 }
 
@@ -48,9 +48,10 @@ void FbxModelDataConverter::ConvertVertex()
 	}
 
 	size_t size = sizeof(mModel->mVertexElements[0]);
+	unsigned int count = mModel->mVertexElements.size();
 
-	mModel->vertexBuffer = new VertexBufferObject(sizeof(mModel->mVertexElements[0]), mModel->mVertexElements.size());
-	mModel->vertexBuffer->WriteBuffer(&mModel->mVertexElements[0], sizeof(mModel->mVertexElements[0]) * mModel->mVertexElements.size());
+	mModel->vertexBuffer = new VertexBufferObject(size, count);
+	mModel->vertexBuffer->WriteBuffer(&mModel->mVertexElements[0], size * count);
 }
 
 void FbxModelDataConverter::ConvertTexture()
