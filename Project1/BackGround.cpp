@@ -6,7 +6,7 @@
 
 const float GROUND_LINE = -100;
 
-BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<PlayerSH> spPlayer):IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE)
+BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<ICharactor> spPlayer):IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE)
 {
 	DX12CTRL_INSTANCE
 	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
@@ -16,7 +16,7 @@ BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr
 	mSecondImage = mImgCtrl->GetNewCopy();
 	mSecondImage->SetPos(mPos.x + imgSize.x, mPos.y, mPos.z);
 	mSecondImage->TurnX();
-	mwpCharactor.push_back(spPlayer);
+	mspCharactor.push_back(spPlayer);
 }
 
 BackGround::~BackGround()
@@ -25,11 +25,11 @@ BackGround::~BackGround()
 
 void BackGround::Update()
 {
-	for (auto& c : mwpCharactor)
+	for (auto& c : mspCharactor)
 	{
 		if (IsGroundCharactor(c))
 		{
-			c.lock()->OnGround(mGroundLine);
+			c->OnGround(mGroundLine);
 		}
 	}
 }
@@ -40,11 +40,16 @@ void BackGround::Draw() const
 	mSecondImage->Draw();
 }
 
-bool BackGround::IsGroundCharactor(std::weak_ptr<ICharactor> charactor) const
+bool BackGround::IsGroundCharactor(std::shared_ptr<ICharactor> charactor) const
 {
-	if (charactor.lock()->GetPos().y <= mGroundLine)
+	if (charactor->GetPos().y <= mGroundLine)
 	{
 		return true;
 	}
 	return false;
+}
+
+void BackGround::SetCharactor(std::shared_ptr<ICharactor> charactor)
+{
+	mspCharactor.push_back(charactor);
 }

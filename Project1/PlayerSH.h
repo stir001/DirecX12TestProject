@@ -17,6 +17,7 @@ public:
 	void Update();
 	void Draw() const;
 	void OnGround(float grandLine);
+	void OnDamage();
 private:
 	std::shared_ptr<DxInput> mInput;
 
@@ -30,6 +31,7 @@ private:
 	void Punch();
 	void Kick();
 	void Sliding();
+	void Damage();
 	void Gravity();
 };
 

@@ -12,7 +12,6 @@ PlayerSH::PlayerSH(std::shared_ptr<ImageController>& imgCtrl, std::shared_ptr<Dx
 , mInput(dlibInput), mActionUpdate(&PlayerSH::Neutral)
 {
 	mImgCtrl->SetPos(mPos);
-	mImgCtrl->SetScale(2.0f);
 	mChangeNextAction = [&]() {
 		ChangeAction(mCurrentAction->actionName.data());
 	};
@@ -42,6 +41,11 @@ void PlayerSH::OnGround(float grandLine)
 		mActionUpdate = &PlayerSH::Ground;
 	}
 	mVel.y = 0;
+}
+
+void PlayerSH::OnDamage()
+{
+	mVel.x = mIsturn ? -VELOCITY_X * 2 : VELOCITY_X * 2;
 }
 
 void PlayerSH::Gravity()
@@ -309,5 +313,16 @@ void PlayerSH::Sliding()
 	};
 	UpdatePostion();
 
+	AnimationUpdate();
+}
+
+void PlayerSH::Damage()
+{
+	mChangeNextAction = [&]()
+	{
+		ChangeAction("Walk");
+		mActionUpdate = &PlayerSH::Neutral;
+	}
+	UpdatePostion();
 	AnimationUpdate();
 }

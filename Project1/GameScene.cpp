@@ -87,7 +87,7 @@ void GameScene::CreateEnemy(float x, float y, float z)
 {
 	ActionData& act = mActLoader->LoadActionData(DEADMAN_ACTION_PATH);
 	std::shared_ptr<ImageController> imgCtrl = mImgLoader->LoadImageData(act.relativePath);
-	std::shared_ptr<Enemy> enemy(new DeadMan(imgCtrl, x, y, z));
+	std::shared_ptr<Enemy> enemy(new DeadMan(imgCtrl, x, y, z, mPlayer));
 	enemy->SetAction(act);
 	mEnemeys.push_back(enemy);
 }
@@ -96,4 +96,8 @@ void GameScene::CreateGround()
 {
 	std::shared_ptr<ImageController> imgCtrl = mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH);
 	mBackGround.reset(new BackGround(imgCtrl, mPlayer));
+	for (auto& enemy : mEnemeys)
+	{
+		mBackGround->SetCharactor(enemy);
+	}
 }

@@ -12,16 +12,18 @@ class BackGround :public IDrawableObject
 public:
 	void Update();
 	void Draw() const ;
-	BackGround(std::shared_ptr<ImageController> imgCtrl,std::shared_ptr<PlayerSH> spPlayer);
+	BackGround(std::shared_ptr<ImageController> imgCtrl,std::shared_ptr<ICharactor> spPlayer);
 	~BackGround();
+
+	void SetCharactor(std::shared_ptr<ICharactor> charactor);
 
 private:
 	float mGroundLine;
 
 	std::shared_ptr<ImageController> mSecondImage;
 	DirectX::XMFLOAT3 mPos;
-	std::vector<std::weak_ptr<ICharactor>> mwpCharactor;
+	std::vector<std::shared_ptr<ICharactor>> mspCharactor;
 
-	bool IsGroundCharactor(std::weak_ptr<ICharactor> charactor) const;
+	bool IsGroundCharactor(std::shared_ptr<ICharactor> charactor) const;
 };
 

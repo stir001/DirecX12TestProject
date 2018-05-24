@@ -9,6 +9,7 @@
 class ImageController;
 struct Action;
 struct ActionData;
+struct ActionRect;
 
 class ICharactor :
 	public IDrawableObject
@@ -20,7 +21,9 @@ public:
 
 	virtual void OnGround(float GroundLine) = 0;
 	virtual void Update() = 0;
+	virtual void OnDamage() = 0;
 
+	const std::vector<ActionRect>& GetCurrentActionRects() const;
 	void SetAction(ActionData& inActs);
 	const DirectX::XMFLOAT3& GetPos() const;
 protected:

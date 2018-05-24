@@ -6,11 +6,12 @@
 
 ICharactor::ICharactor(): mIsturn(false), mFrame(0), mActionImageIndex(0), mPos(0,0,0), mVel(0,0,0)
 {
+	mImgCtrl->SetScale(2.0f);
 }
 
 ICharactor::ICharactor(std::shared_ptr<ImageController>& imgCtrl):IDrawableObject(imgCtrl),  mIsturn(false), mFrame(0), mActionImageIndex(0), mPos(0, 0, 0), mVel(0, 0, 0)
 {
-
+	mImgCtrl->SetScale(2.0f);
 }
 
 ICharactor::~ICharactor()
@@ -78,4 +79,9 @@ void ICharactor::ChangeAction(const char* actionName)
 		mActionImageIndex = 0;
 		SetActionImageData();
 	}
+}
+
+const std::vector<ActionRect>& ICharactor::GetCurrentActionRects() const
+{
+	return mCurrentAction->datas[mActionImageIndex].actionRects;
 }
