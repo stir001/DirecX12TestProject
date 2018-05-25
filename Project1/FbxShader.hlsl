@@ -56,25 +56,27 @@ Output FbxVS(Input input)
 //テクスチャがB8G8R8A8の時の実装?
 float4 FbxPS(Output output) : SV_Target
 {
+    //return float4(output.uv, 0, 1);
     //return abs(float4(output.normal));
+    //return normalmap.Sample(smp, output.uv);
 
-    float4 mapNormal = float4(normalize(normalmap.Sample(smp, output.uv).xyz), 1);
-    float c = mul(output.normal, mapNormal);
-    float rad = acos(c) / 2.0f;
-    float3 axis = normalize(cross(mapNormal.xyz, output.normal.xyz));
-    float4 q = { axis.x * sin(rad), axis.y * sin(rad), axis.z * sin(rad), cos(rad) };
-    float4 nq = { -axis.x * sin(rad), -axis.y * sin(rad), -axis.z * sin(rad), cos(rad) };
-    float4 mulNormal = q * mapNormal * nq;
+    //float4 mapNormal = float4(normalize(normalmap.Sample(smp, output.uv).xyz), 1);
+    //float c = mul(output.normal.xyz, mapNormal.xyz);
+    //float rad = acos(c) / 2.0f;
+    //float3 axis = normalize(cross(mapNormal.xyz, output.normal.xyz));
+    //float4 q = { axis.x * sin(rad), axis.y * sin(rad), axis.z * sin(rad), cos(rad) };
+    //float4 nq = { -axis.x * sin(rad), -axis.y * sin(rad), -axis.z * sin(rad), cos(rad) };
+    //float4 mulNormal = mul(mul(nq, mapNormal), q);
 
-    float3 n_munorm = normalize(mulNormal.xyz);
+    //float3 n_munorm = normalize(mulNormal.xyz);
 
-    return abs(mulNormal);
-    return float4((n_munorm), 1);
+    ////return abs(mulNormal);
+    //return abs(float4((n_munorm.x),0,0, 1));
 
     float4 light = float4(dir, 1);
-    float brightness = dot(mulNormal, light);
+    float brightness = dot(output.normal.xyz , light.xyz);
     float4 color = diffsemap.Sample(smp, output.uv);
-    color = color * brightness /*+ color * ambientmap.Sample(smp, output.uv)*/;
+    color = color /** brightness*/ /*+ color * ambientmap.Sample(smp, output.uv)*/;
 
     return color;
 }

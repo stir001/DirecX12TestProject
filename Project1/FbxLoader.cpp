@@ -124,6 +124,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 		fbxsdk::FbxGeometryElement::EReferenceMode referenceMode = normalElement->GetReferenceMode();
 		fbxsdk::FbxLayerElementArrayTemplate<fbxsdk::FbxVector4> normalArray = normalElement->GetDirectArray();
 		fbxsdk::FbxLayerElementArrayTemplate<int> normalArrayIndicesArray = normalElement->GetIndexArray();//normalArray‚É‘Î‰ž‚·‚éIndex‚ðŠi”[‚µ‚Ä‚¢‚é”z—ñ
+		int arraycount = normalArrayIndicesArray.GetCount();
 
 		fbxsdk::FbxGeometryElement::EMappingMode mappingMode = normalElement->GetMappingMode();
 
@@ -246,7 +247,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 				for (int i = 0; i < m_tmpVertices.size(); ++i)
 				{
 					m_tmpVertices[i].normalandUV[0].uv.x = static_cast<float>(uvArray.GetAt(i)[0]);
-					m_tmpVertices[i].normalandUV[0].uv.y = static_cast<float>(uvArray.GetAt(i)[0]);
+					m_tmpVertices[i].normalandUV[0].uv.y = 1.0f - static_cast<float>(uvArray.GetAt(i)[0]);
 				}
 				break;
 			case fbxsdk::FbxLayerElement::eIndex:
@@ -254,7 +255,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 				for (int i = 0; i < uvArrayIndicesCount; ++i)
 				{
 					t_uv.x = static_cast<float>(uvArray.GetAt(uvArrayIndicesArray[i])[0]);
-					t_uv.y = static_cast<float>(uvArray.GetAt(uvArrayIndicesArray[i])[1]);
+					t_uv.y = 1.0f - static_cast<float>(uvArray.GetAt(uvArrayIndicesArray[i])[1]);
 					m_tmpVertices[i].normalandUV[0].uv = t_uv;
 				}
 				break;
@@ -269,7 +270,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 				for (int i = 0; i < polygonverticesCount; ++i)
 				{
 					t_uv.x = static_cast<float>(uvArray.GetAt(i)[0]);
-					t_uv.y = static_cast<float>(uvArray.GetAt(i)[1]);
+					t_uv.y = 1.0f - static_cast<float>(uvArray.GetAt(i)[1]);
 					m_tmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]++].uv = t_uv;
 				}
 				break;
@@ -278,7 +279,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 				for (int i = 0; i < uvArrayIndicesCount; ++i)
 				{
 					t_uv.x = static_cast<float>(uvArray.GetAt(uvArrayIndicesArray[i])[0]);
-					t_uv.y = static_cast<float>(uvArray.GetAt(uvArrayIndicesArray[i])[1]);
+					t_uv.y = 1.0f - static_cast<float>(uvArray.GetAt(uvArrayIndicesArray[i])[1]);
 					m_tmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]++].uv = t_uv;
 				}
 				break;
@@ -490,7 +491,6 @@ void FbxLoader::FixVertexInfo(Fbx::FbxModelData* model, fbxsdk::FbxMesh* mesh)
 			break;
 		}
 	}
-
 
 	std::vector<unsigned int>(model->indexes.indexes).swap(model->indexes.indexes);
 	
