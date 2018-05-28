@@ -22,6 +22,8 @@ public:
 	virtual void OnGround(float GroundLine) = 0;
 	virtual void Update() = 0;
 	virtual void OnDamage() = 0;
+	
+	bool IsTurn() const;
 
 	const std::vector<ActionRect>& GetCurrentActionRects() const;
 	void SetAction(ActionData& inActs);

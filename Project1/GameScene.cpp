@@ -8,6 +8,7 @@
 #include "ActionLoader.h"
 #include "Dx12Ctrl.h"
 #include "DeadMan.h"
+#include "CollisionDetector.h"
 
 const std::string BACKGROUND_IMAGE_PATH = "Action18/img/splatterhouse.png";
 const std::string TOPHUD_IMAGE_PATH = "Action18/img/bar_top.png";
@@ -17,7 +18,7 @@ const std::string DEADMAN_ACTION_PATH = "Action18/Action/deadman.act";
 
 GameScene::GameScene(std::shared_ptr<DxInput> inInput):mInput(inInput),mImgLoader(new ImageLoader())
 ,mPlayer(nullptr), mBackGround(nullptr), mTopHUD(nullptr), mBottomHUD(nullptr)
-,mActLoader(new ActionLoader())
+,mActLoader(new ActionLoader()),mColDetector(new CollisionDetector())
 {
 	CreateHUD();
 	CreatePlayer();
@@ -42,6 +43,8 @@ void GameScene::Run()
 	{
 		e->Update();
 	}
+
+	CheckCollision();
 
 	mTopHUD->Draw();
 	mBottomHUD->Draw();
@@ -99,5 +102,13 @@ void GameScene::CreateGround()
 	for (auto& enemy : mEnemeys)
 	{
 		mBackGround->SetCharactor(enemy);
+	}
+}
+
+void GameScene::CheckCollision()
+{
+	for (auto& e : mEnemeys)
+	{
+		mColDetector->CheckCollision(mPlayer, e);
 	}
 }

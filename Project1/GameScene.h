@@ -9,6 +9,7 @@ class BackGround;
 class HeadUpDisplay;
 class ActionLoader;
 class Enemy;
+class CollisionDetector;
 
 class GameScene :
 	public Scene
@@ -26,6 +27,7 @@ private:
 	std::unique_ptr<HeadUpDisplay> mTopHUD;
 	std::unique_ptr<HeadUpDisplay> mBottomHUD;
 	std::unique_ptr<ActionLoader> mActLoader;
+	std::shared_ptr<CollisionDetector> mColDetector;
 
 	std::vector<std::shared_ptr<Enemy>> mEnemeys;
 
@@ -34,5 +36,7 @@ private:
 	void CreateBackGround();
 	void CreateEnemy(float x, float y,float z);
 	void CreateGround();
+
+	void CheckCollision();
 };
 

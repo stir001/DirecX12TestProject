@@ -7,6 +7,7 @@
 const float VELOCITY_X  = 2.0f;
 const float VELOCITY_Y  = 15.0f;
 const float GRAVITY		= -0.8f;
+const float JUMPVEL_XRATO = 0.8f;
 
 PlayerSH::PlayerSH(std::shared_ptr<ImageController>& imgCtrl, std::shared_ptr<DxInput> dlibInput) :ICharactor::ICharactor(imgCtrl)
 , mInput(dlibInput), mActionUpdate(&PlayerSH::Neutral)
@@ -46,6 +47,8 @@ void PlayerSH::OnGround(float grandLine)
 void PlayerSH::OnDamage()
 {
 	mVel.x = mIsturn ? -VELOCITY_X * 2 : VELOCITY_X * 2;
+	ChangeAction("Damage");
+	mActionUpdate = &PlayerSH::Damage;
 }
 
 void PlayerSH::Gravity()
@@ -93,6 +96,7 @@ void PlayerSH::Walk()
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
 	{
 		mVel.y = VELOCITY_Y;
+		mVel.x *= JUMPVEL_XRATO;
 		ChangeAction("Jump");
 		mActionUpdate = &PlayerSH::Jump;
 	}
@@ -147,6 +151,7 @@ void PlayerSH::Neutral()
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
 	{
 		mVel.y = VELOCITY_Y;
+		mVel.x *= JUMPVEL_XRATO;
 		ChangeAction("Jump");
 		mActionUpdate = &PlayerSH::Jump;
 	}
@@ -169,7 +174,7 @@ void PlayerSH::Jump()
 	};
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
 	{
-		mVel.x = VELOCITY_X * 0.8f;
+		mVel.x = VELOCITY_X * JUMPVEL_XRATO;
 		if (mIsturn == true)
 		{
 			mImgCtrl->TurnX();
@@ -179,7 +184,7 @@ void PlayerSH::Jump()
 
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_LEFT))
 	{
-		mVel.x = -VELOCITY_X * 0.8f;
+		mVel.x = -VELOCITY_X * JUMPVEL_XRATO;
 		if (mIsturn == false)
 		{
 			mImgCtrl->TurnX();
@@ -256,6 +261,7 @@ void PlayerSH::Crouch()
 		ChangeAction("Jump");
 		mActionUpdate = &PlayerSH::Jump;
 		mVel.y = VELOCITY_Y;
+		mVel.x *= JUMPVEL_XRATO;
 	}
 
 	if (mInput->IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
@@ -322,7 +328,7 @@ void PlayerSH::Damage()
 	{
 		ChangeAction("Walk");
 		mActionUpdate = &PlayerSH::Neutral;
-	}
+	};
 	UpdatePostion();
 	AnimationUpdate();
 }

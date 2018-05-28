@@ -49,6 +49,6 @@ protected:
 public:
 	virtual void Draw() = 0;
 	PrimitiveObject();
-	~PrimitiveObject();
+	virtual ~PrimitiveObject();
 };
 

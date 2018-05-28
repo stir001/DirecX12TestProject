@@ -128,7 +128,7 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BmpLoader.cpp" />
     <ClCompile Include="CBVDescriptorHeapObject.cpp" />
-    <ClCompile Include="ColliisonDetector.cpp" />
+    <ClCompile Include="CollisionDetector.cpp" />
     <ClCompile Include="ConstantBufferObject.cpp" />
     <ClCompile Include="DeadMan.cpp" />
     <ClCompile Include="DepthBufferObject.cpp" />
@@ -153,6 +153,7 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="ImageObject.cpp" />
     <ClCompile Include="IndexBufferObject.cpp" />
+    <ClCompile Include="IPrimitive2D.cpp" />
     <ClCompile Include="LightObject.cpp" />
     <ClCompile Include="ActionLoader.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -166,6 +167,8 @@
     <ClCompile Include="PMXLoader.cpp" />
     <ClCompile Include="PMXModel.cpp" />
     <ClCompile Include="PngLoader.cpp" />
+    <ClCompile Include="Primitive2DLine.cpp" />
+    <ClCompile Include="Primitive3DLine.cpp" />
     <ClCompile Include="PrimitiveManager.cpp" />
     <ClCompile Include="PrimitiveObject.cpp" />
     <ClCompile Include="PrimitivePlane.cpp" />
@@ -263,7 +266,7 @@
     <ClInclude Include="BmpLoader.h" />
     <ClInclude Include="CBVDescriptorHeapObject.h" />
     <ClInclude Include="CharToWChar.h" />
-    <ClInclude Include="ColliisonDetector.h" />
+    <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="ConstantBufferObject.h" />
     <ClInclude Include="DeadMan.h" />
     <ClInclude Include="DepthBufferObject.h" />
@@ -289,12 +292,15 @@
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="ImageObject.h" />
     <ClInclude Include="IndexBufferObject.h" />
+    <ClInclude Include="IPrimitive2D.h" />
     <ClInclude Include="LightObject.h" />
     <ClInclude Include="ActionLoader.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelController.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="PlayerSH.h" />
+    <ClInclude Include="Primitive2DLine.h" />
+    <ClInclude Include="Primitive3DLine.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="XMFloat3Operators.h" />

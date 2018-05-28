@@ -85,3 +85,8 @@ const std::vector<ActionRect>& ICharactor::GetCurrentActionRects() const
 {
 	return mCurrentAction->datas[mActionImageIndex].actionRects;
 }
+
+bool ICharactor::IsTurn() const
+{
+	return mIsturn;
+}
