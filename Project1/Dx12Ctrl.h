@@ -43,6 +43,7 @@ enum PSOIndex
 	pso_exitTex,//textureありのポリゴン描画用(3Dモデル)
 	pso_primitive,//プリミティブ描画
 	pso_image,
+	pso_primitive2D,
 	pso_max
 };
 
@@ -51,6 +52,7 @@ enum RootSignatureIndex
 	rsi_pmd,
 	rsi_prm,
 	rsi_image,
+	rsi_prm2D,
 	rsi_max
 };
 
@@ -63,6 +65,8 @@ enum ShaderIndex
 	si_PS_primitive,
 	si_VS_image,
 	si_PS_image,
+	si_VS_primitive2D,
+	si_PS_primitive2D,
 	si_max
 };
 

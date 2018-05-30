@@ -7,14 +7,23 @@ public:
 	Primitive2DLine(const DirectX::XMFLOAT3& point1,const DirectX::XMFLOAT3& point2);
 	~Primitive2DLine();
 
+	void SetCenter(const DirectX::XMFLOAT3& pos);
 	void Draw();
-	void SetLength(float length);
+	void SetScale(float scale);
 	void SetRota(float deg);
+	void SetBasePoints(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2);
+	void SetColor(const DirectX::XMFLOAT3& color);
 private:
+	DirectX::XMFLOAT3 mCenter;
 	DirectX::XMFLOAT3 mColor;
-	float mRad;
+	DirectX::XMFLOAT2 mWndSize;
+	float mBaseRad;
+	float mAddRad;
 	float mLength;
+	float mScale;
 
+	void SetPoints(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2);
+	void UpdateVertex();
 	void UpdateBuffer();
 };
 

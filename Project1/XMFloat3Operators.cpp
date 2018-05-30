@@ -20,29 +20,44 @@ void operator-=(DirectX::XMFLOAT3& lval, const DirectX::XMFLOAT3& rval)
 	lval = lval - rval;
 }
 
-DirectX::XMFLOAT3 operator*(const DirectX::XMFLOAT3& lval, float rato)
+DirectX::XMFLOAT3 operator*(const DirectX::XMFLOAT3& lval, float rate)
 {
-	return DirectX::XMFLOAT3(lval.x * rato, lval.y * rato, lval.z * rato);
+	return DirectX::XMFLOAT3(lval.x * rate, lval.y * rate, lval.z * rate);
 }
 
-DirectX::XMFLOAT3 operator*(float rato, const DirectX::XMFLOAT3& rval)
+DirectX::XMFLOAT3 operator*(float rate, const DirectX::XMFLOAT3& rval)
 {
-	return rval * rato;
+	return rval * rate;
 }
 
-void operator*=(DirectX::XMFLOAT3& lval, float rato)
+void operator*=(DirectX::XMFLOAT3& lval, float rate)
 {
-	lval = lval * rato;
+	lval = lval * rate;
 }
 
-DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lval, float rato)
+DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lval, float rate)
 {
-	return DirectX::XMFLOAT3(lval.x / rato, lval.y / rato, lval.z / rato);
+	return DirectX::XMFLOAT3(lval.x / rate, lval.y / rate, lval.z / rate);
 }
 
-void operator/=(DirectX::XMFLOAT3& lval, float rato)
+void operator/=(DirectX::XMFLOAT3& lval, float rate)
 {
-	lval = lval / rato;
+	lval = lval / rate;
+}
+
+DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& val)
+{
+	return -1.0f * val;
+}
+
+bool operator==(const DirectX::XMFLOAT3& rval, const DirectX::XMFLOAT3& lval)
+{
+	return (rval.x == lval.x && rval.y == lval.y && rval.z == lval.z);
+}
+
+bool operator!=(const DirectX::XMFLOAT3& rval, const DirectX::XMFLOAT3& lval)
+{
+	return !(rval == lval);
 }
 
 DirectX::XMFLOAT3 NormalizeXMFloat3(const DirectX::XMFLOAT3& val)
@@ -67,17 +82,7 @@ DirectX::XMVECTOR CreateQuoternion(DirectX::XMFLOAT3 axis, float deg)
 	return DirectX::XMLoadFloat4(&DirectX::XMFLOAT4(axis.x * sinf(DirectX::XMConvertToRadians(deg / 2.0f)), axis.y * sinf(DirectX::XMConvertToRadians(deg / 20.f)), axis.z * sinf(DirectX::XMConvertToRadians(deg / 2.0f)), cosf(DirectX::XMConvertToRadians(deg / 2.0f))));
 }
 
-DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& val)
+float GetLengthXMFloat3(const DirectX::XMFLOAT3 val)
 {
-	return -1.0f * val;
-}
-
-bool operator==(const DirectX::XMFLOAT3& rval, const DirectX::XMFLOAT3& lval)
-{
-	return (rval.x == lval.x && rval.y == lval.y && rval.z == lval.z);
-}
-
-bool operator!=(const DirectX::XMFLOAT3& rval, const DirectX::XMFLOAT3& lval)
-{
-	return !(rval == lval);
+	return sqrt(DotXMFloat3(val, val));
 }

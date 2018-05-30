@@ -28,6 +28,6 @@ void PiplineStateObject::CreatePiplineState(D3D12_GRAPHICS_PIPELINE_STATE_DESC& 
 {
 	if (piplineState != nullptr) return;
 	DX12CTRL_INSTANCE
-		d12->result = d12->GetDev()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&piplineState));
+	d12->result = d12->GetDev()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&piplineState));
 	D12RESULTCHECK
 }

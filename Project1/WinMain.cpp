@@ -2,6 +2,7 @@
 #include "Geometry.h"
 #include "GameScene.h"
 #include "DxInput.h"
+#include "Primitive2DLine.h"
 
 #include <Windows.h>
 #include <tchar.h>
@@ -29,10 +30,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	std::shared_ptr<DxInput> spInput(new DxInput());
 	GameScene* gameScene = new GameScene(spInput);
 
+	Primitive2DLine* line = new Primitive2DLine(XMFLOAT3(-10, 0, 0), XMFLOAT3(10, 0, 0));
+
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
 
+		line->Draw();
 		gameScene->Run();
 
 		CallEndPerGameLoop();

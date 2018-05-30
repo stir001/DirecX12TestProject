@@ -271,6 +271,21 @@ void  Dx12Ctrl::CreatePiplineStates()
 	gpsDesc.PS = GetShader(si_PS_image);
 	gpsDesc.pRootSignature = GetRootSignature(rsi_image);
 	piplinestateObjects[pso_image].CreatePiplineState(gpsDesc);
+
+	//primitive2D—ppsoì¬
+	D3D12_INPUT_ELEMENT_DESC pmv2DinputDescs[] = {
+		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+	};
+
+
+	gpsDesc.InputLayout.NumElements = sizeof(pmv2DinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
+	gpsDesc.InputLayout.pInputElementDescs = pmv2DinputDescs;
+
+	gpsDesc.VS = GetShader(si_VS_primitive2D);
+	gpsDesc.PS = GetShader(si_PS_primitive2D);
+	gpsDesc.pRootSignature = GetRootSignature(rsi_prm2D);
+	piplinestateObjects[pso_primitive2D].CreatePiplineState(gpsDesc);
 }
 
 void Dx12Ctrl::CompileShaders()
@@ -347,6 +362,21 @@ void Dx12Ctrl::CompileShaders()
 	outErr(err);
 
 	result = D3DGetBlobPart(shaders[si_VS_image]->GetBufferPointer(), shaders[si_VS_image]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
+	rsObj = new RootSignatureObject(rs);
+	rootsignature.push_back(rsObj);
+
+	delete(shaderName);
+	size = sizeof("Primitive2D.hlsl");
+	convert = ToWChar(&shaderName, size, "Primitive2D.hlsl", size - 1);
+
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+		"Primitive2DVS", "vs_5_0", compileflag, 0, &shaders[si_VS_primitive2D], &err);
+	outErr(err);
+	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+		"Primitive2DPS", "ps_5_0", compileflag, 0, &shaders[si_PS_primitive2D], &err);
+	outErr(err);
+
+	result = D3DGetBlobPart(shaders[si_VS_primitive2D]->GetBufferPointer(), shaders[si_VS_primitive2D]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
 	rsObj = new RootSignatureObject(rs);
 	rootsignature.push_back(rsObj);
 }
