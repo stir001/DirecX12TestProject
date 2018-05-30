@@ -19,7 +19,7 @@ public:
 	IPrimitive2D(int vertexCount);
 	virtual ~IPrimitive2D();
 
-	virtual void Draw() = 0;
+	virtual void Draw() const = 0;
 protected:
 	std::vector<Primitive2DVertex> mVertices;
 	VertexBufferObject* mVertexBuffer;

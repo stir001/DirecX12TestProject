@@ -1,6 +1,5 @@
 #pragma once
 #include "IDrawableObject.h"
-#include <memory>
 #include <vector>
 #include <string>
 #include <functional>
@@ -10,6 +9,15 @@ class ImageController;
 struct Action;
 struct ActionData;
 struct ActionRect;
+
+#ifndef _CHARACTOR_SCALE_
+const float CHARACTOR_SCALE = 2.0f;
+#endif // !_CHARACTOR_SCALE_
+
+#ifdef _DEBUG
+class Primitive2DLine;
+#endif // _DEBUG
+
 
 class ICharactor :
 	public IDrawableObject
@@ -42,5 +50,16 @@ protected:
 	void ChangeAction(const char* actionName);
 	void SetActionImageData();
 	void AnimationUpdate();
+
+#ifdef _DEBUG
+	void DrawRect() const;
+#endif // _DEBUG
+private:
+#ifdef _DEBUG
+	void UpDateRectLine();
+	void UpDateRectPosition();
+	std::vector<std::shared_ptr<Primitive2DLine>> mRectLines;
+#endif // _DEBUG
+
 };
 

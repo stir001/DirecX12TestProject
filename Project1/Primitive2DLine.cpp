@@ -31,7 +31,16 @@ Primitive2DLine::~Primitive2DLine()
 {
 }
 
-void Primitive2DLine::Draw()
+void Primitive2DLine::SetCenter(const DirectX::XMFLOAT3& pos)
+{
+	DirectX::XMFLOAT3 unitP1 = NormalizeXMFloat3(mVertices[0].pos - mCenter);
+	DirectX::XMFLOAT3 unitP2 = NormalizeXMFloat3(mVertices[3].pos - mCenter);
+	mCenter = pos;
+
+	SetPoints(unitP1 * (mLength / 2.f), unitP2 * (mLength / 2.0f));
+}
+
+void Primitive2DLine::Draw() const
 {
 	DX12CTRL_INSTANCE
 	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_primitive2D));
@@ -105,4 +114,6 @@ void Primitive2DLine::SetColor(const DirectX::XMFLOAT3& color)
 	{
 		v.color = color;
 	}
+
+	UpdateBuffer();
 }

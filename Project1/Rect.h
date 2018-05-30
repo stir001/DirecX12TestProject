@@ -23,5 +23,6 @@ private:
 	DirectX::XMFLOAT3 mCenter;
 	float mWidth;
 	float mHeight;
+	float mScalse;
 };
 

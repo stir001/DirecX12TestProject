@@ -30,6 +30,10 @@ void PlayerSH::Update()
 
 void PlayerSH::Draw() const
 {
+#ifdef _DEBUG
+	DrawRect();
+#endif // _DEBUG
+
 	mImgCtrl->Draw();
 }
 
