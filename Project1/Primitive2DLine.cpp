@@ -34,10 +34,11 @@ Primitive2DLine::~Primitive2DLine()
 void Primitive2DLine::SetCenter(const DirectX::XMFLOAT3& pos)
 {
 	DirectX::XMFLOAT3 unitP1 = NormalizeXMFloat3(mVertices[0].pos - mCenter);
-	DirectX::XMFLOAT3 unitP2 = NormalizeXMFloat3(mVertices[3].pos - mCenter);
+	DirectX::XMFLOAT3 unitP2 = NormalizeXMFloat3(mVertices[1].pos - mCenter);
 	mCenter = pos;
 
 	SetPoints(unitP1 * (mLength / 2.f), unitP2 * (mLength / 2.0f));
+	UpdateBuffer();
 }
 
 void Primitive2DLine::Draw() const
@@ -60,13 +61,10 @@ void Primitive2DLine::SetScale(float scale)
 	mScale = scale;
 
 	DirectX::XMFLOAT3 point1vec = mVertices[0].pos - mCenter;
-	DirectX::XMFLOAT3 point2vec = mVertices[3].pos - mCenter;
+	DirectX::XMFLOAT3 point2vec = mVertices[1].pos - mCenter;
 
-	float p1Length = GetLengthXMFloat3(point1vec);
-	float p2Length = GetLengthXMFloat3(point2vec);
-
-	float p1scale = p1Length / ((mLength * mScale) / 2);
-	float p2scale = p2Length / ((mLength * mScale) / 2);
+	float p1scale = ((mLength * mScale) / 2.f);
+	float p2scale = ((mLength * mScale) / 2.f);
 
 	SetPoints(NormalizeXMFloat3(point1vec) * p1scale + mCenter, NormalizeXMFloat3(point2vec) * p2scale + mCenter);
 }

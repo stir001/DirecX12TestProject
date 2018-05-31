@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	Dx12Ctrl* d12 = Dx12Ctrl::Instance();
 	d12->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "SplatterHouse";
+	std::string wName = "1601295_^“ç§ˆê˜Y";
 	d12->SetWindowName(wName);
 	d12->Dx12Init();
 	
