@@ -18,6 +18,9 @@ Dx12Camera::Dx12Camera(int wWidth,int wHeight):width(wWidth),height(wHeight)
 	element.viewproj = camera * projection;
 
 	cameraBuffer = new ConstantBufferObject(sizeof(element), 1);
+	DX12CTRL_INSTANCE
+	cameraBuffer->SetCommandList(d12.GetCmdList().Get());
+	cameraBuffer->SetRootparameterIndex(1);
 
 	UpdateBuffer();
 }
@@ -33,6 +36,8 @@ Dx12Camera::Dx12Camera(int wWidth, int wHeight, DirectX::XMFLOAT3& eye, DirectX:
 	projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, static_cast<float>(width) / static_cast<float>(height), 10.0f, 500.f);//カメラのプロジェクション行列
 	UpdateElement();
 
+	DX12CTRL_INSTANCE
+	cameraBuffer->SetCommandList(d12.GetCmdList().Get());
 	cameraBuffer = new ConstantBufferObject(sizeof(element), 1);
 
 	UpdateBuffer();
@@ -57,9 +62,8 @@ void Dx12Camera::UpdateBuffer()
 
 void Dx12Camera::SetBuffer()
 {
-	DX12CTRL_INSTANCE
 	cameraBuffer->SetDescHeap();
-	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_camera, cameraBuffer->GetGPUDescriptorHandle());
+	cameraBuffer->SetBuffer();
 }
 
 void Dx12Camera::SetPos(DirectX::XMFLOAT3& pos)

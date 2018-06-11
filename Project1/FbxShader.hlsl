@@ -19,7 +19,7 @@ SamplerState smp : register(s0);
 
 cbuffer offset: register(b2)
 {
-    float3 offsetpos;
+    matrix modelMatrix;
 }
 
 struct Input
@@ -41,14 +41,14 @@ struct Output
 Output FbxVS(Input input)
 {
     Output output;
-    output.svpos = mul(c_viewproj, (mul(c_world, float4(input.pos, 1)) /*+ mul(c_world, float4(offsetpos, 1))*/));
+    //output.svpos = mul(c_viewproj, (mul(c_world, mul(modelMatrix, float4(input.pos, 1)))));
+    output.svpos = mul(c_viewproj, (mul(c_world,  float4(input.pos, 1))));
     output.pos = output.svpos;
     output.uv = input.uv;
 
-    matrix m = c_world;
+    matrix m = mul(c_world, modelMatrix);
     m._m03_m13_m23 = 0;
-    float3 n = normalize(input.normal);
-    output.normal = (mul(m, float4(n, 1)));
+    output.normal = float4(normalize((mul(m, float4(input.normal, 1))).xyz), 1);
 
     return output;
 }
@@ -56,6 +56,7 @@ Output FbxVS(Input input)
 //テクスチャがB8G8R8A8の時の実装?
 float4 FbxPS(Output output) : SV_Target
 {
+    return float4(output.normal);
     //return float4(output.uv, 0, 1);
     //return abs(float4(output.normal));
     //return normalmap.Sample(smp, output.uv);
@@ -76,7 +77,7 @@ float4 FbxPS(Output output) : SV_Target
     float4 light = float4(dir, 1);
     float brightness = dot(output.normal.xyz , light.xyz);
     float4 color = diffsemap.Sample(smp, output.uv);
-    color = color /** brightness*/ /*+ color * ambientmap.Sample(smp, output.uv)*/;
+    color = color * brightness + color * ambientmap.Sample(smp, output.uv);
 
     return color;
 }

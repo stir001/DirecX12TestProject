@@ -20,10 +20,10 @@ PMDController::~PMDController()
 void PMDController::Draw()
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_notTex).Get());
-	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(rsi_pmd).Get());
+	d12.GetCmdList()->SetPipelineState(d12.GetPiplineState(pso_notTex).Get());
+	d12.GetCmdList()->SetGraphicsRootSignature(d12.GetRootSignature(rsi_pmd).Get());
 	dirLight->SetLight();
-	d12->SetCameraBuffer();
+	d12.SetCameraBuffer();
 	model->SetIndexBuffer();
 	model->SetVertexBuffer();
 	SetBoneBuffer();
@@ -50,7 +50,7 @@ void PMDController::SetBoneBuffer()
 	DX12CTRL_INSTANCE
 	boneMatrixBuffer->WriteBuffer(&boneMatrix[0], static_cast<unsigned int>(sizeof(boneMatrix[0]) * boneMatrix.size()));
 	boneMatrixBuffer->SetDescHeap();
-	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_bonematrix, boneMatrixBuffer->GetGPUDescriptorHandle());
+	d12.GetCmdList()->SetGraphicsRootDescriptorTable(rpt_bonematrix, boneMatrixBuffer->GetGPUDescriptorHandle());
 }
 
 void PMDController::SetPosition(DirectX::XMFLOAT3& p)

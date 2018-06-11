@@ -155,12 +155,12 @@ void ImageController::TurnY()
 void ImageController::Draw() const
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetPipelineState(d12->GetPiplineState(pso_image).Get());
-	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(rsi_image).Get());
-	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	d12.GetCmdList()->SetPipelineState(d12.GetPiplineState(pso_image).Get());
+	d12.GetCmdList()->SetGraphicsRootSignature(d12.GetRootSignature(rsi_image).Get());
+	d12.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	mVertexBuffer->SetBuffer();
 	mImgObj->SetImage();
-	d12->GetCmdList()->DrawInstanced(4, 1, 0, 0);
+	d12.GetCmdList()->DrawInstanced(4, 1, 0, 0);
 }
 
 void ImageController::UpdateUV()
@@ -206,7 +206,7 @@ void ImageController::UpdateNormvec()
 void ImageController::UpdateBuffer()
 {
 	DX12CTRL_INSTANCE
-	DirectX::XMFLOAT2 size = d12->GetWindowSize();
+	DirectX::XMFLOAT2 size = d12.GetWindowSize();
 	for (int i = 0; i < 4; ++i)
 	{
 		mVertex[i].pos = RotationXY(mNormvec[i], mRota) * mLength[i] * mScale + mCenter;

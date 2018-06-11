@@ -7,10 +7,10 @@
 #include <wrl.h>
 
 
-#define DX12CTRL_INSTANCE Dx12Ctrl* d12 = Dx12Ctrl::Instance();
+#define DX12CTRL_INSTANCE Dx12Ctrl& d12 = Dx12Ctrl::Instance();
 
 #ifdef _DEBUG
-#define D12RESULTCHECK Dx12Ctrl::Instance()->CheckResult();
+#define D12RESULTCHECK Dx12Ctrl::Instance().CheckResult();
 #else
 #define D12RESULTCHECK 
 
@@ -74,6 +74,8 @@ enum ShaderIndex
 class Dx12Ctrl
 {
 private:
+	static Dx12Ctrl* inst;
+
 	int wHeight;
 	int wWidth;
 	std::string windowName;
@@ -103,8 +105,26 @@ private:
 
 	Dx12Ctrl();
 	Dx12Ctrl(const Dx12Ctrl&);
+	//Dx12Ctrl& operator=(const Dx12Ctrl&);
 public:
-	static Dx12Ctrl* Instance();
+	static Dx12Ctrl& Instance()
+	{
+		static Dx12Ctrl DX12CTRL;
+		/*if (DX12CTRL == nullptr)
+		{
+			DX12CTRL = new Dx12Ctrl();
+		}*/
+
+		return DX12CTRL;
+	}
+	/*static void Destroy()
+	{
+		if (DX12CTRL == nullptr)
+		{
+			delete DX12CTRL;
+			DX12CTRL = nullptr;
+		}
+	}*/
 	HRESULT result;
 	DXGI_SWAP_CHAIN_DESC1 GetDefaultSwapChainDesc();
 	D3D12_STATIC_SAMPLER_DESC GetDefaulSamplerDesc();

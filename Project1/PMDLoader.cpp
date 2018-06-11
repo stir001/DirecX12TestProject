@@ -290,8 +290,8 @@ void PMDLoader::CreateTexture()
 {
 	DX12CTRL_INSTANCE
 	loadingmodel->textureObjects.resize(exittexcount);
-	loadingmodel->textureDescHeap = d12->CreateTextureDescHeap(loadingmodel->path, exittexcount);
-	UINT descsize = d12->GetDev()->GetDescriptorHandleIncrementSize(loadingmodel->textureDescHeap->GetDesc().Type);
+	loadingmodel->textureDescHeap = d12.CreateTextureDescHeap(loadingmodel->path, exittexcount);
+	UINT descsize = d12.GetDev()->GetDescriptorHandleIncrementSize(loadingmodel->textureDescHeap->GetDesc().Type);
 	for (unsigned int i = 0;i < loadingmodel->materials.size();i++)
 	{
 		if (loadingmodel->materials[i].texid == -1) continue;
@@ -307,7 +307,7 @@ void PMDLoader::CreateTexture()
 		cpuhandle.ptr += loadingmodel->materials[i].texid * descsize;
 		D3D12_GPU_DESCRIPTOR_HANDLE gpuhandle = loadingmodel->textureDescHeap->GetGPUDescriptorHandleForHeapStart();
 		gpuhandle.ptr += loadingmodel->materials[i].texid * descsize;
-		loadingmodel->textureObjects[loadingmodel->materials[i].texid] = d12->LoadTexture(path, cpuhandle, gpuhandle);
+		loadingmodel->textureObjects[loadingmodel->materials[i].texid] = d12.LoadTexture(path, cpuhandle, gpuhandle);
 	}
 }
 

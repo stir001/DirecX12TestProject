@@ -47,17 +47,6 @@ Dx12Ctrl::~Dx12Ctrl()
 
 }
 
-Dx12Ctrl* Dx12Ctrl::Instance()
-{
-	static Dx12Ctrl* dx12Ctrl = nullptr;
-	if (dx12Ctrl == nullptr)
-	{
-		dx12Ctrl = new Dx12Ctrl();
-	}
-
-	return dx12Ctrl;
-}
-
 Microsoft::WRL::ComPtr<ID3D12Device> Dx12Ctrl::GetDev()
 {	
 	return dev;

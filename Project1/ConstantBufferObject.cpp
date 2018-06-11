@@ -22,7 +22,7 @@ ConstantBufferObject::ConstantBufferObject(unsigned int elementsize,unsigned int
 	cbvResourceDesc.SampleDesc.Count = 1;
 	cbvResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
-	d12->result = d12->GetDev()->CreateCommittedResource(
+	d12.result = d12.GetDev()->CreateCommittedResource(
 		&cbvHeapProp,
 		D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE,
 		&cbvResourceDesc,
@@ -37,18 +37,18 @@ ConstantBufferObject::ConstantBufferObject(unsigned int elementsize,unsigned int
 	cbvHeapDesc.NumDescriptors = elementcount;
 	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 
-	d12->result = d12->GetDev()->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&cbvDescHeap));
+	d12.result = d12.GetDev()->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&cbvDescHeap));
 	D12RESULTCHECK
 
 	auto bufferLocation = buffer->GetGPUVirtualAddress();
-	auto descSize = d12->GetDev()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	auto descSize = d12.GetDev()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	auto handle = cbvDescHeap->GetCPUDescriptorHandleForHeapStart();
 	for (unsigned int i = 0; i < elementcount; i++)
 	{
 		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 		cbvDesc.BufferLocation = bufferLocation;
 		cbvDesc.SizeInBytes = (elementsize + 0xff) & ~0xff;
-		d12->GetDev()->CreateConstantBufferView(&cbvDesc, handle);
+		d12.GetDev()->CreateConstantBufferView(&cbvDesc, handle);
 		bufferLocation += (elementsize + 0xff) & ~0xff;
 		handle.ptr += descSize;
 	}
@@ -70,8 +70,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE ConstantBufferObject::GetGPUDescriptorHandle()
 
 void ConstantBufferObject::SetDescHeap()
 {
-	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetDescriptorHeaps(1, &cbvDescHeap);
+	cmdList->SetDescriptorHeaps(1, &cbvDescHeap);
 }
 
 void ConstantBufferObject::SetRootparameterIndex(int index)

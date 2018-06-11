@@ -179,7 +179,7 @@ void FbxLoader::TmpVertexInfo(fbxsdk::FbxMesh* mesh)
 					nluv.normal.x = static_cast<float>(t_normal[0]);
 					nluv.normal.y = static_cast<float>(t_normal[1]);
 					nluv.normal.z = static_cast<float>(t_normal[2]);
-					nluv.vertexNo = i;
+					nluv.vertexNo = polygonvertices[i];
 					m_tmpVertices[polygonvertices[i]].normalandUV.push_back(nluv);
 				}
 				break;

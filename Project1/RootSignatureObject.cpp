@@ -29,7 +29,7 @@ RootSignatureObject::RootSignatureObject() :srvRangecount(0), cbvRangecount(0),s
 RootSignatureObject::RootSignatureObject(ID3D10Blob* signatureBlob)
 {
 	DX12CTRL_INSTANCE
-	d12->result =d12->GetDev()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	d12.result =d12.GetDev()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 }
 
 RootSignatureObject::~RootSignatureObject()
@@ -130,15 +130,15 @@ void RootSignatureObject::CreateRootSignature()
 
 		rootparam.push_back(MakeRootParamater(&descriptorRanges[i], visibility));
 	}*/
-	Dx12Ctrl* d12 = Dx12Ctrl::Instance();
+	Dx12Ctrl& d12 = Dx12Ctrl::Instance();
 	rootSignatureDesc = new CD3DX12_ROOT_SIGNATURE_DESC();
 	rootSignatureDesc->Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 	CreateSamplers();
 	rootSignatureDesc->pParameters = &rootparam[0];
 	rootSignatureDesc->NumParameters = static_cast<UINT>(rootparam.size());
-	d12->result = D3D12SerializeRootSignature(rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error);
+	d12.result = D3D12SerializeRootSignature(rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error);
 	D12RESULTCHECK
-	d12->result = d12->GetDev()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	d12.result = d12.GetDev()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	D12RESULTCHECK
 }
 
@@ -148,7 +148,7 @@ void RootSignatureObject::CreateSamplers()
 	samplerDesc.resize(samplercount);
 	ZeroMemory(&samplerDesc[0], sizeof(samplerDesc[0]) * samplercount);
 
-	samplerDesc[0] = Dx12Ctrl::Instance()->GetDefaulSamplerDesc();
+	samplerDesc[0] = Dx12Ctrl::Instance().GetDefaulSamplerDesc();
 	
 	rootSignatureDesc->NumStaticSamplers = static_cast<UINT>(samplerDesc.size());
 	rootSignatureDesc->pStaticSamplers = &samplerDesc[0];

@@ -24,6 +24,6 @@ DirectX::XMFLOAT2 ImageObject::GetImageSize()
 void ImageObject::SetImage() const
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetDescriptorHeaps(1, &mTexDescHeap);
+	d12.GetCmdList()->SetDescriptorHeaps(1, &mTexDescHeap);
 	mTexObj->SetBuffer();
 }

@@ -20,19 +20,19 @@ PMDModel::~PMDModel()
 void PMDModel::SetMaterialBuffer()
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	d12.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = materialBuffer->GetGPUDescriptorHandle();
-	UINT descsize = d12->GetDev()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	UINT descsize = d12.GetDev()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	int offset = 0;
-	auto cmdList = d12->GetCmdList();
-	cmdList->SetPipelineState(d12->GetPiplineState(pso_exitTex).Get());
+	auto cmdList = d12.GetCmdList();
+	cmdList->SetPipelineState(d12.GetPiplineState(pso_exitTex).Get());
 
 	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = textureDescHeap->GetGPUDescriptorHandleForHeapStart();
 	for (unsigned int i = 0; i < materials.size(); i++)
 	{
 		if (materials[i].texid != -1)
 		{
-			cmdList->SetPipelineState(d12->GetPiplineState(pso_exitTex).Get());
+			cmdList->SetPipelineState(d12.GetPiplineState(pso_exitTex).Get());
 			if (textureObjects[materials[i].texid] != nullptr)
 			{
 				cmdList->SetDescriptorHeaps(1, &textureDescHeap);
@@ -41,7 +41,7 @@ void PMDModel::SetMaterialBuffer()
 		}
 		else
 		{
-			cmdList->SetPipelineState(d12->GetPiplineState(pso_notTex).Get());
+			cmdList->SetPipelineState(d12.GetPiplineState(pso_notTex).Get());
 		}
 		materialBuffer->SetDescHeap();
 		cmdList->SetGraphicsRootDescriptorTable(rpt_cbv, handle);

@@ -76,7 +76,7 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 	int size = sizeof(PrimitiveVertex);
 
 	DX12CTRL_INSTANCE
-	d12->result = d12->GetDev()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+	d12.result = d12.GetDev()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((vertices.size() * sizeof(PrimitiveVertex))),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
@@ -85,7 +85,7 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 	D12RESULTCHECK
 
 	mapData = nullptr;
-	d12->result = vertexBuffer->Map(0,nullptr, (void**)&mapData);
+	d12.result = vertexBuffer->Map(0,nullptr, (void**)&mapData);
 	D12RESULTCHECK
 
 	memcpy(mapData, &vertices[0], vertices.size() * sizeof(PrimitiveVertex));
@@ -103,7 +103,7 @@ PrimitivePlane::~PrimitivePlane()
 void PrimitivePlane::Draw()
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	d12->GetCmdList()->IASetVertexBuffers(0, 1, vbView);
-	d12->GetCmdList()->DrawInstanced(static_cast<UINT>(vertices.size()), 1, 0, 0);
+	d12.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	d12.GetCmdList()->IASetVertexBuffers(0, 1, vbView);
+	d12.GetCmdList()->DrawInstanced(static_cast<UINT>(vertices.size()), 1, 0, 0);
 }

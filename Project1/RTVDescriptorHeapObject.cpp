@@ -7,12 +7,12 @@
 
 RTVDescriptorHeapObject::RTVDescriptorHeapObject()
 {
-	Dx12Ctrl::Instance()->GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance()->MakeDescriptorHeapDesc(dhdt_rtv)), IID_PPV_ARGS(&rtvDescriptorHeap));
+	Dx12Ctrl::Instance().GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance().MakeDescriptorHeapDesc(dhdt_rtv)), IID_PPV_ARGS(&rtvDescriptorHeap));
 }
 
 RTVDescriptorHeapObject::RTVDescriptorHeapObject(int numDescriptor)
 {
-	Dx12Ctrl::Instance()->GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance()->MakeDescriptorHeapDesc(dhdt_rtv,numDescriptor)), IID_PPV_ARGS(&rtvDescriptorHeap));
+	Dx12Ctrl::Instance().GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance().MakeDescriptorHeapDesc(dhdt_rtv,numDescriptor)), IID_PPV_ARGS(&rtvDescriptorHeap));
 }
 
 

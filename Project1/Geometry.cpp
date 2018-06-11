@@ -18,13 +18,13 @@ void CallStartPerGameLoop()
 {
 	DX12CTRL_INSTANCE
 	AnimationPlayerManager::Instance()->UpdateAnimations();
-	d12->InitMainCmdList();
+	d12.InitMainCmdList();
 }
 
 void CallEndPerGameLoop()
 {
 	DX12CTRL_INSTANCE
-	d12->ExcuteAndPresent();
+	d12.ExcuteAndPresent();
 }
 
 bool ProcessMessage()

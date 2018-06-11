@@ -28,9 +28,9 @@ TextureObj* TextureLoader::LoadTexture(std::wstring filepath, D3D12_CPU_DESCRIPT
 	rtn->cpuHandle = cpuHandle;
 	rtn->gpuHandle = gpuhandle;
 	DX12CTRL_INSTANCE
-	d12->result = DirectX::LoadWICTextureFromFile(d12->GetDev().Get(),  filepath.data(), &rtn->textureBuffer, rtn->decodedData, rtn->subresource);
+	d12.result = DirectX::LoadWICTextureFromFile(d12.GetDev().Get(),  filepath.data(), &rtn->textureBuffer, rtn->decodedData, rtn->subresource);
 
-	if (FAILED(d12->result))
+	if (FAILED(d12.result))
 	{
 		delete rtn;
 		return rtn = nullptr;
@@ -66,7 +66,7 @@ void TextureLoader::CreateTexWriteToSubRrsource(TextureObj*& inTex)
 	int count = inTex->textureBuffer->Release();
 	inTex->textureBuffer = nullptr;
 
-	d12->result = d12->GetDev()->CreateCommittedResource(&heapProp
+	d12.result = d12.GetDev()->CreateCommittedResource(&heapProp
 		, D3D12_HEAP_FLAG_NONE
 		, &desc
 		, D3D12_RESOURCE_STATE_GENERIC_READ
@@ -82,7 +82,7 @@ void TextureLoader::CreateTexWriteToSubRrsource(TextureObj*& inTex)
 	box.front = 0;
 	box.back = 1;
 
-	d12->result = inTex->textureBuffer->WriteToSubresource(0, &box, inTex->subresource.pData, box.right * 4, box.bottom * 4);
+	d12.result = inTex->textureBuffer->WriteToSubresource(0, &box, inTex->subresource.pData, box.right * 4, box.bottom * 4);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC wicSrvDesc = {};
 	wicSrvDesc.Format = desc.Format;
@@ -90,23 +90,23 @@ void TextureLoader::CreateTexWriteToSubRrsource(TextureObj*& inTex)
 	wicSrvDesc.Texture2D.MipLevels = 1;
 	wicSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-	d12->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inTex->textureBuffer, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+	d12.GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(inTex->textureBuffer, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
-	d12->GetDev()->CreateShaderResourceView(inTex->textureBuffer, &wicSrvDesc, inTex->cpuHandle);
+	d12.GetDev()->CreateShaderResourceView(inTex->textureBuffer, &wicSrvDesc, inTex->cpuHandle);
 
 	{
 		//close()を忘れてエラーをはいていた
 		//バリアの張り方がわるいのかバリアでエラーをはくので一部バリアを書いていない(書く必要もないように感じるが...
 		//改善対象
 		//cmdList変数の寿命管理のためブロックを作っている
-		ID3D12GraphicsCommandList* cmdList = d12->GetCmdList().Get();
+		ID3D12GraphicsCommandList* cmdList = d12.GetCmdList().Get();
 		cmdList->Close();
-		d12->GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
+		d12.GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
 
 	}
 
-	d12->CmdQueueSignal();
-	d12->GetCmdList()->Reset(d12->GetCmdAllocator().Get(), d12->GetPiplineState(pso_notTex).Get());
+	d12.CmdQueueSignal();
+	d12.GetCmdList()->Reset(d12.GetCmdAllocator().Get(), d12.GetPiplineState(pso_notTex).Get());
 }
 
 void TextureLoader::CreateTexUpdateSubResources(TextureObj*& inTex)
@@ -135,7 +135,7 @@ void TextureLoader::CreateTexUpdateSubResources(TextureObj*& inTex)
 	uploadDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	uploadDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-	d12->result = d12->GetDev()->CreateCommittedResource(
+	d12.result = d12.GetDev()->CreateCommittedResource(
 		&heapProp, 
 		D3D12_HEAP_FLAG_NONE,
 		&uploadDesc,
@@ -143,7 +143,7 @@ void TextureLoader::CreateTexUpdateSubResources(TextureObj*& inTex)
 		nullptr,
 		IID_PPV_ARGS(&updateBuffer));
 
-	UINT64 num = UpdateSubresources(d12->GetCmdList().Get(),
+	UINT64 num = UpdateSubresources(d12.GetCmdList().Get(),
 		inTex->textureBuffer,
 		updateBuffer,
 		0,
@@ -158,7 +158,7 @@ void TextureLoader::CreateTexUpdateSubResources(TextureObj*& inTex)
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	d12->GetCmdList()->ResourceBarrier(1, &barrier);
+	d12.GetCmdList()->ResourceBarrier(1, &barrier);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC wicSrvDesc = {};
 	wicSrvDesc.Format = inTex->textureBuffer->GetDesc().Format;
@@ -166,16 +166,16 @@ void TextureLoader::CreateTexUpdateSubResources(TextureObj*& inTex)
 	wicSrvDesc.Texture2D.MipLevels = 1;
 	wicSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-	d12->GetDev()->CreateShaderResourceView(inTex->textureBuffer, &wicSrvDesc, inTex->cpuHandle);
+	d12.GetDev()->CreateShaderResourceView(inTex->textureBuffer, &wicSrvDesc, inTex->cpuHandle);
 
-	d12->GetCmdList()->Close();
+	d12.GetCmdList()->Close();
 
 	{
-		ID3D12GraphicsCommandList* cmdList = d12->GetCmdList().Get();
-		d12->GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
+		ID3D12GraphicsCommandList* cmdList = d12.GetCmdList().Get();
+		d12.GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
 	}
 
-	d12->CmdQueueSignal();
+	d12.CmdQueueSignal();
 
-	d12->GetCmdList()->Reset(d12->GetCmdAllocator().Get(), d12->GetPiplineState(pso_exitTex ).Get());
+	d12.GetCmdList()->Reset(d12.GetCmdAllocator().Get(), d12.GetPiplineState(pso_exitTex ).Get());
 }

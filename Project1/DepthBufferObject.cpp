@@ -18,7 +18,7 @@ DepthBufferObject::DepthBufferObject(int height,int width)
 	depthClearValue.DepthStencil.Depth = 1.0f;//[‚³Å‘å’l‚Í‚P 
 	depthClearValue.Format = DXGI_FORMAT_D32_FLOAT;
 
-	d12->result = d12->GetDev()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+	d12.result = d12.GetDev()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&depthResourceDesc,
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
@@ -34,10 +34,10 @@ DepthBufferObject::DepthBufferObject(int height,int width)
 	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {}; 
 	dsvHeapDesc.NumDescriptors = 1;
 	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	d12->result = d12->GetDev()->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
+	d12.result = d12.GetDev()->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
 	D12RESULTCHECK
 
-	d12->GetDev()->CreateDepthStencilView(buffer, &dsvDesc, dsvHeap->GetCPUDescriptorHandleForHeapStart());
+	d12.GetDev()->CreateDepthStencilView(buffer, &dsvDesc, dsvHeap->GetCPUDescriptorHandleForHeapStart());
 
 }
 

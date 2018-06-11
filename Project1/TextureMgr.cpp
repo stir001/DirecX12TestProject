@@ -49,7 +49,7 @@ TextureMgr::~TextureMgr()
 //
 //	HRESULT result;
 //
-//	result = Dx12Ctrl::Instance()->GetDev()->CreateCommittedResource(
+//	result = Dx12Ctrl::Instance().GetDev()->CreateCommittedResource(
 //		&textureHeapProperties,
 //		D3D12_HEAP_FLAG_NONE,
 //		&textureResourceDesc,
@@ -66,17 +66,17 @@ TextureMgr::~TextureMgr()
 //	box.front = 0;
 //	box.back = 1;
 //
-//	ID3D12GraphicsCommandList* cmdList = Dx12Ctrl::Instance()->GetCmdList();
+//	ID3D12GraphicsCommandList* cmdList = Dx12Ctrl::Instance().GetCmdList();
 //
 //	result = texObj->textureBuffer->WriteToSubresource(0, &box, &imgData.rgbData[0], box.right * 4, 4 * box.bottom);
 //
 //	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texObj->textureBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 //	cmdList->Close();
 //
-//	Dx12Ctrl::Instance()->GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)&cmdList);
+//	Dx12Ctrl::Instance().GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)&cmdList);
 //
-//	Dx12Ctrl::Instance()->GetCmdQueue()->Signal(Dx12Ctrl::Instance()->GetFence(), ++(Dx12Ctrl::Instance()->GetFenceValue()));
-//	while (Dx12Ctrl::Instance()->GetFence()->GetCompletedValue() != Dx12Ctrl::Instance()->GetFenceValue()) {}
+//	Dx12Ctrl::Instance().GetCmdQueue()->Signal(Dx12Ctrl::Instance().GetFence(), ++(Dx12Ctrl::Instance().GetFenceValue()));
+//	while (Dx12Ctrl::Instance().GetFence()->GetCompletedValue() != Dx12Ctrl::Instance().GetFenceValue()) {}
 //
 //	texture.push_back(texObj);
 //
@@ -95,7 +95,7 @@ ID3D12DescriptorHeap* TextureMgr::CreateTextureDescHeap(std::string modelpath, i
 	texDescHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 
 	ID3D12DescriptorHeap* tex;
-	d12->result = d12->GetDev()->CreateDescriptorHeap(&texDescHeapDesc, IID_PPV_ARGS(&tex));
+	d12.result = d12.GetDev()->CreateDescriptorHeap(&texDescHeapDesc, IID_PPV_ARGS(&tex));
 	D12RESULTCHECK
 
 	modelTextureDescHeaps[modelpath] = tex;

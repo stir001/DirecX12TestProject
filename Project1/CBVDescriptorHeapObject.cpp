@@ -5,12 +5,12 @@
 
 CBVDescriptorHeapObject::CBVDescriptorHeapObject()
 {
-	Dx12Ctrl::Instance()->GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance()->MakeDescriptorHeapDesc(dhdt_cbv)), IID_PPV_ARGS(&cbvDescriptorHeap));
+	Dx12Ctrl::Instance().GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance().MakeDescriptorHeapDesc(dhdt_cbv)), IID_PPV_ARGS(&cbvDescriptorHeap));
 }
 
 CBVDescriptorHeapObject::CBVDescriptorHeapObject(int numDescriptor)
 {
-	Dx12Ctrl::Instance()->GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance()->MakeDescriptorHeapDesc(dhdt_cbv, numDescriptor)), IID_PPV_ARGS(&cbvDescriptorHeap));
+	Dx12Ctrl::Instance().GetDev()->CreateDescriptorHeap(&(Dx12Ctrl::Instance().MakeDescriptorHeapDesc(dhdt_cbv, numDescriptor)), IID_PPV_ARGS(&cbvDescriptorHeap));
 }
 
 CBVDescriptorHeapObject::~CBVDescriptorHeapObject()

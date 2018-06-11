@@ -21,7 +21,7 @@ TextureObj::~TextureObj()
 void TextureObj::SetBuffer() const
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rpt_texture, gpuHandle);
+	d12.GetCmdList()->SetGraphicsRootDescriptorTable(rpt_texture, gpuHandle);
 }
 
 int TextureObj::GetWidth() const
@@ -37,5 +37,5 @@ int TextureObj::GetHeight() const
 void TextureObj::SetBuffer(int rootparamIndex) const
 {
 	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetGraphicsRootDescriptorTable(rootparamIndex, gpuHandle);
+	d12.GetCmdList()->SetGraphicsRootDescriptorTable(rootparamIndex, gpuHandle);
 }

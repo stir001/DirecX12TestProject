@@ -25,12 +25,25 @@ public:
 
 	void Draw();
 	void SetLight(std::shared_ptr<DirectionalLight>);
+	void SetPositon(DirectX::XMFLOAT3& pos);
+	void SetScale(float scale);
+	void AddRotaX(float deg);
+	void AddRotaY(float deg);
+	void AddRotaZ(float deg);
+	void SetRotaQuaternion(DirectX::XMFLOAT4& quaternion);
 private:
+	ConstantBufferObject * mModelMatrixBuffer;
+	DirectX::XMMATRIX mModelMatrix;
+	float mScale;
 	std::shared_ptr<Fbx::FbxModel> mModel;
 	DirectX::XMFLOAT3 mPos;
-	DirectX::XMFLOAT3 mRotation;
+	DirectX::XMMATRIX mRotationMatrix;
+	DirectX::XMFLOAT4 mQuaternion;
 	ConstantBufferObject* mBoneMatrixBuffer;
 	std::vector<DirectX::XMMATRIX> mBoneMatrix;
 	std::shared_ptr<DirectionalLight> mDirLight;
+
+	void UpdateMatrix();
+	void SetModelMatrix();
 };
 

@@ -8,15 +8,15 @@
 
 SwapChainComponent::SwapChainComponent(HWND& hwnd):swapchain(nullptr),rtvDescriptorHeap(nullptr)
 {
-	Dx12Ctrl* d12 = Dx12Ctrl::Instance();
+	Dx12Ctrl& d12 = Dx12Ctrl::Instance();
 	auto swap = swapchain.Get();
-	d12->result = d12->GetFactory()->CreateSwapChainForHwnd(d12->GetCmdQueue().Get(), hwnd, &(d12->GetDefaultSwapChainDesc()), nullptr, nullptr, (IDXGISwapChain1**)(&swap));
+	d12.result = d12.GetFactory()->CreateSwapChainForHwnd(d12.GetCmdQueue().Get(), hwnd, &(d12.GetDefaultSwapChainDesc()), nullptr, nullptr, (IDXGISwapChain1**)(&swap));
 	D12RESULTCHECK
 	swapchain = swap;
 	DXGI_SWAP_CHAIN_DESC swdesc = {};
 	swapchain->GetDesc(&swdesc);
 	rtvDescriptorHeap = new RTVDescriptorHeapObject(swdesc.BufferCount);
-	heapIncrementsize = d12->GetDev()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	heapIncrementsize = d12.GetDev()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	renderTargets.resize(swdesc.BufferCount);
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuhandle = rtvDescriptorHeap->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
 	D3D12_RENDER_TARGET_VIEW_DESC rtdesc;
@@ -27,9 +27,9 @@ SwapChainComponent::SwapChainComponent(HWND& hwnd):swapchain(nullptr),rtvDescrip
 	
 	for (int i = 0; i < renderTargets.size(); i++)
 	{
-		d12->result = swapchain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
+		d12.result = swapchain->GetBuffer(i, IID_PPV_ARGS(&renderTargets[i]));
 		D12RESULTCHECK
-		d12->GetDev()->CreateRenderTargetView(renderTargets[i], &rtdesc, cpuhandle);
+		d12.GetDev()->CreateRenderTargetView(renderTargets[i], &rtdesc, cpuhandle);
 		cpuhandle.ptr += (heapIncrementsize);
 	}
 

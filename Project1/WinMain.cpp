@@ -44,14 +44,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	///Direct3D12‚Ì‰Šú‰»
 
-	Dx12Ctrl* d12 = Dx12Ctrl::Instance();
-	d12->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	/*Dx12Ctrl& d12 = Dx12Ctrl::Instance();*/
+	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	std::string wName = "FbxLoad";
-	d12->SetWindowName(wName);
-	d12->Dx12Init();
+	Dx12Ctrl::Instance().SetWindowName(wName);
+	Dx12Ctrl::Instance().Dx12Init();
 
 	FbxLoader::Create();
-	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH);
+	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH2);
 	FbxModelDataConverter* fbxconverter = new FbxModelDataConverter();
 	std::shared_ptr<FbxModel> fbxModel(fbxconverter->ConvertToFbxModel(modelData));
 
@@ -74,7 +74,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//mgr.CreatePlane(pos, 50, 50, normal);
 	//mgr.SetLightObject(dirLight);
 
-	Dx12Camera* camera = d12->GetCamera();
+	Dx12Camera* camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 
 	while (ProcessMessage()) {
@@ -128,16 +128,20 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			camera->TurnRightLeft(1.0f);
 		}
 
+		fbxctrl->SetPositon(DirectX::XMFLOAT3(10,0,0));
+		fbxctrl->SetScale(0.1f);
+		fbxctrl->AddRotaX(1.0f);
+
 	/*	pmdContrl->Draw();*/
 		//mgr.Draw();
 		fbxctrl->Draw();
 
 		CallEndPerGameLoop();
 	}
-	d12->Release();
+	Dx12Ctrl::Instance().Release();
 #ifdef _DEBUG
 	ID3D12DebugDevice* debugdev = nullptr;
-	d12->GetDev()->QueryInterface(&debugdev);
+	Dx12Ctrl::Instance().GetDev()->QueryInterface(&debugdev);
 	debugdev->ReportLiveDeviceObjects(D3D12_RLDO_FLAGS::D3D12_RLDO_DETAIL);
 #endif
 	
