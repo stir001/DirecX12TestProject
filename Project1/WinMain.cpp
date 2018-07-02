@@ -1,8 +1,8 @@
 #include "Dx12Ctrl.h"
-#include "Geometry.h"
 #include "GameScene.h"
 #include "DxInput.h"
 #include "Primitive2DLine.h"
+#include "NeedCall.h"
 
 #include <Windows.h>
 #include <tchar.h>
@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	d12->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	std::string wName = "1601295_^“ç§ˆê˜Y";
 	d12->SetWindowName(wName);
-	d12->Dx12Init();
+	d12->Dx12Init(hInst);
 	
 	std::shared_ptr<DxInput> spInput(new DxInput());
 	GameScene* gameScene = new GameScene(spInput);
