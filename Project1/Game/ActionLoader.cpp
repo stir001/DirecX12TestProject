@@ -55,7 +55,7 @@ std::vector<Action> ActionLoader::LoadActionRects()
 {
 	std::vector<Action> actions;
 
-	int actionCount;
+	int actionCount = 0;
 	mFile->LoadFile(&actionCount);
 	actions.resize(actionCount);
 

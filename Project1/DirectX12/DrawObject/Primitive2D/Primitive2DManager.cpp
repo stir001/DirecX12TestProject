@@ -23,6 +23,10 @@ Primitive2DManager::~Primitive2DManager()
 
 std::shared_ptr<Primitive2DLine> Primitive2DManager::CreatePrimitive2DLine(const DirectX::XMFLOAT3 & point1, const DirectX::XMFLOAT3 & point2)
 {
+	std::shared_ptr<Primitive2DLine> line(new Primitive2DLine(point1, point2, Dx12Ctrl::Instance()->GetDev(), mCmdList));
+	line->SetPipelineState(mPipelinestate);
+	line->SetRootSignature(mRootsignature);
+	return line;
 }
 
 void Primitive2DManager::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)

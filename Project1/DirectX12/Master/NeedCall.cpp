@@ -23,7 +23,7 @@ void CallStartPerGameLoop()
 	//}, AnimationPlayerManager::Instance());
 
 	//threadObject.join();
-	AnimationPlayerManager::Instance()->UpdateAnimations();
+	//AnimationPlayerManager::Instance()->UpdateAnimations();
 }
 
 void CallEndPerGameLoop()

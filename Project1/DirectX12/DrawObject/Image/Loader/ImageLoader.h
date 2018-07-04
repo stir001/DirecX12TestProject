@@ -22,7 +22,7 @@ public:
 	
 	void Release(const std::string& releaseImagePath);
 
-	static  std::unique_ptr<ImageLoader>& GetInstance()
+	static  std::unique_ptr<ImageLoader>& Instance()
 	{
 		if (mInstance == nullptr)
 		{

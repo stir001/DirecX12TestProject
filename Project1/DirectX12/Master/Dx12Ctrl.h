@@ -79,6 +79,11 @@ public:
 
 	HRESULT result;
 
+#ifdef _DEBUG
+	Microsoft::WRL::ComPtr<ID3D12DebugDevice> mDebugDevice;
+#endif // _DEBUG
+
+
 	Microsoft::WRL::ComPtr<ID3D12Device> GetDev();
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> GetCmdAllocator();
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> GetCmdQueue();
@@ -124,6 +129,8 @@ public:
 		mWinHInstance = hInstance;
 	};
 
+	HRESULT ReportLiveObject();
+
 private:
 	Dx12Ctrl();
 	Dx12Ctrl(const Dx12Ctrl&);
@@ -142,8 +149,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCmdList;
 	Microsoft::WRL::ComPtr<ID3D12Fence> mFence;
 	Microsoft::WRL::ComPtr<IDXGIFactory4> mFactory;
-	std::vector<std::shared_ptr<RootSignatureObject>> mRootsignature;
-	std::vector<std::shared_ptr<PipelineStateObject>> mPipelinestateObjects;
+	//std::vector<std::shared_ptr<RootSignatureObject>> mRootsignature;
+	//std::vector<std::shared_ptr<PipelineStateObject>> mPipelinestateObjects;
 	std::shared_ptr<DepthBufferObject> mDepthBuffer;
 	std::shared_ptr<Dx12DescriptorHeapObject> mDepthDescHeap;
 	std::shared_ptr<Dx12Camera> mCamera;

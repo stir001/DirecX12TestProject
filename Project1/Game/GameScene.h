@@ -21,7 +21,6 @@ public:
 
 private:
 	std::shared_ptr<DxInput> mInput;
-	std::unique_ptr<ImageLoader> mImgLoader;
 	std::shared_ptr<PlayerSH> mPlayer;
 	std::unique_ptr<BackGround> mBackGround;
 	std::unique_ptr<HeadUpDisplay> mTopHUD;

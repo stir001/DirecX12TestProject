@@ -58,12 +58,12 @@ void RenderingPathManager::Init(Microsoft::WRL::ComPtr<ID3D12Device>& dev, Micro
 	Microsoft::WRL::ComPtr<ID3D12Resource> resoruce;//シェーダーリソースビューとして作成してから渡す
 	CreateDummyRenderTarget(resoruce);
 
-
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> firstTarget;
 	firstTarget.push_back(resoruce);
 
 	unsigned int index = AddRenderingPathObject("FirstPath", firstTarget);
 
+	mRenderingPathObjects[index].isActive = true;
 }
 
 void RenderingPathManager::Render()

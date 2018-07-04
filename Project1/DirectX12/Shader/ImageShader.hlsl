@@ -1,6 +1,6 @@
 #define IMGRS "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT)" \
 	", DescriptorTable(SRV(t0), visibility = SHADER_VISIBILITY_PIXEL)" \
-	", StaticSampler(s0, filter = FILTER_MIN_MAG_LINEAR_MIP_POINT"   \
+	", StaticSampler(s0, filter = FILTER_MIN_MAG_MIP_POINT"   \
     ", addressU = TEXTURE_ADDRESS_WRAP, addressV = TEXTURE_ADDRESS_WRAP, addressW = TEXTURE_ADDRESS_WRAP)"
 
 

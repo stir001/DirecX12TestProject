@@ -3,6 +3,7 @@
 #include "XMFloatOperators.h"
 #include "ImageController.h"
 #include "Primitive2DLine.h"
+#include "Primitive2DManager.h"
 #include <algorithm>
 
 ICharactor::ICharactor(): mIsturn(false), mFrame(0), mActionImageIndex(0), mPos(0,0,0), mVel(0,0,0)
@@ -110,49 +111,45 @@ void ICharactor::DrawRect() const
 
 void ICharactor::UpDateRectLine()
 {
-	DirectX::XMFLOAT3 color;
-	mRectLines.clear();
-	mRectLines.reserve(mCurrentAction->datas[mActionImageIndex].actionRects.size() * 4);
-	DirectX::XMFLOAT3 offset = {-(mCurrentAction->datas[mActionImageIndex].pivot.x), -(-mCurrentAction->datas[mActionImageIndex].pivot.y), 0};
-	offset += mPos;
-	for (auto& actRect : mCurrentAction->datas[mActionImageIndex].actionRects)
-	{
-		if (actRect.type == eACTION_RECT_TYPE_ATTACK)
-		{
-			color = { 1,0,0 };
-		}
-		else if (actRect.type == eACTION_RECT_TYPE_DAMAGE)
-		{
-			color = { 0,1,0 };
-		}
-		else
-		{
-			color = { 1,1,1 };
-		}
-		//上のライン
-		mRectLines.push_back(std::shared_ptr<Primitive2DLine>(
-			new Primitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetUp() + offset.y, 0),
-			DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetUp() + offset.y, 0))));
-		mRectLines.back()->SetColor(color);
+	//DirectX::XMFLOAT3 color;
+	//mRectLines.clear();
+	//mRectLines.reserve(mCurrentAction->datas[mActionImageIndex].actionRects.size() * 4);
+	//DirectX::XMFLOAT3 offset = {-(mCurrentAction->datas[mActionImageIndex].pivot.x), -(-mCurrentAction->datas[mActionImageIndex].pivot.y), 0};
+	//offset += mPos;
+	//for (auto& actRect : mCurrentAction->datas[mActionImageIndex].actionRects)
+	//{
+	//	if (actRect.type == eACTION_RECT_TYPE_ATTACK)
+	//	{
+	//		color = { 1,0,0 };
+	//	}
+	//	else if (actRect.type == eACTION_RECT_TYPE_DAMAGE)
+	//	{
+	//		color = { 0,1,0 };
+	//	}
+	//	else
+	//	{
+	//		color = { 1,1,1 };
+	//	}
+	//	//上のライン
+	//	mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetUp() + offset.y, 0),
+	//		DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetUp() + offset.y, 0)));
+	//	mRectLines.back()->SetColor(color);
 
-		//右のライン
-		mRectLines.push_back(std::shared_ptr<Primitive2DLine>(
-			new Primitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetUp() + offset.y, 0),
-				DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetDown() + offset.y, 0))));
-		mRectLines.back()->SetColor(color);
+	//	//右のライン
+	//	mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetUp() + offset.y, 0),
+	//			DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetDown() + offset.y, 0)));
+	//	mRectLines.back()->SetColor(color);
 
-		//下のライン
-		mRectLines.push_back(std::shared_ptr<Primitive2DLine>(
-			new Primitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetDown() + offset.y, 0),
-				DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetDown() + offset.y, 0))));
-		mRectLines.back()->SetColor(color);
+	//	//下のライン
+	//	mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetDown() + offset.y, 0),
+	//			DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetDown() + offset.y, 0)));
+	//	mRectLines.back()->SetColor(color);
 
-		//左のライン
-		mRectLines.push_back(std::shared_ptr<Primitive2DLine>(
-			new Primitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetDown() + offset.y, 0),
-				DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetUp() + offset.y, 0))));
-		mRectLines.back()->SetColor(color);
-	}
+	//	//左のライン
+	//	mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetDown() + offset.y, 0),
+	//			DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetUp() + offset.y, 0)));
+	//	mRectLines.back()->SetColor(color);
+	//}
 }
 
 void ICharactor::UpDateRectPosition()

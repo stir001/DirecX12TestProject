@@ -15,7 +15,7 @@ public:
 
 	static Primitive2DManager*& Instance()
 	{
-		if (mInstance = nullptr)
+		if (mInstance == nullptr)
 		{
 			mInstance = new Primitive2DManager();
 		}

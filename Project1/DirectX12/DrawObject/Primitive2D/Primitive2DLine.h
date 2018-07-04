@@ -4,7 +4,8 @@
 class Primitive2DLine : public IPrimitive2D
 {
 public:
-	Primitive2DLine(const DirectX::XMFLOAT3& point1,const DirectX::XMFLOAT3& point2);
+	Primitive2DLine(const DirectX::XMFLOAT3& point1,const DirectX::XMFLOAT3& point2
+		, const Microsoft::WRL::ComPtr<ID3D12Device> dev, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
 	~Primitive2DLine();
 
 	void SetCenter(const DirectX::XMFLOAT3& pos);

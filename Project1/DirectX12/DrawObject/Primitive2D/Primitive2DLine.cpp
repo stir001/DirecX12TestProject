@@ -6,7 +6,9 @@
 #include "RootSignatureObject.h"
 
 
-Primitive2DLine::Primitive2DLine(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2) :IPrimitive2D(4), mColor(0.f, 0.f, 0.f), mBaseRad(0.f), mAddRad(0.f), mScale(1.0f),mCenter(0.f,0.f,0.f)
+Primitive2DLine::Primitive2DLine(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2
+	, const Microsoft::WRL::ComPtr<ID3D12Device> dev, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
+	:IPrimitive2D(4,"2DLine", dev, cmdList), mColor(0.f, 0.f, 0.f), mBaseRad(0.f), mAddRad(0.f), mScale(1.0f),mCenter(0.f,0.f,0.f)
 {
 	DX12CTRL_INSTANCE
 	

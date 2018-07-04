@@ -13,7 +13,7 @@
 
 #include "d3dx12.h"
 
-const std::string IMAGE_SHADER_PATH = "DirectX12/ImageShader.hlsl";
+const std::string IMAGE_SHADER_PATH = "DirectX12/Shader/ImageShader.hlsl";
 const std::string IMAGE_VERTEXSHADER_NAME = "ImageVS";
 const std::string IMAGE_PIXCELSHADER_NAME = "ImagePS";
 const std::string IMAGE_GEOMETRYSHADER_NAME = "";
@@ -159,7 +159,7 @@ void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	mRootsignature->GetRootSignature()->SetName(L"ImageRootSignature");
 
 	m3DShader = ShaderCompiler::GetInstance()->CompileShader(
-		"DirectX12/Image3DShader.hlsl",
+		"DirectX12/Shader/Image3DShader.hlsl",
 		"Image3DVS",
 		"Image3DPS",
 		"",

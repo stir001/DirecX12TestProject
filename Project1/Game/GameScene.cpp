@@ -46,14 +46,14 @@ void GameScene::Run()
 
 	CheckCollision();
 
-	mTopHUD->Draw();
-	mBottomHUD->Draw();
-	mPlayer->Draw();
+	mBackGround->Draw();
 	for (auto& e : mEnemeys)
 	{
 		e->Draw();
 	}
-	mBackGround->Draw();
+	mPlayer->Draw();
+	mBottomHUD->Draw();
+	mTopHUD->Draw();
 }
 
 void GameScene::CreateHUD()
@@ -62,12 +62,12 @@ void GameScene::CreateHUD()
 	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
 	std::shared_ptr<ImageController> ictrl;
 	DirectX::XMFLOAT2 imgSize;
-	ictrl = (mImgLoader->LoadImageData(BOTTOMHUD_IMAGE_PATH));
+	ictrl = (ImageLoader::Instance()->LoadImageData(BOTTOMHUD_IMAGE_PATH));
 	imgSize = ictrl->GetImageSize();
 	mBottomHUD.reset(new HeadUpDisplay(ictrl));
 	mBottomHUD->SetPos(0, -(wndSize.y / 2.0f - imgSize.y / 2.0f), 0);
 
-	ictrl = (mImgLoader->LoadImageData(TOPHUD_IMAGE_PATH));
+	ictrl = (ImageLoader::Instance()->LoadImageData(TOPHUD_IMAGE_PATH));
 	imgSize = ictrl->GetImageSize();
 	mTopHUD.reset(new HeadUpDisplay(ictrl));
 	mTopHUD->SetPos(0, (wndSize.y / 2.0f - imgSize.y / 2.0f), 0);
@@ -77,19 +77,19 @@ void GameScene::CreateHUD()
 void GameScene::CreatePlayer()
 {
 	ActionData& act = mActLoader->LoadActionData(PLAYER_ACTION_PATH);
-	mPlayer.reset(new PlayerSH(mImgLoader->LoadImageData(act.relativePath), mInput));
+	mPlayer.reset(new PlayerSH(ImageLoader::Instance()->LoadImageData(act.relativePath), mInput));
 	mPlayer->SetAction(act);
 }
 
 void GameScene::CreateBackGround()
 {
-	mBackGround.reset(new BackGround(mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH), mPlayer));
+	mBackGround.reset(new BackGround(ImageLoader::Instance()->LoadImageData(BACKGROUND_IMAGE_PATH), mPlayer));
 }
 
 void GameScene::CreateEnemy(float x, float y, float z)
 {
 	ActionData& act = mActLoader->LoadActionData(DEADMAN_ACTION_PATH);
-	std::shared_ptr<ImageController> imgCtrl = mImgLoader->LoadImageData(act.relativePath);
+	std::shared_ptr<ImageController> imgCtrl = ImageLoader::Instance()->LoadImageData(act.relativePath);
 	std::shared_ptr<Enemy> enemy(new DeadMan(imgCtrl, x, y, z, mPlayer));
 	enemy->SetAction(act);
 	mEnemeys.push_back(enemy);
@@ -97,7 +97,7 @@ void GameScene::CreateEnemy(float x, float y, float z)
 
 void GameScene::CreateGround()
 {
-	std::shared_ptr<ImageController> imgCtrl = mImgLoader->LoadImageData(BACKGROUND_IMAGE_PATH);
+	std::shared_ptr<ImageController> imgCtrl = ImageLoader::Instance()->LoadImageData(BACKGROUND_IMAGE_PATH);
 	mBackGround.reset(new BackGround(imgCtrl, mPlayer));
 	for (auto& enemy : mEnemeys)
 	{
