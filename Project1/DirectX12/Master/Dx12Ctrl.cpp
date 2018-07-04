@@ -50,8 +50,9 @@ HRESULT Dx12Ctrl::ReportLiveObject()
 {
 #ifdef _DEBUG
 	return mDebugDevice->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL);
-#endif
+#else
 	return S_OK;
+#endif
 }
 
 Dx12Ctrl::Dx12Ctrl() :mWndHeight(720), mWndWidth(1280),mClrcolor{0.5f,0.5f,0.5f,1.0f}
@@ -66,11 +67,11 @@ Dx12Ctrl::Dx12Ctrl() :mWndHeight(720), mWndWidth(1280),mClrcolor{0.5f,0.5f,0.5f,
 Dx12Ctrl::~Dx12Ctrl()
 {
 	Release();
-	mDev.Reset();
-	ReportLiveObject();
+	//ReportLiveObject();
 #ifdef _DEBUG
 	mDebugDevice.Reset();
 #endif // _DEBUG
+	mDev.Reset();
 }
 
 Microsoft::WRL::ComPtr<ID3D12Device> Dx12Ctrl::GetDev()
@@ -134,9 +135,14 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 	}
 
 	result = D3D12CreateDevice(hardwareAdapter.Get(), level, IID_PPV_ARGS(&mDev));
+	UINT count = mDev.Get()->AddRef();
+	count = mDev.Get()->Release();
 #ifdef _DEBUG
 	mDev->QueryInterface(mDebugDevice.GetAddressOf());
 #endif // _DEBUG
+	count = mDev.Get()->AddRef();
+	count = mDev.Get()->Release();
+	ReportLiveObject();
 	adapter.Detach();
 
 	if (result != S_OK)

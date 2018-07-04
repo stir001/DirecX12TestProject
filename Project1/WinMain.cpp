@@ -28,16 +28,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	d12->Dx12Init(hInst);
 	
 	std::shared_ptr<DxInput> spInput(new DxInput());
-	//GameScene* gameScene = new GameScene(spInput);
+	GameScene* gameScene = new GameScene(spInput);
 
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
-		//gameScene->Run();
+		gameScene->Run();
 
 		CallEndPerGameLoop();
 	}
 	d12->Release();
-	d12->ReportLiveObject();
 	Dx12Ctrl::Destroy();
 }
