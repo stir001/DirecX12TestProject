@@ -14,7 +14,7 @@ DrawObjectController::DrawObjectController(const std::string& name, const Micros
 
 DrawObjectController::~DrawObjectController()
 {
-	
+	mCmdList.Reset();
 }
 
 void DrawObjectController::SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsignature)

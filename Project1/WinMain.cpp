@@ -37,6 +37,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		CallEndPerGameLoop();
 	}
+
+	delete gameScene;
+
 	d12->Release();
+	//d12->ReportLiveObject();
 	Dx12Ctrl::Destroy();
 }

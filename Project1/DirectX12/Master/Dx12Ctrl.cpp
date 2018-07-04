@@ -135,14 +135,9 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 	}
 
 	result = D3D12CreateDevice(hardwareAdapter.Get(), level, IID_PPV_ARGS(&mDev));
-	UINT count = mDev.Get()->AddRef();
-	count = mDev.Get()->Release();
 #ifdef _DEBUG
 	mDev->QueryInterface(mDebugDevice.GetAddressOf());
 #endif // _DEBUG
-	count = mDev.Get()->AddRef();
-	count = mDev.Get()->Release();
-	ReportLiveObject();
 	adapter.Detach();
 
 	if (result != S_OK)
