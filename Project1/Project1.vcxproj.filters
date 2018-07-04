@@ -1,0 +1,523 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="refactoring">
+      <UniqueIdentifier>{98954141-9f8f-4aaf-8fdb-21c2b6c722e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\descriptorHeap">
+      <UniqueIdentifier>{95a407b5-c73e-4acc-8449-346cf868d9a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\texture">
+      <UniqueIdentifier>{001ab8e6-31e3-4752-9e0c-927ae1bcfc58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\rootsignature">
+      <UniqueIdentifier>{007527a9-7100-4812-ae21-ef0ca4696fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\swapchain">
+      <UniqueIdentifier>{3093a3fa-1d9f-4837-8abc-c02cc5bcb13d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\buffer">
+      <UniqueIdentifier>{8b35d3c2-d2bd-4955-8440-72e88eff0739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\file">
+      <UniqueIdentifier>{fa160d3f-f086-4117-81b3-2ca33afdb530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\piplinestate">
+      <UniqueIdentifier>{5e2970c3-4a30-4072-9c78-9f093fa08ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\DxInput">
+      <UniqueIdentifier>{3bb17f7b-ce82-4311-8be8-f1e01f49071e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\ImageObject">
+      <UniqueIdentifier>{0bada73e-b7e5-4f2c-950e-5aee518d0ace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\buffer\base">
+      <UniqueIdentifier>{a64d7cc6-c92b-4086-8596-464175aaae69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{4dae7c9b-36a8-45c6-9fde-5a05db813eb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\Rect">
+      <UniqueIdentifier>{3a1c9fa7-afb8-49eb-8aaa-00f0ffb3054d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{97024e43-ec72-4a90-b9e2-0d021a95fc8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\ImagLoader">
+      <UniqueIdentifier>{1ea09ad7-3835-4fa5-99bd-17dfa5240ee8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action">
+      <UniqueIdentifier>{2f1a0cd9-d0d8-4e64-a361-971c5c6035a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject">
+      <UniqueIdentifier>{bafb3dde-ab38-485f-b424-042bdba6675c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\HeadUpDisplay">
+      <UniqueIdentifier>{d1a85456-12a4-497d-91db-466a3d4947a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\BackGround">
+      <UniqueIdentifier>{a48c27b7-d945-4001-ba38-5f45832745e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor">
+      <UniqueIdentifier>{869b3fb3-8b22-4857-b582-3dc9ab2aa8ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Player">
+      <UniqueIdentifier>{ba2e4c71-2105-4e8f-90b2-2bf976fff933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Base">
+      <UniqueIdentifier>{ace3b135-881a-45ec-bc73-55c221893293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\Base">
+      <UniqueIdentifier>{b0710344-d73e-4983-b442-4adb2bdbf849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy">
+      <UniqueIdentifier>{d29dac57-4b83-40e1-8334-0d506887d917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy\Base">
+      <UniqueIdentifier>{dfc276c9-a699-420c-9fed-c64e7d96a773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy\DeadMan">
+      <UniqueIdentifier>{55d73d0b-c203-44d1-b857-00c6772cf4a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CollisionDetector">
+      <UniqueIdentifier>{109ebb55-5ce7-45bc-b03e-8733b373d711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\Primitive2D">
+      <UniqueIdentifier>{56114807-fcb4-448a-9ea7-fca7176f5844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\Master">
+      <UniqueIdentifier>{2915c6b4-a741-4259-936a-ea6e8a15577c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\util">
+      <UniqueIdentifier>{972cfe2c-9570-4894-b1d5-7e94a681378b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\WIC">
+      <UniqueIdentifier>{bfe70f0e-8703-4560-8cef-0b5b469bfb0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\shader">
+      <UniqueIdentifier>{3ef4f168-17f2-4c6c-94b0-0fc58776eda5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\VIewDesc">
+      <UniqueIdentifier>{5d39ac1d-6216-4b38-acef-3e36b6563c85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\CommandList">
+      <UniqueIdentifier>{72d90d64-9b5b-49cf-b28c-98069e05a3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\DrawObject">
+      <UniqueIdentifier>{65bd40f7-9f60-4e93-b701-009890dcaa04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\PathManager">
+      <UniqueIdentifier>{d23cfe9d-d9ef-4bc9-8b12-975df185c29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\camera">
+      <UniqueIdentifier>{8cc17a16-2783-412a-a6eb-82c683b6327b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="refactoring\Animation">
+      <UniqueIdentifier>{af1a0fe8-f322-4bcc-8fe0-8e448a1d262d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\Dx12BufferObject.cpp">
+      <Filter>refactoring\buffer\base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\AdditionalConstatntBuffer.cpp">
+      <Filter>refactoring\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\ConstantBufferObject.cpp">
+      <Filter>refactoring\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\DepthBufferObject.cpp">
+      <Filter>refactoring\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\IndexBufferObject.cpp">
+      <Filter>refactoring\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\RendertargetObject.cpp">
+      <Filter>refactoring\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\ShaderResourceObject.cpp">
+      <Filter>refactoring\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\VertexBufferObject.cpp">
+      <Filter>refactoring\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DescriptorHeap\Dx12DescriptorHeapObject.cpp">
+      <Filter>refactoring\descriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Input\DxInput.cpp">
+      <Filter>refactoring\DxInput</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\File.cpp">
+      <Filter>refactoring\file</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\ImageController.cpp">
+      <Filter>refactoring\ImageObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\ImageObject.cpp">
+      <Filter>refactoring\ImageObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\Loader\ImageLoader.cpp">
+      <Filter>refactoring\ImagLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp">
+      <Filter>refactoring\piplinestate</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp">
+      <Filter>refactoring\Primitive2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.cpp">
+      <Filter>refactoring\Primitive2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\Rect.cpp">
+      <Filter>refactoring\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp">
+      <Filter>refactoring\rootsignature</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\SwapChain\SwapChainObject.cpp">
+      <Filter>refactoring\swapchain</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Texture\TextureLoader.cpp">
+      <Filter>refactoring\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Texture\TextureObject.cpp">
+      <Filter>refactoring\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Master\Dx12Ctrl.cpp">
+      <Filter>refactoring\Master</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Master\NeedCall.cpp">
+      <Filter>refactoring\Master</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Shader\HlslInclude.cpp">
+      <Filter>refactoring\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Shader\ShaderCompiler.cpp">
+      <Filter>refactoring\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Shader\ShaderDatasStructure.cpp">
+      <Filter>refactoring\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\CharToWChar.cpp">
+      <Filter>refactoring\util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\Util.cpp">
+      <Filter>refactoring\util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\XMFloatOperators.cpp">
+      <Filter>refactoring\util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp">
+      <Filter>refactoring\WIC</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12BufferViewDesc.cpp">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12ConstantBufferViewDesc.cpp">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12DepthStencilViewDesc.cpp">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12RenderTargetViewDesc.cpp">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.cpp">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.cpp">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\DrawObjectController.cpp">
+      <Filter>refactoring\DrawObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\DrawObjectLoader.cpp">
+      <Filter>refactoring\DrawObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp">
+      <Filter>refactoring\PathManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\Image3DController.cpp">
+      <Filter>refactoring\DrawObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\ImageControllerStructure.cpp">
+      <Filter>refactoring\DrawObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\Dx12Getter.cpp">
+      <Filter>refactoring\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Camera\Dx12Camera.cpp">
+      <Filter>refactoring\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Animation\AnimationPlayerManager.cpp">
+      <Filter>refactoring\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\CommandList\Dx12CommandList.cpp">
+      <Filter>refactoring\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ActionLoader.cpp">
+      <Filter>Game\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionDetector.cpp">
+      <Filter>Game\CollisionDetector</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BackGround.cpp">
+      <Filter>Game\DrawObject\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\IDrawableObject.cpp">
+      <Filter>Game\DrawObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HeadUpDisplay.cpp">
+      <Filter>Game\DrawObject\HeadUpDisplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ICharactor.cpp">
+      <Filter>Game\DrawObject\ICharactor\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy.cpp">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\DeadMan.cpp">
+      <Filter>Game\DrawObject\ICharactor\Enemy\DeadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PlayerSH.cpp">
+      <Filter>Game\DrawObject\ICharactor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp">
+      <Filter>refactoring\Primitive2D</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\Dx12BufferObject.h">
+      <Filter>refactoring\buffer\base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\DepthBufferObject.h">
+      <Filter>refactoring\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\AdditionalConstatntBuffer.h">
+      <Filter>refactoring\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\ConstantBufferObject.h">
+      <Filter>refactoring\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\IndexBufferObject.h">
+      <Filter>refactoring\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\RendertargetObject.h">
+      <Filter>refactoring\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\ShaderResourceObject.h">
+      <Filter>refactoring\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\VertexBufferObject.h">
+      <Filter>refactoring\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DescriptorHeap\Dx12DescriptorHeapObject.h">
+      <Filter>refactoring\descriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Input\DxInput.h">
+      <Filter>refactoring\DxInput</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\File.h">
+      <Filter>refactoring\file</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\ImageController.h">
+      <Filter>refactoring\ImageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\ImageObject.h">
+      <Filter>refactoring\ImageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\Loader\ImageLoader.h">
+      <Filter>refactoring\ImagLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h">
+      <Filter>refactoring\piplinestate</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.h">
+      <Filter>refactoring\Primitive2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h">
+      <Filter>refactoring\Primitive2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\Rect.h">
+      <Filter>refactoring\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h">
+      <Filter>refactoring\rootsignature</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\SwapChain\SwapChainObject.h">
+      <Filter>refactoring\swapchain</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Texture\TextureObject.h">
+      <Filter>refactoring\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Texture\TextureLoader.h">
+      <Filter>refactoring\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Master\Dx12Ctrl.h">
+      <Filter>refactoring\Master</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Master\NeedCall.h">
+      <Filter>refactoring\Master</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Master\Dx12ResultCheckDefine.h">
+      <Filter>refactoring\Master</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Shader\HlslInclude.h">
+      <Filter>refactoring\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Shader\ShaderDatasStructure.h">
+      <Filter>refactoring\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Shader\ShaderCompiler.h">
+      <Filter>refactoring\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\CharToWChar.h">
+      <Filter>refactoring\util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\Util.h">
+      <Filter>refactoring\util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\XMFloatOperators.h">
+      <Filter>refactoring\util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h">
+      <Filter>refactoring\WIC</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\d3dx12.h">
+      <Filter>refactoring</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\Animation.h">
+      <Filter>refactoring\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\AnimationPlayer.h">
+      <Filter>refactoring\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\AnimationPlayerManager.h">
+      <Filter>refactoring\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\DrawObjectController.h">
+      <Filter>refactoring\DrawObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\DrawObjectLoader.h">
+      <Filter>refactoring\DrawObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Camera\Dx12Camera.h">
+      <Filter>refactoring\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12BufferViewDesc.h">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12ConstantBufferViewDesc.h">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12DepthStencilViewDesc.h">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12RenderTargetViewDesc.h">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.h">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.h">
+      <Filter>refactoring\VIewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\Image3DController.h">
+      <Filter>refactoring\ImageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\ImageControllerStructure.h">
+      <Filter>refactoring\ImageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h">
+      <Filter>refactoring\PathManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\CommandList\Dx12CommandList.h">
+      <Filter>refactoring\CommandList</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ActionStructs.h">
+      <Filter>Game\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ActionLoader.h">
+      <Filter>Game\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionDetector.h">
+      <Filter>Game\CollisionDetector</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGround.h">
+      <Filter>Game\DrawObject\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\IDrawableObject.h">
+      <Filter>Game\DrawObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HeadUpDisplay.h">
+      <Filter>Game\DrawObject\HeadUpDisplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ICharactor.h">
+      <Filter>Game\DrawObject\ICharactor\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy.h">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\DeadMan.h">
+      <Filter>Game\DrawObject\ICharactor\Enemy\DeadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PlayerSH.h">
+      <Filter>Game\DrawObject\ICharactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h">
+      <Filter>refactoring\Primitive2D</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project1.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DirectX12\Shader\CameraLightcBuffer.hlsl">
+      <Filter>refactoring\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\ImageShader.hlsl">
+      <Filter>refactoring\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\Primitive3D.hlsl">
+      <Filter>refactoring\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\Shader.hlsl">
+      <Filter>refactoring\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\Primitive2D.hlsl">
+      <Filter>refactoring\shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
