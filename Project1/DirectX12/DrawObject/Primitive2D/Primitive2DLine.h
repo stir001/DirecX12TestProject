@@ -14,6 +14,9 @@ public:
 	void SetRota(float deg);
 	void SetBasePoints(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2);
 	void SetColor(const DirectX::XMFLOAT3& color);
+	void SetPoints(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2);
+
+	void AddCenterPos(const DirectX::XMFLOAT3& val);
 private:
 	DirectX::XMFLOAT3 mCenter;
 	DirectX::XMFLOAT3 mColor;
@@ -23,7 +26,6 @@ private:
 	float mLength;
 	float mScale;
 
-	void SetPoints(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2);
 	void UpdateVertex();
 	void UpdateBuffer();
 };

@@ -23,12 +23,18 @@ public:
 	void SetCenter(const DirectX::XMFLOAT3& inc);
 	void SetWidth(const float inw);
 	void SetHeight(const float inh);
+	void SetScale(float scale);
 
 	void Draw();
 private:
 	DirectX::XMFLOAT3 mCenter;
 	float mWidth;
 	float mHeight;
+	float mScale;
+
+#ifdef _DEBUG
 	std::shared_ptr<Primitive2DLine> mLines[4];
+	void UpdateLines();
+#endif
 };
 

@@ -101,6 +101,7 @@ std::vector<Action> ActionLoader::LoadActionRects()
 				actRect.rect.SetCenter(rCenterf);
 				actRect.rect.SetHeight(static_cast<float>(rSize.y));
 				actRect.rect.SetWidth(static_cast<float>(rSize.x));
+				//actRect.rect.SetScale(2.0f);
 			}
 		}
 	}

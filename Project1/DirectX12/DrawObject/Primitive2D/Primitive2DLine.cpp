@@ -39,7 +39,7 @@ void Primitive2DLine::SetCenter(const DirectX::XMFLOAT3& pos)
 {
 	DirectX::XMFLOAT3 unitP1 = NormalizeXMFloat3(mVertices[0].pos - mCenter);
 	DirectX::XMFLOAT3 unitP2 = NormalizeXMFloat3(mVertices[1].pos - mCenter);
-	mCenter = pos;
+	//mCenter = pos;
 
 	SetPoints(unitP1 * (mLength / 2.f), unitP2 * (mLength / 2.0f));
 	UpdateBuffer();
@@ -80,7 +80,6 @@ void Primitive2DLine::UpdateVertex()
 void Primitive2DLine::SetBasePoints(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2)
 {
 	mScale = 1.0f;
-	mLength = GetLengthXMFloat3(point1 - point2);
 	SetPoints(point1, point2);
 }
 
@@ -99,14 +98,19 @@ void Primitive2DLine::SetPoints(const DirectX::XMFLOAT3& point1, const DirectX::
 	mVertices[1].pos.z = point2.z;
 
 
-	mVertices[2].pos.x = (point1.x + 1.f) / (wndSize.x * 0.5f);
-	mVertices[2].pos.y = (point1.y + 1.f) / (wndSize.y * 0.5f);
+	mVertices[2].pos.x = (point1.x + 1.0f) / (wndSize.x * 0.5f);
+	mVertices[2].pos.y = (point1.y + 1.0f) / (wndSize.y * 0.5f);
 	mVertices[2].pos.z = point1.z;
 
 
-	mVertices[3].pos.x = (point2.x + 1.f) / (wndSize.x * 0.5f);
-	mVertices[3].pos.y = (point2.y + 1.f) / (wndSize.y * 0.5f);
+	mVertices[3].pos.x = (point2.x + 1.0f) / (wndSize.x * 0.5f);
+	mVertices[3].pos.y = (point2.y + 1.0f) / (wndSize.y * 0.5f);
 	mVertices[3].pos.z = point2.z;
+
+	mCenter = (point1 - point2) * 0.5f;
+	mLength = GetLengthXMFloat3(point1 - point2);
+
+	UpdateBuffer();
 }
 
 void Primitive2DLine::SetColor(const DirectX::XMFLOAT3& color)
@@ -117,4 +121,9 @@ void Primitive2DLine::SetColor(const DirectX::XMFLOAT3& color)
 	}
 
 	UpdateBuffer();
+}
+
+void Primitive2DLine::AddCenterPos(const DirectX::XMFLOAT3 & val)
+{
+	mCenter += val;
 }
