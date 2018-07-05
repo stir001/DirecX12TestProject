@@ -70,7 +70,7 @@ void ICharactor::AnimationUpdate()
 void ICharactor::SetActionImageData()
 {
 	DirectX::XMFLOAT2 imgSize = { mCurrentAction->datas[mActionImageIndex].imageRect.GetWidth(),mCurrentAction->datas[mActionImageIndex].imageRect.GetHeight() };
-	mImgCtrl->SetCenterOffset((mCurrentAction->datas[mActionImageIndex].pivot.x - imgSize.x / 2.0f), (-mCurrentAction->datas[mActionImageIndex].pivot.y + imgSize.y / 2.0f), 0);
+	mImgCtrl->SetCenterOffset(-(mCurrentAction->datas[mActionImageIndex].pivot.x - imgSize.x * 0.5f), -(-mCurrentAction->datas[mActionImageIndex].pivot.y + imgSize.y * 0.5f), 0);
 	mImgCtrl->SetRect(mCurrentAction->datas[mActionImageIndex].imageRect);
 
 #ifdef _DEBUG
@@ -114,7 +114,8 @@ void ICharactor::UpDateRectLine()
 	DirectX::XMFLOAT3 color;
 	mRectLines.clear();
 	mRectLines.reserve(mCurrentAction->datas[mActionImageIndex].actionRects.size() * 4);
-	DirectX::XMFLOAT3 offset = {-(mCurrentAction->datas[mActionImageIndex].pivot.x), -(-mCurrentAction->datas[mActionImageIndex].pivot.y), 0};
+	DirectX::XMFLOAT2 imgSize = { mCurrentAction->datas[mActionImageIndex].imageRect.GetWidth(),mCurrentAction->datas[mActionImageIndex].imageRect.GetHeight() };
+	DirectX::XMFLOAT3 offset = {(mCurrentAction->datas[mActionImageIndex].pivot.x - imgSize.x * 0.5f), (-mCurrentAction->datas[mActionImageIndex].pivot.y + imgSize.y * 0.5f), 0};
 	offset += mPos;
 	for (auto& actRect : mCurrentAction->datas[mActionImageIndex].actionRects)
 	{
@@ -131,23 +132,42 @@ void ICharactor::UpDateRectLine()
 			color = { 1,1,1 };
 		}
 		//上のライン
-		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetUp() + offset.y, 0),
-			DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetUp() + offset.y, 0)));
+		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(
+			DirectX::XMFLOAT3((actRect.rect.GetLeft() + offset.x) * CHARACTOR_SCALE, 
+				(actRect.rect.GetUp() + offset.y) * CHARACTOR_SCALE,
+				0),
+				DirectX::XMFLOAT3((actRect.rect.GetRight() + offset.x) * CHARACTOR_SCALE, 
+					(actRect.rect.GetUp() + offset.y) * CHARACTOR_SCALE,
+					0)));
 		mRectLines.back()->SetColor(color);
 
 		//右のライン
-		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetUp() + offset.y, 0),
-				DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetDown() + offset.y, 0)));
+		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(
+			DirectX::XMFLOAT3((actRect.rect.GetRight() + offset.x) * CHARACTOR_SCALE,
+				(actRect.rect.GetUp() + offset.y) * CHARACTOR_SCALE,
+				0),
+				DirectX::XMFLOAT3((actRect.rect.GetRight() + offset.x) * CHARACTOR_SCALE,
+					(actRect.rect.GetDown() + offset.y) * CHARACTOR_SCALE,
+					0)));
 		mRectLines.back()->SetColor(color);
 
 		//下のライン
-		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetRight() + offset.x, actRect.rect.GetDown() + offset.y, 0),
-				DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetDown() + offset.y, 0)));
+		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(
+			DirectX::XMFLOAT3((actRect.rect.GetRight() + offset.x) * CHARACTOR_SCALE
+				, (actRect.rect.GetDown() + offset.y) * CHARACTOR_SCALE, 0),
+				DirectX::XMFLOAT3((actRect.rect.GetLeft() + offset.x) * CHARACTOR_SCALE,
+					(actRect.rect.GetDown() + offset.y) * CHARACTOR_SCALE,
+					0)));
 		mRectLines.back()->SetColor(color);
 
 		//左のライン
-		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetDown() + offset.y, 0),
-				DirectX::XMFLOAT3(actRect.rect.GetLeft() + offset.x, actRect.rect.GetUp() + offset.y, 0)));
+		mRectLines.push_back(Primitive2DManager::Instance()->CreatePrimitive2DLine(
+			DirectX::XMFLOAT3((actRect.rect.GetLeft() + offset.x) * CHARACTOR_SCALE,
+				(actRect.rect.GetDown() + offset.y) * CHARACTOR_SCALE, 
+				0),
+				DirectX::XMFLOAT3((actRect.rect.GetLeft() + offset.x) * CHARACTOR_SCALE,
+					(actRect.rect.GetUp() + offset.y) * CHARACTOR_SCALE,
+					0)));
 		mRectLines.back()->SetColor(color);
 	}
 }

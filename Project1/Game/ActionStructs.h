@@ -23,10 +23,11 @@ struct ActionRect
 	Rect rect;
 };
 
+//左上原点の +xが右 +yが下 になっている
 struct ActionImageData
 {
-	Rect imageRect;//画像切り抜き情報
-	DirectX::XMFLOAT2 pivot;
+	Rect imageRect;//画像切り抜き情報 座標系注意
+	DirectX::XMFLOAT2 pivot;//座標系注意
 	int duraction;
 	std::vector<ActionRect> actionRects;//あたり矩形情報
 };

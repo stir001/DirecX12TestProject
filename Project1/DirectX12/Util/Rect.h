@@ -1,5 +1,9 @@
 #pragma once
 #include <DirectXMath.h>
+#include <memory>
+#include <vector>
+
+class Primitive2DLine;
 
 class Rect
 {
@@ -19,9 +23,12 @@ public:
 	void SetCenter(const DirectX::XMFLOAT3& inc);
 	void SetWidth(const float inw);
 	void SetHeight(const float inh);
+
+	void Draw();
 private:
 	DirectX::XMFLOAT3 mCenter;
 	float mWidth;
 	float mHeight;
+	std::shared_ptr<Primitive2DLine> mLines[4];
 };
 

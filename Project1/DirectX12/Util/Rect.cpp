@@ -16,22 +16,22 @@ Rect::~Rect()
 
 float Rect::GetLeft() const
 {
-	return mCenter.x - mWidth / 2.0f;
+	return mCenter.x - mWidth * 0.5f;
 }
 
 float Rect::GetUp() const
 {
-	return mCenter.y + mHeight / 2.0f;
+	return mCenter.y + mHeight * 0.5f;
 }
 
 float Rect::GetRight() const
 {
-	return mCenter.x + mWidth / 2.0f;
+	return mCenter.x + mWidth * 0.5f;
 }
 
 float Rect::GetDown() const
 {
-	return mCenter.y - mHeight / 2.0f;
+	return mCenter.y - mHeight * 0.5f;
 }
 
 float Rect::GetWidth() const

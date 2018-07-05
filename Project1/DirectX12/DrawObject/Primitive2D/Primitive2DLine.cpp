@@ -89,23 +89,23 @@ void Primitive2DLine::SetPoints(const DirectX::XMFLOAT3& point1, const DirectX::
 	DX12CTRL_INSTANCE
 	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
 
-	mVertices[0].pos.x = point1.x  / (wndSize.x / 2.0f);
-	mVertices[0].pos.y = point1.y  / (wndSize.y / 2.0f);
+	mVertices[0].pos.x = point1.x  / (wndSize.x * 0.5f);
+	mVertices[0].pos.y = point1.y  / (wndSize.y * 0.5f);
 	mVertices[0].pos.z = point1.z;
 
 
-	mVertices[1].pos.x = point2.x / (wndSize.x / 2.0f);
-	mVertices[1].pos.y = point2.y / (wndSize.y / 2.0f);
+	mVertices[1].pos.x = point2.x / (wndSize.x * 0.5f);
+	mVertices[1].pos.y = point2.y / (wndSize.y * 0.5f);
 	mVertices[1].pos.z = point2.z;
 
 
-	mVertices[2].pos.x = (point1.x + 1.f) / (wndSize.x / 2.0f);
-	mVertices[2].pos.y = (point1.y + 1.f) / (wndSize.y / 2.0f);
+	mVertices[2].pos.x = (point1.x + 1.f) / (wndSize.x * 0.5f);
+	mVertices[2].pos.y = (point1.y + 1.f) / (wndSize.y * 0.5f);
 	mVertices[2].pos.z = point1.z;
 
 
-	mVertices[3].pos.x = (point2.x + 1.f) / (wndSize.x / 2.0f);
-	mVertices[3].pos.y = (point2.y + 1.f) / (wndSize.y / 2.0f);
+	mVertices[3].pos.x = (point2.x + 1.f) / (wndSize.x * 0.5f);
+	mVertices[3].pos.y = (point2.y + 1.f) / (wndSize.y * 0.5f);
 	mVertices[3].pos.z = point2.z;
 }
 

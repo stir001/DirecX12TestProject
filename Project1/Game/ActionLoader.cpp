@@ -76,16 +76,16 @@ std::vector<Action> ActionLoader::LoadActionRects()
 		act.datas.resize(actionDataCount);
 		for (auto& data : act.datas)
 		{
-			mFile->LoadFile(&rCenter.x);
-			mFile->LoadFile(&rCenter.y);
-			mFile->LoadFile(&rSize);
+			mFile->LoadFile(&rCenter.x);	//rectCX
+			mFile->LoadFile(&rCenter.y);	//rectCY
+			mFile->LoadFile(&rSize);		//width height
 
 			rCenterf = { static_cast<float>(rCenter.x), static_cast<float>(rCenter.y), 0.0f };
 			data.imageRect.SetCenter(rCenterf);
 			data.imageRect.SetHeight(static_cast<float>(rSize.y));
 			data.imageRect.SetWidth(static_cast<float>(rSize.x));
 
-			mFile->LoadFile(&rSize);
+			mFile->LoadFile(&rSize);		//centerx centery
 			data.pivot = { static_cast<float>(rSize.x),static_cast<float>(rSize.y) };
 			mFile->LoadFile(&data.duraction);
 			mFile->LoadFile(&actRectCount);
@@ -93,11 +93,11 @@ std::vector<Action> ActionLoader::LoadActionRects()
 			for (auto& actRect : data.actionRects)
 			{
 				mFile->LoadFile(&actRect.type);
-				mFile->LoadFile(&rCenter.x);
-				mFile->LoadFile(&rCenter.y);
-				mFile->LoadFile(&rSize);
+				mFile->LoadFile(&rCenter.x);	//ActRcCX ピボット位置からのオフセット値
+				mFile->LoadFile(&rCenter.y);	//ActRcCY ピボット位置からのオフセット値
+				mFile->LoadFile(&rSize);		//ActRcW ActRcH
 
-				rCenterf = { static_cast<float>(rCenter.x), static_cast<float>(rCenter.y), 0.0f };
+				rCenterf = { static_cast<float>(rCenter.x), static_cast<float>(-rCenter.y), 0.0f };
 				actRect.rect.SetCenter(rCenterf);
 				actRect.rect.SetHeight(static_cast<float>(rSize.y));
 				actRect.rect.SetWidth(static_cast<float>(rSize.x));

@@ -17,7 +17,7 @@ public:
 private:
 	DirectX::XMFLOAT3 mCenter;
 	DirectX::XMFLOAT3 mColor;
-	DirectX::XMFLOAT2 mWndSize;
+	/*DirectX::XMFLOAT2 mWndSize;*/
 	float mBaseRad;
 	float mAddRad;
 	float mLength;

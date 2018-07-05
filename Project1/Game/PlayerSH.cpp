@@ -30,11 +30,10 @@ void PlayerSH::Update()
 
 void PlayerSH::Draw() const
 {
+	mImgCtrl->Draw();
 #ifdef _DEBUG
 	DrawRect();
 #endif // _DEBUG
-
-	mImgCtrl->Draw();
 }
 
 void PlayerSH::OnGround(float grandLine)
