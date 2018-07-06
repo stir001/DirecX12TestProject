@@ -24,5 +24,6 @@ private:
 	std::shared_ptr<ShaderResourceObject> mShaderResource;
 	std::unique_ptr<uint8_t[]> mDecodedData;
 	D3D12_SUBRESOURCE_DATA mSubresource;
+	float mGamma;
 };
 

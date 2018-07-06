@@ -55,5 +55,6 @@ private:
 	void CreateNullTexture(std::shared_ptr<TextureObject>& inTex);
 
 	std::string GetTextureName(const std::wstring& filePath);
+	bool IsUseGamma(DXGI_FORMAT fomat);
 };
 

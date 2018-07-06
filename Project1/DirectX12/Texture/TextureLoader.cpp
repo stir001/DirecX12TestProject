@@ -11,6 +11,8 @@
 
 TextureLoader* TextureLoader::mInstance = nullptr;
 
+const float GAMMA_VALUE = 1.0f / 2.2f;
+
 TextureLoader::TextureLoader()
 {
 	CoInitialize(nullptr);
@@ -65,6 +67,15 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 	}
 
 	D3D12_RESOURCE_DESC desc = texture->GetDesc();
+
+	if (IsUseGamma(desc.Format))
+	{
+		rtn->mGamma = GAMMA_VALUE;
+	}
+	else
+	{
+		rtn->mGamma = 1.0f;
+	}
 
 	//CreateTexWriteToSubRrsource(rtn);
 	CreateTexUpdateSubResources(rtn);
@@ -245,4 +256,16 @@ std::string TextureLoader::GetTextureName(const std::wstring& filePath)
 	delete charbuf;
 
 	return rtn;
+}
+
+bool TextureLoader::IsUseGamma(DXGI_FORMAT fomat)
+{
+	return(
+		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB == fomat ||
+		DXGI_FORMAT_BC1_UNORM_SRGB == fomat ||
+		DXGI_FORMAT_BC2_UNORM_SRGB == fomat ||
+		DXGI_FORMAT_BC3_UNORM_SRGB == fomat ||
+		DXGI_FORMAT_B8G8R8A8_UNORM_SRGB == fomat ||
+		DXGI_FORMAT_B8G8R8X8_UNORM_SRGB == fomat ||
+		DXGI_FORMAT_BC7_UNORM_SRGB == fomat);
 }

@@ -48,7 +48,7 @@ bool CollisionDetector::RectCollision(const Rect& r1, const DirectX::XMFLOAT3& r
 {
 	DirectX::XMFLOAT3 r1BasePosition = { r1.GetCenter().x * (isR1Turn ? -1 : 1) * SCALE + r1offset.x ,r1.GetCenter().y * SCALE + r1offset.y ,r1.GetCenter().z * SCALE + r1offset.z };
 	DirectX::XMFLOAT3 r2BasePosition = { r2.GetCenter().x * (isR2Turn ? -1 : 1) * SCALE + r2offset.x ,r2.GetCenter().y * SCALE + r2offset.y ,r2.GetCenter().z * SCALE + r2offset.z };
-	DirectX::XMFLOAT3 centerSub = (r1.GetCenter() * SCALE + r1offset) - (r2.GetCenter()  * SCALE + r2offset);
+	DirectX::XMFLOAT3 centerSub = r1BasePosition - r2BasePosition;
 	float halfWidthAdd = r1.GetWidth() * SCALE / 2.0f + r2.GetWidth() * SCALE / 2.0f;
 	float halfHeightAdd = r1.GetHeight() * SCALE / 2.0f + r2.GetHeight() * SCALE / 2.0f;
 

@@ -86,6 +86,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)/Project1/DirectX12;$(SolutionDir)/Project1/DirectX12/Animation;$(SolutionDir)/Project1/DirectX12/Buffer;$(SolutionDir)/Project1/DirectX12/Camera;$(SolutionDir)/Project1/DirectX12/CommandList;$(SolutionDir)/Project1/DirectX12/DescriptorHeap;$(SolutionDir)/Project1/DirectX12/DrawObject;$(SolutionDir)/Project1/DirectX12/Input;$(SolutionDir)/Project1/DirectX12/Light;$(SolutionDir)/Project1/DirectX12/Master;$(SolutionDir)/Project1/DirectX12/PipelineState;$(SolutionDir)/Project1/DirectX12/RenderingPathManager;$(SolutionDir)/Project1/DirectX12/rootsignature;$(SolutionDir)/Project1/DirectX12/Shader;$(SolutionDir)/Project1/DirectX12/SwapChain;$(SolutionDir)/Project1/DirectX12/Texture;$(SolutionDir)/Project1/DirectX12/Util;$(SolutionDir)/Project1/DirectX12/ViewDesc;$(SolutionDir)/Project1/DirectX12/WIC;$(SolutionDir)/Project1/DirectX12/DrawObject/Image;$(SolutionDir)/Project1/DirectX12/DrawObject/Image/Loader;$(SolutionDir)/Project1/DirectX12/DrawObject/Primitive2D;$(SolutionDir)/Project1/Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -151,6 +152,7 @@
     <ClCompile Include="DirectX12\Master\NeedCall.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp" />
+    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObjct.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp" />
     <ClCompile Include="DirectX12\Shader\HlslInclude.cpp" />
     <ClCompile Include="DirectX12\Shader\ShaderCompiler.cpp" />
@@ -264,6 +266,7 @@
     <ClInclude Include="DirectX12\Master\NeedCall.h" />
     <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h" />
+    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObjct.h" />
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h" />
     <ClInclude Include="DirectX12\Shader\HlslInclude.h" />
     <ClInclude Include="DirectX12\Shader\ShaderCompiler.h" />

@@ -134,9 +134,21 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 		}
 	}
 
-	result = D3D12CreateDevice(hardwareAdapter.Get(), level, IID_PPV_ARGS(&mDev));
+	if (hardwareAdapter)
+	{
+		result = D3D12CreateDevice(hardwareAdapter.Get(), level, IID_PPV_ARGS(&mDev));
+	}
+	else
+	{
+		for (auto i : levels) {
+			if (SUCCEEDED(D3D12CreateDevice(nullptr, i, IID_PPV_ARGS(&mDev)))) {
+				level = i;
+				break;
+			}
+		}
+	}
 #ifdef _DEBUG
-	mDev->QueryInterface(mDebugDevice.GetAddressOf());
+	//mDev->QueryInterface(mDebugDevice.GetAddressOf());
 #endif // _DEBUG
 	adapter.Detach();
 
