@@ -9,9 +9,11 @@ public:
 	~StageData();
 
 	int GetChipData(int layer, int x, int y);
+	DirectX::XMINT2 GetChipSize() const;
+	DirectX::XMINT2 GetChipNum() const;
 private:
 
-
+	
 	DirectX::XMINT2 mChipNum;
 	DirectX::XMINT2 mChipSize;
 	std::vector<int> mMapData;

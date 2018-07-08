@@ -5,8 +5,10 @@
 
 const float VELOCITY_X = 0.5f;
 const float RETURN_DISTANCE = 50.0f;
+const int DEAD_LINE_COUNT = 60;
 
-DeadMan::DeadMan(std::shared_ptr<ImageController>& imgCtrl, std::shared_ptr<PlayerSH> spPlayer):Enemy(imgCtrl,spPlayer)
+DeadMan::DeadMan(std::shared_ptr<ImageController>& imgCtrl, std::shared_ptr<PlayerSH> spPlayer)
+	: Enemy(imgCtrl,spPlayer), mDeadCount(0)
 {
 	mVel.x = VELOCITY_X;
 	mActionUpdate = &DeadMan::Walk;
@@ -14,7 +16,8 @@ DeadMan::DeadMan(std::shared_ptr<ImageController>& imgCtrl, std::shared_ptr<Play
 	mImgCtrl->SetPos(mPos);
 }
 
-DeadMan::DeadMan(std::shared_ptr<ImageController>& imgCtrl, float x, float y, float z , std::shared_ptr<PlayerSH> spPlayer):Enemy(imgCtrl, spPlayer)
+DeadMan::DeadMan(std::shared_ptr<ImageController>& imgCtrl, float x, float y, float z , std::shared_ptr<PlayerSH> spPlayer)
+	: Enemy(imgCtrl, spPlayer), mDeadCount(0)
 {
 	mVel.x = VELOCITY_X;
 	mActionUpdate = &DeadMan::Walk;
@@ -85,5 +88,22 @@ void DeadMan::Walk()
 
 void DeadMan::Damage()
 {
+	mChangeNextAction = [&]() {
+		ChangeAction("Die");
+	};
+	AnimationUpdate();
+}
 
+void DeadMan::Die()
+{
+	mChangeNextAction = [&]() {
+		--mActionImageIndex;
+		--mFrame;
+		if (++mDeadCount > DEAD_LINE_COUNT)
+		{
+			mIsDead = true;
+		}
+	};
+
+	AnimationUpdate();
 }

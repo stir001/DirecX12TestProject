@@ -136,6 +136,9 @@
     <Filter Include="Game\Stage">
       <UniqueIdentifier>{f8b6aace-4692-4179-b7ac-83b23da537a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy\Bat">
+      <UniqueIdentifier>{6855efd4-0fc2-49c5-8f83-02a235d32042}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -329,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageLoader.cpp">
       <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Bat.cpp">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Bat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -538,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageData.h">
       <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Bat.h">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Bat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

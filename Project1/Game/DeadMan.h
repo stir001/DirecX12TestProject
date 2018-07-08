@@ -13,14 +13,16 @@ public:
 	void Update();
 	void OnGround(float groundLine);
 	void OnDamage();
-	void Gravity();
 
 private:
 	void (DeadMan::*mActionUpdate)();
 
+	void Gravity();
 	void Walk();
 	void Damage();
 	void Die();
 	void Die2();
+
+	int mDeadCount;
 };
 

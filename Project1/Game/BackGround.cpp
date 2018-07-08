@@ -4,11 +4,12 @@
 #include "Dx12Ctrl.h"
 #include "ICharactor.h"
 #include "XMFloatOperators.h"
+#include "Enemy.h"
 
 const float GROUND_LINE = -100;
 
-BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<ICharactor> spPlayer)
-	:IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE)
+BackGround::BackGround(std::shared_ptr<ImageController> imgCtrl, std::shared_ptr<ICharactor> spPlayer, std::list<std::shared_ptr<Enemy>>& enemy)
+	:IDrawableObject(imgCtrl),mGroundLine(GROUND_LINE), mEnemys(enemy)
 {
 	DX12CTRL_INSTANCE
 	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
@@ -36,6 +37,14 @@ void BackGround::Update()
 		if (IsGroundCharactor(c))
 		{
 			c->OnGround(mGroundLine);
+		}
+	}
+
+	for (auto& e : mEnemys)
+	{
+		if (IsGroundCharactor(e))
+		{
+			e->OnGround(mGroundLine);
 		}
 	}
 }

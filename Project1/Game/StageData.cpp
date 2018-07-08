@@ -15,3 +15,13 @@ int StageData::GetChipData(int layer, int x, int y)
 {
 	return mMapData[layer * mChipNum.x * mChipNum.y + x + y * mChipNum.x];
 }
+
+DirectX::XMINT2 StageData::GetChipSize() const
+{
+	return mChipSize;
+}
+
+DirectX::XMINT2 StageData::GetChipNum() const
+{
+	return mChipNum;
+}

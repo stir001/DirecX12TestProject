@@ -32,9 +32,12 @@ const std::shared_ptr<StageData>& StageLoader::LoadStageData(const std::string& 
 
 	auto& data = LoadFMF();
 
-	DirectX::XMINT2 mapNum = { mHeader.width, mHeader.height };
+	DirectX::XMINT2 mapNum = {static_cast<int>(mHeader.width), static_cast<int>(mHeader.height) };
 	DirectX::XMINT2 chipSize = { mHeader.chipWidth, mHeader.chipHeight };
 	std::shared_ptr<StageData> rtn(new StageData(data, mapNum, chipSize));
+
+	mData[path] = rtn;
+	return mData[path];
 }
 
 std::vector<int> StageLoader::LoadFMF()
@@ -55,10 +58,12 @@ std::vector<int> StageLoader::LoadFMF()
 			for (int w = 0; w < mHeader.width; ++w)
 			{
 
-				convertData[layer * mHeader.width * mHeader.height + w + h * mHeader.width] =
-					data[layer * mHeader.width * mHeader.height + w * mHeader.width + h ];
+				convertData[layer * mHeader.width * mHeader.height + w * mHeader.height + h] =
+					data[layer * mHeader.width * mHeader.height + w + h * mHeader.width];
 
 			}
 		}
 	}
+
+	return convertData;
 }

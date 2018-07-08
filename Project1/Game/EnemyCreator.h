@@ -1,32 +1,38 @@
 #pragma once
 #include <memory>
+#include <list>
 
 class ActionLoader;
 class PlayerSH;
 class Enemy;
+class StageData;
 
 class EnemyCreator
 {
 public:
-	EnemyCreator(std::shared_ptr<ActionLoader> actLoader);
+	EnemyCreator(std::shared_ptr<ActionLoader> actLoader, std::shared_ptr<PlayerSH>& player);
 	~EnemyCreator();
 
-	std::shared_ptr<Enemy> CreateEnemy(unsigned int enemyNum);
+	void CreateEnemyStageData(std::list<std::shared_ptr<Enemy>>& enemys);
+	void SetStageData(std::shared_ptr<StageData>& data);
 private:
 	enum eENEMY_TYPE {
 		eENEMY_TYPE_NON,
 		eENEMY_TYPE_DEADMAN,
-		eENEMY_TYPE_BAD,
+		eENEMY_TYPE_BAT,
 		eENEMY_TYPE_SPIKE,
 		eENEMY_TYPE_MAX,
 	};
-	std::shared_ptr<Enemy> (EnemyCreator::*mCreateFunc[eENEMY_TYPE_MAX])();
+	void (EnemyCreator::*mCreateFunc[eENEMY_TYPE_MAX])(std::list<std::shared_ptr<Enemy>>& enemys);
 	std::shared_ptr<ActionLoader> mActLoader;
 	std::shared_ptr<PlayerSH> mPlayer;
+	std::shared_ptr<StageData> mData;
 
-	std::shared_ptr<Enemy> CreateNullEnemy();
-	std::shared_ptr<Enemy> CreateDeadMan();
-	std::shared_ptr<Enemy> CreateBad();
-	std::shared_ptr<Enemy> CreateSpike();
+	void CreateNullEnemy(std::list<std::shared_ptr<Enemy>>& enemys);
+	void CreateDeadMan(std::list<std::shared_ptr<Enemy>>& enemys);
+	void CreateBat(std::list<std::shared_ptr<Enemy>>& enemys);
+	void CreatePike(std::list<std::shared_ptr<Enemy>>& enemys);
+
+	int mReadLine;
 };
 

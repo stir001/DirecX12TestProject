@@ -10,25 +10,27 @@
 #include "DeadMan.h"
 #include "CollisionDetector.h"
 #include "GameCamera2D.h"
+#include "StageLoader.h"
+#include "EnemyCreator.h"
 
 const std::string BACKGROUND_IMAGE_PATH = "Action18/img/splatterhouse.png";
 const std::string TOPHUD_IMAGE_PATH = "Action18/img/bar_top.png";
 const std::string BOTTOMHUD_IMAGE_PATH = "Action18/img/bar_bottom.png";
 const std::string PLAYER_ACTION_PATH = "Action18/Action/player.act";
 const std::string DEADMAN_ACTION_PATH = "Action18/Action/deadman.act";
+const std::string MAPDATA_PATH = "Action18/stagedata/stage1.fmf";
 
 GameScene::GameScene(std::shared_ptr<DxInput> inInput):mInput(inInput)
 , mPlayer(nullptr), mBackGround(nullptr), mTopHUD(nullptr), mBottomHUD(nullptr), mCamera2D(nullptr)
 , mActLoader(new ActionLoader()), mColDetector(new CollisionDetector())
+, mStageLoader(new StageLoader()), mEnemyCreator(nullptr)
 {
 	CreateHUD();
 	CreatePlayer();
-	CreateEnemy(100,0,0);
-	CreateEnemy(-100,0,0);
 	CreateGround();
 	CreateCamera();
+	LoadStage();
 }
-
 
 GameScene::~GameScene()
 {
@@ -37,13 +39,19 @@ GameScene::~GameScene()
 
 void GameScene::Run()
 {
+	LoadEnemyStageData();
+
 	mInput->UpdateKeyState();
 	mBackGround->Update();
 	mPlayer->Update();
 
-	for (auto& e : mEnemys)
+	for (auto itr = mEnemys.begin();itr != mEnemys.end(); ++itr)
 	{
-		e->Update();
+		(*itr)->Update();
+		if ((*itr)->IsDead())
+		{
+			mEnemys.erase(itr);
+		}
 	}
 
 	CheckCollision();
@@ -81,37 +89,27 @@ void GameScene::CreatePlayer()
 	mPlayer->SetAction(act);
 }
 
-void GameScene::CreateBackGround()
-{
-	mBackGround.reset(new BackGround(ImageLoader::Instance()->LoadImageData(BACKGROUND_IMAGE_PATH), mPlayer));
-}
-
-void GameScene::CreateEnemy(float x, float y, float z)
-{
-	ActionData& act = mActLoader->LoadActionData(DEADMAN_ACTION_PATH);
-	std::shared_ptr<ImageController> imgCtrl = ImageLoader::Instance()->LoadImageData(act.relativePath);
-	std::shared_ptr<Enemy> enemy(new DeadMan(imgCtrl, x, y, z, mPlayer));
-	enemy->SetAction(act);
-	mEnemys.push_back(enemy);
-}
-
 void GameScene::CreateGround()
 {
 	std::shared_ptr<ImageController> imgCtrl = ImageLoader::Instance()->LoadImageData(BACKGROUND_IMAGE_PATH);
-	mBackGround.reset(new BackGround(imgCtrl, mPlayer));
-	for (auto& enemy : mEnemys)
-	{
-		mBackGround->SetCharactor(enemy);
-	}
+	mBackGround.reset(new BackGround(imgCtrl, mPlayer,mEnemys));
 }
 
 void GameScene::CreateCamera()
 {
-	mCamera2D.reset(new GameCamera2D(mPlayer,mBackGround));
-	for (auto& enemy : mEnemys)
-	{
-		mCamera2D->SetObject(enemy);
-	}
+	mCamera2D.reset(new GameCamera2D(mPlayer,mBackGround, mEnemys));
+}
+
+void GameScene::LoadStage()
+{
+	mStageData = mStageLoader->LoadStageData(MAPDATA_PATH);
+	mEnemyCreator.reset(new EnemyCreator(mActLoader, mPlayer));
+	mEnemyCreator->SetStageData(mStageData);
+}
+
+void GameScene::LoadEnemyStageData()
+{
+	mEnemyCreator->CreateEnemyStageData(mEnemys);
 }
 
 void GameScene::CheckCollision()

@@ -175,6 +175,7 @@
     <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp" />
     <ClCompile Include="Game\ActionLoader.cpp" />
     <ClCompile Include="Game\BackGround.cpp" />
+    <ClCompile Include="Game\Bat.cpp" />
     <ClCompile Include="Game\CollisionDetector.cpp" />
     <ClCompile Include="Game\DeadMan.cpp" />
     <ClCompile Include="Game\Enemy.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="Game\ActionLoader.h" />
     <ClInclude Include="Game\ActionStructs.h" />
     <ClInclude Include="Game\BackGround.h" />
+    <ClInclude Include="Game\Bat.h" />
     <ClInclude Include="Game\CollisionDetector.h" />
     <ClInclude Include="Game\DeadMan.h" />
     <ClInclude Include="Game\Enemy.h" />
