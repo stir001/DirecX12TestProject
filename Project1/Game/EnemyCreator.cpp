@@ -52,7 +52,7 @@ void EnemyCreator::CreateDeadMan(std::list<std::shared_ptr<Enemy>>& enemys)
 {
 	auto& act = mActLoader->LoadActionData(DEADMAN_ACTION_PATH);
 	std::shared_ptr<ImageController> ctrl = ImageLoader::Instance()->LoadImageData(act.relativePath);
-	std::shared_ptr<Enemy> enemy(new DeadMan(ctrl, mPlayer));
+	std::shared_ptr<Enemy> enemy(new DeadMan(ctrl, mReadLine / mData->GetChipNum().y * mData->GetChipSize().x - WINDOW_WIDTH / 2, 0, 0, mPlayer));
 	enemy->SetAction(act);
 	enemys.push_back(enemy);
 }
@@ -61,7 +61,7 @@ void EnemyCreator::CreateBat(std::list<std::shared_ptr<Enemy>>& enemys)
 {
 	auto& act = mActLoader->LoadActionData(BAT_ACTION_PATH);
 	std::shared_ptr<ImageController> ctrl = ImageLoader::Instance()->LoadImageData(act.relativePath);
-	std::shared_ptr<Enemy> enemy(new Bat(ctrl, mPlayer));
+	std::shared_ptr<Enemy> enemy(new Bat(ctrl,mReadLine / mData->GetChipNum().y * mData->GetChipSize().x - WINDOW_WIDTH / 2, 0, 0, mPlayer));
 	enemy->SetAction(act);
 	enemys.push_back(enemy);
 }
