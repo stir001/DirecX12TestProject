@@ -28,10 +28,10 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img,
 	std::shared_ptr<RootSignatureObject>& rootsignature)
 	:DrawObjectController(img->GetTextureName() + "Bundle", dev, cmdList),
 	mImgObj(img)
-	, mVertex{ { { 0.f, img->GetImageSize().y, 0.f },{ 0.f, 0.f } }/* v1 */
-	,{ { img->GetImageSize().x,img->GetImageSize().y, 0.f },{ 1.f, 0.f } }/* v2 */
-	,{ { 0.0f,0.0f , 0.0f },{ 0.f, 1.f } }/* v3 */
-	,{ { img->GetImageSize().x, 0.0f, 0.f },{ 1.f, 1.f } }/* v4 */ }
+	, mVertex{ { { 0.f, img->GetImageSize().y, 0.f },{ 0.f, 0.f }, img->GetGamma()}/* v1 */
+	,{ { img->GetImageSize().x,img->GetImageSize().y, 0.f },{ 1.f, 0.f }, img->GetGamma() }/* v2 */
+	,{ { 0.0f,0.0f , 0.0f },{ 0.f, 1.f }, img->GetGamma() }/* v3 */
+	,{ { img->GetImageSize().x, 0.0f, 0.f },{ 1.f, 1.f }, img->GetGamma() }/* v4 */ }
 	, mScaleX(1.0f), mScaleY(1.0f), mRota(0.0f), mPivot{ 0.f,0.f,0.f }, mCenterOffset(0,0,0)
 	, mRect(new Rect(mPivot, img->GetImageSize().x, img->GetImageSize().y))
 	, mTurnSign(1,1), mBundleUpdate(&ImageController::UpdateBundle)
@@ -205,6 +205,16 @@ void ImageController::Draw()
 	mDescHeap->SetDescriptorHeap(mCmdList);
 	mCmdList->ExecuteBundle(mBundleCmdList->GetCommandList().Get());
 
+}
+
+bool ImageController::IsTurnX() const
+{
+	return mTurnSign.x == -1;
+}
+
+bool ImageController::IsTurnY() const
+{
+	return mTurnSign.y == -1;
 }
 
 DirectX::XMFLOAT2 ImageController::GetImageSize()

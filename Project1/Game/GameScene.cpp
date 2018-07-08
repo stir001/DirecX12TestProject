@@ -9,6 +9,7 @@
 #include "Dx12Ctrl.h"
 #include "DeadMan.h"
 #include "CollisionDetector.h"
+#include "GameCamera2D.h"
 
 const std::string BACKGROUND_IMAGE_PATH = "Action18/img/splatterhouse.png";
 const std::string TOPHUD_IMAGE_PATH = "Action18/img/bar_top.png";
@@ -17,14 +18,15 @@ const std::string PLAYER_ACTION_PATH = "Action18/Action/player.act";
 const std::string DEADMAN_ACTION_PATH = "Action18/Action/deadman.act";
 
 GameScene::GameScene(std::shared_ptr<DxInput> inInput):mInput(inInput)
-,mPlayer(nullptr), mBackGround(nullptr), mTopHUD(nullptr), mBottomHUD(nullptr)
-,mActLoader(new ActionLoader()),mColDetector(new CollisionDetector())
+, mPlayer(nullptr), mBackGround(nullptr), mTopHUD(nullptr), mBottomHUD(nullptr), mCamera2D(nullptr)
+, mActLoader(new ActionLoader()), mColDetector(new CollisionDetector())
 {
 	CreateHUD();
 	CreatePlayer();
 	CreateEnemy(100,0,0);
 	CreateEnemy(-100,0,0);
 	CreateGround();
+	CreateCamera();
 }
 
 
@@ -39,19 +41,17 @@ void GameScene::Run()
 	mBackGround->Update();
 	mPlayer->Update();
 
-	for (auto& e : mEnemeys)
+	for (auto& e : mEnemys)
 	{
 		e->Update();
 	}
 
 	CheckCollision();
 
-	mBackGround->Draw();
-	for (auto& e : mEnemeys)
-	{
-		e->Draw();
-	}
-	mPlayer->Draw();
+	mCamera2D->Update();
+	
+	mCamera2D->DrawObjects();
+
 	mBottomHUD->Draw();
 	mTopHUD->Draw();
 }
@@ -92,22 +92,31 @@ void GameScene::CreateEnemy(float x, float y, float z)
 	std::shared_ptr<ImageController> imgCtrl = ImageLoader::Instance()->LoadImageData(act.relativePath);
 	std::shared_ptr<Enemy> enemy(new DeadMan(imgCtrl, x, y, z, mPlayer));
 	enemy->SetAction(act);
-	mEnemeys.push_back(enemy);
+	mEnemys.push_back(enemy);
 }
 
 void GameScene::CreateGround()
 {
 	std::shared_ptr<ImageController> imgCtrl = ImageLoader::Instance()->LoadImageData(BACKGROUND_IMAGE_PATH);
 	mBackGround.reset(new BackGround(imgCtrl, mPlayer));
-	for (auto& enemy : mEnemeys)
+	for (auto& enemy : mEnemys)
 	{
 		mBackGround->SetCharactor(enemy);
 	}
 }
 
+void GameScene::CreateCamera()
+{
+	mCamera2D.reset(new GameCamera2D(mPlayer,mBackGround));
+	for (auto& enemy : mEnemys)
+	{
+		mCamera2D->SetObject(enemy);
+	}
+}
+
 void GameScene::CheckCollision()
 {
-	for (auto& e : mEnemeys)
+	for (auto& e : mEnemys)
 	{
 		mColDetector->CheckCollision(mPlayer, e);
 	}

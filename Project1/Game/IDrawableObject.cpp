@@ -20,3 +20,7 @@ void IDrawableObject::SetImageController(std::shared_ptr<ImageController>& imgCt
 {
 	mImgCtrl = imgCtrl;
 }
+
+void IDrawableObject::Draw(const DirectX::XMFLOAT3 & offset)
+{
+}

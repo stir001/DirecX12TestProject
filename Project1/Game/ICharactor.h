@@ -30,6 +30,9 @@ public:
 	virtual void OnGround(float GroundLine) = 0;
 	virtual void Update() = 0;
 	virtual void OnDamage() = 0;
+	virtual void Draw() const = 0;
+
+	virtual void Draw(const DirectX::XMFLOAT3& offset);
 	
 	bool IsTurn() const;
 

@@ -95,6 +95,12 @@ const std::vector<ActionRect>& ICharactor::GetCurrentActionRects() const
 	return mCurrentAction->datas[mActionImageIndex].actionRects;
 }
 
+void ICharactor::Draw(const DirectX::XMFLOAT3 & offset)
+{
+	mImgCtrl->SetPos(mPos + offset);
+	mImgCtrl->Draw();
+}
+
 bool ICharactor::IsTurn() const
 {
 	return mIsturn;

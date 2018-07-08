@@ -36,6 +36,11 @@ void PlayerSH::Draw() const
 #endif // _DEBUG
 }
 
+void PlayerSH::Draw(const DirectX::XMFLOAT3 & offset)
+{
+	ICharactor::Draw(offset);
+}
+
 void PlayerSH::OnGround(float grandLine)
 {
 	mPos.y = grandLine;

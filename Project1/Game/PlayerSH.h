@@ -16,6 +16,7 @@ public:
 
 	void Update();
 	void Draw() const;
+	void Draw(const DirectX::XMFLOAT3& offset);
 	void OnGround(float grandLine);
 	void OnDamage();
 private:

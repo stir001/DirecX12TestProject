@@ -23,10 +23,10 @@ Image3DController::Image3DController(std::shared_ptr<ImageObject> img,
 	std::shared_ptr<RootSignatureObject>& rootsignature)
 	:DrawObjectController(img->GetTextureName() + "Bundle",dev, cmdList),
 	mImgObj(img)
-	, mVertex{ { { 0.f, img->GetImageSize().y, 0.f ,1.f}, {0.f,0.f,-1.f,0.f}, { 0.f, 0.f } }/* v1 */,
-{ { img->GetImageSize().x,img->GetImageSize().y, 0.f ,1.f}, { 0.f,0.f,-1.f,0.f }, { 1.f, 0.f } }/* v2 */
-,{ { 0.0f, 0.0f, 0.0f,1.f },{ 0.f,0.f,-1.f,0.f },{ 0.f, 1.f } }/* v3 */
-,{ { img->GetImageSize().x, 0.0f, 0.f, 1.f },{ 0.f,0.f,-1.f,0.f }, { 1.f, 1.f } }/* v4 */ }
+	, mVertex{ { { 0.f, img->GetImageSize().y, 0.f ,1.f}, {0.f,0.f,-1.f,0.f}, { 0.f, 0.f } , img->GetGamma() }/* v1 */,
+{ { img->GetImageSize().x,img->GetImageSize().y, 0.f ,1.f}, { 0.f,0.f,-1.f,0.f }, { 1.f, 0.f }, img->GetGamma() }/* v2 */
+,{ { 0.0f, 0.0f, 0.0f,1.f },{ 0.f,0.f,-1.f,0.f },{ 0.f, 1.f }, img->GetGamma() }/* v3 */
+,{ { img->GetImageSize().x, 0.0f, 0.f, 1.f },{ 0.f,0.f,-1.f,0.f }, { 1.f, 1.f }, img->GetGamma() }/* v4 */ }
 , mScaleX(1.0f), mScaleY(1.0f), mScaleZ(1.0f), mCenter({ 0.f,0.f,0.f })
 , mRect(new Rect(mCenter, img->GetImageSize().x, img->GetImageSize().y))
 , mTurnSign(1, 1),mBundleUpdate(&Image3DController::UpdateBundle)

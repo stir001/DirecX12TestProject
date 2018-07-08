@@ -39,6 +39,8 @@ public:
 	void TurnX();
 	void TurnY();
 	void Draw();
+	bool IsTurnX() const;
+	bool IsTurnY() const;
 
 	DirectX::XMFLOAT2 GetImageSize();
 	std::shared_ptr<ImageController> GetNewCopy();

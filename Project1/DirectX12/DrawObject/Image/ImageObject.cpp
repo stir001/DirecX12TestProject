@@ -35,3 +35,8 @@ const std::string & ImageObject::GetFilePath() const
 {
 	return mTexObj->GetFilePath();
 }
+
+float ImageObject::GetGamma() const
+{
+	return mTexObj->GetGamma();
+}

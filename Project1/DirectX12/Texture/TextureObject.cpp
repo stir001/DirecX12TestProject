@@ -43,3 +43,8 @@ const std::string & TextureObject::GetFilePath() const
 {
 	return mFilepath;
 }
+
+float TextureObject::GetGamma() const
+{
+	return mGamma;
+}

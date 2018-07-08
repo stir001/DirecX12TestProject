@@ -20,6 +20,7 @@ public:
 	std::shared_ptr<ShaderResourceObject> GetShaderResource() const;
 	const std::string& GetTextureName() const;
 	const std::string& GetFilePath() const;
+	float GetGamma() const;
 private:
 	enum eROOT_PARAMATER_INDEX
 	{

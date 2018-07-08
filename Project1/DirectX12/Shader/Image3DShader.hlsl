@@ -23,6 +23,7 @@ struct VSinput
     float4 pos : POSITION;
     float4 normal : NORMAL;
     float2 uv : TEXCOORD;
+    float gamma : GAMMA;
 };
 
 struct VSoutput
@@ -30,6 +31,7 @@ struct VSoutput
     float4 svpos : SV_Position;
     float4 normal : NORMAL;
     float2 uv : TEXCOORD;
+    float gamma : GAMMA;
 };
 
 [RootSignature(IMAGE3DRS)]
@@ -39,11 +41,12 @@ VSoutput Image3DVS(VSinput input)
     output.svpos = mul(c_projection, mul(c_view, mul(c_world, mul(imageMatrix, input.pos))));
     output.normal = mul(imageMatrix, input.normal);
     output.uv = input.uv;
+    output.gamma = input.gamma;
 
     return output;
 }
 
 float4 Image3DPS(VSoutput vsout):SV_Target
 {
-    return colortex.Sample(texsampler, vsout.uv);
+    return pow(colortex.Sample(texsampler, vsout.uv), vsout.gamma);
 }
