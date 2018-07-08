@@ -12,6 +12,7 @@ class ActionLoader;
 class Enemy;
 class CollisionDetector;
 class GameCamera2D;
+class StageLoader;
 
 class GameScene :
 	public Scene
@@ -30,6 +31,7 @@ private:
 	std::unique_ptr<ActionLoader> mActLoader;
 	std::shared_ptr<CollisionDetector> mColDetector;
 	std::shared_ptr<GameCamera2D> mCamera2D;
+	std::unique_ptr<StageLoader> mStageLoader;
 
 	std::vector<std::shared_ptr<Enemy>> mEnemys;
 

@@ -130,6 +130,12 @@
     <Filter Include="Game\2DCamera">
       <UniqueIdentifier>{49c9e15a-49b3-4afc-8d7d-93bd8759277d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\EnemyCreator">
+      <UniqueIdentifier>{27cb4a11-1995-4b46-874c-f002f71f2369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Stage">
+      <UniqueIdentifier>{f8b6aace-4692-4179-b7ac-83b23da537a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -314,6 +320,15 @@
     </ClCompile>
     <ClCompile Include="Game\GameCamera2D.cpp">
       <Filter>Game\2DCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EnemyCreator.cpp">
+      <Filter>Game\EnemyCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageData.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageLoader.cpp">
+      <Filter>Game\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,6 +526,18 @@
     </ClInclude>
     <ClInclude Include="Game\GameCamera2D.h">
       <Filter>Game\2DCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyCreator.h">
+      <Filter>Game\EnemyCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyActionPathDefine.h">
+      <Filter>Game\EnemyCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageLoader.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageData.h">
+      <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

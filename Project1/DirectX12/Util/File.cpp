@@ -10,9 +10,10 @@ File::File(std::string path):mFp(nullptr)
 
 File::~File()
 {
+	Close();
 }
 
-void File::SetFile(std::string path)
+void File::SetFile(const std::string& path)
 {
 	if (mFp != nullptr) Close();
 	fopen_s(&mFp, path.data(), "rb");

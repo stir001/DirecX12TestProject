@@ -2,16 +2,12 @@
 #include <string>
 #include <iostream>
 
-//typedef FILE;
-
-
-
 class File
 {
 private:
 	FILE* mFp;
 public:
-	void SetFile(std::string path);
+	void SetFile(const std::string& path);
 	template <typename T>
 	void LoadFile(T* buffer, int readcount = 1,int size = -1);
 	void SeekFile(int seeksize);
