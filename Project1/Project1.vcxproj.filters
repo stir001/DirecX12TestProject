@@ -127,6 +127,9 @@
     <Filter Include="refactoring\Animation">
       <UniqueIdentifier>{af1a0fe8-f322-4bcc-8fe0-8e448a1d262d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\2DCamera">
+      <UniqueIdentifier>{49c9e15a-49b3-4afc-8d7d-93bd8759277d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -308,6 +311,9 @@
     </ClCompile>
     <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObjct.cpp">
       <Filter>refactoring\PathManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera2D.cpp">
+      <Filter>Game\2DCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObjct.h">
       <Filter>refactoring\PathManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera2D.h">
+      <Filter>Game\2DCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

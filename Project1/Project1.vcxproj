@@ -178,6 +178,7 @@
     <ClCompile Include="Game\CollisionDetector.cpp" />
     <ClCompile Include="Game\DeadMan.cpp" />
     <ClCompile Include="Game\Enemy.cpp" />
+    <ClCompile Include="Game\GameCamera2D.cpp" />
     <ClCompile Include="Game\GameScene.cpp" />
     <ClCompile Include="Game\HeadUpDisplay.cpp" />
     <ClCompile Include="Game\ICharactor.cpp" />
@@ -292,6 +293,7 @@
     <ClInclude Include="Game\CollisionDetector.h" />
     <ClInclude Include="Game\DeadMan.h" />
     <ClInclude Include="Game\Enemy.h" />
+    <ClInclude Include="Game\GameCamera2D.h" />
     <ClInclude Include="Game\GameScene.h" />
     <ClInclude Include="Game\HeadUpDisplay.h" />
     <ClInclude Include="Game\ICharactor.h" />

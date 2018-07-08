@@ -149,8 +149,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCmdList;
 	Microsoft::WRL::ComPtr<ID3D12Fence> mFence;
 	Microsoft::WRL::ComPtr<IDXGIFactory4> mFactory;
-	//std::vector<std::shared_ptr<RootSignatureObject>> mRootsignature;
-	//std::vector<std::shared_ptr<PipelineStateObject>> mPipelinestateObjects;
 	std::shared_ptr<DepthBufferObject> mDepthBuffer;
 	std::shared_ptr<Dx12DescriptorHeapObject> mDepthDescHeap;
 	std::shared_ptr<Dx12Camera> mCamera;
