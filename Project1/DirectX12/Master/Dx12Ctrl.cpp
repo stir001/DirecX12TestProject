@@ -148,7 +148,7 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 		}
 	}
 #ifdef _DEBUG
-	//mDev->QueryInterface(mDebugDevice.GetAddressOf());
+	mDev->QueryInterface(mDebugDevice.GetAddressOf());
 #endif // _DEBUG
 	adapter.Detach();
 
@@ -157,9 +157,6 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 		mDev = nullptr;
 		return false;
 	}
-
-
-
 
 	mDev->SetName(L"ID3D12Device");
 
@@ -187,7 +184,6 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 	CompileShaders();
 
 	mCamera.reset(new Dx12Camera(mWndWidth, mWndHeight));
-	//CreatePipelineStates();
 
 	//RendringManagerƒNƒ‰ƒX‚Ì‰Šú‰»ˆ—
 	InitFirstPath();

@@ -23,7 +23,6 @@ Dx12CommandList::Dx12CommandList(const std::string& name, const Microsoft::WRL::
 	mName = name;
 }
 
-
 Dx12CommandList::~Dx12CommandList()
 {
 	ULONG count = mCmdList.Reset();
@@ -40,7 +39,7 @@ D3D12_COMMAND_LIST_TYPE Dx12CommandList::GetType() const
 	return mType;
 }
 
-HRESULT Dx12CommandList::Reset()
+HRESULT Dx12CommandList::Reset() const
 {
 	mCmdallcator->Reset();
 	return mCmdList->Reset(mCmdallcator.Get(), nullptr);
@@ -58,11 +57,35 @@ HRESULT Dx12CommandList::SetDescriptorHeap(const std::shared_ptr<Dx12DescriptorH
 	mCmdList->SetDescriptorHeaps(1, descHeap->GetDescriptorHeap().GetAddressOf());
 
 #ifdef _DEBUG
-	rtn = Dx12Ctrl::Instance()->GetDeviceRemoveReason();
+	rtn = GetDeviceRemoveReason();
 #else
 	rtn = S_OK;
 #endif
 
+	return rtn;
+}
+
+HRESULT Dx12CommandList::SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeap) const
+{
+	HRESULT rtn = WSAEINVAL;
+
+	mCmdList->SetDescriptorHeaps(1, descHeap.GetAddressOf());
+
+	return rtn;
+}
+
+HRESULT Dx12CommandList::SetGraphicsRootDescriptorTabel(std::shared_ptr<Dx12DescriptorHeapObject>& descHeap, int resourceIndex, int rootpramIndex) const
+{
+	HRESULT rtn = WSAEINVAL;
+
+	descHeap->SetGprahicsDescriptorTable(mCmdList, resourceIndex, rootpramIndex);
+
+	rtn = GetDeviceRemoveReason();
+	return rtn;
+}
+
+HRESULT Dx12CommandList::SetGraphicsRootDescriptorTable(int rootparamaterIndex, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle) const
+{
 	return E_NOTIMPL;
 }
 
@@ -94,6 +117,36 @@ HRESULT Dx12CommandList::TransitionBarrier(std::shared_ptr<Dx12BufferObject>& re
 	return rtn;
 }
 
+void Dx12CommandList::ClearDepthView(D3D12_CPU_DESCRIPTOR_HANDLE depthCpuHandle, float clearValue, D3D12_RECT* rect, unsigned int rectNum)
+{
+	mCmdList->ClearDepthStencilView(depthCpuHandle, D3D12_CLEAR_FLAG_DEPTH, clearValue, 0, rectNum, rect);
+}
+
+void Dx12CommandList::ClearStencilView(D3D12_CPU_DESCRIPTOR_HANDLE stencilCpuHandle, unsigned int clearValue, D3D12_RECT * rect, unsigned int rectNum)
+{
+	mCmdList->ClearDepthStencilView(stencilCpuHandle, D3D12_CLEAR_FLAG_STENCIL, 1.0f , clearValue, rectNum, rect);
+}
+
+void Dx12CommandList::OMSetRenderTargets(unsigned int renderTargetCount, D3D12_CPU_DESCRIPTOR_HANDLE rendertargetCpuHandle, D3D12_CPU_DESCRIPTOR_HANDLE * depthCpuHandle)
+{
+	mCmdList->OMSetRenderTargets(renderTargetCount, &rendertargetCpuHandle, false, depthCpuHandle);
+}
+
+void Dx12CommandList::ClearRenderTargetView(D3D12_CPU_DESCRIPTOR_HANDLE rendertargetCpuHandle, const float colorRGBA[4], D3D12_RECT * rect, unsigned int rectNum)
+{
+	mCmdList->ClearRenderTargetView(rendertargetCpuHandle, colorRGBA, rectNum, rect);
+}
+
+void Dx12CommandList::RSSetViewports(D3D12_VIEWPORT * viewPorts, unsigned int viewportCount)
+{
+	mCmdList->RSSetViewports(viewportCount, viewPorts);
+}
+
+void Dx12CommandList::RSSetScissorRects(D3D12_RECT* scissorRects, unsigned int scissorRectsCount)
+{
+	mCmdList->RSSetScissorRects(scissorRectsCount, scissorRects);
+}
+
 const std::string & Dx12CommandList::GetName() const
 {
 	return mName;
@@ -102,5 +155,12 @@ const std::string & Dx12CommandList::GetName() const
 void Dx12CommandList::Close() const
 {
 	mCmdList->Close();
+}
+
+HRESULT Dx12CommandList::GetDeviceRemoveReason() const
+{
+	Microsoft::WRL::ComPtr<ID3D12Device> dev;
+	mCmdList->GetDevice(IID_PPV_ARGS(&dev));
+	return dev->GetDeviceRemovedReason();
 }
 
