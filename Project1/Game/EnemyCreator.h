@@ -23,15 +23,15 @@ private:
 		eENEMY_TYPE_SPIKE,
 		eENEMY_TYPE_MAX,
 	};
-	void (EnemyCreator::*mCreateFunc[eENEMY_TYPE_MAX])(std::list<std::shared_ptr<Enemy>>& enemys);
+	void (EnemyCreator::*mCreateFunc[eENEMY_TYPE_MAX])(std::list<std::shared_ptr<Enemy>>& enemys,int x, int y);
 	std::shared_ptr<ActionLoader> mActLoader;
 	std::shared_ptr<PlayerSH> mPlayer;
 	std::shared_ptr<StageData> mData;
 
-	void CreateNullEnemy(std::list<std::shared_ptr<Enemy>>& enemys);
-	void CreateDeadMan(std::list<std::shared_ptr<Enemy>>& enemys);
-	void CreateBat(std::list<std::shared_ptr<Enemy>>& enemys);
-	void CreatePike(std::list<std::shared_ptr<Enemy>>& enemys);
+	void CreateNullEnemy(std::list<std::shared_ptr<Enemy>>& enemys, int x, int y);
+	void CreateDeadMan(std::list<std::shared_ptr<Enemy>>& enemys, int x, int y);
+	void CreateBat(std::list<std::shared_ptr<Enemy>>& enemys, int x, int y);
+	void CreatePike(std::list<std::shared_ptr<Enemy>>& enemys, int x, int y);
 
 	int mReadLine;
 };

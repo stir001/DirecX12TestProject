@@ -12,6 +12,7 @@
 #include "GameCamera2D.h"
 #include "StageLoader.h"
 #include "EnemyCreator.h"
+#include "StageData.h"
 
 const std::string BACKGROUND_IMAGE_PATH = "Action18/img/splatterhouse.png";
 const std::string TOPHUD_IMAGE_PATH = "Action18/img/bar_top.png";
@@ -50,7 +51,11 @@ void GameScene::Run()
 		(*itr)->Update();
 		if ((*itr)->IsDead())
 		{
-			mEnemys.erase(itr);
+			itr = mEnemys.erase(itr);
+			if (itr != mEnemys.begin())
+			{
+				--itr;
+			}
 		}
 	}
 
@@ -105,6 +110,7 @@ void GameScene::LoadStage()
 	mStageData = mStageLoader->LoadStageData(MAPDATA_PATH);
 	mEnemyCreator.reset(new EnemyCreator(mActLoader, mPlayer));
 	mEnemyCreator->SetStageData(mStageData);
+	mCamera2D->SetStageLength(mStageData->GetChipNum().x * mStageData->GetChipSize().x);
 }
 
 void GameScene::LoadEnemyStageData()

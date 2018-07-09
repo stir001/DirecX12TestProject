@@ -3,7 +3,7 @@
 #include "PlayerSH.h"
 #include "XMFloatOperators.h"
 
-const float VELOCITY_X = 0.3f;
+const float VELOCITY_X = 1.5f;
 
 Bat::Bat(std::shared_ptr<ImageController>& imgCtrl, std::shared_ptr<PlayerSH> spPlayer) :Enemy(imgCtrl, spPlayer)
 {
@@ -48,13 +48,13 @@ void Bat::OnDamage()
 
 void Bat::Wait()
 {
-	if ((mwpPlayer.lock()->GetPos().x - mPos.x) <= 0 && mImgCtrl->IsTurnX())
+	if ((mwpPlayer.lock()->GetPos().x - mPos.x) <= 0 && !mImgCtrl->IsTurnX())
 	{
 		mImgCtrl->TurnX();
 		mVel.x *= -1;
 	}
 
-	if (abs(mwpPlayer.lock()->GetPos().x - mPos.x) < 100)
+	if (abs(mwpPlayer.lock()->GetPos().x - mPos.x) < 300)
 	{
 		ChangeAction("Fly");
 		mActionUpdate = &Bat::FlyDown;
@@ -65,6 +65,7 @@ void Bat::Damage()
 {
 	mChangeNextAction = [&](){
 		ChangeAction("Die");
+		mActionUpdate = &Bat::Die;
 	};
 
 	AnimationUpdate();
@@ -75,7 +76,10 @@ void Bat::Die()
 	mChangeNextAction = [&]() {
 		--mFrame;
 		--mActionImageIndex;
+		mIsDead = true;
 	};
+
+	mPos.y -= 0.3f;
 
 	AnimationUpdate();
 }
@@ -88,9 +92,9 @@ void Bat::Fly()
 
 void Bat::FlyDown()
 {
-	if (mPos.y > mwpPlayer.lock()->GetPos().y)
+	if (mPos.y - 100> mwpPlayer.lock()->GetPos().y)
 	{
-		mPos.y -= 0.2f;
+		mPos.y -= 1.0f;
 	}
 	else
 	{

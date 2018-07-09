@@ -55,9 +55,6 @@ public:
 	*/
 	void WriteBuffer256Alignment(const void* pData, unsigned int datasize, unsigned int datacount);
 
-	
-	virtual void SetDescTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList,D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, unsigned int rootParamaterIndex) const;
-
 	void CreateConstantBufferViewDesc();
 
 	void CreateUnorderdAccessViewDesc();

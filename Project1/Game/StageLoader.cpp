@@ -51,19 +51,5 @@ std::vector<int> StageLoader::LoadFMF()
 		mFile->LoadFile(&d, 1, mHeader.bitCount / 8);
 	}
 
-	for (int layer = 0; layer < mHeader.layerCount; ++layer)
-	{
-		for (int h = 0; h < mHeader.height; ++h)
-		{
-			for (int w = 0; w < mHeader.width; ++w)
-			{
-
-				convertData[layer * mHeader.width * mHeader.height + w * mHeader.height + h] =
-					data[layer * mHeader.width * mHeader.height + w + h * mHeader.width];
-
-			}
-		}
-	}
-
-	return convertData;
+	return data;
 }

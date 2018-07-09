@@ -13,6 +13,10 @@ StageData::~StageData()
 
 int StageData::GetChipData(int layer, int x, int y)
 {
+	if (layer * mChipNum.x * mChipNum.y + x + y * mChipNum.x >= mChipNum.x * mChipNum.y)
+	{
+		return 0;
+	}
 	return mMapData[layer * mChipNum.x * mChipNum.y + x + y * mChipNum.x];
 }
 

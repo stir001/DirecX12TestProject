@@ -16,11 +16,13 @@ public:
 
 	void Update();
 	void DrawObjects();
+	void SetStageLength(int length);
 private:
 	const int WINDOW_SIZE_X = 768;
 	const int STAGE_IMAGE_SIZE_X = 576;
 	int mObjectsNum;
-	int mStateImageNum;//イメージ何枚分までスクロールするか
+
+	int mStageLength;
 	DirectX::XMFLOAT3 mCameraPos;
 	std::shared_ptr<PlayerSH> mPlayer;
 	std::shared_ptr<BackGround> mBackGround;

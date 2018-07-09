@@ -90,6 +90,7 @@ void DeadMan::Damage()
 {
 	mChangeNextAction = [&]() {
 		ChangeAction("Die");
+		mActionUpdate = &DeadMan::Die;
 	};
 	AnimationUpdate();
 }

@@ -86,5 +86,5 @@ void Dx12DescriptorHeapObject::SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID
 
 void Dx12DescriptorHeapObject::SetGprahicsDescriptorTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int rootParamaterIndex) const
 {
-	mResourceBinds[resourceIndex].resource.lock()->SetDescTable(cmdList, mResourceBinds[resourceIndex].gpuHandle,rootParamaterIndex);
+	cmdList->SetGraphicsRootDescriptorTable(rootParamaterIndex, mResourceBinds[resourceIndex].gpuHandle);
 }

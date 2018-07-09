@@ -152,7 +152,7 @@
     <ClCompile Include="DirectX12\Master\NeedCall.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp" />
-    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObjct.cpp" />
+    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObject.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp" />
     <ClCompile Include="DirectX12\Shader\HlslInclude.cpp" />
     <ClCompile Include="DirectX12\Shader\ShaderCompiler.cpp" />
@@ -271,7 +271,7 @@
     <ClInclude Include="DirectX12\Master\NeedCall.h" />
     <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h" />
-    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObjct.h" />
+    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObject.h" />
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h" />
     <ClInclude Include="DirectX12\Shader\HlslInclude.h" />
     <ClInclude Include="DirectX12\Shader\ShaderCompiler.h" />

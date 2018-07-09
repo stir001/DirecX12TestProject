@@ -70,6 +70,17 @@ DepthBufferObject::DepthBufferObject(const std::string& name, Microsoft::WRL::Co
 
 DepthBufferObject::~DepthBufferObject()
 {
+	if (mCurrentState != D3D12_RESOURCE_STATE_DEPTH_WRITE)
+	{
+		D3D12_RESOURCE_BARRIER barrier;
+		barrier.Transition.pResource = mBuffer.Get();
+		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		barrier.Transition.StateAfter = mCurrentState;
+		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+		barrier.Transition.Subresource = 0;
+		Dx12Ctrl::Instance()->GetCmdList()->ResourceBarrier(1, &barrier);
+	}
 }
 
 void DepthBufferObject::Map()

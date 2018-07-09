@@ -54,7 +54,7 @@ void PlayerSH::OnGround(float grandLine)
 
 void PlayerSH::OnDamage()
 {
-	mVel.x = mIsturn ? -VELOCITY_X * 2 : VELOCITY_X * 2;
+	mVel.x = mIsturn ? VELOCITY_X * 2 : -VELOCITY_X * 2;
 	ChangeAction("Damage");
 	mActionUpdate = &PlayerSH::Damage;
 }

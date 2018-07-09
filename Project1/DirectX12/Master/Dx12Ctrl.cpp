@@ -496,15 +496,9 @@ DirectX::XMFLOAT2 Dx12Ctrl::GetWindowSize() const
 
 void Dx12Ctrl::Release()
 {
-	mCmdAllocator.Reset();
-	mCmdList.Reset();
-	mCmdQueue.Reset();
-	mFactory.Reset();
-	mFence.Reset();
 	//mRootsignature.clear();
 	//mPipelinestateObjects.clear();
 	mShaders.clear();
-	mDepthBuffer.reset();
 	mDepthDescHeap.reset();
 	TextureLoader::Destroy();
 	RenderingPathManager::Destroy();
@@ -513,6 +507,12 @@ void Dx12Ctrl::Release()
 	ShaderCompiler::Destroy();
 	mCamera.reset();
 	Primitive2DManager::Destory();
+	mDepthBuffer.reset();
+	mCmdAllocator.Reset();
+	mCmdList.Reset();
+	mCmdQueue.Reset();
+	mFactory.Reset();
+	mFence.Reset();
 }
 
 void Dx12Ctrl::SetWindowSize(int inw, int inh)

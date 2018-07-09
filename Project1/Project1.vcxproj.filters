@@ -318,9 +318,6 @@
     <ClCompile Include="DirectX12\DrawObject\Image\ImageControllerStructure.cpp">
       <Filter>refactoring\ImageObject</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObjct.cpp">
-      <Filter>refactoring\PathManager</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameCamera2D.cpp">
       <Filter>Game\2DCamera</Filter>
     </ClCompile>
@@ -335,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="Game\Bat.cpp">
       <Filter>Game\DrawObject\ICharactor\Enemy\Bat</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObject.cpp">
+      <Filter>refactoring\PathManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -527,9 +527,6 @@
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h">
       <Filter>refactoring\Primitive2D</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObjct.h">
-      <Filter>refactoring\PathManager</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameCamera2D.h">
       <Filter>Game\2DCamera</Filter>
     </ClInclude>
@@ -547,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="Game\Bat.h">
       <Filter>Game\DrawObject\ICharactor\Enemy\Bat</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObject.h">
+      <Filter>refactoring\PathManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

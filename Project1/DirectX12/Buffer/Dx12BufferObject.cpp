@@ -5,6 +5,7 @@
 #include "Dx12RenderTargetViewDesc.h"
 #include "Dx12UnorderedAccessViewDesc.h"
 #include "CharToWChar.h"
+#include "Dx12Ctrl.h"
 
 
 Dx12BufferObject::Dx12BufferObject(const std::string& name) : mBuffer(nullptr),mElementBuffer(nullptr)
@@ -38,6 +39,31 @@ Dx12BufferObject::~Dx12BufferObject()
 		mBuffer->Unmap(0, nullptr);
 	}
 	mElementBuffer = nullptr;
+
+
+	//https://docs.microsoft.com/en-us/windows/desktop/api/d3d12/ns-d3d12-d3d12_discard_region
+	D3D12_DISCARD_REGION region;
+	if (mBuffer->GetDesc().Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)
+	{
+		region.NumRects = 1;
+	}
+	else
+	{
+		region.NumRects = 0;
+	}
+
+	D3D12_RECT rect;
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = mBuffer->GetDesc().Width;
+	rect.bottom = mBuffer->GetDesc().Height;
+
+	region.pRects = &rect;
+	region.FirstSubresource = 0;
+	region.NumSubresources = 1;
+
+	Dx12Ctrl::Instance()->GetCmdList()->DiscardResource(mBuffer.Get(), &region);
+	Dx12Ctrl::Instance()->CmdQueueSignal();
 	unsigned long resetCount = mBuffer.Reset();
 	mViewDescs.reset();
 }
@@ -49,7 +75,6 @@ void Dx12BufferObject::WriteBuffer(const void* pData, unsigned int amountDatasSi
 	memcpy(mElementBuffer, pData, amountDatasSize);
 	mBuffer->Unmap(0,&range);
 	mElementBuffer = nullptr;
-	//mBuffer->Unmap(0, nullptr);
 }
 
 void Dx12BufferObject::Map()
@@ -67,11 +92,6 @@ void Dx12BufferObject::WriteBuffer256Alignment(const void* pData, unsigned int d
 	}
 	mBuffer->Unmap(0, &range);
 	mElementBuffer = nullptr;
-}
-
-void Dx12BufferObject::SetDescTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, unsigned int rootParamaterIndex) const
-{
-	cmdList->SetGraphicsRootDescriptorTable(rootParamaterIndex, gpuHandle);
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource>& Dx12BufferObject::GetBuffer()
