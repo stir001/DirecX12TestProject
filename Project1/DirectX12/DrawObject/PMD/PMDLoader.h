@@ -1,6 +1,6 @@
 #pragma once
 #include "DrawObjectLoader.h"
-#include <vector>
+#include <map>
 
 class PMDModel;
 class PMDController;
@@ -12,12 +12,12 @@ public:
 	PMDLoader();
 	~PMDLoader();
 
-	PMDController* Load(std::string path);
+	std::shared_ptr<PMDController> Load(std::string path);
 private:
 
-	std::vector<PMDModel*> mModels;
-	PMDModel* mLoadingmodel;
-	PMDController* mController;
+	std::map<std::string,std::shared_ptr<PMDModel>> mModels;
+	std::shared_ptr<PMDModel> mLoadingmodel;
+	std::shared_ptr<PMDController> mController;
 	int exittexcount;
 	void LoadHeader();
 	void LoadVertex();
@@ -40,7 +40,7 @@ private:
 	void CreateMaterialBuffer();
 	void CreateBoneMatrixBuffer();
 
-	void CreatePiplineState();
-	void CreateRootSiganature();
-};
+	void CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	void CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+};	
 

@@ -9,7 +9,7 @@ ShaderDatas::~ShaderDatas()
 {
 	rootSignature.Reset();
 	vertexShader.Reset();
-	pixcelShader.Reset();
+	pixelShader.Reset();
 	geometryShader.Reset();
 	hullShader.Reset();
 }

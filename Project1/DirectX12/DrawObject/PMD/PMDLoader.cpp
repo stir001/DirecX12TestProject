@@ -10,6 +10,7 @@
 #include "VMDPlayer.h"
 #include "PMDController.h"
 #include "TextureLoader.h"
+#include "PipelineStateObject.h"
 
 #include <d3d12.h>
 #include <algorithm>
@@ -24,16 +25,19 @@ PMDLoader::~PMDLoader()
 {
 }
 
-PMDController* PMDLoader::Load(std::string mPath)
+PMDController* PMDLoader::Load(std::string path)
 {
-
-	mFp = new File(mPath);
-	GetRelativePath(mPath);
+	if (mModels.find(path))
+	{
+		return std::shared_ptr<PMDController>();
+	}
+	mFp = new File(path);
+	GetRelativePath(path);
 	mLoadingmodel = new PMDModel();
 	mController = new PMDController();
 	mController->mModel = mLoadingmodel;
 
-	mLoadingmodel->mPath = mPath;
+	mLoadingmodel->mPath = path;
 	mModels.push_back(mLoadingmodel);
 	LoadHeader();
 	LoadVertex();
@@ -337,4 +341,48 @@ void PMDLoader::CreateBoneMatrixBuffer()
 	mController->mBoneMatrix.resize(mLoadingmodel->mBoneDatas.size());
 	for (auto& bm : mController->mBoneMatrix) bm = DirectX::XMMatrixIdentity();
 	mController->mVmdPlayer = new VMDPlayer(mLoadingmodel->mBoneDatas, mLoadingmodel->mBoneNode, mController->mBoneMatrix);
+}
+
+void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+{
+	D3D12_INPUT_ELEMENT_DESC inputDescs[] = {
+		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "BONENO",0,DXGI_FORMAT_R16G16_UINT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "WEIGHT",0,DXGI_FORMAT_R8_UINT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 }
+	};
+
+	CD3DX12_RASTERIZER_DESC rastarizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	rastarizer.CullMode = D3D12_CULL_MODE_NONE;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = {};
+	gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);	//ブレンドするか
+	gpsDesc.DepthStencilState.DepthEnable = true;			//デプスを使うか
+	gpsDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	gpsDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	gpsDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	gpsDesc.DepthStencilState.StencilEnable = false;		//???
+	gpsDesc.InputLayout.NumElements = sizeof(inputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
+	gpsDesc.InputLayout.pInputElementDescs = inputDescs;	//要素へのポインタ(先頭?)
+	gpsDesc.pRootSignature = GetRootSignature().Get();				//ルートシグネチャポインタ
+	gpsDesc.RasterizerState = rastarizer;	//ラスタライザーの設定
+	gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//
+	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	gpsDesc.SampleDesc.Count = 1;
+	gpsDesc.NumRenderTargets = 1;
+	gpsDesc.SampleMask = 0xffffff;
+	gpsDesc.NodeMask = 0;
+
+	gpsDesc.VS = mShader.vertexShader;
+	gpsDesc.PS = mShader.pixcelShader;
+	gpsDesc.DS;
+	gpsDesc.GS;
+	gpsDesc.HS;
+
+	mPipelinestate.reset(new PipelineStateObject(gpsDesc,dev));
+}
+
+void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+{
 }

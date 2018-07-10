@@ -21,7 +21,7 @@ ShaderCompiler::~ShaderCompiler()
 	for (auto& data : mDatas)
 	{
 		data.second.vertexShader.Reset();
-		data.second.pixcelShader.Reset();
+		data.second.pixelShader.Reset();
 		data.second.geometryShader.Reset();
 		data.second.domainShader.Reset();
 		data.second.hullShader.Reset();
@@ -89,7 +89,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 		result = D3DCompileFromFile(path, nullptr, &hlslinculde,
 			psName.data(), "ps_5_0", compileflag, 0, &pixcel, &err);
 		outErr(err);
-		mDatas[shaderPath].pixcelShader.Swap(pixcel);
+		mDatas[shaderPath].pixelShader.Swap(pixcel);
 	}
 
 	if (gsName.size() > 0)

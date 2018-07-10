@@ -17,12 +17,6 @@ unsigned int Roundup2Multiplier(unsigned int size)
 
 void CallStartPerGameLoop()
 {
-	//std::thread threadObject([](AnimationPlayerManager* manager)
-	//{
-	//	manager->UpdateAnimations();
-	//}, AnimationPlayerManager::Instance());
-
-	//threadObject.join();
 	//AnimationPlayerManager::Instance()->UpdateAnimations();
 }
 

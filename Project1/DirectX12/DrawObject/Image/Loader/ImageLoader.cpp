@@ -124,7 +124,7 @@ void ImageLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.NodeMask = 0;
 
 	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mShader.vertexShader.Get());
-	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixcelShader.Get());
+	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixelShader.Get());
 
 	
 	mPipelinestate.reset(new PipelineStateObject(gpsDesc, dev));
@@ -141,7 +141,7 @@ void ImageLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 	gpsDesc.DepthStencilState.DepthEnable = true;
 	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(m3DShader.vertexShader.Get());
-	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(m3DShader.pixcelShader.Get());
+	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(m3DShader.pixelShader.Get());
 	gpsDesc.pRootSignature = m3DRootsignature->GetRootSignature().Get();
 
 	m3DPipelinestate.reset(new PipelineStateObject(gpsDesc, dev));

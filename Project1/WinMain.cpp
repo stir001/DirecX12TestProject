@@ -1,5 +1,5 @@
 #include "Dx12Ctrl.h"
-#include "Geometry.h"
+#include "NeedCall.h"
 #include "PMDLoader.h"
 #include "PrimitiveManager.h"
 #include "PMDController.h"
@@ -9,10 +9,8 @@
 #include "DirectionalLight.h"
 #include "ImageLoader.h"
 #include "ImageController.h"
-#include "FbxLoader.h"
-#include "FbxModelDataCoverter.h"
+//#include "FbxLoader.h"
 #include "PMDController.h"
-#include "FbxModelController.h"
 
 #include <algorithm>
 #include <Windows.h>
@@ -27,7 +25,6 @@
 #include <memory>
 
 using namespace DirectX;
-using namespace Fbx;
 
 const int WINDOW_WIDTH = 768;
 const int WINDOW_HEIGHT = 448;
@@ -45,25 +42,20 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	///Direct3D12‚Ì‰Šú‰»
 
 	/*Dx12Ctrl& d12 = Dx12Ctrl::Instance();*/
-	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	Dx12Ctrl::Instance()->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	std::string wName = "FbxLoad";
-	Dx12Ctrl::Instance().SetWindowName(wName);
-	Dx12Ctrl::Instance().Dx12Init();
+	Dx12Ctrl::Instance()->SetWindowName(wName);
+	Dx12Ctrl::Instance()->Dx12Init(hInst);
 
-	FbxLoader::Create();
-	FbxModelData* modelData = FbxLoader::Instance().LoadMesh(FBX_MODEL_PATH2);
-	FbxModelDataConverter* fbxconverter = new FbxModelDataConverter();
-	std::shared_ptr<FbxModel> fbxModel(fbxconverter->ConvertToFbxModel(modelData));
-
-	FbxModelController* fbxctrl = new FbxModelController(fbxModel);
+	//FbxLoader::Create();
+	//auto modelData = FbxLoader::Instance()->LoadMesh(FBX_MODEL_PATH2);
 
 	//PrimitiveManager mgr;
 
 
 	PMDLoader loader;
-	PMDController* pmdContrl = loader.Load(PMD_MODEL_PATH2);
+	std::shared_ptr<PMDController> pmdContrl = loader.Load(PMD_MODEL_PATH2);
 	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
-	fbxctrl->SetLight(dirLight);
 
 	pmdContrl->SetLight(dirLight);
 
@@ -74,75 +66,21 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//mgr.CreatePlane(pos, 50, 50, normal);
 	//mgr.SetLightObject(dirLight);
 
-	Dx12Camera* camera = Dx12Ctrl::Instance().GetCamera();
+	auto camera = Dx12Ctrl::Instance()->GetCamera();
 	DxInput input;
 
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
 		input.UpdateKeyState();
 
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_W))
-		{
-			camera->MoveFront(1.0f);
-		}
+		camera->DefaultMove(input);
 
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_A))
-		{
-			camera->MoveSide(1.0f);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_D))
-		{
-			camera->MoveSide(-1.0f);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_S))
-		{
-			camera->MoveFront(-1.0f);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_SPACE))
-		{
-			camera->MoveUp(1.0f);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_LSHIFT))
-		{
-			camera->MoveUp(-1.0f);
-		}
-
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_UP))
-		{
-			camera->TurnUpDown(1.0f);
-		}
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
-		{
-			camera->TurnUpDown(-1.0f);
-		}
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
-		{
-			camera->TurnRightLeft(-1.0f);
-		}
-		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_LEFT))
-		{
-			camera->TurnRightLeft(1.0f);
-		}
-
-		fbxctrl->SetPositon(DirectX::XMFLOAT3(10,0,0));
-		fbxctrl->SetScale(0.1f);
-		fbxctrl->AddRotaX(1.0f);
-
-	/*	pmdContrl->Draw();*/
+		/*pmdContrl->Draw();*/
 		//mgr.Draw();
-		fbxctrl->Draw();
 
 		CallEndPerGameLoop();
 	}
-	Dx12Ctrl::Instance().Release();
-#ifdef _DEBUG
-	ID3D12DebugDevice* debugdev = nullptr;
-	Dx12Ctrl::Instance().GetDev()->QueryInterface(&debugdev);
-	debugdev->ReportLiveDeviceObjects(D3D12_RLDO_FLAGS::D3D12_RLDO_DETAIL);
-#endif
+	Dx12Ctrl::Instance()->Release();
+	Dx12Ctrl::Destroy();
 	
 }

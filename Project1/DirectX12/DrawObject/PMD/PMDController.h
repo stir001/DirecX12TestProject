@@ -20,7 +20,7 @@ public:
 	~PMDController();
 
 	void Draw();
-	void SetMotion(VMDMotion* motion);
+	void SetMotion(std::shared_ptr<VMDMotion> motion);
 	void PlayMotion(bool loopFlag = false);
 	void StopMotion();
 	void SetPosition(DirectX::XMFLOAT3& p);
@@ -28,13 +28,13 @@ public:
 
 	void SetLight(std::shared_ptr<DirectionalLight> dlight);
 private:
-	PMDModel* mModel;
+	std::shared_ptr<PMDModel> mModel;
 	DirectX::XMFLOAT3 mPos;
 	DirectX::XMFLOAT3 mRotation;
-	ConstantBufferObject* mBoneMatrixBuffer;
+	std::shared_ptr<ConstantBufferObject> mBoneMatrixBuffer;
 	std::vector<DirectX::XMMATRIX> mBoneMatrix;
 	std::shared_ptr<DirectionalLight> mDirLight;
-	VMDPlayer* mVmdPlayer;
+	std::shared_ptr<VMDPlayer> mVmdPlayer;
 
 	void SetBoneBuffer();
 };

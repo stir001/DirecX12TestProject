@@ -496,8 +496,6 @@ DirectX::XMFLOAT2 Dx12Ctrl::GetWindowSize() const
 
 void Dx12Ctrl::Release()
 {
-	//mRootsignature.clear();
-	//mPipelinestateObjects.clear();
 	mShaders.clear();
 	mDepthDescHeap.reset();
 	TextureLoader::Destroy();

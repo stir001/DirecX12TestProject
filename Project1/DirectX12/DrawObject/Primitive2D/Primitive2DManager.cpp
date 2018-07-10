@@ -58,7 +58,7 @@ void Primitive2DManager::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device
 	gpsDesc.NodeMask = 0;
 
 	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mShader.vertexShader.Get());
-	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixcelShader.Get());
+	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixelShader.Get());
 
 	mPipelinestate.reset(new PipelineStateObject(gpsDesc, dev));
 }
