@@ -26,11 +26,19 @@ void PrimitiveManager::CreatePlane(DirectX::XMFLOAT3 pos, float length, float he
 void PrimitiveManager::Draw()
 {
 	DX12CTRL_INSTANCE
+<<<<<<< HEAD:Project1/DirectX12/DirectX12/PrimitiveManager.cpp
 	d12->GetCmdList()->SetPipelineState(d12->GetPipelineState(pso_primitive).Get());
 	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(rsi_prm).Get());
 	//d12->SetCameraBuffer(d12->GetCmdList());
 	mLight->SetLight(d12->GetCmdList());
 	for (PrimitiveObject* o : mObjects)
+=======
+	d12.GetCmdList()->SetPipelineState(d12.GetPiplineState(pso_primitive).Get());
+	d12.GetCmdList()->SetGraphicsRootSignature(d12.GetRootSignature(rsi_prm).Get());
+	d12.SetCameraBuffer();
+	light->SetLight();
+	for (PrimitiveObject* o : objects)
+>>>>>>> f1bde25f671e4006252ea9c7cb50882dbc0ff550:Project1/PrimitiveManager.cpp
 	{
 		o->Draw();
 	}

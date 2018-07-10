@@ -24,12 +24,21 @@ void CallStartPerGameLoop()
 
 	//threadObject.join();
 	AnimationPlayerManager::Instance()->UpdateAnimations();
+<<<<<<< HEAD:Project1/DirectX12/DirectX12/NeedCall.cpp
+=======
+	d12.InitMainCmdList();
+>>>>>>> f1bde25f671e4006252ea9c7cb50882dbc0ff550:Project1/Geometry.cpp
 }
 
 void CallEndPerGameLoop()
 {
+<<<<<<< HEAD:Project1/DirectX12/DirectX12/NeedCall.cpp
 	//AnimationPlayerManager::Instance()->WaitSafeFree();
 	RenderingPathManager::Instance()->Render();
+=======
+	DX12CTRL_INSTANCE
+	d12.ExcuteAndPresent();
+>>>>>>> f1bde25f671e4006252ea9c7cb50882dbc0ff550:Project1/Geometry.cpp
 }
 
 bool ProcessMessage()
