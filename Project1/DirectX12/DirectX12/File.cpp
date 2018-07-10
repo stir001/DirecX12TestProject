@@ -1,0 +1,31 @@
+#include "File.h"
+#include <iostream>
+
+
+File::File(std::string path):mFp(nullptr)
+{
+	SetFile(path);
+}
+
+
+File::~File()
+{
+}
+
+void File::SetFile(std::string path)
+{
+	if (mFp != nullptr) Close();
+	fopen_s(&mFp, path.data(), "rb");
+}
+
+void File::SeekFile(int seeksize)
+{
+	fseek(mFp, seeksize, SEEK_CUR);
+}
+
+void File::Close()
+{
+	if (mFp == nullptr) return;
+	fclose(mFp);
+	mFp = nullptr;
+}
