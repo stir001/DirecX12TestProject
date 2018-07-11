@@ -73,8 +73,6 @@ void FbxModelController::Draw()
 {
 	UpdateVertex();
 	(this->*mBundleUpdate)();
-	/*auto obj = RenderingPathManager::Instance()->GetRenderTargetViews(0);
-	mCmdList->OMSetRenderTargets(obj.cpuhandles.size(), &obj.rtvDescHeap->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), false, &d12->GetDepthBuffer()->GetCPUAdress());*/
 	mCmdList->SetDescriptorHeaps(1, mDescHeap->GetDescriptorHeap().GetAddressOf());
 	mCmdList->ExecuteBundle(mBundleCmdList->GetCommandList().Get());
 	

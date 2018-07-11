@@ -15,9 +15,9 @@ public:
 	std::shared_ptr<PMDController> Load(std::string path);
 private:
 
-	std::map<std::string,std::shared_ptr<PMDModel>> mModels;
+	std::map<std::string, std::shared_ptr<PMDModel>> mModels;
 	std::shared_ptr<PMDModel> mLoadingmodel;
-	std::shared_ptr<PMDController> mController;
+	//std::shared_ptr<PMDController> mController;
 	int exittexcount;
 	void LoadHeader();
 	void LoadVertex();
@@ -38,9 +38,11 @@ private:
 	void CreateVertexBuffer();
 	void CreateTexture();
 	void CreateMaterialBuffer();
-	void CreateBoneMatrixBuffer();
+	void CreateBoneMatrixBuffer(std::shared_ptr<PMDController>& ctrl);
 
 	void CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	void CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+
+	std::string GetModelName(const std::string& path) const;
 };	
 

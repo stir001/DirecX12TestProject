@@ -31,7 +31,6 @@ cbuffer bone : register(b3) {
 	matrix bones[256];
 }
 
-
 struct Output {
 	float4 svpos : SV_POSITION;
 	float4 pos : POSITION0;

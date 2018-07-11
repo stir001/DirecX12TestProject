@@ -7,6 +7,10 @@
 #include "VMDPlayer.h"
 #include "PMDModel.h"
 #include "DirectionalLight.h"
+#include "IndexBufferObject.h"
+#include "VertexBufferObject.h"
+#include "ConstantBufferObject.h"
+#include "ShaderResourceObject.h"
 
 
 PMDController::PMDController(const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
@@ -23,8 +27,8 @@ void PMDController::Draw()
 	mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
 	mCmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
 	//d12->SetCameraBuffer(d12->GetCmdList());
-	mModel->SetIndexBuffer(d12->GetCmdList());
-	mModel->SetVertexBuffer(d12->GetCmdList());
+	mModel->SetIndexBuffer(mCmdList);
+	mModel->SetVertexBuffer(mCmdList);
 	SetBoneBuffer();
 	mModel->SetMaterialBuffer();//‚±‚Ì’†‚ÅDraw‚Ü‚Å‚â‚é
 }

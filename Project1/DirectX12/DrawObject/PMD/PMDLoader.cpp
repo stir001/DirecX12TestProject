@@ -27,18 +27,20 @@ PMDLoader::~PMDLoader()
 
 std::shared_ptr<PMDController> PMDLoader::Load(std::string path)
 {
-	if (mModels.find(path))
+	auto itr = mModels.find(path);
+	std::shared_ptr<PMDController> controller(new PMDController(GetModelName(path), Dx12Ctrl::Instance()->GetDev(), mCmdList));
+	if (itr != mModels.end())
 	{
-		return std::shared_ptr<PMDController>();
+		controller->mModel = (*itr).second;
+		CreateBoneMatrixBuffer(controller);
+		return controller;
 	}
 	mFp = new File(path);
 	GetRelativePath(path);
-	mLoadingmodel = new PMDModel();
-	mController = new PMDController();
-	mController->mModel = mLoadingmodel;
+	mLoadingmodel.reset(new PMDModel());
 
 	mLoadingmodel->mPath = path;
-	mModels.push_back(mLoadingmodel);
+	mModels[path] = mLoadingmodel;
 	LoadHeader();
 	LoadVertex();
 	LoadIndex();
@@ -60,10 +62,10 @@ std::shared_ptr<PMDController> PMDLoader::Load(std::string path)
 	CreateVertexBuffer();
 	CreateTexture();
 	CreateMaterialBuffer();
-	CreateBoneMatrixBuffer();
+	CreateBoneMatrixBuffer(controller);
 
 	mLoadingmodel = nullptr;
-	return mController;
+	return controller;
 }
 
 void PMDLoader::LoadHeader()
@@ -296,9 +298,7 @@ void PMDLoader::CreateVertexBuffer()
 void PMDLoader::CreateTexture()
 {
 	DX12CTRL_INSTANCE
-	mLoadingmodel->mTextureObjectects.resize(exittexcount);
-	//mLoadingmodel->mTextureDescHeap = TextureLoader::Instance()->CreateTexDescHeap(mLoadingmodel->mPath, exittexcount);
-	//UINT descsize = d12->GetDev()->GetDescriptorHandleIncrementSize(mLoadingmodel->mTextureDescHeap->GetDesc().Type);
+	mLoadingmodel->mTextureObjects.resize(exittexcount);
 	for (unsigned int i = 0;i < mLoadingmodel->mMaterials.size();i++)
 	{
 		if (mLoadingmodel->mMaterials[i].texid == -1) continue;
@@ -310,11 +310,6 @@ void PMDLoader::CreateTexture()
 		}
 		size_t num;
 		mbstowcs_s(&num, &mPath[mPath.length() - 20], 20, &mLoadingmodel->mMaterials[i].texturePath[0], 20);
-		//D3D12_CPU_DESCRIPTOR_HANDLE cpuhandle = mLoadingmodel->mTextureDescHeap->GetCPUDescriptorHandleForHeapStart();
-		//cpuhandle.ptr += mLoadingmodel->mMaterials[i].texid * descsize;
-		//D3D12_GPU_DESCRIPTOR_HANDLE gpuhandle = mLoadingmodel->mTextureDescHeap->GetGPUDescriptorHandleForHeapStart();
-		//gpuhandle.ptr += mLoadingmodel->mMaterials[i].texid * descsize;
-		//mLoadingmodel->mTextureObjectects[mLoadingmodel->mMaterials[i].texid] = TextureLoader::Instance()->LoadTexture(mPath, cpuhandle, gpuhandle);
 	}
 }
 
@@ -335,12 +330,12 @@ void PMDLoader::CreateMaterialBuffer()
 	mLoadingmodel->mMaterialBuffer->WriteBuffer256Alignment(mLoadingmodel->mD12mat, sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));
 }
 
-void PMDLoader::CreateBoneMatrixBuffer()
+void PMDLoader::CreateBoneMatrixBuffer(std::shared_ptr<PMDController>& ctrl)
 {
-	mController->mBoneMatrixBuffer = new ConstantBufferObject("PMDBoneMatrixBuffer", Dx12Ctrl::Instance()->GetDev(),static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mLoadingmodel->mBoneDatas.size()), 1);
-	mController->mBoneMatrix.resize(mLoadingmodel->mBoneDatas.size());
-	for (auto& bm : mController->mBoneMatrix) bm = DirectX::XMMatrixIdentity();
-	mController->mVmdPlayer = new VMDPlayer(mLoadingmodel->mBoneDatas, mLoadingmodel->mBoneNode, mController->mBoneMatrix);
+	ctrl->mBoneMatrixBuffer.reset(new ConstantBufferObject("PMDBoneMatrixBuffer", Dx12Ctrl::Instance()->GetDev(),static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mLoadingmodel->mBoneDatas.size()), 1));
+	ctrl->mBoneMatrix.resize(mLoadingmodel->mBoneDatas.size());
+	for (auto& bm : ctrl->mBoneMatrix) bm = DirectX::XMMatrixIdentity();
+	ctrl->mVmdPlayer.reset(new VMDPlayer(mLoadingmodel->mBoneDatas, mLoadingmodel->mBoneNode, ctrl->mBoneMatrix));
 }
 
 void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
@@ -365,7 +360,7 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.DepthStencilState.StencilEnable = false;		//???
 	gpsDesc.InputLayout.NumElements = sizeof(inputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
 	gpsDesc.InputLayout.pInputElementDescs = inputDescs;	//要素へのポインタ(先頭?)
-	gpsDesc.pRootSignature = GetRootSignature().Get();				//ルートシグネチャポインタ
+	gpsDesc.pRootSignature = mRootsignature->GetRootSignature().Get();				//ルートシグネチャポインタ
 	gpsDesc.RasterizerState = rastarizer;	//ラスタライザーの設定
 	gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//
 	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -374,8 +369,8 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.SampleMask = 0xffffff;
 	gpsDesc.NodeMask = 0;
 
-	gpsDesc.VS = mShader.vertexShader;
-	gpsDesc.PS = mShader.pixcelShader;
+	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mShader.vertexShader.Get());
+	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixelShader.Get());
 	gpsDesc.DS;
 	gpsDesc.GS;
 	gpsDesc.HS;
@@ -385,4 +380,11 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
+}
+
+std::string PMDLoader::GetModelName(const std::string & path) const
+{
+	size_t length = path.rfind('/') + 1;
+	std::string rtn(path.begin() + length, path.end());
+	return rtn;
 }
