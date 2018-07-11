@@ -89,9 +89,9 @@ public:
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> GetCmdQueue();
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCmdList();
 	Microsoft::WRL::ComPtr<IDXGIFactory4> GetFactory();
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> GetRootSignature(int index = 0);
+	//Microsoft::WRL::ComPtr<ID3D12RootSignature> GetRootSignature(int index = 0);
 
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> GetPipelineState(PSOIndex index);
+	//Microsoft::WRL::ComPtr<ID3D12PipelineState> GetPipelineState(PSOIndex index);
 	D3D12_SHADER_BYTECODE GetShader(ShaderIndex index);
 	std::shared_ptr<DepthBufferObject> GetDepthBuffer() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDepthCpuHandle() const;

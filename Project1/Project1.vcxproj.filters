@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <FxCompile Include="DirectX12\Shader\CameraLightcBuffer.hlsl">
+      <Filter>DirectX12\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\ImageShader.hlsl">
+      <Filter>DirectX12\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\Primitive2D.hlsl">
+      <Filter>DirectX12\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\Primitive3D.hlsl">
+      <Filter>DirectX12\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\Shader.hlsl">
+      <Filter>DirectX12\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinMain.cpp" />
+    <ClCompile Include="DirectX12\Animation\AnimationPlayerManager.cpp">
+      <Filter>DirectX12\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\AdditionalConstatntBuffer.cpp">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\CharToWChar.cpp">
+      <Filter>DirectX12\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\ConstantBufferObject.cpp">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\DepthBufferObject.cpp">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\DrawObjectController.cpp">
+      <Filter>DirectX12\DrawObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\DrawObjectLoader.cpp">
+      <Filter>DirectX12\DrawObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\Dx12BufferObject.cpp">
+      <Filter>DirectX12\Buffer\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12BufferViewDesc.cpp">
+      <Filter>DirectX12\BufferViewDesc\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Camera\Dx12Camera.cpp">
+      <Filter>DirectX12\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\CommandList\Dx12CommandList.cpp">
+      <Filter>DirectX12\CommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12ConstantBufferViewDesc.cpp">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12DepthStencilViewDesc.cpp">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DescriptorHeap\Dx12DescriptorHeapObject.cpp">
+      <Filter>DirectX12\DescriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\Dx12Getter.cpp">
+      <Filter>DirectX12\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12RenderTargetViewDesc.cpp">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Master\Dx12Ctrl.cpp">
+      <Filter>DirectX12\Master</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.cpp">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.cpp">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Input\DxInput.cpp">
+      <Filter>DirectX12\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\File.cpp">
+      <Filter>DirectX12\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Shader\HlslInclude.cpp">
+      <Filter>DirectX12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\ImageController.cpp">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\Image3DController.cpp">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\ImageControllerStructure.cpp">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\Loader\ImageLoader.cpp">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Image\ImageObject.cpp">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\IndexBufferObject.cpp">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp">
+      <Filter>DirectX12\DrawObject\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Master\NeedCall.cpp">
+      <Filter>DirectX12\Master</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp">
+      <Filter>DirectX12\PipelineState</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.cpp">
+      <Filter>DirectX12\DrawObject\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp">
+      <Filter>DirectX12\DrawObject\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\Rect.cpp">
+      <Filter>DirectX12\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp">
+      <Filter>DirectX12\RenderingPath</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObject.cpp">
+      <Filter>DirectX12\RenderingPath\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\RendertargetObject.cpp">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Shader\ShaderCompiler.cpp">
+      <Filter>DirectX12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Shader\ShaderDatasStructure.cpp">
+      <Filter>DirectX12\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\ShaderResourceObject.cpp">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\SwapChain\SwapChainObject.cpp">
+      <Filter>DirectX12\SwapChain</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Texture\TextureLoader.cpp">
+      <Filter>DirectX12\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Texture\TextureObject.cpp">
+      <Filter>DirectX12\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Buffer\VertexBufferObject.cpp">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp">
+      <Filter>DirectX12\WIC</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\Util.cpp">
+      <Filter>DirectX12\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Util\XMFloatOperators.cpp">
+      <Filter>DirectX12\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\PMD\PMDController.cpp">
+      <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\PMD\PMDLoader.cpp">
+      <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\PMD\PMDModel.cpp">
+      <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Animation\VMD\VMDLoader.cpp">
+      <Filter>DirectX12\Animation\VMD</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Animation\VMD\VMDMotion.cpp">
+      <Filter>DirectX12\Animation\VMD</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Animation\VMD\VMDPlayer.cpp">
+      <Filter>DirectX12\Animation\VMD</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DirectX12\d3dx12.h">
+      <Filter>DirectX12</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\Animation.h">
+      <Filter>DirectX12\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\AnimationPlayer.h">
+      <Filter>DirectX12\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\AnimationPlayerManager.h">
+      <Filter>DirectX12\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\AdditionalConstatntBuffer.h">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\CharToWChar.h">
+      <Filter>DirectX12\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\ConstantBufferObject.h">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\DepthBufferObject.h">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\DrawObjectController.h">
+      <Filter>DirectX12\DrawObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\DrawObjectLoader.h">
+      <Filter>DirectX12\DrawObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\Dx12BufferObject.h">
+      <Filter>DirectX12\Buffer\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12BufferViewDesc.h">
+      <Filter>DirectX12\BufferViewDesc\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Camera\Dx12Camera.h">
+      <Filter>DirectX12\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\CommandList\Dx12CommandList.h">
+      <Filter>DirectX12\CommandList</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12ConstantBufferViewDesc.h">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12DepthStencilViewDesc.h">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DescriptorHeap\Dx12DescriptorHeapObject.h">
+      <Filter>DirectX12\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12RenderTargetViewDesc.h">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Master\Dx12Ctrl.h">
+      <Filter>DirectX12\Master</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Master\Dx12ResultCheckDefine.h">
+      <Filter>DirectX12\Master</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.h">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.h">
+      <Filter>DirectX12\BufferViewDesc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Input\DxInput.h">
+      <Filter>DirectX12\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\File.h">
+      <Filter>DirectX12\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Shader\HlslInclude.h">
+      <Filter>DirectX12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\ImageController.h">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\Image3DController.h">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\ImageControllerStructure.h">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\Loader\ImageLoader.h">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Image\ImageObject.h">
+      <Filter>DirectX12\DrawObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\IndexBufferObject.h">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h">
+      <Filter>DirectX12\DrawObject\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Master\NeedCall.h">
+      <Filter>DirectX12\Master</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h">
+      <Filter>DirectX12\PipelineState</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.h">
+      <Filter>DirectX12\DrawObject\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h">
+      <Filter>DirectX12\DrawObject\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\Rect.h">
+      <Filter>DirectX12\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h">
+      <Filter>DirectX12\RenderingPath</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObject.h">
+      <Filter>DirectX12\RenderingPath\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\RendertargetObject.h">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Shader\ShaderCompiler.h">
+      <Filter>DirectX12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Shader\ShaderDatasStructure.h">
+      <Filter>DirectX12\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\ShaderResourceObject.h">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\SwapChain\SwapChainObject.h">
+      <Filter>DirectX12\SwapChain</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Texture\TextureLoader.h">
+      <Filter>DirectX12\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Texture\TextureObject.h">
+      <Filter>DirectX12\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Buffer\VertexBufferObject.h">
+      <Filter>DirectX12\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h">
+      <Filter>DirectX12\WIC</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\Util.h">
+      <Filter>DirectX12\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Util\XMFloatOperators.h">
+      <Filter>DirectX12\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDModel.h">
+      <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDController.h">
+      <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDLoader.h">
+      <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\VMD\VMDPlayer.h">
+      <Filter>DirectX12\Animation\VMD</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\VMD\VMDLoader.h">
+      <Filter>DirectX12\Animation\VMD</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Animation\VMD\VMDMotion.h">
+      <Filter>DirectX12\Animation\VMD</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="DirectX12">
+      <UniqueIdentifier>{caeb3578-6c4d-4cd4-81e4-18a8fa3b5948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Animation">
+      <UniqueIdentifier>{9ac53c54-2b04-495f-92a3-67250509e14a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Buffer">
+      <UniqueIdentifier>{aba2f37c-b849-498c-9cb3-b191b88a1d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Shader">
+      <UniqueIdentifier>{044c99dc-877c-4a06-88d2-60ec49c3741d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Util">
+      <UniqueIdentifier>{dc86133a-2602-49fb-aa4a-1a9feb1f974e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject">
+      <UniqueIdentifier>{0f990e3f-3205-4e11-b54f-699dfc52d7ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject\Base">
+      <UniqueIdentifier>{6ce7509e-7332-4cc2-b4f5-be464b2fdf73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Buffer\Base">
+      <UniqueIdentifier>{4ba3cf19-0ad4-4f78-ab38-b3c4e2e7cf03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\BufferViewDesc">
+      <UniqueIdentifier>{9673c0d2-b00b-4339-ac64-bcbd3f7533bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\BufferViewDesc\Base">
+      <UniqueIdentifier>{f0c299c5-a1f3-46f5-9277-896570499afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Camera">
+      <UniqueIdentifier>{96bebf31-4550-4e5a-aaa3-15826034c3ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\CommandList">
+      <UniqueIdentifier>{0756388e-9e33-4d96-bf89-71e38cefe526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DescriptorHeap">
+      <UniqueIdentifier>{6d06ed4b-b5a0-46fa-a9b2-37bdc5b265b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Master">
+      <UniqueIdentifier>{ce7ed8c8-8c73-463f-8703-7931e8d2421a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Input">
+      <UniqueIdentifier>{65df3719-990f-4718-bc56-6a4835f18488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject\2D">
+      <UniqueIdentifier>{7519ba09-5cb9-4ac5-bc22-1b6fe2e20b14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject\3D">
+      <UniqueIdentifier>{fcccb306-f659-4428-8c9d-1c93893d0b0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject\Primitive">
+      <UniqueIdentifier>{dad80b0c-e7ee-4a18-883b-ce15f026ec2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\PipelineState">
+      <UniqueIdentifier>{b725ba65-4e48-436c-a06b-23cfb6e56776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\RenderingPath">
+      <UniqueIdentifier>{bd5c050c-22e8-4d5d-ace7-02ee5ccae04c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\RenderingPath\Base">
+      <UniqueIdentifier>{f8a6b79c-607a-42da-a0b4-eef1d4d2cd2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Rootsignature">
+      <UniqueIdentifier>{ec5d833b-d2c8-466e-bcb7-d44bb198c040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\SwapChain">
+      <UniqueIdentifier>{2640983b-e384-494b-94fe-71cc3ff0c714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Texture">
+      <UniqueIdentifier>{5f16a0bc-e6f5-4ccc-8487-692eb0a98283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\WIC">
+      <UniqueIdentifier>{76cf3edf-df9c-4803-8a70-9012a067fee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Animation\VMD">
+      <UniqueIdentifier>{2a395652-faa4-4990-80e8-618c086de9d5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

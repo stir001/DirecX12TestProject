@@ -126,6 +126,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DirectX12\Animation\AnimationPlayerManager.cpp" />
+    <ClCompile Include="DirectX12\Animation\VMD\VMDLoader.cpp" />
+    <ClCompile Include="DirectX12\Animation\VMD\VMDMotion.cpp" />
+    <ClCompile Include="DirectX12\Animation\VMD\VMDPlayer.cpp" />
     <ClCompile Include="DirectX12\Buffer\AdditionalConstatntBuffer.cpp" />
     <ClCompile Include="DirectX12\Buffer\ConstantBufferObject.cpp" />
     <ClCompile Include="DirectX12\Buffer\DepthBufferObject.cpp" />
@@ -144,6 +147,9 @@
     <ClCompile Include="DirectX12\DrawObject\Image\ImageControllerStructure.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\ImageObject.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\Loader\ImageLoader.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\PMD\PMDController.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\PMD\PMDLoader.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\PMD\PMDModel.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp" />
@@ -227,6 +233,9 @@
     <ClInclude Include="DirectX12\Animation\Animation.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayer.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayerManager.h" />
+    <ClInclude Include="DirectX12\Animation\VMD\VMDLoader.h" />
+    <ClInclude Include="DirectX12\Animation\VMD\VMDMotion.h" />
+    <ClInclude Include="DirectX12\Animation\VMD\VMDPlayer.h" />
     <ClInclude Include="DirectX12\Buffer\AdditionalConstatntBuffer.h" />
     <ClInclude Include="DirectX12\Buffer\ConstantBufferObject.h" />
     <ClInclude Include="DirectX12\Buffer\DepthBufferObject.h" />
@@ -246,6 +255,9 @@
     <ClInclude Include="DirectX12\DrawObject\Image\ImageControllerStructure.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\ImageObject.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\Loader\ImageLoader.h" />
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDController.h" />
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDLoader.h" />
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDModel.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h" />

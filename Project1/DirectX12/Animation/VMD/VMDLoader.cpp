@@ -13,15 +13,14 @@ VMDLoader::~VMDLoader()
 {
 	mFp->Close();
 	delete mFp;
-	for (auto m : mMotions) delete m.second;
 	mLoadingMotion = nullptr;
 }
 
-VMDMotion* VMDLoader::LoadMotion(std::string path)
+std::shared_ptr<VMDMotion> VMDLoader::LoadMotion(std::string path)
 {
 	if (mMotions.find(path) != mMotions.end()) return mMotions[path];
 	mFp = new File(path);
-	mLoadingMotion = new VMDMotion();
+	mLoadingMotion.reset(new VMDMotion());
 
 	LoadHeader();
 	LoadMotionDatas();

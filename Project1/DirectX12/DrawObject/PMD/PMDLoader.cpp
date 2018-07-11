@@ -25,7 +25,7 @@ PMDLoader::~PMDLoader()
 {
 }
 
-PMDController* PMDLoader::Load(std::string path)
+std::shared_ptr<PMDController> PMDLoader::Load(std::string path)
 {
 	if (mModels.find(path))
 	{

@@ -1,6 +1,7 @@
 #include "PMDController.h"
 #include "Dx12Ctrl.h"
 #include "RootSignatureObject.h"
+#include "PipelineStateObject.h"
 #include "ConstantBufferObject.h"
 #include "TextureObject.h"
 #include "VMDPlayer.h"
@@ -8,7 +9,8 @@
 #include "DirectionalLight.h"
 
 
-PMDController::PMDController()//:DrawObjectController(Dx12Ctrl::Instance()->GetCmdList())
+PMDController::PMDController(const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList): DrawObjectController(name + "BundleCommnadList", dev, cmdList)
 {
 }
 
@@ -18,10 +20,8 @@ PMDController::~PMDController()
 
 void PMDController::Draw()
 {
-	DX12CTRL_INSTANCE
-	d12->GetCmdList()->SetPipelineState(d12->GetPipelineState(pso_notTex).Get());
-	d12->GetCmdList()->SetGraphicsRootSignature(d12->GetRootSignature(rsi_pmd).Get());
-	mDirLight->SetLight(d12->GetCmdList());
+	mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
+	mCmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
 	//d12->SetCameraBuffer(d12->GetCmdList());
 	mModel->SetIndexBuffer(d12->GetCmdList());
 	mModel->SetVertexBuffer(d12->GetCmdList());
@@ -29,7 +29,7 @@ void PMDController::Draw()
 	mModel->SetMaterialBuffer();//‚±‚Ì’†‚ÅDraw‚Ü‚Å‚â‚é
 }
 
-void PMDController::SetMotion(VMDMotion* motion)
+void PMDController::SetMotion(std::shared_ptr<VMDMotion> motion)
 {
 	mVmdPlayer->SetVMD(motion);
 }

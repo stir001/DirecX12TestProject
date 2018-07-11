@@ -22,7 +22,7 @@ public:
 	void Play(bool loopFlag = false);
 	void Update();
 	void WriteBoneMatrix(ConstantBufferObject* matrixBuffer);
-	void SetVMD(VMDMotion* vmd);
+	void SetVMD(std::shared_ptr<VMDMotion> vmd);
 private:
 	std::vector<DirectX::XMMATRIX>& currentBoneMatrix;
 	std::map<std::string, std::vector<VMDPose>>* poses;

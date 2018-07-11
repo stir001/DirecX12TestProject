@@ -12,11 +12,12 @@ class DirectionalLight;
 struct ID3D12DescriptorHeap;
 
 class PMDController
-	//: public DrawObjectController
+	: public DrawObjectController
 {
 	friend class PMDLoader;
 public:
-	PMDController();
+	PMDController(const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
+		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
 	~PMDController();
 
 	void Draw();

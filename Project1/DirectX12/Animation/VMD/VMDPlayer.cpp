@@ -22,7 +22,7 @@ void VMDPlayer::Update()
 	(this->*update)();
 }
 
-void VMDPlayer::SetVMD(VMDMotion* vmd)
+void VMDPlayer::SetVMD(std::shared_ptr<VMDMotion> vmd)
 {
 	poses = &vmd->mPoses;
 	//Play();
