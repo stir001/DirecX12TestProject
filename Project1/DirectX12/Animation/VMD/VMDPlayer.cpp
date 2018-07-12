@@ -146,7 +146,7 @@ void VMDPlayer::Stop()
 	id = -1;
 }
 
-void VMDPlayer::WriteBoneMatrix(ConstantBufferObject* matrixBuffer)
+void VMDPlayer::WriteBoneMatrix(std::shared_ptr<ConstantBufferObject>& matrixBuffer)
 {
 	matrixBuffer->WriteBuffer(&currentBoneMatrix[0], static_cast<unsigned int>(currentBoneMatrix.size() * sizeof(currentBoneMatrix[0])));
 }

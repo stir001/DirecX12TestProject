@@ -5,8 +5,14 @@
 
 #include <d3d12.h>
 
+D3D12_GPU_DESCRIPTOR_HANDLE operator +(const D3D12_GPU_DESCRIPTOR_HANDLE& handle, const unsigned int ptrVal)
+{
+	D3D12_GPU_DESCRIPTOR_HANDLE rtn = handle;
+	rtn.ptr += ptrVal;
+	return rtn;
+}
 
-Dx12DescriptorHeapObject::Dx12DescriptorHeapObject(const std::string& name, Microsoft::WRL::ComPtr<ID3D12Device>& dev, std::vector<std::shared_ptr<Dx12BufferObject>>& buffers,D3D12_DESCRIPTOR_HEAP_TYPE heapType)
+Dx12DescriptorHeapObject::Dx12DescriptorHeapObject(const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev, std::vector<std::shared_ptr<Dx12BufferObject>>& buffers,D3D12_DESCRIPTOR_HEAP_TYPE heapType)
 {
 	unsigned int viewcount = 0;
 	std::vector<std::shared_ptr<Dx12BufferViewDesc>> viewDescs;
@@ -30,6 +36,7 @@ Dx12DescriptorHeapObject::Dx12DescriptorHeapObject(const std::string& name, Micr
 		heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	}
 	heapDesc.NodeMask = 0;
+	mHeapIncrementSize = dev->GetDescriptorHandleIncrementSize(heapType);
 	
 	HRESULT result = S_OK;
 	
@@ -84,7 +91,7 @@ void Dx12DescriptorHeapObject::SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID
 	cmdList->SetDescriptorHeaps(1, mDescHeap.GetAddressOf());
 }
 
-void Dx12DescriptorHeapObject::SetGprahicsDescriptorTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int rootParamaterIndex) const
+void Dx12DescriptorHeapObject::SetGprahicsDescriptorTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int rootParamaterIndex, unsigned int handleOffset) const
 {
-	cmdList->SetGraphicsRootDescriptorTable(rootParamaterIndex, mResourceBinds[resourceIndex].gpuHandle);
+	cmdList->SetGraphicsRootDescriptorTable(rootParamaterIndex, mResourceBinds[resourceIndex].gpuHandle + (handleOffset * mHeapIncrementSize));
 }

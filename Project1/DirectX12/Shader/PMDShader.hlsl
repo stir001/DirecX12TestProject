@@ -4,12 +4,11 @@
 	", DescriptorTable(CBV(b1), visibility = SHADER_VISIBILITY_ALL)" \
 	", DescriptorTable(CBV(b2), visibility = SHADER_VISIBILITY_ALL)" \
     ", DescriptorTable(CBV(b3), visibility = SHADER_VISIBILITY_ALL)" \
-	", DescriptorTable(SRV(t1), visibility = SHADER_VISIBILITY_PIXEL)" \
 	", StaticSampler(s0, filter = FILTER_MIN_MAG_LINEAR_MIP_POINT"   \
         ", addressU = TEXTURE_ADDRESS_WRAP, addressV = TEXTURE_ADDRESS_WRAP, addressW = TEXTURE_ADDRESS_WRAP)"
 
 Texture2D<float4> tex:register(t0);
-Texture2D<float> shadowmap:register(t1);
+//Texture2D<float> shadowmap:register(t1);
 SamplerState smp:register(s0);
 
 #include "CameraLightcBuffer.hlsl"
@@ -18,17 +17,18 @@ CAMERA_CBUFFER(b0)
 
 LIGHT_CBUFFER(b1)
 
-cbuffer mat:register(b2) {
+cbuffer bone : register(b2)
+{
+    matrix bones[256];
+}
+
+cbuffer mat:register(b3) {
 	float3 diffuse;
 	float alpha;
 	float specularity;
 	float3 specular;
 	float3 ambient;
 	float3 offsetPos;
-}
-
-cbuffer bone : register(b3) {
-	matrix bones[256];
 }
 
 struct Output {

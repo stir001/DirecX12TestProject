@@ -11,13 +11,14 @@
 #include "PMDController.h"
 #include "TextureLoader.h"
 #include "PipelineStateObject.h"
+#include "DirectionalLight.h"
 
 #include <d3d12.h>
 #include <algorithm>
 
 const std::string PMDSHADER_PATH = "shader.hlsl";
 
-PMDLoader::PMDLoader()
+PMDLoader::PMDLoader():mLight(new DirectionalLight(1,-1,1))
 {
 }
 
@@ -28,11 +29,10 @@ PMDLoader::~PMDLoader()
 std::shared_ptr<PMDController> PMDLoader::Load(std::string path)
 {
 	auto itr = mModels.find(path);
-	std::shared_ptr<PMDController> controller(new PMDController(GetModelName(path), Dx12Ctrl::Instance()->GetDev(), mCmdList));
 	if (itr != mModels.end())
 	{
-		controller->mModel = (*itr).second;
-		CreateBoneMatrixBuffer(controller);
+		std::shared_ptr<PMDController> controller(new PMDController((*itr).second, mLight, GetModelName(path),
+				Dx12Ctrl::Instance()->GetDev(), mCmdList));
 		return controller;
 	}
 	mFp = new File(path);
@@ -62,8 +62,8 @@ std::shared_ptr<PMDController> PMDLoader::Load(std::string path)
 	CreateVertexBuffer();
 	CreateTexture();
 	CreateMaterialBuffer();
-	CreateBoneMatrixBuffer(controller);
 
+	std::shared_ptr<PMDController> controller(new PMDController(mLoadingmodel, mLight, GetModelName(path), Dx12Ctrl::Instance()->GetDev(), mCmdList));
 	mLoadingmodel = nullptr;
 	return controller;
 }
@@ -330,13 +330,6 @@ void PMDLoader::CreateMaterialBuffer()
 	mLoadingmodel->mMaterialBuffer->WriteBuffer256Alignment(mLoadingmodel->mD12mat, sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));
 }
 
-void PMDLoader::CreateBoneMatrixBuffer(std::shared_ptr<PMDController>& ctrl)
-{
-	ctrl->mBoneMatrixBuffer.reset(new ConstantBufferObject("PMDBoneMatrixBuffer", Dx12Ctrl::Instance()->GetDev(),static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mLoadingmodel->mBoneDatas.size()), 1));
-	ctrl->mBoneMatrix.resize(mLoadingmodel->mBoneDatas.size());
-	for (auto& bm : ctrl->mBoneMatrix) bm = DirectX::XMMatrixIdentity();
-	ctrl->mVmdPlayer.reset(new VMDPlayer(mLoadingmodel->mBoneDatas, mLoadingmodel->mBoneNode, ctrl->mBoneMatrix));
-}
 
 void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {

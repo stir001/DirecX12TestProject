@@ -1,6 +1,7 @@
 #pragma once
 #include "AnimationPlayer.h"
 
+#include <memory>
 #include <DirectXMath.h>
 #include <vector>
 #include <map>
@@ -21,7 +22,7 @@ public:
 	void Stop();
 	void Play(bool loopFlag = false);
 	void Update();
-	void WriteBoneMatrix(ConstantBufferObject* matrixBuffer);
+	void WriteBoneMatrix(std::shared_ptr<ConstantBufferObject>& matrixBuffer);
 	void SetVMD(std::shared_ptr<VMDMotion> vmd);
 private:
 	std::vector<DirectX::XMMATRIX>& currentBoneMatrix;

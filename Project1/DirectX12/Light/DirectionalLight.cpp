@@ -51,7 +51,3 @@ DirectionalLight::~DirectionalLight()
 {
 }
 
-//void DirectionalLight::SetLight(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, int rootparamindex)
-//{
-//	//mCbuffer->SetBuffer(cmdList,rootparamindex);
-//}

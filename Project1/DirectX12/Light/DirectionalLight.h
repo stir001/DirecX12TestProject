@@ -15,7 +15,6 @@ public:
 	DirectionalLight(float dirX, float dirY, float dirZ, float length = 100);
 	~DirectionalLight();
 
-	//void SetLight(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, int rootparamindex = 2);
 private:
 	DirectionalLightElement mElement;
 };

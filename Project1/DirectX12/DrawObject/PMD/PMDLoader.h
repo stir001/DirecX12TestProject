@@ -4,6 +4,7 @@
 
 class PMDModel;
 class PMDController;
+class DirectionalLight;
 
 class PMDLoader :
 	public DrawObjectLoader
@@ -15,9 +16,9 @@ public:
 	std::shared_ptr<PMDController> Load(std::string path);
 private:
 
+	std::shared_ptr<DirectionalLight> mLight;
 	std::map<std::string, std::shared_ptr<PMDModel>> mModels;
 	std::shared_ptr<PMDModel> mLoadingmodel;
-	//std::shared_ptr<PMDController> mController;
 	int exittexcount;
 	void LoadHeader();
 	void LoadVertex();
@@ -38,7 +39,6 @@ private:
 	void CreateVertexBuffer();
 	void CreateTexture();
 	void CreateMaterialBuffer();
-	void CreateBoneMatrixBuffer(std::shared_ptr<PMDController>& ctrl);
 
 	void CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	void CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev);

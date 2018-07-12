@@ -13,7 +13,6 @@ public:
 	LightObject();
 	virtual ~LightObject();
 
-	virtual void SetLight(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, int rootparamindex = 2) = 0;
 	std::shared_ptr<ConstantBufferObject>& GetLightBuffer();
 protected:
 	DirectX::XMFLOAT3 mPos;//ç¿ïW

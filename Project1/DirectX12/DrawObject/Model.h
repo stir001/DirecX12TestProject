@@ -33,7 +33,7 @@ public:
 	std::unique_ptr<IndexBufferObject>& GetIndexBuffer() const;
 	std::unique_ptr<VertexBufferObject>& GetVertexBuffer() const;
 	std::vector<std::shared_ptr<TextureObject>>& GetTextureObjects() const;
-	std::unique_ptr<ConstantBufferObject>& GetMaterialBuffer() const;
+	std::shared_ptr<ConstantBufferObject>& GetMaterialBuffer() const;
 
 	const std::string& GetModelName() const;
 	const std::string& GetModelPath() const;
@@ -42,7 +42,7 @@ protected:
 	std::unique_ptr<VertexBufferObject> mVertexBuffer;
 	unsigned int mTexturecount;
 	std::vector<std::shared_ptr<TextureObject>> mTextureObjects;
-	std::unique_ptr<ConstantBufferObject> mMaterialBuffer;
+	std::shared_ptr<ConstantBufferObject> mMaterialBuffer;
 	Dx12Material* mD12mat;
 
 	std::string mModelName;

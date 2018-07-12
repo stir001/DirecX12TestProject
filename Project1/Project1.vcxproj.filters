@@ -13,7 +13,7 @@
     <FxCompile Include="DirectX12\Shader\Primitive3D.hlsl">
       <Filter>DirectX12\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="DirectX12\Shader\Shader.hlsl">
+    <FxCompile Include="DirectX12\Shader\PMDShader.hlsl">
       <Filter>DirectX12\Shader</Filter>
     </FxCompile>
   </ItemGroup>
@@ -23,16 +23,16 @@
       <Filter>DirectX12\Animation</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\AdditionalConstatntBuffer.cpp">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Util\CharToWChar.cpp">
       <Filter>DirectX12\Util</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\ConstantBufferObject.cpp">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\DepthBufferObject.cpp">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\DrawObject\DrawObjectController.cpp">
       <Filter>DirectX12\DrawObject\Base</Filter>
@@ -41,7 +41,7 @@
       <Filter>DirectX12\DrawObject\Base</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\Dx12BufferObject.cpp">
-      <Filter>DirectX12\Buffer\Base</Filter>
+      <Filter>DirectX12\Animation\Buffer\Base</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\ViewDesc\Dx12BufferViewDesc.cpp">
       <Filter>DirectX12\BufferViewDesc\Base</Filter>
@@ -101,7 +101,7 @@
       <Filter>DirectX12\DrawObject\2D</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\IndexBufferObject.cpp">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp">
       <Filter>DirectX12\DrawObject\Primitive</Filter>
@@ -128,7 +128,7 @@
       <Filter>DirectX12\RenderingPath\Base</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\RendertargetObject.cpp">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp">
       <Filter>DirectX12\Rootsignature</Filter>
@@ -140,7 +140,7 @@
       <Filter>DirectX12\Shader</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\ShaderResourceObject.cpp">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\SwapChain\SwapChainObject.cpp">
       <Filter>DirectX12\SwapChain</Filter>
@@ -152,7 +152,7 @@
       <Filter>DirectX12\Texture</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\VertexBufferObject.cpp">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp">
       <Filter>DirectX12\WIC</Filter>
@@ -196,16 +196,16 @@
       <Filter>DirectX12\Animation</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\AdditionalConstatntBuffer.h">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Util\CharToWChar.h">
       <Filter>DirectX12\Util</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\ConstantBufferObject.h">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\DepthBufferObject.h">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\DrawObject\DrawObjectController.h">
       <Filter>DirectX12\DrawObject\Base</Filter>
@@ -214,7 +214,7 @@
       <Filter>DirectX12\DrawObject\Base</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\Dx12BufferObject.h">
-      <Filter>DirectX12\Buffer\Base</Filter>
+      <Filter>DirectX12\Animation\Buffer\Base</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\ViewDesc\Dx12BufferViewDesc.h">
       <Filter>DirectX12\BufferViewDesc\Base</Filter>
@@ -274,7 +274,7 @@
       <Filter>DirectX12\DrawObject\2D</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\IndexBufferObject.h">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h">
       <Filter>DirectX12\DrawObject\Primitive</Filter>
@@ -301,7 +301,7 @@
       <Filter>DirectX12\RenderingPath\Base</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\RendertargetObject.h">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h">
       <Filter>DirectX12\Rootsignature</Filter>
@@ -313,7 +313,7 @@
       <Filter>DirectX12\Shader</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\ShaderResourceObject.h">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\SwapChain\SwapChainObject.h">
       <Filter>DirectX12\SwapChain</Filter>
@@ -325,7 +325,7 @@
       <Filter>DirectX12\Texture</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\VertexBufferObject.h">
-      <Filter>DirectX12\Buffer</Filter>
+      <Filter>DirectX12\Animation\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h">
       <Filter>DirectX12\WIC</Filter>
@@ -362,9 +362,6 @@
     <Filter Include="DirectX12\Animation">
       <UniqueIdentifier>{9ac53c54-2b04-495f-92a3-67250509e14a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DirectX12\Buffer">
-      <UniqueIdentifier>{aba2f37c-b849-498c-9cb3-b191b88a1d0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DirectX12\Shader">
       <UniqueIdentifier>{044c99dc-877c-4a06-88d2-60ec49c3741d}</UniqueIdentifier>
     </Filter>
@@ -376,9 +373,6 @@
     </Filter>
     <Filter Include="DirectX12\DrawObject\Base">
       <UniqueIdentifier>{6ce7509e-7332-4cc2-b4f5-be464b2fdf73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectX12\Buffer\Base">
-      <UniqueIdentifier>{4ba3cf19-0ad4-4f78-ab38-b3c4e2e7cf03}</UniqueIdentifier>
     </Filter>
     <Filter Include="DirectX12\BufferViewDesc">
       <UniqueIdentifier>{9673c0d2-b00b-4339-ac64-bcbd3f7533bf}</UniqueIdentifier>
@@ -433,6 +427,12 @@
     </Filter>
     <Filter Include="DirectX12\Animation\VMD">
       <UniqueIdentifier>{2a395652-faa4-4990-80e8-618c086de9d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Animation\Buffer">
+      <UniqueIdentifier>{aba2f37c-b849-498c-9cb3-b191b88a1d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Animation\Buffer\Base">
+      <UniqueIdentifier>{4ba3cf19-0ad4-4f78-ab38-b3c4e2e7cf03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
