@@ -125,6 +125,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DirectX12\Animation\Animation.cpp" />
+    <ClCompile Include="DirectX12\Animation\AnimationPlayer.cpp" />
     <ClCompile Include="DirectX12\Animation\AnimationPlayerManager.cpp" />
     <ClCompile Include="DirectX12\Animation\VMD\VMDLoader.cpp" />
     <ClCompile Include="DirectX12\Animation\VMD\VMDMotion.cpp" />
@@ -147,6 +149,7 @@
     <ClCompile Include="DirectX12\DrawObject\Image\ImageControllerStructure.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\ImageObject.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\Loader\ImageLoader.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\Model.cpp" />
     <ClCompile Include="DirectX12\DrawObject\PMD\PMDController.cpp" />
     <ClCompile Include="DirectX12\DrawObject\PMD\PMDLoader.cpp" />
     <ClCompile Include="DirectX12\DrawObject\PMD\PMDModel.cpp" />
@@ -154,6 +157,8 @@
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp" />
     <ClCompile Include="DirectX12\Input\DxInput.cpp" />
+    <ClCompile Include="DirectX12\Light\DirectionalLight.cpp" />
+    <ClCompile Include="DirectX12\Light\LightObject.cpp" />
     <ClCompile Include="DirectX12\Master\Dx12Ctrl.cpp" />
     <ClCompile Include="DirectX12\Master\NeedCall.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp" />
@@ -255,6 +260,7 @@
     <ClInclude Include="DirectX12\DrawObject\Image\ImageControllerStructure.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\ImageObject.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\Loader\ImageLoader.h" />
+    <ClInclude Include="DirectX12\DrawObject\Model.h" />
     <ClInclude Include="DirectX12\DrawObject\PMD\PMDController.h" />
     <ClInclude Include="DirectX12\DrawObject\PMD\PMDLoader.h" />
     <ClInclude Include="DirectX12\DrawObject\PMD\PMDModel.h" />
@@ -262,6 +268,8 @@
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h" />
     <ClInclude Include="DirectX12\Input\DxInput.h" />
+    <ClInclude Include="DirectX12\Light\DirectionalLight.h" />
+    <ClInclude Include="DirectX12\Light\LightObject.h" />
     <ClInclude Include="DirectX12\Master\Dx12Ctrl.h" />
     <ClInclude Include="DirectX12\Master\Dx12ResultCheckDefine.h" />
     <ClInclude Include="DirectX12\Master\NeedCall.h" />

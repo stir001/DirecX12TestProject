@@ -6,7 +6,7 @@ class Dx12ConstantBufferViewDesc :
 public:
 	Dx12ConstantBufferViewDesc(D3D12_GPU_VIRTUAL_ADDRESS gpuVirtualAddress, UINT sizeInBytes, unsigned int elementCount);
 	~Dx12ConstantBufferViewDesc();
-	void CreateView(Microsoft::WRL::ComPtr<ID3D12Device>& dev, D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle, 
+	void CreateView(const Microsoft::WRL::ComPtr<ID3D12Device>& dev, D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle, 
 		D3D12_GPU_DESCRIPTOR_HANDLE& gpuHandle, Microsoft::WRL::ComPtr<ID3D12Resource> resource);
 
 	unsigned int GetViewDescCount() const;

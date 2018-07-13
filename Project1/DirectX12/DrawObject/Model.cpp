@@ -24,11 +24,11 @@ Model::~Model()
 		delete mD12mat;
 		mD12mat = nullptr;
 	}
-	for (auto& texObj : mTextureObjectects)
+	for (auto& texObj : mTextureObjects)
 	{
 		TextureLoader::Instance()->Release(texObj->GetFilePath());
 	}
-	mTextureObjectects.clear();
+	mTextureObjects.clear();
 }
 
 void Model::SetIndexBuffer(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList) const
@@ -41,24 +41,24 @@ void Model::SetVertexBuffer(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandLi
 	mVertexBuffer->SetBuffer(cmdList);
 }
 
-std::unique_ptr<IndexBufferObject>& Model::GetIndexBuffer() const
+std::shared_ptr<IndexBufferObject> Model::GetIndexBuffer() const
 {
 	return mIndexBuffer;
 }
 
-std::unique_ptr<VertexBufferObject>& Model::GetVertexBuffer() const
+std::shared_ptr<VertexBufferObject> Model::GetVertexBuffer() const
 {
 	return mVertexBuffer;
 }
 
-std::vector<std::shared_ptr<TextureObject>>& Model::GetTextureObjects() const
+std::vector<std::shared_ptr<TextureObject>> Model::GetTextureObjects() const
 {
 	return mTextureObjects;
 }
 
-std::shared_ptr<ConstantBufferObject>& Model::GetMaterialBuffer() const
+std::shared_ptr<ConstantBufferObject> Model::GetMaterialBuffer() const
 {
-	return mMatarialBuffer
+	return mMaterialBuffer;
 }
 
 const std::string& Model::GetModelName() const

@@ -30,16 +30,16 @@ public:
 
 	void SetIndexBuffer(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList) const;
 	void SetVertexBuffer(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList) const;
-	std::unique_ptr<IndexBufferObject>& GetIndexBuffer() const;
-	std::unique_ptr<VertexBufferObject>& GetVertexBuffer() const;
-	std::vector<std::shared_ptr<TextureObject>>& GetTextureObjects() const;
-	std::shared_ptr<ConstantBufferObject>& GetMaterialBuffer() const;
+	std::shared_ptr<IndexBufferObject> GetIndexBuffer() const;
+	std::shared_ptr<VertexBufferObject> GetVertexBuffer() const;
+	std::vector<std::shared_ptr<TextureObject>> GetTextureObjects() const;
+	std::shared_ptr<ConstantBufferObject> GetMaterialBuffer() const;
 
 	const std::string& GetModelName() const;
 	const std::string& GetModelPath() const;
 protected:
-	std::unique_ptr<IndexBufferObject> mIndexBuffer;
-	std::unique_ptr<VertexBufferObject> mVertexBuffer;
+	std::shared_ptr<IndexBufferObject> mIndexBuffer;
+	std::shared_ptr<VertexBufferObject> mVertexBuffer;
 	unsigned int mTexturecount;
 	std::vector<std::shared_ptr<TextureObject>> mTextureObjects;
 	std::shared_ptr<ConstantBufferObject> mMaterialBuffer;

@@ -181,6 +181,21 @@
     <ClCompile Include="DirectX12\Animation\VMD\VMDPlayer.cpp">
       <Filter>DirectX12\Animation\VMD</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX12\Animation\Animation.cpp">
+      <Filter>DirectX12\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Animation\AnimationPlayer.cpp">
+      <Filter>DirectX12\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Model.cpp">
+      <Filter>DirectX12\DrawObject\3D\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Light\LightObject.cpp">
+      <Filter>DirectX12\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Light\DirectionalLight.cpp">
+      <Filter>DirectX12\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX12\d3dx12.h">
@@ -354,6 +369,15 @@
     <ClInclude Include="DirectX12\Animation\VMD\VMDMotion.h">
       <Filter>DirectX12\Animation\VMD</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Model.h">
+      <Filter>DirectX12\DrawObject\3D\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Light\LightObject.h">
+      <Filter>DirectX12\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Light\DirectionalLight.h">
+      <Filter>DirectX12\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectX12">
@@ -433,6 +457,12 @@
     </Filter>
     <Filter Include="DirectX12\Animation\Buffer\Base">
       <UniqueIdentifier>{4ba3cf19-0ad4-4f78-ab38-b3c4e2e7cf03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject\3D\Base">
+      <UniqueIdentifier>{bc4f5fc9-ed1d-4383-9c77-cd6a84f565f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Light">
+      <UniqueIdentifier>{722ee01c-82ab-44c8-9c6a-a6b9b53cae8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ public:
 	Dx12DepthStencilViewDesc(DXGI_FORMAT format);
 	~Dx12DepthStencilViewDesc();
 
-	void CreateView(Microsoft::WRL::ComPtr<ID3D12Device>& dev, D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle,
+	void CreateView(const Microsoft::WRL::ComPtr<ID3D12Device>& dev, D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE& gpuHandle, Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr);
 private:
 	D3D12_DEPTH_STENCIL_VIEW_DESC mDsvDesc;
