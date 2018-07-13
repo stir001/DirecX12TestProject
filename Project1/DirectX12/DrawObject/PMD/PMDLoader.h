@@ -19,7 +19,6 @@ private:
 	std::shared_ptr<DirectionalLight> mLight;
 	std::map<std::string, std::shared_ptr<PMDModel>> mModels;
 	std::shared_ptr<PMDModel> mLoadingmodel;
-	int exittexcount;
 	void LoadHeader();
 	void LoadVertex();
 	void LoadIndex();

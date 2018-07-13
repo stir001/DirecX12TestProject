@@ -17,7 +17,7 @@ void Dx12ConstantBufferViewDesc::CreateView(const Microsoft::WRL::ComPtr<ID3D12D
 	UINT incrementSize = dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	for (unsigned int i = 0; i < mElementCount; ++i)
 	{
-		desc.BufferLocation = mCbvView.BufferLocation + i * incrementSize;
+		desc.BufferLocation = mCbvView.BufferLocation + i * 256;
 		dev->CreateConstantBufferView(&desc, cpuhandle);
 		cpuhandle.ptr += incrementSize;
 		gpuHandle.ptr += incrementSize;

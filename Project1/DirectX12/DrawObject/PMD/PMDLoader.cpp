@@ -102,7 +102,6 @@ void PMDLoader::LoadIndex()
 
 void PMDLoader::LoadMaterial()
 {
-	exittexcount = 0;
 	unsigned int materialcount = 0;
 	mFp->LoadFile(&materialcount);
 	mLoadingmodel->mMaterials.resize(materialcount);
@@ -120,7 +119,6 @@ void PMDLoader::LoadMaterial()
 		mFp->LoadFile(&m.texturePath[0], sizeof(m.texturePath));
 		if (m.texturePath[0] != 0)
 		{
-			exittexcount++;
 			auto itr = std::find_if(texpaths.begin(), texpaths.end(), [&](char* tpath) {return strcmp(tpath , m.texturePath) == 0; });
 			if (itr == texpaths.end())
 			{
@@ -297,19 +295,12 @@ void PMDLoader::CreateVertexBuffer()
 
 void PMDLoader::CreateTexture()
 {
-	DX12CTRL_INSTANCE
-	mLoadingmodel->mTextureObjects.resize(exittexcount);
-	for (unsigned int i = 0;i < mLoadingmodel->mMaterials.size();i++)
+	mLoadingmodel->mTextureObjects.resize(mLoadingmodel->mTexturecount);
+	for (auto& mat : mLoadingmodel->mMaterials)
 	{
-		if (mLoadingmodel->mMaterials[i].texid == -1) continue;
-		std::wstring mPath;
-		mPath.resize(mRelativePath.length() + 20);
-		for (unsigned int i = 0; i < mRelativePath.length(); i++)
-		{
-			mPath[i] = mRelativePath[i];
-		}
-		size_t num;
-		mbstowcs_s(&num, &mPath[mPath.length() - 20], 20, &mLoadingmodel->mMaterials[i].texturePath[0], 20);
+		if (mat.texid == -1) continue;
+		std::string loadPath = mRelativePath + mat.texturePath;
+		mLoadingmodel->mTextureObjects[mat.texid] = TextureLoader::Instance()->LoadTexture(loadPath);
 	}
 }
 

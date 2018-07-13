@@ -433,23 +433,6 @@ UINT64 Dx12Ctrl::GetFenceValue() const
 	return mFenceValue;
 }
 
-//Microsoft::WRL::ComPtr<ID3D12RootSignature> Dx12Ctrl::GetRootSignature(int index)
-//{
-//	return mRootsignature[index]->GetRootSignature();
-//}
-
-
-//Microsoft::WRL::ComPtr<ID3D12PipelineState> Dx12Ctrl::GetPipelineState(PSOIndex index)
-//{
-//	return mPipelinestateObjects[index]->GetPipelineState();
-//}
-
-D3D12_SHADER_BYTECODE Dx12Ctrl::GetShader(ShaderIndex index)
-{
-	return CD3DX12_SHADER_BYTECODE(mShaders[index].Get());
-}
-
-
 void Dx12Ctrl::CmdQueueSignal()
 {
 	mCmdQueue->Signal(mFence.Get(), ++mFenceValue);

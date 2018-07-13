@@ -3,6 +3,7 @@
 #include "File.h"
 #include "PipelineStateObject.h"
 #include <wpframework.h>
+#include <algorithm>
 
 DrawObjectLoader::DrawObjectLoader() :mPipelinestate(nullptr), mRootsignature(nullptr)
 {
@@ -16,14 +17,9 @@ DrawObjectLoader::~DrawObjectLoader()
 
 void DrawObjectLoader::GetRelativePath(const std::string& path)
 {
-	mRelativePath.resize(path.size());
-	size_t num;
-	mbstowcs_s(&num, &mRelativePath[0], mRelativePath.size(), &path[0], mRelativePath.size() - 1);
-	while (mRelativePath.size())
-	{
-		if (mRelativePath.back() == '/' || mRelativePath.back() == '\\') break;
-		mRelativePath.pop_back();
-	}
+	size_t length = path.rfind('/') + 1;
+	mRelativePath.resize(length);
+	std::copy(path.begin(), path.begin() + length, mRelativePath.begin());
 }
 
 void DrawObjectLoader::SetRenderingCommnadList(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)

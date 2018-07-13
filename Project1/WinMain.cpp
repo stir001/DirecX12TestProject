@@ -52,9 +52,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	//PrimitiveManager mgr;
 
-
-	PMDLoader loader;
-	std::shared_ptr<PMDController> pmdContrl = loader.Load(PMD_MODEL_PATH2);
+	
+	std::shared_ptr<PMDLoader> loader(new PMDLoader());
+	std::shared_ptr<PMDController> pmdContrl = loader->Load(PMD_MODEL_PATH2);
 	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
 
 	pmdContrl->SetLight(dirLight);
@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//mgr.CreatePlane(pos, 50, 50, normal);
 	//mgr.SetLightObject(dirLight);
 
-	auto camera = Dx12Ctrl::Instance()->GetCamera();
+	auto& camera = Dx12Ctrl::Instance()->GetCamera();
 	DxInput input;
 
 	while (ProcessMessage()) {
@@ -75,11 +75,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		camera->DefaultMove(input);
 
-		/*pmdContrl->Draw();*/
+		pmdContrl->Draw();
 		//mgr.Draw();
 
 		CallEndPerGameLoop();
 	}
+
+	camera = nullptr;
+	dirLight = nullptr;
+	pmdContrl = nullptr;
+	loader = nullptr;
+
 	Dx12Ctrl::Instance()->Release();
 	Dx12Ctrl::Destroy();
 	

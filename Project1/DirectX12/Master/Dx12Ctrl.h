@@ -11,11 +11,7 @@
 #include <cassert>
 #endif // _DEBUG
 
-
-
 #define DX12CTRL_INSTANCE Dx12Ctrl* d12 = Dx12Ctrl::Instance();
-
-
 
 class SwapChainObject;
 class DescriptorHeapManager;
@@ -32,30 +28,30 @@ namespace DirectX
  struct XMFLOAT2;
 };
 
-enum PSOIndex
-{
-	pso_notTex,//textureなしのポリゴン描画用(3Dモデル)
-	pso_exitTex,//textureありのポリゴン描画用(3Dモデル)
-	pso_primitive,//プリミティブ描画
-	pso_max
-};
-
-enum RootSignatureIndex
-{
-	rsi_pmd,
-	rsi_prm,
-	rsi_max
-};
-
-enum ShaderIndex
-{
-	si_VS_basic,
-	si_PS_notTex,
-	si_PS_exitTex,
-	si_VS_primitive,
-	si_PS_primitive,
-	si_max
-};
+//enum PSOIndex
+//{
+//	pso_notTex,//textureなしのポリゴン描画用(3Dモデル)
+//	pso_exitTex,//textureありのポリゴン描画用(3Dモデル)
+//	pso_primitive,//プリミティブ描画
+//	pso_max
+//};
+//
+//enum RootSignatureIndex
+//{
+//	rsi_pmd,
+//	rsi_prm,
+//	rsi_max
+//};
+//
+//enum ShaderIndex
+//{
+//	si_VS_basic,
+//	si_PS_notTex,
+//	si_PS_exitTex,
+//	si_VS_primitive,
+//	si_PS_primitive,
+//	si_max
+//};
 
 class Dx12Ctrl
 {
@@ -89,10 +85,6 @@ public:
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> GetCmdQueue();
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCmdList();
 	Microsoft::WRL::ComPtr<IDXGIFactory4> GetFactory();
-	//Microsoft::WRL::ComPtr<ID3D12RootSignature> GetRootSignature(int index = 0);
-
-	//Microsoft::WRL::ComPtr<ID3D12PipelineState> GetPipelineState(PSOIndex index);
-	D3D12_SHADER_BYTECODE GetShader(ShaderIndex index);
 	std::shared_ptr<DepthBufferObject> GetDepthBuffer() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDepthCpuHandle() const;
 

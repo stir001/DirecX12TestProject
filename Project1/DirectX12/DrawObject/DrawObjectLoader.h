@@ -21,7 +21,7 @@ public:
 	void SetRenderingCommnadList(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
 protected:
 	File* mFp;
-	std::wstring mRelativePath;//相対パス保存用
+	std::string mRelativePath;//相対パス保存用
 
 	ShaderDatas mShader;
 	std::shared_ptr<PipelineStateObject> mPipelinestate;

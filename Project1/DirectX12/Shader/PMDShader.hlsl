@@ -8,7 +8,6 @@
         ", addressU = TEXTURE_ADDRESS_WRAP, addressV = TEXTURE_ADDRESS_WRAP, addressW = TEXTURE_ADDRESS_WRAP)"
 
 Texture2D<float4> tex:register(t0);
-//Texture2D<float> shadowmap:register(t1);
 SamplerState smp:register(s0);
 
 #include "CameraLightcBuffer.hlsl"
