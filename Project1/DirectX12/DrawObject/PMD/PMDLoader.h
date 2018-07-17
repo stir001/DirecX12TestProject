@@ -19,6 +19,10 @@ private:
 	std::shared_ptr<DirectionalLight> mLight;
 	std::map<std::string, std::shared_ptr<PMDModel>> mModels;
 	std::shared_ptr<PMDModel> mLoadingmodel;
+	ShaderDatas mSecondShader;
+	std::shared_ptr<RootSignatureObject> mSecondRootsiganture;
+	std::shared_ptr<PipelineStateObject> mSecondPipelineState;
+
 	void LoadHeader();
 	void LoadVertex();
 	void LoadIndex();

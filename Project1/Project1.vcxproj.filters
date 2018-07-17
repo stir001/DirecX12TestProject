@@ -16,6 +16,9 @@
     <FxCompile Include="DirectX12\Shader\PMDShader.hlsl">
       <Filter>DirectX12\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="DirectX12\Shader\PMDexistTexShader.hlsl">
+      <Filter>DirectX12\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp" />

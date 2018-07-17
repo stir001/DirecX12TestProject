@@ -26,7 +26,7 @@ PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<D
 
 	auto texObjs = mModel->GetTextureObjects();
 	std::vector<std::shared_ptr<Dx12BufferObject>> buffers;
-	int constantBufferNum = 3;
+	int constantBufferNum = 4;
 	buffers.reserve(texObjs.size() + constantBufferNum);
 	for (auto& tex : texObjs)
 	{
@@ -52,7 +52,8 @@ void PMDController::Draw()
 	mModel->SetIndexBuffer(mCmdList);
 	mModel->SetVertexBuffer(mCmdList);
 	SetBoneBuffer();
-	mModel->SetMaterialBuffer();//‚±‚Ì’†‚ÅDraw‚Ü‚Å‚â‚é
+	//mModel->SetMaterialBuffer();//‚±‚Ì’†‚ÅDraw‚Ü‚Å‚â‚é
+	SetMaterialBuffer();
 }
 
 void PMDController::SetMotion(std::shared_ptr<VMDMotion> motion)

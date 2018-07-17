@@ -13,7 +13,6 @@ TextureObject::TextureObject()
 
 TextureObject::~TextureObject()
 {
-	mDecodedData.release();
 	mSubresource.pData = nullptr;
 	mShaderResource.reset();
 }

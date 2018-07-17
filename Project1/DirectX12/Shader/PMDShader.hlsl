@@ -1,14 +1,8 @@
 #define PMDRS "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT)" \
-    ", DescriptorTable(SRV(t0), visibility = SHADER_VISIBILITY_PIXEL)" \
 	", DescriptorTable(CBV(b0), visibility = SHADER_VISIBILITY_ALL)" \
 	", DescriptorTable(CBV(b1), visibility = SHADER_VISIBILITY_ALL)" \
 	", DescriptorTable(CBV(b2), visibility = SHADER_VISIBILITY_ALL)" \
     ", DescriptorTable(CBV(b3), visibility = SHADER_VISIBILITY_ALL)" \
-	", StaticSampler(s0, filter = FILTER_MIN_MAG_LINEAR_MIP_POINT"   \
-        ", addressU = TEXTURE_ADDRESS_WRAP, addressV = TEXTURE_ADDRESS_WRAP, addressW = TEXTURE_ADDRESS_WRAP)"
-
-Texture2D<float4> tex:register(t0);
-SamplerState smp:register(s0);
 
 #include "CameraLightcBuffer.hlsl"
 
@@ -60,7 +54,6 @@ Output BasicVS(float3 pos : POSITION , float3 normal : NORMAL, float2 uv : TEXCO
 }
 
 //ピクセルシェーダー
-[RootSignature(PMDRS)]
 float4 BasicPS(Output data) : SV_Target
 {
 	float3 light = dir;
@@ -73,11 +66,6 @@ float4 BasicPS(Output data) : SV_Target
     return float4(color, alpha);
 }
 
-[RootSignature(PMDRS)]
-float4 ExitTexPS(Output data):SV_Target
-{
-    float4 color = tex.Sample(smp, data.uv);
-    return color * dot(data.normal.xyz, -dir) + color * float4(ambient, 1);
-}
+
 
 

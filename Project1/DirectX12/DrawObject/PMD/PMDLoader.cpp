@@ -12,6 +12,7 @@
 #include "TextureLoader.h"
 #include "PipelineStateObject.h"
 #include "DirectionalLight.h"
+#include "ShaderCompiler.h"
 
 #include <d3d12.h>
 #include <algorithm>
@@ -360,10 +361,34 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.HS;
 
 	mPipelinestate.reset(new PipelineStateObject(gpsDesc,dev));
+
+	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mSecondShader.vertexShader.Get());
+	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mSecondShader.pixelShader.Get());
+	gpsDesc.DS;
+	gpsDesc.GS;
+	gpsDesc.HS;
+
+	mSecondPipelineState.reset(new PipelineStateObject(gpsDesc, dev));
+
 }
 
 void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
+	mShader = ShaderCompiler::GetInstance()->CompileShader("DirectX12/Shader/PMDShader.hlsl"
+		, "BasicVS"
+		, "BasicPS"
+		, ""
+		, ""
+		, ""
+		, true);
+
+	mSecondShader = ShaderCompiler::GetInstance()->CompileShader("DirectX12/Shader/PMDexistTexShader.hlsl"
+		, "BasicVS"
+		, "ExitTexPS"
+		, ""
+		, ""
+		, ""
+		, true);
 }
 
 std::string PMDLoader::GetModelName(const std::string & path) const
