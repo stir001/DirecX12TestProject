@@ -21,20 +21,21 @@ const std::string PMDSHADER_PATH = "shader.hlsl";
 
 PMDLoader::PMDLoader():mLight(new DirectionalLight(1,-1,1))
 {
+	Microsoft::WRL::ComPtr<ID3D12Device> dev = Dx12Ctrl::Instance()->GetDev();
+	CreateRootsignature(dev);
+	CreatePipelineState(dev);
 }
 
 PMDLoader::~PMDLoader()
 {
 }
 
-std::shared_ptr<PMDController> PMDLoader::Load(std::string path)
+std::shared_ptr<PMDController> PMDLoader::Load(const std::string& path)
 {
 	auto itr = mModels.find(path);
 	if (itr != mModels.end())
 	{
-		std::shared_ptr<PMDController> controller(new PMDController((*itr).second, mLight, GetModelName(path),
-				Dx12Ctrl::Instance()->GetDev(), mCmdList));
-		return controller;
+		return CreateController((*itr).second, path);
 	}
 	mFp = new File(path);
 	GetRelativePath(path);
@@ -64,7 +65,7 @@ std::shared_ptr<PMDController> PMDLoader::Load(std::string path)
 	CreateTexture();
 	CreateMaterialBuffer();
 
-	std::shared_ptr<PMDController> controller(new PMDController(mLoadingmodel, mLight, GetModelName(path), Dx12Ctrl::Instance()->GetDev(), mCmdList));
+	std::shared_ptr<PMDController> controller = CreateController(mLoadingmodel, path);
 	mLoadingmodel = nullptr;
 	return controller;
 }
@@ -98,7 +99,7 @@ void PMDLoader::LoadIndex()
 	unsigned int indexcount = 0;
 	mFp->LoadFile(&indexcount);
 	mLoadingmodel->mIndices.resize(indexcount);
-	mFp->LoadFile(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(mLoadingmodel->mIndices.size()));
+	mFp->LoadFile(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(mLoadingmodel->mIndices.size()), sizeof(unsigned short));
 }
 
 void PMDLoader::LoadMaterial()
@@ -362,13 +363,14 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 	mPipelinestate.reset(new PipelineStateObject(gpsDesc,dev));
 
-	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mSecondShader.vertexShader.Get());
-	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mSecondShader.pixelShader.Get());
+	gpsDesc.pRootSignature = mSubRootsiganture->GetRootSignature().Get();
+	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mSubShader.vertexShader.Get());
+	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mSubShader.pixelShader.Get());
 	gpsDesc.DS;
 	gpsDesc.GS;
 	gpsDesc.HS;
 
-	mSecondPipelineState.reset(new PipelineStateObject(gpsDesc, dev));
+	mSubPipelineState.reset(new PipelineStateObject(gpsDesc, dev));
 
 }
 
@@ -382,13 +384,29 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 		, ""
 		, true);
 
-	mSecondShader = ShaderCompiler::GetInstance()->CompileShader("DirectX12/Shader/PMDexistTexShader.hlsl"
+	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(), dev));
+
+	mSubShader = ShaderCompiler::GetInstance()->CompileShader("DirectX12/Shader/PMDexistTexShader.hlsl"
 		, "BasicVS"
 		, "ExitTexPS"
 		, ""
 		, ""
 		, ""
 		, true);
+
+	mSubRootsiganture.reset(new RootSignatureObject(mSubShader.rootSignature.Get(), dev));
+}
+
+std::shared_ptr<PMDController> PMDLoader::CreateController(std::shared_ptr<PMDModel>& model, const std::string& path)
+{
+	std::shared_ptr<PMDController> controller(new PMDController(model, mLight, GetModelName(path),
+		Dx12Ctrl::Instance()->GetDev(), mCmdList));
+	controller->SetLight(mLight);
+	controller->SetRootSignature(mRootsignature);
+	controller->SetPipelineState(mPipelinestate);
+	controller->SetSubRootsignature(mSubRootsiganture);
+	controller->SetSubPipeLineState(mSubPipelineState);
+	return controller;
 }
 
 std::string PMDLoader::GetModelName(const std::string & path) const

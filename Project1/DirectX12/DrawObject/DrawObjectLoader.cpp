@@ -2,10 +2,13 @@
 #include "ShaderCompiler.h"
 #include "File.h"
 #include "PipelineStateObject.h"
+#include "RenderingPathManager.h"
 #include <wpframework.h>
 #include <algorithm>
 
-DrawObjectLoader::DrawObjectLoader() :mPipelinestate(nullptr), mRootsignature(nullptr)
+DrawObjectLoader::DrawObjectLoader()
+	:mPipelinestate(nullptr), mRootsignature(nullptr), 
+	mCmdList(RenderingPathManager::Instance()->GetRenderingPathCommandList(0))
 {
 	setlocale(LC_ALL, "japanese");
 }

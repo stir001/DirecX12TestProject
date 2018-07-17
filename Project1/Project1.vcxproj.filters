@@ -381,6 +381,9 @@
     <ClInclude Include="DirectX12\Light\DirectionalLight.h">
       <Filter>DirectX12\Light</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDDataStructure.h">
+      <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectX12">

@@ -1,8 +1,6 @@
 #pragma once
 #include "DrawObjectController.h"
-#include <DirectXMath.h>
-#include <vector>
-#include <memory>
+#include "PMDDataStructure.h"
 
 class PMDModel;
 class ConstantBufferObject;
@@ -44,8 +42,10 @@ private:
 	std::shared_ptr<RootSignatureObject> mSubRootsignature;
 	std::unique_ptr<Dx12DescriptorHeapObject> mDescHeap;
 
-	void SetBoneBuffer();
-	void SetMaterialBuffer();
-	void CreateDescriptorHeap();
+	void DrawWhileSetTable();
+	void SetTexture(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, PMDMaterial& material);
+	void SetMaterial(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int offsetCount);
+	void CreateDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Device>& dev, const std::string& name);
+	void SetConstantBuffers(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
 };
 

@@ -24,20 +24,7 @@ PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<D
 	for (auto& bm : mBoneMatrix) bm = DirectX::XMMatrixIdentity();
 	mVmdPlayer.reset(new VMDPlayer(mModel->mBoneDatas, mModel->mBoneNode, mBoneMatrix));
 
-	auto texObjs = mModel->GetTextureObjects();
-	std::vector<std::shared_ptr<Dx12BufferObject>> buffers;
-	int constantBufferNum = 4;
-	buffers.reserve(texObjs.size() + constantBufferNum);
-	for (auto& tex : texObjs)
-	{
-		buffers.push_back(tex->GetShaderResource());
-	}
-	buffers.push_back(Dx12Ctrl::Instance()->GetCamera()->GetCameraBuffer());
-	buffers.push_back(mDirLight->GetLightBuffer());
-	buffers.push_back(mBoneMatrixBuffer);
-	buffers.push_back(mModel->GetMaterialBuffer());
-	std::string descName = name + "DescriptorHeap";
-	mDescHeap.reset(new Dx12DescriptorHeapObject(descName, dev, buffers, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+	CreateDescriptorHeap(dev, name);
 }
 
 PMDController::~PMDController()
@@ -48,12 +35,12 @@ void PMDController::Draw()
 {
 	mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
 	mCmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
-	//d12->SetCameraBuffer(d12->GetCmdList());
+
 	mModel->SetIndexBuffer(mCmdList);
 	mModel->SetVertexBuffer(mCmdList);
-	SetBoneBuffer();
-	//mModel->SetMaterialBuffer();//‚±‚Ì’†‚ÅDraw‚Ü‚Å‚â‚é
-	SetMaterialBuffer();
+	mDescHeap->SetDescriptorHeap(mCmdList);
+
+	DrawWhileSetTable();
 }
 
 void PMDController::SetMotion(std::shared_ptr<VMDMotion> motion)
@@ -71,40 +58,70 @@ void PMDController::StopMotion()
 	mVmdPlayer->Stop();
 }
 
-void PMDController::SetBoneBuffer()
-{
-	mBoneMatrixBuffer->WriteBuffer(&mBoneMatrix[0], static_cast<unsigned int>(sizeof(mBoneMatrix[0]) * mBoneMatrix.size()));
-	//mBoneMatrixBuffer->SetDescHeap(d12->GetCmdList());
-	//d12->GetCmdList()->SetGraphicsRootDescriptorTable(PMDModel::eROOT_PARAMATER_INDEX_BONE_MATRIX, mBoneMatrixBuffer->GetGPUViewHandle());
-}
-
-void PMDController::SetMaterialBuffer()
+void PMDController::DrawWhileSetTable()
 {
 	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	int offset = 0;
-	mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
+	unsigned int indexOffset = 0;
+	unsigned int offsetCount = 0;
 
-	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle = {};// mTextureDescHeap->GetGPUDescriptorHandleForHeapStart();
-	for (unsigned int i = 0; i < mModel->mMaterials.size(); i++)
+	for (auto& material : mModel->mMaterials)
 	{
-		if (mModel->mMaterials[i].texid != -1)
+		if (material.texid != -1)
 		{
-			mCmdList->SetPipelineState(mSubPipeline->GetPipelineState().Get());
-			if (mModel->GetTextureObjects()[mModel->mMaterials[i].texid] != nullptr)
-			{
-				//cmdList->SetDescriptorHeaps(1, mTextureDescHeap.GetAddressOf());
-				//mTextureObjectects[mMaterials[i].texid]->SetBuffer(d12->GetCmdList(), eROOT_PARAMATER_INDEX_TEXTURE);
-			}
+			SetTexture(mCmdList, material);
 		}
 		else
 		{
 			mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
+			mCmdList->SetComputeRootSignature(mRootsignature->GetRootSignature().Get());
 		}
-		//mMaterialBuffer->SetDescHeap(d12->GetCmdList());
-		//cmdList->SetGraphicsRootDescriptorTable(eROOT_PARAMATER_INDEX_MATERIAL, handle);
-		mCmdList->DrawIndexedInstanced(mModel->mMaterials[i].indexCount, 1, offset, 0, 0);
-		offset += mModel->mMaterials[i].indexCount;
+		SetConstantBuffers(mCmdList);
+		SetMaterial(mCmdList, mModel->GetTextureObjects().size(), offsetCount);
+		mCmdList->DrawIndexedInstanced(material.indexCount, 1, indexOffset, 0, 0);
+		indexOffset += material.indexCount;
+		++offsetCount;
 	}
+}
+
+void PMDController::SetTexture(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, PMDMaterial& material)
+{
+	cmdList->SetPipelineState(mSubPipeline->GetPipelineState().Get());
+	cmdList->SetGraphicsRootSignature(mSubRootsignature->GetRootSignature().Get());
+	mDescHeap->SetGprahicsDescriptorTable(cmdList, material.texid, PMDModel::eROOT_PARAMATER_INDEX_TEXTURE);
+}
+
+void PMDController::SetMaterial(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int offsetCount)
+{
+	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex, PMDModel::eROOT_PARAMATER_INDEX_MATERIAL, offsetCount);
+}
+
+void PMDController::CreateDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Device>& dev, const std::string & name)
+{
+	auto texObjs = mModel->GetTextureObjects();
+	std::vector<std::shared_ptr<Dx12BufferObject>> buffers;
+	int constantBufferNum = 4;
+	buffers.reserve(texObjs.size() + constantBufferNum);
+	for (auto& tex : texObjs)
+	{
+		buffers.push_back(tex->GetShaderResource());
+	}
+	buffers.push_back(Dx12Ctrl::Instance()->GetCamera()->GetCameraBuffer());
+	buffers.push_back(mDirLight->GetLightBuffer());
+	buffers.push_back(mBoneMatrixBuffer);
+	buffers.push_back(mModel->GetMaterialBuffer());
+	std::string descName = name + "DescriptorHeap";
+	mDescHeap.reset(new Dx12DescriptorHeapObject(descName, dev, buffers, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+}
+
+void PMDController::SetConstantBuffers(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
+{
+	unsigned int resourceIndex = mModel->GetTextureObjects().size();
+	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex++
+		, PMDModel::eROOT_PARAMATER_INDEX_CAMERA);
+	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex++
+		, PMDModel::eROOT_PARAMATER_INDEX_LIGHT);
+	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex++
+		, PMDModel::eROOT_PARAMATER_INDEX_BONE_MATRIX);
 }
 
 void PMDController::SetPosition(DirectX::XMFLOAT3& p)

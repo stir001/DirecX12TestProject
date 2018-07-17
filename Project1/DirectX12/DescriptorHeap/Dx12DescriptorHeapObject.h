@@ -18,7 +18,7 @@ public:
 	virtual D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHeapHandleStart() const;
 	virtual D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHeapHandleStart() const;
 	virtual void SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList) const;
-	virtual void SetGprahicsDescriptorTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int rootParamaterIndex, unsigned int handleOffset = 0) const;
+	virtual void SetGprahicsDescriptorTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int rootParamaterIndex, unsigned int handleOffsetCount = 0) const;
 protected:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mDescHeap;
 private:

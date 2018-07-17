@@ -270,6 +270,7 @@
     <ClInclude Include="DirectX12\DrawObject\Image\Loader\ImageLoader.h" />
     <ClInclude Include="DirectX12\DrawObject\Model.h" />
     <ClInclude Include="DirectX12\DrawObject\PMD\PMDController.h" />
+    <ClInclude Include="DirectX12\DrawObject\PMD\PMDDataStructure.h" />
     <ClInclude Include="DirectX12\DrawObject\PMD\PMDLoader.h" />
     <ClInclude Include="DirectX12\DrawObject\PMD\PMDModel.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h" />

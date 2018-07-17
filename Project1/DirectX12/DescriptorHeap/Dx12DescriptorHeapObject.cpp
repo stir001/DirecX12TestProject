@@ -91,7 +91,7 @@ void Dx12DescriptorHeapObject::SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID
 	cmdList->SetDescriptorHeaps(1, mDescHeap.GetAddressOf());
 }
 
-void Dx12DescriptorHeapObject::SetGprahicsDescriptorTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int rootParamaterIndex, unsigned int handleOffset) const
+void Dx12DescriptorHeapObject::SetGprahicsDescriptorTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int rootParamaterIndex, unsigned int handleOffsetCount) const
 {
-	cmdList->SetGraphicsRootDescriptorTable(rootParamaterIndex, mResourceBinds[resourceIndex].gpuHandle + (handleOffset * mHeapIncrementSize));
+	cmdList->SetGraphicsRootDescriptorTable(rootParamaterIndex, mResourceBinds[resourceIndex].gpuHandle + (handleOffsetCount * mHeapIncrementSize));
 }
