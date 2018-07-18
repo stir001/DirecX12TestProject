@@ -3,7 +3,7 @@
 
 PipelineStateObject::PipelineStateObject(D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device> dev)
 {
-	dev->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&mPipelineState));
+	HRESULT hr = dev->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&mPipelineState));
 }
 
 PipelineStateObject::PipelineStateObject():mPipelineState(nullptr)

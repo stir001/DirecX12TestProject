@@ -19,7 +19,6 @@ struct Dx12Material
 	float specularity;
 	DirectX::XMFLOAT3 specular;
 	DirectX::XMFLOAT3 ambient;
-	DirectX::XMFLOAT3 offset;
 };
 
 class Model

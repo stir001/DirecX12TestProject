@@ -99,7 +99,7 @@ void PMDLoader::LoadIndex()
 	unsigned int indexcount = 0;
 	mFp->LoadFile(&indexcount);
 	mLoadingmodel->mIndices.resize(indexcount);
-	mFp->LoadFile(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(mLoadingmodel->mIndices.size()), sizeof(unsigned short));
+	mFp->LoadFile(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(mLoadingmodel->mIndices.size()));
 }
 
 void PMDLoader::LoadMaterial()
@@ -285,7 +285,7 @@ void PMDLoader::LoadJoint()
 
 void PMDLoader::CreateIndexBuffer()
 {
-	mLoadingmodel->mIndexBuffer.reset(new IndexBufferObject("PMDIndexBuffer", Dx12Ctrl::Instance()->GetDev(), sizeof(mLoadingmodel->mIndices[0]),static_cast<unsigned int>(mLoadingmodel->mIndices.size())));
+	mLoadingmodel->mIndexBuffer.reset(new IndexBufferObject("PMDIndexBuffer", Dx12Ctrl::Instance()->GetDev(), sizeof(mLoadingmodel->mIndices[0]),static_cast<unsigned int>(mLoadingmodel->mIndices.size()), DXGI_FORMAT_R16_UINT));
 	mLoadingmodel->mIndexBuffer->WriteBuffer(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(sizeof(mLoadingmodel->mIndices[0]) * mLoadingmodel->mIndices.size()));
 }
 
@@ -317,7 +317,6 @@ void PMDLoader::CreateMaterialBuffer()
 		mLoadingmodel->mD12mat[i].ambient = mLoadingmodel->mMaterials[i].ambient;
 		mLoadingmodel->mD12mat[i].specular = mLoadingmodel->mMaterials[i].specular;
 		mLoadingmodel->mD12mat[i].specularity = mLoadingmodel->mMaterials[i].specularity;
-		mLoadingmodel->mD12mat[i].offset = DirectX::XMFLOAT3(0.5, 0.5, 0);
 	}
 
 	mLoadingmodel->mMaterialBuffer->WriteBuffer256Alignment(mLoadingmodel->mD12mat, sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));

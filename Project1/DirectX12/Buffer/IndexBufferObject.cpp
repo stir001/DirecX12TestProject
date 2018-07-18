@@ -3,7 +3,7 @@
 
 #include "d3dx12.h"
 
-IndexBufferObject::IndexBufferObject(const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev, unsigned int elementsize,unsigned int elementcount, DXGI_FORMAT format)
+IndexBufferObject::IndexBufferObject(const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev, unsigned int elementsize, unsigned int elementcount, DXGI_FORMAT format)
 	:Dx12BufferObject(name)
 {
 	mElementCount = elementcount;
@@ -12,7 +12,7 @@ IndexBufferObject::IndexBufferObject(const std::string& name, const Microsoft::W
 	D3D12_RESOURCE_DESC rscDesc;
 	rscDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	rscDesc.Alignment = 0;
-	rscDesc.Width = (elementsize * elementcount + 0xff) & ~0xff;
+	rscDesc.Width = (elementsize * elementcount);
 	rscDesc.Height = 1;
 	rscDesc.DepthOrArraySize = 1;
 	rscDesc.MipLevels = 1;
@@ -48,7 +48,7 @@ IndexBufferObject::IndexBufferObject(const std::string& name, const Microsoft::W
 
 	mIndexBufferView.BufferLocation = mBuffer->GetGPUVirtualAddress();
 	mIndexBufferView.Format = format;
-	mIndexBufferView.SizeInBytes = (elementsize * elementcount + 0xff) & ~0xff;
+	mIndexBufferView.SizeInBytes = (elementsize * elementcount);
 
 }
 
@@ -57,7 +57,7 @@ IndexBufferObject::IndexBufferObject(const std::string& name, Microsoft::WRL::Co
 {
 	mIndexBufferView.BufferLocation = mBuffer->GetGPUVirtualAddress();
 	mIndexBufferView.Format = mBuffer->GetDesc().Format;
-	mIndexBufferView.SizeInBytes = (mElementSize * mElementCount + 0xff) & ~0xff;
+	mIndexBufferView.SizeInBytes = (mElementSize * mElementCount);
 }
 
 IndexBufferObject::~IndexBufferObject()
@@ -67,5 +67,5 @@ IndexBufferObject::~IndexBufferObject()
 void IndexBufferObject::SetBuffer(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList) const
 {
 	cmdList->IASetIndexBuffer(&mIndexBufferView);
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

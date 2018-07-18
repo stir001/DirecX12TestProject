@@ -41,11 +41,14 @@ private:
 	std::shared_ptr<PipelineStateObject> mSubPipeline;
 	std::shared_ptr<RootSignatureObject> mSubRootsignature;
 	std::unique_ptr<Dx12DescriptorHeapObject> mDescHeap;
+	void (PMDController::*mBundleUpdate)();
 
-	void DrawWhileSetTable();
+	void DrawWhileSetTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
 	void SetTexture(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, PMDMaterial& material);
 	void SetMaterial(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList, unsigned int resourceIndex, unsigned int offsetCount);
 	void CreateDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Device>& dev, const std::string& name);
 	void SetConstantBuffers(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
+	void UpdateBundle();
+	void NonUpdateBundle();
 };
 

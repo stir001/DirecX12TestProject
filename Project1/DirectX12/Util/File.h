@@ -20,5 +20,8 @@ template <typename T>
 void File::LoadFile(T* buffer, int readcount, int size)
 {
 	if (size == -1) size = sizeof(*buffer);
-	fread(buffer, size, readcount, mFp);
+	for (int i = 0; i < readcount; ++i)
+	{
+		fread(&buffer[i], size, 1, mFp);
+	}
 };

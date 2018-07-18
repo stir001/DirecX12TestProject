@@ -26,7 +26,7 @@ public:
 	std::string mPath;
 	PMDHeader mHeader;
 	std::vector<PMDVertex> mVertexes;
-	std::vector<unsigned int> mIndices;
+	std::vector<unsigned short> mIndices;
 	std::vector<PMDMaterial> mMaterials;
 	std::vector<PMDBoneData> mBoneDatas;
 	PMDIKList mIkLists;

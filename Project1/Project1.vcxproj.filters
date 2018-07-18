@@ -26,16 +26,16 @@
       <Filter>DirectX12\Animation</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\AdditionalConstatntBuffer.cpp">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Util\CharToWChar.cpp">
       <Filter>DirectX12\Util</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\ConstantBufferObject.cpp">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\DepthBufferObject.cpp">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\DrawObject\DrawObjectController.cpp">
       <Filter>DirectX12\DrawObject\Base</Filter>
@@ -44,7 +44,7 @@
       <Filter>DirectX12\DrawObject\Base</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\Dx12BufferObject.cpp">
-      <Filter>DirectX12\Animation\Buffer\Base</Filter>
+      <Filter>DirectX12\Buffer\Base</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\ViewDesc\Dx12BufferViewDesc.cpp">
       <Filter>DirectX12\BufferViewDesc\Base</Filter>
@@ -104,7 +104,7 @@
       <Filter>DirectX12\DrawObject\2D</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\IndexBufferObject.cpp">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp">
       <Filter>DirectX12\DrawObject\Primitive</Filter>
@@ -131,7 +131,7 @@
       <Filter>DirectX12\RenderingPath\Base</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\RendertargetObject.cpp">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp">
       <Filter>DirectX12\Rootsignature</Filter>
@@ -143,7 +143,7 @@
       <Filter>DirectX12\Shader</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\ShaderResourceObject.cpp">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\SwapChain\SwapChainObject.cpp">
       <Filter>DirectX12\SwapChain</Filter>
@@ -155,7 +155,7 @@
       <Filter>DirectX12\Texture</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Buffer\VertexBufferObject.cpp">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp">
       <Filter>DirectX12\WIC</Filter>
@@ -214,16 +214,16 @@
       <Filter>DirectX12\Animation</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\AdditionalConstatntBuffer.h">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Util\CharToWChar.h">
       <Filter>DirectX12\Util</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\ConstantBufferObject.h">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\DepthBufferObject.h">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\DrawObject\DrawObjectController.h">
       <Filter>DirectX12\DrawObject\Base</Filter>
@@ -232,7 +232,7 @@
       <Filter>DirectX12\DrawObject\Base</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\Dx12BufferObject.h">
-      <Filter>DirectX12\Animation\Buffer\Base</Filter>
+      <Filter>DirectX12\Buffer\Base</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\ViewDesc\Dx12BufferViewDesc.h">
       <Filter>DirectX12\BufferViewDesc\Base</Filter>
@@ -292,7 +292,7 @@
       <Filter>DirectX12\DrawObject\2D</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\IndexBufferObject.h">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h">
       <Filter>DirectX12\DrawObject\Primitive</Filter>
@@ -319,7 +319,7 @@
       <Filter>DirectX12\RenderingPath\Base</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\RendertargetObject.h">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h">
       <Filter>DirectX12\Rootsignature</Filter>
@@ -331,7 +331,7 @@
       <Filter>DirectX12\Shader</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\ShaderResourceObject.h">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\SwapChain\SwapChainObject.h">
       <Filter>DirectX12\SwapChain</Filter>
@@ -343,7 +343,7 @@
       <Filter>DirectX12\Texture</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\VertexBufferObject.h">
-      <Filter>DirectX12\Animation\Buffer</Filter>
+      <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h">
       <Filter>DirectX12\WIC</Filter>
@@ -458,17 +458,17 @@
     <Filter Include="DirectX12\Animation\VMD">
       <UniqueIdentifier>{2a395652-faa4-4990-80e8-618c086de9d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DirectX12\Animation\Buffer">
-      <UniqueIdentifier>{aba2f37c-b849-498c-9cb3-b191b88a1d0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectX12\Animation\Buffer\Base">
-      <UniqueIdentifier>{4ba3cf19-0ad4-4f78-ab38-b3c4e2e7cf03}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DirectX12\DrawObject\3D\Base">
       <UniqueIdentifier>{bc4f5fc9-ed1d-4383-9c77-cd6a84f565f1}</UniqueIdentifier>
     </Filter>
     <Filter Include="DirectX12\Light">
       <UniqueIdentifier>{722ee01c-82ab-44c8-9c6a-a6b9b53cae8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Buffer">
+      <UniqueIdentifier>{aba2f37c-b849-498c-9cb3-b191b88a1d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Buffer\Base">
+      <UniqueIdentifier>{4ba3cf19-0ad4-4f78-ab38-b3c4e2e7cf03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

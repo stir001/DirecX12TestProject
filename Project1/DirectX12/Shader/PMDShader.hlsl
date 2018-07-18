@@ -21,7 +21,6 @@ cbuffer mat:register(b3) {
 	float specularity;
 	float3 specular;
 	float3 ambient;
-	float3 offsetPos;
 }
 
 struct Output {
@@ -41,8 +40,8 @@ Output BasicVS(float3 pos : POSITION , float3 normal : NORMAL, float2 uv : TEXCO
 	float wgt2 = 1.0 - wgt1;
 	Output o;
 	matrix m = bones[boneno[0]] * wgt1 + bones[boneno[1]] * wgt2;
-    o.origpos = mul(m, float4(pos, 1)) + float4(offsetPos, 0);
-    o.pos = mul(c_projection, mul(c_view, (mul(mul(c_world, m), float4(pos, 1)) + mul(c_world, float4(offsetPos, 0)))));
+    o.origpos = mul(m, float4(pos, 1));
+    o.pos = mul(c_projection, mul(c_view, (mul(mul(c_world, m), float4(pos, 1)))));
 	o.svpos = o.pos;
     o.shadowpos = mul(mul(c_projection, mul(c_view, c_world)), float4(pos, 1));
     matrix n = mul(c_world, m);

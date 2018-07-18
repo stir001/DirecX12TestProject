@@ -10,6 +10,7 @@ DrawObjectController::DrawObjectController(const std::string& name, const Micros
 	:mCmdList(cmdList)
 {
 	mBundleCmdList.reset(new Dx12CommandList(name, dev,D3D12_COMMAND_LIST_TYPE_BUNDLE));
+	mBundleCmdList->Close();
 }
 
 DrawObjectController::~DrawObjectController()

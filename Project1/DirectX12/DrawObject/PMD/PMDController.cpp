@@ -14,14 +14,16 @@
 #include "Dx12DescriptorHeapObject.h"
 #include "TextureObject.h"
 #include "Dx12Camera.h"
+#include "Dx12CommandList.h"
 
 PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<DirectionalLight>& dlight, const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
-	: DrawObjectController(name + "BundleCommnadList", dev, cmdList), mModel(model), mDirLight(dlight)
+	: DrawObjectController(name + "BundleCommnadList", dev, cmdList), mModel(model), mDirLight(dlight), mBundleUpdate(&PMDController::UpdateBundle)
 {
 	mBoneMatrixBuffer.reset(new ConstantBufferObject("PMDBoneMatrixBuffer", Dx12Ctrl::Instance()->GetDev(), static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mModel->mBoneDatas.size()), 1));
 	mBoneMatrix.resize(mModel->mBoneDatas.size());
 	for (auto& bm : mBoneMatrix) bm = DirectX::XMMatrixIdentity();
+	mBoneMatrixBuffer->WriteBuffer(&mBoneMatrix[0], static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mModel->mBoneDatas.size()));
 	mVmdPlayer.reset(new VMDPlayer(mModel->mBoneDatas, mModel->mBoneNode, mBoneMatrix));
 
 	CreateDescriptorHeap(dev, name);
@@ -33,14 +35,17 @@ PMDController::~PMDController()
 
 void PMDController::Draw()
 {
-	mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
-	mCmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
-
-	mModel->SetIndexBuffer(mCmdList);
-	mModel->SetVertexBuffer(mCmdList);
+	(this->*mBundleUpdate)();
 	mDescHeap->SetDescriptorHeap(mCmdList);
+	mCmdList->ExecuteBundle(mBundleCmdList->GetCommandList().Get());
+	//mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
+	//mCmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
 
-	DrawWhileSetTable();
+	//mModel->SetIndexBuffer(mCmdList);
+	//mModel->SetVertexBuffer(mCmdList);
+	//mDescHeap->SetDescriptorHeap(mCmdList);
+
+	//DrawWhileSetTable(mCmdList);
 }
 
 void PMDController::SetMotion(std::shared_ptr<VMDMotion> motion)
@@ -58,9 +63,35 @@ void PMDController::StopMotion()
 	mVmdPlayer->Stop();
 }
 
-void PMDController::DrawWhileSetTable()
+void PMDController::SetPosition(DirectX::XMFLOAT3& p)
 {
-	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	mPos = p;
+}
+
+void PMDController::SetRota(DirectX::XMFLOAT3& rota)
+{
+	mRotation = rota;
+}
+
+void PMDController::SetLight(std::shared_ptr<DirectionalLight> dlight)
+{
+	mDirLight = dlight;
+}
+
+void PMDController::SetSubPipeLineState(std::shared_ptr<PipelineStateObject>& pipelineState)
+{
+	mSubPipeline = pipelineState;
+}
+
+void PMDController::SetSubRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganture)
+{
+	mSubRootsignature = rootsiganture;
+}
+
+
+void PMDController::DrawWhileSetTable(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
+{
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	unsigned int indexOffset = 0;
 	unsigned int offsetCount = 0;
 
@@ -68,16 +99,16 @@ void PMDController::DrawWhileSetTable()
 	{
 		if (material.texid != -1)
 		{
-			SetTexture(mCmdList, material);
+			SetTexture(cmdList, material);
 		}
 		else
 		{
-			mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
-			mCmdList->SetComputeRootSignature(mRootsignature->GetRootSignature().Get());
+			cmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
+			cmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
 		}
-		SetConstantBuffers(mCmdList);
-		SetMaterial(mCmdList, mModel->GetTextureObjects().size(), offsetCount);
-		mCmdList->DrawIndexedInstanced(material.indexCount, 1, indexOffset, 0, 0);
+		SetConstantBuffers(cmdList);
+		SetMaterial(cmdList, mModel->GetTextureObjects().size() + 3, offsetCount);
+		cmdList->DrawIndexedInstanced(material.indexCount, 1, indexOffset, 0, 0);
 		indexOffset += material.indexCount;
 		++offsetCount;
 	}
@@ -124,27 +155,22 @@ void PMDController::SetConstantBuffers(const Microsoft::WRL::ComPtr<ID3D12Graphi
 		, PMDModel::eROOT_PARAMATER_INDEX_BONE_MATRIX);
 }
 
-void PMDController::SetPosition(DirectX::XMFLOAT3& p)
+void PMDController::UpdateBundle()
 {
-	mPos = p;
+	mBundleCmdList->Reset();
+	const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& bundle = mBundleCmdList->GetCommandList();
+	bundle->SetPipelineState(mPipelinestate->GetPipelineState().Get());
+	bundle->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
+
+	mModel->SetIndexBuffer(bundle);
+	mModel->SetVertexBuffer(bundle);
+	mDescHeap->SetDescriptorHeap(bundle);
+
+	DrawWhileSetTable(bundle);
+	mBundleCmdList->Close();
 }
 
-void PMDController::SetRota(DirectX::XMFLOAT3& rota)
+void PMDController::NonUpdateBundle()
 {
-	mRotation = rota;
-}
 
-void PMDController::SetLight(std::shared_ptr<DirectionalLight> dlight)
-{
-	mDirLight = dlight;
-}
-
-void PMDController::SetSubPipeLineState(std::shared_ptr<PipelineStateObject>& pipelineState)
-{
-	mSubPipeline = pipelineState;
-}
-
-void PMDController::SetSubRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganture)
-{
-	mSubRootsignature = rootsiganture;
 }
