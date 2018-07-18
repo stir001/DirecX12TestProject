@@ -28,8 +28,10 @@ public:
 	void SetRota(DirectX::XMFLOAT3& rota);
 
 	void SetLight(std::shared_ptr<DirectionalLight> dlight);
-	void SetSubPipeLineState(std::shared_ptr<PipelineStateObject>& pipelineState);
-	void SetSubRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganture);
+	void SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState);
+	void SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsiganture);
+	void SetSubPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState);
+	void SetSubRootSignature(std::shared_ptr<RootSignatureObject>& rootsiganture);
 private:
 	std::shared_ptr<PMDModel> mModel;
 	DirectX::XMFLOAT3 mPos;

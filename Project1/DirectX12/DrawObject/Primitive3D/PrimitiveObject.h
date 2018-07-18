@@ -1,6 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include <vector>
+#include <memory>
 
 struct ID3D12Resource;
 struct D3D12_VERTEX_BUFFER_VIEW;
@@ -8,35 +9,32 @@ class VertexBufferObject;
 
 struct PrimitiveVertex
 {
-	DirectX::XMFLOAT3 pos;
-	DirectX::XMFLOAT3 normal;
-	DirectX::XMFLOAT3 color;
+	DirectX::XMFLOAT4 pos;
+	DirectX::XMFLOAT4 normal;
+	DirectX::XMFLOAT4 color;
 	DirectX::XMFLOAT2 uv;
 	PrimitiveVertex()
 	{
-		pos = DirectX::XMFLOAT3(0, 0, 0);
-		normal = DirectX::XMFLOAT3(0, 0, 0);
-		color = DirectX::XMFLOAT3(1, 1, 1);
-		uv = DirectX::XMFLOAT2(0, 0);
+		pos = { 0, 0, 0, 1};
+		normal = { 0, 0, 0, 1 };
+		color = { 1, 1, 1, 1 };
+		uv = { 0, 0 };
 	}
-	PrimitiveVertex(DirectX::XMFLOAT3& p, DirectX::XMFLOAT3& norm, DirectX::XMFLOAT2& coord)
+
+	PrimitiveVertex(DirectX::XMFLOAT3& inpos, DirectX::XMFLOAT3& innorm, DirectX::XMFLOAT2& inuv)
 	{
-		pos = p;
-		normal = norm;
-		uv = coord;
-		color = DirectX::XMFLOAT3(1, 1, 1);
+		pos = { inpos.x, inpos.y, inpos.z, 1.0f };
+		normal = { innorm.x, innorm.y, innorm.z, 1.0f };
+		uv = inuv;
+		color = { 1, 1, 1, 1 };
 	}
+
 	PrimitiveVertex(float x, float y, float z, float nx, float ny, float nz, float u, float v)
 	{
-		pos.x = x;
-		pos.y = y;
-		pos.z = z;
-		normal.x = nx;
-		normal.y = ny;
-		normal.z = nz;
-		uv.x = u;
-		uv.y = v;
-		color = DirectX::XMFLOAT3(1, 1, 1);
+		pos = { x, y, z, 1.0f };
+		normal = { nx, ny, nz, 1.0f };
+		uv = { u,v };
+		color = { 1, 1, 1, 1 };
 	}
 };
 
@@ -49,6 +47,6 @@ public:
 	virtual void Draw() = 0;
 protected:
 	std::vector<PrimitiveVertex> mVertices;
-	VertexBufferObject* mVertexBuffer;
+	std::shared_ptr<VertexBufferObject> mVertexBuffer;
 };
 

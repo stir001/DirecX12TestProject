@@ -77,7 +77,7 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 
 	int size = sizeof(PrimitiveVertex);
 
-	mVertexBuffer = new VertexBufferObject("PrimitiveVertexBuffer",Dx12Ctrl::Instance()->GetDev(),size, vertexCount);
+	mVertexBuffer.reset(new VertexBufferObject("PrimitiveVertexBuffer",Dx12Ctrl::Instance()->GetDev(),size, vertexCount));
 	mVertexBuffer->WriteBuffer(&mVertices[0], size * vertexCount);
 }
 

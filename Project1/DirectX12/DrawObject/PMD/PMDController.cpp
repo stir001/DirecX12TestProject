@@ -71,13 +71,27 @@ void PMDController::SetLight(std::shared_ptr<DirectionalLight> dlight)
 	mDirLight = dlight;
 }
 
-void PMDController::SetSubPipeLineState(std::shared_ptr<PipelineStateObject>& pipelineState)
+void PMDController::SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState)
 {
+	mBundleUpdate = &PMDController::UpdateBundle;
+	DrawObjectController::SetPipelineState(pipelineState);
+}
+
+void PMDController::SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsiganture)
+{
+	mBundleUpdate = &PMDController::UpdateBundle;
+	DrawObjectController::SetRootSignature(rootsiganture);
+}
+
+void PMDController::SetSubPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState)
+{
+	mBundleUpdate = &PMDController::UpdateBundle;
 	mSubPipeline = pipelineState;
 }
 
-void PMDController::SetSubRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganture)
+void PMDController::SetSubRootSignature(std::shared_ptr<RootSignatureObject>& rootsiganture)
 {
+	mBundleUpdate = &PMDController::UpdateBundle;
 	mSubRootsignature = rootsiganture;
 }
 
@@ -161,6 +175,7 @@ void PMDController::UpdateBundle()
 
 	DrawWhileSetTable(bundle);
 	mBundleCmdList->Close();
+	mBundleUpdate = &PMDController::NonUpdateBundle;
 }
 
 void PMDController::NonUpdateBundle()

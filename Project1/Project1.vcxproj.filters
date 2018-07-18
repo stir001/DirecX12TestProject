@@ -106,20 +106,11 @@
     <ClCompile Include="DirectX12\Buffer\IndexBufferObject.cpp">
       <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp">
-      <Filter>DirectX12\DrawObject\Primitive</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX12\Master\NeedCall.cpp">
       <Filter>DirectX12\Master</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp">
       <Filter>DirectX12\PipelineState</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.cpp">
-      <Filter>DirectX12\DrawObject\Primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp">
-      <Filter>DirectX12\DrawObject\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\Util\Rect.cpp">
       <Filter>DirectX12\Util</Filter>
@@ -198,6 +189,24 @@
     </ClCompile>
     <ClCompile Include="DirectX12\Light\DirectionalLight.cpp">
       <Filter>DirectX12\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp">
+      <Filter>DirectX12\DrawObject\Primitive\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.cpp">
+      <Filter>DirectX12\DrawObject\Primitive\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp">
+      <Filter>DirectX12\DrawObject\Primitive\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.cpp">
+      <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.cpp">
+      <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveManager.cpp">
+      <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,20 +303,11 @@
     <ClInclude Include="DirectX12\Buffer\IndexBufferObject.h">
       <Filter>DirectX12\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h">
-      <Filter>DirectX12\DrawObject\Primitive</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX12\Master\NeedCall.h">
       <Filter>DirectX12\Master</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h">
       <Filter>DirectX12\PipelineState</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.h">
-      <Filter>DirectX12\DrawObject\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h">
-      <Filter>DirectX12\DrawObject\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Util\Rect.h">
       <Filter>DirectX12\Util</Filter>
@@ -383,6 +383,24 @@
     </ClInclude>
     <ClInclude Include="DirectX12\DrawObject\PMD\PMDDataStructure.h">
       <Filter>DirectX12\DrawObject\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h">
+      <Filter>DirectX12\DrawObject\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.h">
+      <Filter>DirectX12\DrawObject\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h">
+      <Filter>DirectX12\DrawObject\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.h">
+      <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.h">
+      <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveManager.h">
+      <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -469,6 +487,12 @@
     </Filter>
     <Filter Include="DirectX12\Buffer\Base">
       <UniqueIdentifier>{4ba3cf19-0ad4-4f78-ab38-b3c4e2e7cf03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject\Primitive\2D">
+      <UniqueIdentifier>{057c3891-ebfc-4c06-aa27-7587ba30cf8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\DrawObject\Primitive\3D">
+      <UniqueIdentifier>{9c0fea9a-152c-470b-b825-7081261aa9ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

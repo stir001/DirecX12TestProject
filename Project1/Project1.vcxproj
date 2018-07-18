@@ -156,6 +156,9 @@
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveManager.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.cpp" />
     <ClCompile Include="DirectX12\Input\DxInput.cpp" />
     <ClCompile Include="DirectX12\Light\DirectionalLight.cpp" />
     <ClCompile Include="DirectX12\Light\LightObject.cpp" />
@@ -276,6 +279,9 @@
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\IPrimitive2D.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DLine.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h" />
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveManager.h" />
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.h" />
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.h" />
     <ClInclude Include="DirectX12\Input\DxInput.h" />
     <ClInclude Include="DirectX12\Light\DirectionalLight.h" />
     <ClInclude Include="DirectX12\Light\LightObject.h" />

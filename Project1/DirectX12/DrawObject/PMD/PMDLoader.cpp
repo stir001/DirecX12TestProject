@@ -403,8 +403,8 @@ std::shared_ptr<PMDController> PMDLoader::CreateController(std::shared_ptr<PMDMo
 	controller->SetLight(mLight);
 	controller->SetRootSignature(mRootsignature);
 	controller->SetPipelineState(mPipelinestate);
-	controller->SetSubRootsignature(mSubRootsiganture);
-	controller->SetSubPipeLineState(mSubPipelineState);
+	controller->SetSubRootSignature(mSubRootsiganture);
+	controller->SetSubPipelineState(mSubPipelineState);
 	return controller;
 }
 
