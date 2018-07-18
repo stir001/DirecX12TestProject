@@ -15,6 +15,7 @@
 #include "TextureObject.h"
 #include "Dx12Camera.h"
 #include "Dx12CommandList.h"
+#include "XMFloatOperators.h"
 
 PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<DirectionalLight>& dlight, const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
@@ -22,7 +23,7 @@ PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<D
 {
 	mBoneMatrixBuffer.reset(new ConstantBufferObject("PMDBoneMatrixBuffer", Dx12Ctrl::Instance()->GetDev(), static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mModel->mBoneDatas.size()), 1));
 	mBoneMatrix.resize(mModel->mBoneDatas.size());
-	for (auto& bm : mBoneMatrix) bm = DirectX::XMMatrixIdentity();
+	for (auto& bm : mBoneMatrix)  DirectX::XMStoreFloat4x4(&bm, DirectX::XMMatrixIdentity());
 	mBoneMatrixBuffer->WriteBuffer(&mBoneMatrix[0], static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mModel->mBoneDatas.size()));
 	mVmdPlayer.reset(new VMDPlayer(mModel->mBoneDatas, mModel->mBoneNode, mBoneMatrix));
 
@@ -38,14 +39,6 @@ void PMDController::Draw()
 	(this->*mBundleUpdate)();
 	mDescHeap->SetDescriptorHeap(mCmdList);
 	mCmdList->ExecuteBundle(mBundleCmdList->GetCommandList().Get());
-	//mCmdList->SetPipelineState(mPipelinestate->GetPipelineState().Get());
-	//mCmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
-
-	//mModel->SetIndexBuffer(mCmdList);
-	//mModel->SetVertexBuffer(mCmdList);
-	//mDescHeap->SetDescriptorHeap(mCmdList);
-
-	//DrawWhileSetTable(mCmdList);
 }
 
 void PMDController::SetMotion(std::shared_ptr<VMDMotion> motion)
@@ -107,7 +100,7 @@ void PMDController::DrawWhileSetTable(const Microsoft::WRL::ComPtr<ID3D12Graphic
 			cmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
 		}
 		SetConstantBuffers(cmdList);
-		SetMaterial(cmdList, mModel->GetTextureObjects().size() + 3, offsetCount);
+		SetMaterial(cmdList, static_cast<unsigned int>(mModel->GetTextureObjects().size() + 3), offsetCount);
 		cmdList->DrawIndexedInstanced(material.indexCount, 1, indexOffset, 0, 0);
 		indexOffset += material.indexCount;
 		++offsetCount;
@@ -146,7 +139,7 @@ void PMDController::CreateDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Devi
 
 void PMDController::SetConstantBuffers(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
 {
-	unsigned int resourceIndex = mModel->GetTextureObjects().size();
+	unsigned int resourceIndex = static_cast<unsigned int>(mModel->GetTextureObjects().size());
 	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex++
 		, PMDModel::eROOT_PARAMATER_INDEX_CAMERA);
 	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex++

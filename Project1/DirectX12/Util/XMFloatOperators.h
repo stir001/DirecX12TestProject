@@ -13,7 +13,6 @@ void operator-=(DirectX::XMFLOAT3& lval, const DirectX::XMFLOAT3& rval);
 
 DirectX::XMFLOAT3 operator*(const DirectX::XMFLOAT3& lval, float rato);
 
-
 DirectX::XMFLOAT3 operator*(float rato, const DirectX::XMFLOAT3& rval);
 
 void operator*=(DirectX::XMFLOAT3& lval, float rato);

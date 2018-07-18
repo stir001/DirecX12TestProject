@@ -55,8 +55,8 @@ Dx12BufferObject::~Dx12BufferObject()
 	D3D12_RECT rect;
 	rect.left = 0;
 	rect.top = 0;
-	rect.right = mBuffer->GetDesc().Width;
-	rect.bottom = mBuffer->GetDesc().Height;
+	rect.right = static_cast<LONG>(mBuffer->GetDesc().Width);
+	rect.bottom = static_cast<LONG>(mBuffer->GetDesc().Height);
 
 	region.pRects = &rect;
 	region.FirstSubresource = 0;

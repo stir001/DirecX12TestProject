@@ -179,5 +179,5 @@ void operator*=(DirectX::XMFLOAT4X4& lval, DirectX::XMFLOAT4X4& rval)
 
 float GetLengthXMFloat3(const DirectX::XMFLOAT3 val)
 {
-	return sqrt(DotXMFloat3(val, val));
+	return sqrtf(DotXMFloat3(val, val));
 }

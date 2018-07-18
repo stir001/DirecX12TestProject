@@ -16,7 +16,7 @@ struct BoneTree;
 class VMDPlayer : public AnimationPlayer
 {
 public:
-	VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMMATRIX>& boneMat);
+	VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMFLOAT4X4>& boneMat);
 	~VMDPlayer();
 
 	void Stop();
@@ -25,17 +25,18 @@ public:
 	void WriteBoneMatrix(std::shared_ptr<ConstantBufferObject>& matrixBuffer);
 	void SetVMD(std::shared_ptr<VMDMotion> vmd);
 private:
-	std::vector<DirectX::XMMATRIX>& currentBoneMatrix;
-	std::map<std::string, std::vector<VMDPose>>* poses;
-	std::vector<PMDBoneData>& boneDatas;
-	BoneTree& boneNode;
-	int frame;
-	int id;
-	bool loopFlag;
+	std::vector<DirectX::XMFLOAT4X4>& mCurrentBoneMatrix;
+	std::map<std::string, std::vector<VMDPose>>* mPoses;
+	std::vector<PMDBoneData>& mBoneDatas;
+	BoneTree& mBoneNode;
+	int mFrame;
+	int mId;
+	bool mIsLoop;
+	void (VMDPlayer::*mUpdate)();
+	void (VMDPlayer::*mEndCheck)();
+
 	void VMDBoneRotation(const std::string& boneName, DirectX::XMMATRIX& boneRotaMatrix);
-	void VMDBoneChildRotation(DirectX::XMMATRIX& parentBoneMatrix,int parentIndex);
-	void (VMDPlayer::*update)();
-	void (VMDPlayer::*endCheck)();
+	void VMDBoneChildRotation(DirectX::XMFLOAT4X4& parentBoneMatrix, int parentIndex);
 
 	void LoopEndCheck();
 	void NonCheck();

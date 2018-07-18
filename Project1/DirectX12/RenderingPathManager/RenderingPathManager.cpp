@@ -143,7 +143,7 @@ void RenderingPathManager::CopyLastPathRenderTarget()
 
 unsigned int RenderingPathManager::GetNumCuurentPath() const
 {
-	return mRenderingPathObjects.size();
+	return static_cast<unsigned int>(mRenderingPathObjects.size());
 }
 
 Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> RenderingPathManager::GetRenderingPathCommandList(unsigned int pathIndex) const
@@ -325,9 +325,9 @@ unsigned int RenderingPathManager::AddRenderingPathObject(const std::string& pat
 
 	mRenderingPathObjects.push_back(addPath);
 
-	SetRenderTargetView(mRenderingPathObjects.size() - 1, resources);
+	SetRenderTargetView(static_cast<unsigned int>(mRenderingPathObjects.size() - 1), resources);
 
-	return mRenderingPathObjects.size() - 1;
+	return static_cast<unsigned int>(mRenderingPathObjects.size() - 1);
 }
 
 unsigned int RenderingPathManager::GetRenderingPathIndex(const std::string& pathName) const
@@ -486,7 +486,7 @@ void RenderingPathManager::SetRenderTargetView(unsigned int pathIndex, const std
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc;
 	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	heapDesc.NodeMask = 0;
-	heapDesc.NumDescriptors = resources.size();
+	heapDesc.NumDescriptors = static_cast<UINT>(resources.size());
 	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescHeap;
@@ -603,7 +603,7 @@ void RenderingPathManager::ExcuteCommnadLists(const std::vector<Microsoft::WRL::
 		t_cmdLists[i] = incmdLists[i].Get();
 		incmdLists[i]->Close();
 	}
-	mCmdQueue->ExecuteCommandLists(t_cmdLists.size(), &t_cmdLists[0]);
+	mCmdQueue->ExecuteCommandLists(static_cast<UINT>(t_cmdLists.size()), &t_cmdLists[0]);
 }
 
 void RenderingPathManager::ExcuteOneCommnadList(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)

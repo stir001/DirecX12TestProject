@@ -25,7 +25,7 @@ HRESULT HlslInclude::Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOI
 	int check = -1;
 	while (true)
 	{
-		check = fread(&data, sizeof(data), 1, fp);
+		check = static_cast<int>(fread(&data, sizeof(data), 1, fp));
 		if (check == 0) break;
 		mStr.push_back(data);
 		bytes += sizeof(data);

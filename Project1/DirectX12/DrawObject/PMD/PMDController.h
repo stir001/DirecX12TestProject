@@ -35,7 +35,7 @@ private:
 	DirectX::XMFLOAT3 mPos;
 	DirectX::XMFLOAT3 mRotation;
 	std::shared_ptr<ConstantBufferObject> mBoneMatrixBuffer;
-	std::vector<DirectX::XMMATRIX> mBoneMatrix;
+	std::vector<DirectX::XMFLOAT4X4> mBoneMatrix;
 	std::shared_ptr<DirectionalLight> mDirLight;
 	std::shared_ptr<VMDPlayer> mVmdPlayer;
 	std::shared_ptr<PipelineStateObject> mSubPipeline;

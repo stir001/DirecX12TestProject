@@ -3,13 +3,14 @@
 #include "PMDModel.h"
 #include "ConstantBufferObject.h"
 #include "AnimationPlayerManager.h"
+#include "XMFloatOperators.h"
 
 #include <algorithm>
 
 using namespace DirectX;
 
-VMDPlayer::VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMMATRIX>& boneMat)
-	:boneDatas(bDatas), boneNode(node), frame(0), update(&VMDPlayer::StopUpdate), endCheck(&VMDPlayer::LoopEndCheck), id(-1),currentBoneMatrix(boneMat)
+VMDPlayer::VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMFLOAT4X4>& boneMat)
+	:mBoneDatas(bDatas), mBoneNode(node), mFrame(0), mUpdate(&VMDPlayer::StopUpdate), mEndCheck(&VMDPlayer::LoopEndCheck), mId(-1),mCurrentBoneMatrix(boneMat)
 {
 }
 
@@ -19,64 +20,62 @@ VMDPlayer::~VMDPlayer()
 
 void VMDPlayer::Update()
 {
-	(this->*update)();
+	(this->*mUpdate)();
 }
 
 void VMDPlayer::SetVMD(std::shared_ptr<VMDMotion> vmd)
 {
-	poses = &vmd->mPoses;
+	mPoses = &vmd->mPoses;
 	//Play();
 }
 
 void VMDPlayer::PlayingUpdate()
 {
 	DirectX::XMMATRIX identity = DirectX::XMMatrixIdentity();
-	unsigned int size = currentBoneMatrix.size();
-	for (unsigned int i = 0; i < size; i++)
+	for (auto& cMat : mCurrentBoneMatrix)
 	{
-		currentBoneMatrix[i] = identity;
+		DirectX::XMStoreFloat4x4(&cMat, identity);
 	}
-	auto bitr = poses->begin();
-	auto eitr = poses->end();
-	for (; bitr != eitr; bitr++)
+
+	for (auto& p : *mPoses)
 	{
-		auto findritr = bitr->second.rbegin();
-		for (; findritr != bitr->second.rend(); findritr++)
+		auto findritr = p.second.rbegin();
+		for (; findritr != p.second.rend(); findritr++)
 		{
-			if (findritr->frameNo <= frame / 2) break;
+			if (findritr->frameNo <= mFrame / 2) break;
 		}
-		if (findritr == bitr->second.rbegin())
+		if (findritr == p.second.rbegin())
 		{
 			
 			XMVECTOR v = XMLoadFloat4(&findritr->quoternion);
 			XMMATRIX q = XMMatrixRotationQuaternion(v);
-			VMDBoneRotation(bitr->first, q);
+			VMDBoneRotation(p.first, q);
 		}
 		else
 		{
-			float t = (static_cast<float>(frame) * 0.5f - static_cast<float>(findritr->frameNo)) / static_cast<float>(findritr.base()->frameNo - findritr->frameNo);
+			float t = (static_cast<float>(mFrame) * 0.5f - static_cast<float>(findritr->frameNo)) / static_cast<float>(findritr.base()->frameNo - findritr->frameNo);
 			XMVECTOR q = XMQuaternionSlerp(XMLoadFloat4(&findritr->quoternion), XMLoadFloat4(&findritr.base()->quoternion), t);
 			DirectX::XMMATRIX mat = XMMatrixRotationQuaternion(q);
-			VMDBoneRotation(bitr->first, mat);
+			VMDBoneRotation(p.first, mat);
 		}
 	}
 	/*for (auto& p : *poses)
 	{
-		auto rit = std::find_if(p.second.rbegin(), p.second.rend(), [&](Pose& pose) {return pose.frameNo <= frame / 2; });
+		auto rit = std::find_if(p.second.rbegin(), p.second.rend(), [&](Pose& pose) {return pose.frameNo <= mFrame / 2; });
 		if (rit == p.second.rbegin())
 		{
 			BoneRotation(p.first, XMMatrixRotationQuaternion(rit->quoternion));
 		}
 		else
 		{
-			float t = (static_cast<float>(frame) * 0.5f - static_cast<float>(rit->frameNo)) / static_cast<float>(rit.base()->frameNo - rit->frameNo);
+			float t = (static_cast<float>(mFrame) * 0.5f - static_cast<float>(rit->frameNo)) / static_cast<float>(rit.base()->frameNo - rit->frameNo);
 			DirectX::XMVECTOR q = DirectX::XMQuaternionSlerp(rit->quoternion, rit.base()->quoternion, t);
 			BoneRotation(p.first, XMMatrixRotationQuaternion(q));
 		}
 	}*/
-	VMDBoneChildRotation(currentBoneMatrix[0], 0);
-	++frame %= 121;
-	(this->*endCheck)();
+	VMDBoneChildRotation(mCurrentBoneMatrix[0], 0);
+	++mFrame %= 121;
+	(this->*mEndCheck)();
 }
 
 void VMDPlayer::StopUpdate()
@@ -88,11 +87,11 @@ void VMDPlayer::VMDBoneRotation(const std::string& boneName, XMMATRIX& boneRotaM
 {
 	PMDBoneData* data = nullptr;
 	unsigned int i = 0;
-	for (; i < boneDatas.size(); i++)
+	for (; i < mBoneDatas.size(); i++)
 	{
-		if (boneDatas[i].boneName == boneName)
+		if (mBoneDatas[i].boneName == boneName)
 		{
-			data = &boneDatas[i];
+			data = &mBoneDatas[i];
 			break;
 		}
 	}
@@ -103,36 +102,36 @@ void VMDPlayer::VMDBoneRotation(const std::string& boneName, XMMATRIX& boneRotaM
 	XMMATRIX boneMat = DirectX::XMMatrixTranslationFromVector(-offsetvec);
 	boneMat *= boneRotaMatrix;
 	boneMat *= DirectX::XMMatrixTranslationFromVector(offsetvec);
-	currentBoneMatrix[i] = boneMat * currentBoneMatrix[i];
+	DirectX::XMStoreFloat4x4(&mCurrentBoneMatrix[i] ,boneMat * DirectX::XMLoadFloat4x4(&mCurrentBoneMatrix[i]));
 }
 
-void VMDPlayer::VMDBoneChildRotation(XMMATRIX& parentBoneMatrix, int parentIndex)
+void VMDPlayer::VMDBoneChildRotation(XMFLOAT4X4& parentBoneMatrix, int parentIndex)
 {
-	for (auto& childIndex : boneNode.node[parentIndex])
+	for (auto& childIndex : mBoneNode.node[parentIndex])
 	{
-		currentBoneMatrix[childIndex] *= parentBoneMatrix;
-		VMDBoneChildRotation(currentBoneMatrix[childIndex], childIndex);
+		mCurrentBoneMatrix[childIndex] *= parentBoneMatrix;
+		VMDBoneChildRotation(mCurrentBoneMatrix[childIndex], childIndex);
 	}
 }
 
 void VMDPlayer::Play(bool flag)
 {
-	loopFlag = flag;
-	update = &VMDPlayer::PlayingUpdate;
-	id = AnimationPlayerManager::Instance()->SetAnimation(this);
-	if (loopFlag)
+	mIsLoop = flag;
+	mUpdate = &VMDPlayer::PlayingUpdate;
+	mId = AnimationPlayerManager::Instance()->SetAnimation(this);
+	if (mIsLoop)
 	{
-		endCheck = &VMDPlayer::NonCheck;
+		mEndCheck = &VMDPlayer::NonCheck;
 	}
 	else
 	{
-		endCheck = &VMDPlayer::LoopEndCheck;
+		mEndCheck = &VMDPlayer::LoopEndCheck;
 	}
 }
 
 void VMDPlayer::LoopEndCheck()
 {
-	if (frame == 0) Stop();
+	if (mFrame == 0) Stop();
 }
 
 void VMDPlayer::NonCheck()
@@ -141,12 +140,12 @@ void VMDPlayer::NonCheck()
 
 void VMDPlayer::Stop()
 {
-	update = &VMDPlayer::StopUpdate;
-	AnimationPlayerManager::Instance()->RemoveAnimation(id);
-	id = -1;
+	mUpdate = &VMDPlayer::StopUpdate;
+	AnimationPlayerManager::Instance()->RemoveAnimation(mId);
+	mId = -1;
 }
 
 void VMDPlayer::WriteBoneMatrix(std::shared_ptr<ConstantBufferObject>& matrixBuffer)
 {
-	matrixBuffer->WriteBuffer(&currentBoneMatrix[0], static_cast<unsigned int>(currentBoneMatrix.size() * sizeof(currentBoneMatrix[0])));
+	matrixBuffer->WriteBuffer(&mCurrentBoneMatrix[0], static_cast<unsigned int>(mCurrentBoneMatrix.size() * sizeof(mCurrentBoneMatrix[0])));
 }

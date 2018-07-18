@@ -56,7 +56,7 @@ void Primitive2DLine::Draw() const
 
 void Primitive2DLine::UpdateBuffer()
 {
-	mVertexBuffer->WriteBuffer(&mVertices[0], sizeof(mVertices[0]) * mVertices.size());
+	mVertexBuffer->WriteBuffer(&mVertices[0], static_cast<unsigned int>(sizeof(mVertices[0]) * mVertices.size()));
 }
 
 void Primitive2DLine::SetScale(float scale)
