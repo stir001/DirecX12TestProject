@@ -6,20 +6,17 @@
 
 class PrimitiveObject;
 class LightObject;
+class PrimitivePlane;
 
-struct ID3D12PipelineState;
-
-class PrimitiveManager
+class PrimitiveCreator
 {
 public:
-	PrimitiveManager();
-	~PrimitiveManager();
+	PrimitiveCreator();
+	~PrimitiveCreator();
 
 	void SetLightObject(std::shared_ptr<LightObject> inlight);
-	void CreatePlane(DirectX::XMFLOAT3 pos, float length, float height, DirectX::XMFLOAT3 normal);
-	void Draw();
+	std::shared_ptr<PrimitivePlane> CreatePlane(DirectX::XMFLOAT3 pos, float length, float height, DirectX::XMFLOAT3 normal);
 private:
-	std::vector<PrimitiveObject*> mObjects;
 	std::shared_ptr<LightObject> mLight;
 };
 

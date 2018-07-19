@@ -3,6 +3,8 @@
 #include "d3dx12.h"
 #include "XMFloatOperators.h"
 #include "VertexBufferObject.h"
+#include "RootSignatureObject.h"
+#include "PipelineStateObject.h"
 
 using namespace DirectX;
 

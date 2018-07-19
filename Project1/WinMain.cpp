@@ -1,7 +1,7 @@
 #include "Dx12Ctrl.h"
 #include "NeedCall.h"
 #include "PMDLoader.h"
-#include "PrimitiveManager.h"
+#include "PrimitiveCreator.h"
 #include "PMDController.h"
 #include "VMDLoader.h"
 #include "Dx12Camera.h"
@@ -50,7 +50,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//FbxLoader::Create();
 	//auto modelData = FbxLoader::Instance()->LoadMesh(FBX_MODEL_PATH2);
 
-	//PrimitiveManager mgr;
+	//PrimitiveCreator mgr;
 
 	
 	std::shared_ptr<PMDLoader> loader(new PMDLoader());

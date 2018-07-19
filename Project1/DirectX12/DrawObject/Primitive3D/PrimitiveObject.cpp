@@ -10,5 +10,14 @@ PrimitiveObject::PrimitiveObject()
 
 PrimitiveObject::~PrimitiveObject()
 {
-	delete mVertexBuffer;
+}
+
+void PrimitiveObject::SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState)
+{
+	mPipelineState = pipelineState;
+}
+
+void PrimitiveObject::SetRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganature)
+{
+	mRootsignature = rootsiganature;
 }

@@ -2,10 +2,13 @@
 #include <DirectXMath.h>
 #include <vector>
 #include <memory>
+#include <wrl.h>
 
-struct ID3D12Resource;
-struct D3D12_VERTEX_BUFFER_VIEW;
+struct ID3D12GraphicsCommandList;
 class VertexBufferObject;
+class PipelineStateObject;
+class RootSignatureObject;
+class Dx12CommnadList;
 
 struct PrimitiveVertex
 {
@@ -45,8 +48,14 @@ public:
 	~PrimitiveObject();
 
 	virtual void Draw() = 0;
+	virtual void SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState);
+	virtual void SetRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganature);
 protected:
 	std::vector<PrimitiveVertex> mVertices;
 	std::shared_ptr<VertexBufferObject> mVertexBuffer;
+	std::shared_ptr<PipelineStateObject> mPipelineState;
+	std::shared_ptr<RootSignatureObject> mRootsignature;
+	std::shared_ptr<Dx12CommnadList> mBundleCommnadList;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCmdList;
 };
 

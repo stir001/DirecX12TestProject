@@ -184,7 +184,7 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 	
 	result = mDev->CreateFence(mFenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&mFence));
 
-	CompileShaders();
+	//CompileShaders();
 
 	mCamera.reset(new Dx12Camera(mWndWidth, mWndHeight));
 	//CreatePipelineStates();
@@ -281,43 +281,7 @@ void  Dx12Ctrl::CreatePipelineStates()
 	//	{ "WEIGHT",0,DXGI_FORMAT_R8_UINT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 }
 	//};
 
-	//CD3DX12_RASTERIZER_DESC rastarizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	//rastarizer.CullMode = D3D12_CULL_MODE_NONE;
-
-	//D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = {};
-	//gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);	//ブレンドするか
-	//gpsDesc.DepthStencilState.DepthEnable = true;			//デプスを使うか
-	//gpsDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	//gpsDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-	//gpsDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	//gpsDesc.DepthStencilState.StencilEnable = false;		//???
-	//gpsDesc.InputLayout.NumElements = sizeof(inputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
-	//gpsDesc.InputLayout.pInputElementDescs = inputDescs;	//要素へのポインタ(先頭?)
-	//gpsDesc.pRootSignature = GetRootSignature().Get();				//ルートシグネチャポインタ
-	//gpsDesc.RasterizerState = rastarizer;	//ラスタライザーの設定
-	//gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//
-	//gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	//gpsDesc.SampleDesc.Count = 1;
-	//gpsDesc.NumRenderTargets = 1;
-	//gpsDesc.SampleMask = 0xffffff;
-	//gpsDesc.NodeMask = 0;
-
-	//gpsDesc.VS = GetShader(si_VS_basic);
-	//gpsDesc.PS = GetShader(si_PS_notTex);
-	//gpsDesc.DS;
-	//gpsDesc.GS;
-	//gpsDesc.HS;
-	//
-	////3Dモデル テクスチャなしpso作成
-	//pso.reset(new PipelineStateObject(gpsDesc, mDev));
-	//mPipelinestateObjects.push_back(pso);
-
-
-	//gpsDesc.PS = GetShader(si_PS_exitTex);
-
-	//pso.reset(new PipelineStateObject(gpsDesc, mDev));
-	//mPipelinestateObjects.push_back(pso);//3Dモデル テクスチャありpso作成
-
+	
 
 	////primitive用pso作成
 	//D3D12_INPUT_ELEMENT_DESC primitiveinputDescs[] = {
@@ -340,72 +304,25 @@ void  Dx12Ctrl::CreatePipelineStates()
 
 void Dx12Ctrl::CompileShaders()
 {
-//	mShaders.resize(si_max);
-//
-//	//PMDSHADER
-//	int size = sizeof("DirectX12/Shader.hlsl");
-//	wchar_t* shaderName;
-//	size_t convert = ToWChar(&shaderName, size, "DirectX12/Shader.hlsl", size);
-//	std::shared_ptr<RootSignatureObject> rsObj;
-//
-//	HlslInclude hlslinculde;
-//
-//	hlslinculde.SetRelativePath(GetRelativePath("DirectX12/Shader.hlsl"));
-//
-//#ifdef _DEBUG
-//	UINT compileflag = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-//	std::function<void(ID3D10Blob*)> outErr = [](ID3D10Blob* err) {
-//		if (err != nullptr)
-//		{
-//		OutputDebugStringA((char*)err->GetBufferPointer());
-//		err->Release();
-//		}
-//	};
-//#else
-//	std::function<void(ID3D10Blob*)> outErr = [](ID3D10Blob* err) {
-//};
-//	UINT compileflag = D3DCOMPILE_ENABLE_STRICTNESS;
-//#endif
-//
-//	ID3D10Blob* err = nullptr;
-//	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
-//		"BasicVS", "vs_5_0", compileflag, 0, &mShaders[si_VS_basic], &err);
-//	outErr(err);
-//
-//	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
-//		"BasicPS", "ps_5_0", compileflag, 0, &mShaders[si_PS_notTex], &err);
-//	outErr(err);
-//
-//	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
-//		"ExitTexPS", "ps_5_0", compileflag, 0, &mShaders[si_PS_exitTex], &err);
-//	outErr(err);
-//
-//	ID3DBlob* rs;
-//	result = D3DGetBlobPart(mShaders[si_VS_basic]->GetBufferPointer(), mShaders[si_VS_basic]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
-//	rsObj.reset(new RootSignatureObject(rs,mDev));
-//	mRootsignature.push_back(rsObj);
-//
-//	rs->Release();
-//
-//	delete(shaderName);
-//	size = sizeof("DirectX12/Primitive3D.hlsl");
-//	convert = ToWChar(&shaderName, size, "DirectX12/Primitive3D.hlsl", size);
-//
-//	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
-//		"PrimitiveVS", "vs_5_0", compileflag, 0, &mShaders[si_VS_primitive], &err);
-//	outErr(err);
-//
-//	result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
-//		"PrimitivePS", "ps_5_0", compileflag, 0, &mShaders[si_PS_primitive], &err);
-//	outErr(err);
-//
-//	result = D3DGetBlobPart(mShaders[si_VS_primitive]->GetBufferPointer(), mShaders[si_VS_primitive]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
-//	rsObj.reset(new RootSignatureObject(rs,mDev));
-//	mRootsignature.push_back(rsObj);
-//
-//	rs->Release();
-//
-//	delete shaderName;
+	//delete(shaderName);
+	//size = sizeof("DirectX12/Primitive3D.hlsl");
+	//convert = ToWChar(&shaderName, size, "DirectX12/Primitive3D.hlsl", size);
+	//
+	//result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+	//	"PrimitiveVS", "vs_5_0", compileflag, 0, &mShaders[si_VS_primitive], &err);
+	//outErr(err);
+	//
+	//result = D3DCompileFromFile(shaderName, nullptr, &hlslinculde,
+	//	"PrimitivePS", "ps_5_0", compileflag, 0, &mShaders[si_PS_primitive], &err);
+	//outErr(err);
+	//
+	//result = D3DGetBlobPart(mShaders[si_VS_primitive]->GetBufferPointer(), mShaders[si_VS_primitive]->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &rs);
+	//rsObj.reset(new RootSignatureObject(rs,mDev));
+	//mRootsignature.push_back(rsObj);
+	//
+	//rs->Release();
+	//
+	//delete shaderName;
 }
 
 Microsoft::WRL::ComPtr<ID3D12CommandAllocator> Dx12Ctrl::GetCmdAllocator()

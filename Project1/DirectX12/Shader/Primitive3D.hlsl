@@ -20,7 +20,7 @@ struct PriOutput
     float4 pos : POSITION0;
     float4 normal : NORMAL;
     float4 color : COLOR;
-    float2 uv : TEXCOORD;
+    //float2 uv : TEXCOORD;
 };
 
 [RootSignature(PRM3DRS)]
@@ -30,7 +30,7 @@ PriOutput PrimitiveVS(float4 pos : POSITION, float4 normal : NORMAL, float4 colo
     po.svpos = mul(mul(c_projection, mul(c_view, c_world)), pos);
     po.pos = po.svpos;
     po.color = color;
-    po.uv = (float2(1, 1) + po.shadowpos.xy * float2(1, -1)) * 0.5;
+   // po.uv = (float2(1, 1) + po.shadowpos.xy * float2(1, -1)) * 0.5;
     po.normal = normal;
     return po;
 }
