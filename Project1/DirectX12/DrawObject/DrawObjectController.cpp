@@ -9,7 +9,7 @@ DrawObjectController::DrawObjectController(const std::string& name, const Micros
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
 	:mCmdList(cmdList)
 {
-	mBundleCmdList.reset(new Dx12CommandList(name, dev,D3D12_COMMAND_LIST_TYPE_BUNDLE));
+	mBundleCmdList.reset(new Dx12CommandList(name, dev, D3D12_COMMAND_LIST_TYPE_BUNDLE));
 	mBundleCmdList->Close();
 }
 

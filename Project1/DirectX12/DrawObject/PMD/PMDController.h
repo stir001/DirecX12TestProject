@@ -1,5 +1,5 @@
 #pragma once
-#include "DrawObjectController.h"
+#include "DrawController3D.h"
 #include "PMDDataStructure.h"
 
 class PMDModel;
@@ -12,7 +12,7 @@ class PipelineStateObject;
 class RootSignatureObject;
 
 class PMDController
-	: public DrawObjectController
+	: public DrawController3D
 {
 	friend class PMDLoader;
 public:
@@ -24,8 +24,6 @@ public:
 	void SetMotion(std::shared_ptr<VMDMotion> motion);
 	void PlayMotion(bool loopFlag = false);
 	void StopMotion();
-	void SetPosition(DirectX::XMFLOAT3& p);
-	void SetRota(DirectX::XMFLOAT3& rota);
 
 	void SetLight(std::shared_ptr<DirectionalLight> dlight);
 	void SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState);
@@ -34,8 +32,6 @@ public:
 	void SetSubRootSignature(std::shared_ptr<RootSignatureObject>& rootsiganture);
 private:
 	std::shared_ptr<PMDModel> mModel;
-	DirectX::XMFLOAT3 mPos;
-	DirectX::XMFLOAT3 mRotation;
 	std::shared_ptr<ConstantBufferObject> mBoneMatrixBuffer;
 	std::vector<DirectX::XMFLOAT4X4> mBoneMatrix;
 	std::shared_ptr<DirectionalLight> mDirLight;

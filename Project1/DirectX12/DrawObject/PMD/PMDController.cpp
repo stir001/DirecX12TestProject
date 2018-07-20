@@ -19,7 +19,7 @@
 
 PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<DirectionalLight>& dlight, const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
-	: DrawObjectController(name + "BundleCommnadList", dev, cmdList), mModel(model), mDirLight(dlight), mBundleUpdate(&PMDController::UpdateBundle)
+	: DrawController3D(name, dev, cmdList), mModel(model), mDirLight(dlight), mBundleUpdate(&PMDController::UpdateBundle)
 {
 	mBoneMatrixBuffer.reset(new ConstantBufferObject("PMDBoneMatrixBuffer", Dx12Ctrl::Instance()->GetDev(), static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mModel->mBoneDatas.size()), 1));
 	mBoneMatrix.resize(mModel->mBoneDatas.size());
@@ -54,16 +54,6 @@ void PMDController::PlayMotion(bool loopFlag)
 void PMDController::StopMotion()
 {
 	mVmdPlayer->Stop();
-}
-
-void PMDController::SetPosition(DirectX::XMFLOAT3& p)
-{
-	mPos = p;
-}
-
-void PMDController::SetRota(DirectX::XMFLOAT3& rota)
-{
-	mRotation = rota;
 }
 
 void PMDController::SetLight(std::shared_ptr<DirectionalLight> dlight)

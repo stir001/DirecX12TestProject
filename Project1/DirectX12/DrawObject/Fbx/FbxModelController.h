@@ -1,5 +1,5 @@
 #pragma once
-#include "DrawObjectController.h"
+#include "DrawController3D.h"
 #include "FbxStructure.h"
 
 #include <vector>
@@ -23,7 +23,7 @@ namespace Fbx
 }
 
 class FbxModelController :
-	public DrawObjectController
+	public DrawController3D
 {
 	friend FbxModelDataConverter;
 public:
@@ -36,19 +36,16 @@ public:
 
 	void Draw();
 	void SetLight(std::shared_ptr<DirectionalLight>& dirlight);
-	void SetPositon(const DirectX::XMFLOAT3& pos);
+
+	/*void SetPositon(const DirectX::XMFLOAT3& pos);
 	void SetScale(float scale);
 	void AddRotaX(float deg);
 	void AddRotaY(float deg);
 	void AddRotaZ(float deg);
-	void SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion);
-
-	///テスト用関数
-	///255に調整した数字を入れる
-	//void SetColor(int r, int g, int b);
+	void SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion);*/
 
 	void SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsignature);
-	void SetPipelineState(std::shared_ptr<PipelineStateObject>& Pipelinestate);
+	void SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelinestate);
 	void SetCommandList(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
 	void SetMotion(std::shared_ptr<FbxMotionData>& motion, bool isLoop = true);
 	void StopMotion() const;
@@ -60,17 +57,17 @@ public:
 private:
 	FbxMotionPlayer* mMotionPlayer;
 	DirectX::XMFLOAT3 mColor;
-	std::shared_ptr<ConstantBufferObject> mModelMatrixBuffer;
+
 
 	std::vector<Fbx::FbxVertexElement> mVertexElements;
 	std::shared_ptr<VertexBufferObject> mCtrlVertexBuffer;
-
-	DirectX::XMFLOAT4X4 mModelMatrix;
-	float mScale;
 	std::shared_ptr<Fbx::FbxModel> mModel;
-	DirectX::XMFLOAT3 mPos;
-	DirectX::XMFLOAT4X4 mRotationMatrix;
-	DirectX::XMFLOAT4 mQuaternion;
+
+	//DirectX::XMFLOAT4X4 mModelMatrix;
+	//float mScale;
+	//DirectX::XMFLOAT3 mPos;
+	//DirectX::XMFLOAT4X4 mRotationMatrix;
+	//DirectX::XMFLOAT4 mQuaternion;
 
 	std::shared_ptr<ConstantBufferObject> mDirLightBuffer;
 	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
@@ -80,7 +77,7 @@ private:
 
 	void (FbxModelController::*mBundleUpdate)();
 
-	void UpdateMatrix();
+	//void UpdateMatrix();
 	void UpdateVertex();
 	void UpdateBundle();
 	void NonBundleUpdate();

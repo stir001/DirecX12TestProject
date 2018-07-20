@@ -25,8 +25,8 @@ FbxModelController::FbxModelController(std::shared_ptr<FbxModel>& model,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList,
 	std::shared_ptr<PipelineStateObject>& pipelinestate,
 	std::shared_ptr<RootSignatureObject>& rootsignature)
-	:DrawObjectController(model->GetModelName() + "Bundle",dev, cmdList) 
-	, mScale(1.0f), mPos(0,0,0),mModel(model), mColor(0.8f, 0.8f, 0.8f)
+	:DrawController3D(model->GetModelName() ,dev, cmdList) 
+	,mModel(model), mColor(0.8f, 0.8f, 0.8f)
 	, mBundleUpdate(&FbxModelController::UpdateBundle)
 {
 	mPipelinestate = pipelinestate;
@@ -89,41 +89,41 @@ void FbxModelController::SetLight(std::shared_ptr<DirectionalLight>& dirlight)
 	mBundleUpdate = &FbxModelController::UpdateBundle;
 }
 
-void FbxModelController::SetPositon(const DirectX::XMFLOAT3& pos)
-{
-	mPos = pos;
-	UpdateMatrix();
-}
-
-void FbxModelController::SetScale(float scale)
-{
-	mScale = scale;
-	UpdateMatrix();
-}
-
-void  FbxModelController::AddRotaX(float deg)
-{
-	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationX(XMConvertToRadians(deg)));
-	UpdateMatrix();
-}
-
-void  FbxModelController::AddRotaY(float deg)
-{
-	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationY(XMConvertToRadians(deg)));
-	UpdateMatrix();
-}
-
-void  FbxModelController::AddRotaZ(float deg)
-{
-	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationZ(XMConvertToRadians(deg)));
-	UpdateMatrix();
-}
-
-void FbxModelController::SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion)
-{
-	mQuaternion = quaternion;
-	UpdateMatrix();
-}
+//void FbxModelController::SetPositon(const DirectX::XMFLOAT3& pos)
+//{
+//	mPos = pos;
+//	UpdateMatrix();
+//}
+//
+//void FbxModelController::SetScale(float scale)
+//{
+//	mScale = scale;
+//	UpdateMatrix();
+//}
+//
+//void  FbxModelController::AddRotaX(float deg)
+//{
+//	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationX(XMConvertToRadians(deg)));
+//	UpdateMatrix();
+//}
+//
+//void  FbxModelController::AddRotaY(float deg)
+//{
+//	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationY(XMConvertToRadians(deg)));
+//	UpdateMatrix();
+//}
+//
+//void  FbxModelController::AddRotaZ(float deg)
+//{
+//	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationZ(XMConvertToRadians(deg)));
+//	UpdateMatrix();
+//}
+//
+//void FbxModelController::SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion)
+//{
+//	mQuaternion = quaternion;
+//	UpdateMatrix();
+//}
 
 void FbxModelController::SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsignature)
 {
@@ -184,18 +184,18 @@ void FbxModelController::UpdateVertex()
 	mCtrlVertexBuffer->WriteBuffer(&mVertexElements[0], sizeof(mVertexElements[0]) * mVertexElements.size());
 }
 
-void FbxModelController::UpdateMatrix()
-{
-	XMMATRIX mat = XMMatrixIdentity();
-	XMVECTOR q = XMLoadFloat4(&mQuaternion);
-	mat *= XMMatrixRotationQuaternion(q);
-	mat *= DirectX::XMLoadFloat4x4(&mRotationMatrix);
-	mat *= XMMatrixScaling(mScale, mScale, mScale);
-	mat *= XMMatrixTranslation(mPos.x, mPos.y, mPos.z);
-	DirectX::XMStoreFloat4x4(&mModelMatrix, mat);
-
-	mModelMatrixBuffer->WriteBuffer256Alignment(&mModelMatrix, sizeof(mModelMatrix), 1);
-}
+//void FbxModelController::UpdateMatrix()
+//{
+//	XMMATRIX mat = XMMatrixIdentity();
+//	XMVECTOR q = XMLoadFloat4(&mQuaternion);
+//	mat *= XMMatrixRotationQuaternion(q);
+//	mat *= DirectX::XMLoadFloat4x4(&mRotationMatrix);
+//	mat *= XMMatrixScaling(mScale, mScale, mScale);
+//	mat *= XMMatrixTranslation(mPos.x, mPos.y, mPos.z);
+//	DirectX::XMStoreFloat4x4(&mModelMatrix, mat);
+//
+//	mModelMatrixBuffer->WriteBuffer256Alignment(&mModelMatrix, sizeof(mModelMatrix), 1);
+//}
 
 void FbxModelController::UpdateBundle()
 {
