@@ -10,7 +10,7 @@ class DrawController3D :
 public:
 	DrawController3D(const std::string& modelName, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
-	~DrawController3D();
+	virtual ~DrawController3D();
 
 	void SetPositon(const DirectX::XMFLOAT3& pos);
 	void SetScale(float scale);

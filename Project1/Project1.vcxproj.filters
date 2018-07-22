@@ -208,6 +208,9 @@
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveCreator.cpp">
       <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\DrawController3D.cpp">
+      <Filter>DirectX12\DrawObject\3D\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX12\d3dx12.h">
@@ -401,6 +404,9 @@
     </ClInclude>
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveCreator.h">
       <Filter>DirectX12\DrawObject\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\DrawController3D.h">
+      <Filter>DirectX12\DrawObject\3D\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

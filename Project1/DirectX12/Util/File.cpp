@@ -1,6 +1,6 @@
 #include "File.h"
 #include <iostream>
-
+#include <cassert>
 
 File::File(std::string path):mFp(nullptr)
 {
@@ -17,6 +17,7 @@ void File::SetFile(const std::string& path)
 {
 	if (mFp != nullptr) Close();
 	fopen_s(&mFp, path.data(), "rb");
+	assert(mFp != nullptr);//nullptr‚È‚çƒGƒ‰[‚ğ“f‚­
 }
 
 void File::SeekFile(int seeksize)
