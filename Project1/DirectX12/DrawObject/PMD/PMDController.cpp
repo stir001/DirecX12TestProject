@@ -104,7 +104,7 @@ void PMDController::DrawWhileSetTable(const Microsoft::WRL::ComPtr<ID3D12Graphic
 			cmdList->SetGraphicsRootSignature(mRootsignature->GetRootSignature().Get());
 		}
 		SetConstantBuffers(cmdList);
-		SetMaterial(cmdList, static_cast<unsigned int>(mModel->GetTextureObjects().size() + 3), offsetCount);
+		SetMaterial(cmdList, static_cast<unsigned int>(mModel->GetTextureObjects().size() + PMDModel::eROOT_PARAMATER_INDEX_MATERIAL), offsetCount);
 		cmdList->DrawIndexedInstanced(material.indexCount, 1, indexOffset, 0, 0);
 		indexOffset += material.indexCount;
 		++offsetCount;
@@ -127,7 +127,7 @@ void PMDController::CreateDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Devi
 {
 	auto texObjs = mModel->GetTextureObjects();
 	std::vector<std::shared_ptr<Dx12BufferObject>> buffers;
-	int constantBufferNum = 4;
+	int constantBufferNum = PMDModel::eROOT_PARAMATER_INDEX_MAX - 1;
 	buffers.reserve(texObjs.size() + constantBufferNum);
 	for (auto& tex : texObjs)
 	{
@@ -136,6 +136,7 @@ void PMDController::CreateDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Devi
 	buffers.push_back(Dx12Ctrl::Instance()->GetCamera()->GetCameraBuffer());
 	buffers.push_back(mDirLight->GetLightBuffer());
 	buffers.push_back(mBoneMatrixBuffer);
+	buffers.push_back(mModelMatrixBuffer);
 	buffers.push_back(mModel->GetMaterialBuffer());
 	std::string descName = name + "DescriptorHeap";
 	mDescHeap.reset(new Dx12DescriptorHeapObject(descName, dev, buffers, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
@@ -150,6 +151,8 @@ void PMDController::SetConstantBuffers(const Microsoft::WRL::ComPtr<ID3D12Graphi
 		, PMDModel::eROOT_PARAMATER_INDEX_LIGHT);
 	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex++
 		, PMDModel::eROOT_PARAMATER_INDEX_BONE_MATRIX);
+	mDescHeap->SetGprahicsDescriptorTable(cmdList, resourceIndex++
+		, PMDModel::eROOT_PARAMATER_INDEX_MODEL_MATRIX);
 }
 
 void PMDController::UpdateBundle()

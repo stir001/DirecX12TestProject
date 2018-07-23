@@ -177,7 +177,12 @@ void operator*=(DirectX::XMFLOAT4X4& lval, DirectX::XMFLOAT4X4& rval)
 	lval = lval * rval;
 }
 
-float GetLengthXMFloat3(const DirectX::XMFLOAT3 val)
+float GetLengthXMFloat3(const DirectX::XMFLOAT3& val)
 {
 	return sqrtf(DotXMFloat3(val, val));
+}
+
+DirectX::XMFLOAT4 StoreToXMFloat4(const DirectX::XMFLOAT3 & val)
+{
+	return DirectX::XMFLOAT4(val.x, val.y, val.z, 1);
 }

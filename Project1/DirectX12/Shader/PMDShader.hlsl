@@ -3,6 +3,7 @@
 	", DescriptorTable(CBV(b1), visibility = SHADER_VISIBILITY_ALL)" \
 	", DescriptorTable(CBV(b2), visibility = SHADER_VISIBILITY_ALL)" \
     ", DescriptorTable(CBV(b3), visibility = SHADER_VISIBILITY_ALL)" \
+    ", DescriptorTable(CBV(b4), visibility = SHADER_VISIBILITY_ALL)" \
 
 #include "CameraLightcBuffer.hlsl"
 
@@ -15,12 +16,18 @@ cbuffer bone : register(b2)
     matrix bones[256];
 }
 
-cbuffer mat:register(b3) {
-	float3 diffuse;
-	float alpha;
-	float specularity;
-	float3 specular;
-	float3 ambient;
+cbuffer aMatrix : register(b3)
+{
+    float4x4 modelMatrix;
+}
+
+cbuffer mat : register(b4)
+{
+    float4 diffuse;
+    float4 specular;
+    float4 ambient;
+    float alpha;
+    float specularity;
 }
 
 struct Output {
@@ -40,8 +47,9 @@ Output BasicVS(float3 pos : POSITION , float3 normal : NORMAL, float2 uv : TEXCO
 	float wgt2 = 1.0 - wgt1;
 	Output o;
 	matrix m = bones[boneno[0]] * wgt1 + bones[boneno[1]] * wgt2;
-    o.origpos = mul(m, float4(pos, 1));
-    o.pos = mul(c_projection, mul(c_view, (mul(mul(c_world, m), float4(pos, 1)))));
+    o.origpos = mul(modelMatrix, mul(m, float4(pos, 1)));
+    o.pos = mul(c_projection, mul(c_view, mul(c_world, mul(modelMatrix, mul(m, float4(pos, 1))))));
+    //o.pos = mul(c_projection, mul(c_view, (mul(c_world,  m), float4(pos, 1))));
 	o.svpos = o.pos;
     o.shadowpos = mul(mul(c_projection, mul(c_view, c_world)), float4(pos, 1));
     matrix n = mul(c_world, m);
@@ -55,14 +63,14 @@ Output BasicVS(float3 pos : POSITION , float3 normal : NORMAL, float2 uv : TEXCO
 //ピクセルシェーダー
 float4 BasicPS(Output data) : SV_Target
 {
-	float3 light = dir;
-	float brightness = dot(data.normal.xyz,-light);
-	float3 vray = data.origpos.xyz - eye.xyz;
-	vray = normalize(vray);
-    float spec = saturate(pow(max(0.0f,dot(normalize(reflect(-light, data.normal.xyz)), -vray)), specularity));
-    float3 color = diffuse * brightness + (specular * spec) + ambient;
+	float4 light = dir;
+	float brightness = dot(data.normal.xyz,-light.xyz);
+    float4 vray = float4(data.origpos.xyz - eye.xyz, 1);
+    vray = float4(normalize(vray.xyz), 1);
+    float spec = saturate(pow(max(0.0f,dot(normalize(reflect(-light.xyz, data.normal.xyz)), -vray.xyz)), specularity));
+    float4 color = diffuse * brightness + (specular * spec) + ambient;
 
-    return float4(color, alpha);
+    return float4(color.xyz, alpha);
 }
 
 

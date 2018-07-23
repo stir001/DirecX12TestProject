@@ -6,10 +6,14 @@ using namespace DirectX;
 DrawController3D::DrawController3D(const std::string& modelName, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList): 
 	DrawObjectController(modelName +"Bundle", dev, cmdList), mScale(1.0f), mPos(0, 0, 0)
+	,mQuaternion{0,0,0,1}
 {
+	DirectX::XMStoreFloat4x4(&mModelMatrix, DirectX::XMMatrixIdentity());
+	DirectX::XMStoreFloat4x4(&mRotationMatrix, DirectX::XMMatrixIdentity());
 	std::string cbufferName = modelName;
 	cbufferName += "MatrixBuffer";
 	mModelMatrixBuffer.reset(new ConstantBufferObject(cbufferName, dev, sizeof(XMMATRIX), 1));
+	UpdateMatrix();
 }
 
 DrawController3D::~DrawController3D()

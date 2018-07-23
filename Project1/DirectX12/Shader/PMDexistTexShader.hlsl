@@ -3,6 +3,7 @@
 	", DescriptorTable(CBV(b1), visibility = SHADER_VISIBILITY_ALL)" \
 	", DescriptorTable(CBV(b2), visibility = SHADER_VISIBILITY_ALL)" \
     ", DescriptorTable(CBV(b3), visibility = SHADER_VISIBILITY_ALL)" \
+    ", DescriptorTable(CBV(b4), visibility = SHADER_VISIBILITY_ALL)" \
     ", DescriptorTable(SRV(t0), visibility = SHADER_VISIBILITY_PIXEL)" \
 	", StaticSampler(s0, filter = FILTER_MIN_MAG_LINEAR_MIP_POINT"   \
         ", addressU = TEXTURE_ADDRESS_WRAP, addressV = TEXTURE_ADDRESS_WRAP, addressW = TEXTURE_ADDRESS_WRAP)"
@@ -21,13 +22,18 @@ cbuffer bone : register(b2)
     matrix bones[256];
 }
 
-cbuffer mat : register(b3)
+cbuffer aMatrix : register(b3)
 {
-    float3 diffuse;
+    float4x4 modelMatrix;
+}
+
+cbuffer mat : register(b4)
+{
+    float4 diffuse;
+    float4 specular;
+    float4 ambient;
     float alpha;
     float specularity;
-    float3 specular;
-    float3 ambient;
 }
 
 struct Output
@@ -47,8 +53,9 @@ Output BasicVS(float3 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOO
     float wgt2 = 1.0 - wgt1;
     Output o;
     matrix m = bones[boneno[0]] * wgt1 + bones[boneno[1]] * wgt2;
-    o.origpos = mul(m, float4(pos, 1));
-    o.pos = mul(c_projection, mul(c_view, (mul(mul(c_world, m), float4(pos, 1)))));
+    o.origpos = mul(modelMatrix, mul(m, float4(pos, 1)));
+    o.pos = mul(c_projection, mul(c_view, mul(c_world, mul(modelMatrix, mul(m, float4(pos, 1))))));
+    //o.pos = mul(c_projection, mul(c_view, (mul(c_world,  m), float4(pos, 1))));
     o.svpos = o.pos;
     o.shadowpos = mul(mul(c_projection, mul(c_view, c_world)), float4(pos, 1));
     matrix n = mul(c_world, m);
@@ -62,5 +69,5 @@ Output BasicVS(float3 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOO
 float4 ExitTexPS(Output data) : SV_Target
 {
     float4 color = tex.Sample(smp, data.uv);
-    return color * dot(data.normal.xyz, -dir) + color * float4(ambient, 1);
+    return color * dot(data.normal.xyz, -dir.xyz) + color * ambient ;
 }

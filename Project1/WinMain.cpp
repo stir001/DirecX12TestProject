@@ -75,6 +75,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		camera->DefaultMove(input);
 
+		pmdContrl->AddRotaY(0.1f);
+
 		pmdContrl->Draw();
 		//mgr.Draw();
 
