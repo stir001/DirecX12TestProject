@@ -158,9 +158,6 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 		return false;
 	}
 
-
-
-
 	mDev->SetName(L"ID3D12Device");
 
 	InitWindowCreate();
@@ -184,10 +181,7 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 	
 	result = mDev->CreateFence(mFenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&mFence));
 
-	//CompileShaders();
-
 	mCamera.reset(new Dx12Camera(mWndWidth, mWndHeight));
-	//CreatePipelineStates();
 
 	//RendringManagerƒNƒ‰ƒX‚Ì‰Šú‰»ˆ—
 	InitFirstPath();

@@ -41,7 +41,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	///Direct3D12‚Ì‰Šú‰»
 
-	/*Dx12Ctrl& d12 = Dx12Ctrl::Instance();*/
 	Dx12Ctrl::Instance()->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	std::string wName = "FbxLoad";
 	Dx12Ctrl::Instance()->SetWindowName(wName);

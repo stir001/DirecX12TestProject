@@ -376,7 +376,7 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mShader = ShaderCompiler::GetInstance()->CompileShader("DirectX12/Shader/PMDShader.hlsl"
+	mShader = ShaderCompiler::Instance()->CompileShader("DirectX12/Shader/PMDShader.hlsl"
 		, "BasicVS"
 		, "BasicPS"
 		, ""
@@ -386,7 +386,10 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(), dev));
 
-	mSubShader = ShaderCompiler::GetInstance()->CompileShader("DirectX12/Shader/PMDexistTexShader.hlsl"
+	ShaderCompiler::Instance()->SetDefineMacro("CAMERA_REGISTER", "b0");
+	ShaderCompiler::Instance()->SetDefineMacro("LIGHT_REGISTER", "b1");
+
+	mSubShader = ShaderCompiler::Instance()->CompileShader("DirectX12/Shader/PMDexistTexShader.hlsl"
 		, "BasicVS"
 		, "ExitTexPS"
 		, ""

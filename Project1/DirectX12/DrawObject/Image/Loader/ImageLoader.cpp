@@ -149,7 +149,7 @@ void ImageLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mShader = ShaderCompiler::GetInstance()->CompileShader(
+	mShader = ShaderCompiler::Instance()->CompileShader(
 		IMAGE_SHADER_PATH,
 		IMAGE_VERTEXSHADER_NAME,
 		IMAGE_PIXCELSHADER_NAME,
@@ -160,7 +160,7 @@ void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(),dev));
 	mRootsignature->GetRootSignature()->SetName(L"ImageRootSignature");
 
-	m3DShader = ShaderCompiler::GetInstance()->CompileShader(
+	m3DShader = ShaderCompiler::Instance()->CompileShader(
 		"DirectX12/Shader/Image3DShader.hlsl",
 		"Image3DVS",
 		"Image3DPS",

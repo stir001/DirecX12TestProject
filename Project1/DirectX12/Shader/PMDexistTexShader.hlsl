@@ -13,9 +13,9 @@ SamplerState smp : register(s0);
 
 #include "CameraLightcBuffer.hlsl"
 
-CAMERA_CBUFFER(b0)
+CAMERA_CBUFFER(CAMERA_REGISTER)
 
-LIGHT_CBUFFER(b1)
+LIGHT_CBUFFER(LIGHT_REGISTER)
 
 cbuffer bone : register(b2)
 {
@@ -52,10 +52,9 @@ Output BasicVS(float3 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOO
     float wgt1 = (float) weight / 100.0;
     float wgt2 = 1.0 - wgt1;
     Output o;
-    matrix m = bones[boneno[0]] * wgt1 + bones[boneno[1]] * wgt2;
-    o.origpos = mul(modelMatrix, mul(m, float4(pos, 1)));
-    o.pos = mul(c_projection, mul(c_view, mul(c_world, mul(modelMatrix, mul(m, float4(pos, 1))))));
-    //o.pos = mul(c_projection, mul(c_view, (mul(c_world,  m), float4(pos, 1))));
+    matrix m = mul(modelMatrix, bones[boneno[0]] * wgt1 + bones[boneno[1]] * wgt2);
+    o.origpos = mul(m, float4(pos, 1));
+    o.pos = mul(c_projection, mul(c_view, mul(c_world,  mul(m, float4(pos, 1)))));
     o.svpos = o.pos;
     o.shadowpos = mul(mul(c_projection, mul(c_view, c_world)), float4(pos, 1));
     matrix n = mul(c_world, m);
