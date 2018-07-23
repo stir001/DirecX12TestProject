@@ -142,6 +142,7 @@
     <ClCompile Include="DirectX12\Camera\Dx12Camera.cpp" />
     <ClCompile Include="DirectX12\CommandList\Dx12CommandList.cpp" />
     <ClCompile Include="DirectX12\DescriptorHeap\Dx12DescriptorHeapObject.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\DrawController3D.cpp" />
     <ClCompile Include="DirectX12\DrawObject\DrawObjectController.cpp" />
     <ClCompile Include="DirectX12\DrawObject\DrawObjectLoader.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\Image3DController.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="DirectX12\CommandList\Dx12CommandList.h" />
     <ClInclude Include="DirectX12\d3dx12.h" />
     <ClInclude Include="DirectX12\DescriptorHeap\Dx12DescriptorHeapObject.h" />
+    <ClInclude Include="DirectX12\DrawObject\DrawController3D.h" />
     <ClInclude Include="DirectX12\DrawObject\DrawObjectController.h" />
     <ClInclude Include="DirectX12\DrawObject\DrawObjectLoader.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\Image3DController.h" />
