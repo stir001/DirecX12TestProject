@@ -11,7 +11,7 @@
 #include <cassert>
 #endif // _DEBUG
 
-#define DX12CTRL_INSTANCE Dx12Ctrl* d12 = Dx12Ctrl::Instance();
+#define DX12CTRL_INSTANCE Dx12Ctrl& d12 = Dx12Ctrl::Instance();
 
 class SwapChainObject;
 class DescriptorHeapManager;
@@ -28,44 +28,19 @@ namespace DirectX
  struct XMFLOAT2;
 };
 
-//enum PSOIndex
-//{
-//	pso_notTex,//textureなしのポリゴン描画用(3Dモデル)
-//	pso_exitTex,//textureありのポリゴン描画用(3Dモデル)
-//	pso_primitive,//プリミティブ描画
-//	pso_max
-//};
-//
-//enum RootSignatureIndex
-//{
-//	rsi_pmd,
-//	rsi_prm,
-//	rsi_max
-//};
-//
-//enum ShaderIndex
-//{
-//	si_VS_basic,
-//	si_PS_notTex,
-//	si_PS_exitTex,
-//	si_VS_primitive,
-//	si_PS_primitive,
-//	si_max
-//};
-
 class Dx12Ctrl
 {
 public:
 	~Dx12Ctrl();
 
-	static Dx12Ctrl* Instance()
+	static Dx12Ctrl& Instance()
 	{
 		if (inst == nullptr)
 		{
 			inst = new Dx12Ctrl();
 		}
 
-		return inst;
+		return *inst;
 	}
 
 	static void Destroy()

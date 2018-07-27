@@ -45,9 +45,9 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 	std::shared_ptr<TextureObject> rtn(new TextureObject());
 	Microsoft::WRL::ComPtr<ID3D12Resource> texture;
 	DX12CTRL_INSTANCE
-	d12->result = DirectX::LoadWICTextureFromFile(d12->GetDev().Get(), wstrPath.data(), &texture, rtn->mDecodedData, rtn->mSubresource);
+	d12.result = DirectX::LoadWICTextureFromFile(d12.GetDev().Get(), wstrPath.data(), &texture, rtn->mDecodedData, rtn->mSubresource);
 	
-	if (FAILED(d12->result))
+	if (FAILED(d12.result))
 	{
 		#ifdef _DEBUG
 		std::wstring outputstr = L"テクスチャパスが違うか対応していない拡張子なんやで\n FilePath:";
@@ -102,7 +102,7 @@ void TextureLoader::CreateTexWriteToSubRrsource(std::shared_ptr<TextureObject>& 
 	int count = dstResource.Reset();
 	dstResource = nullptr;
 
-	d12->result = d12->GetDev()->CreateCommittedResource(&heapProp
+	d12.result = d12.GetDev()->CreateCommittedResource(&heapProp
 		, D3D12_HEAP_FLAG_NONE
 		, &desc
 		, D3D12_RESOURCE_STATE_GENERIC_READ
@@ -118,22 +118,22 @@ void TextureLoader::CreateTexWriteToSubRrsource(std::shared_ptr<TextureObject>& 
 	box.front = 0;
 	box.back = 1;
 
-	d12->result = dstResource->WriteToSubresource(0, &box, inTex->mSubresource.pData, box.right * 4, box.bottom * 4);
+	d12.result = dstResource->WriteToSubresource(0, &box, inTex->mSubresource.pData, box.right * 4, box.bottom * 4);
 
-	d12->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(dstResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+	d12.GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(dstResource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
 	{
 		//close()を忘れてエラーをはいていた
 		//バリアの張り方がわるいのかバリアでエラーをはくので一部バリアを書いていない(書く必要もないように感じるが...
 		//改善対象
 		//cmdList変数の寿命管理のためブロックを作っている
-		ID3D12GraphicsCommandList* cmdList = d12->GetCmdList().Get();
+		ID3D12GraphicsCommandList* cmdList = d12.GetCmdList().Get();
 		cmdList->Close();
-		d12->GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
+		d12.GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&cmdList));
 	}
 
-	d12->CmdQueueSignal();
-	d12->GetCmdList()->Reset(d12->GetCmdAllocator().Get(), nullptr);
+	d12.CmdQueueSignal();
+	d12.GetCmdList()->Reset(d12.GetCmdAllocator().Get(), nullptr);
 }
 
 void TextureLoader::CreateTexUpdateSubResources(std::shared_ptr<TextureObject>& inTex)
@@ -163,7 +163,7 @@ void TextureLoader::CreateTexUpdateSubResources(std::shared_ptr<TextureObject>& 
 	uploadDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	uploadDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-	d12->result = d12->GetDev()->CreateCommittedResource(
+	d12.result = d12.GetDev()->CreateCommittedResource(
 		&heapProp, 
 		D3D12_HEAP_FLAG_NONE,
 		&uploadDesc,
@@ -171,7 +171,7 @@ void TextureLoader::CreateTexUpdateSubResources(std::shared_ptr<TextureObject>& 
 		nullptr,
 		IID_PPV_ARGS(&updateBuffer));
 
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList = d12->GetCmdList();
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList = d12.GetCmdList();
 
 	UINT64 num = UpdateSubresources(cmdList.Get(),
 		dstResource.Get(),
@@ -197,13 +197,13 @@ void TextureLoader::CreateTexUpdateSubResources(std::shared_ptr<TextureObject>& 
 
 	{
 		ID3D12GraphicsCommandList* t_cmdList = cmdList.Get();
-		d12->GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&t_cmdList));
+		d12.GetCmdQueue()->ExecuteCommandLists(1, (ID3D12CommandList* const*)(&t_cmdList));
 	}
 
-	d12->CmdQueueSignal();
+	d12.CmdQueueSignal();
 
-	d12->GetCmdAllocator()->Reset();
-	cmdList->Reset(d12->GetCmdAllocator().Get(),nullptr);
+	d12.GetCmdAllocator()->Reset();
+	cmdList->Reset(d12.GetCmdAllocator().Get(),nullptr);
 }
 
 void TextureLoader::CreateNullTexture(std::shared_ptr<TextureObject>& inTex)
@@ -231,7 +231,7 @@ void TextureLoader::CreateNullTexture(std::shared_ptr<TextureObject>& inTex)
 	heapProp.CreationNodeMask = 1;
 	heapProp.VisibleNodeMask = 1;
 
-	d12->result = d12->GetDev()->CreateCommittedResource(&heapProp
+	d12.result = d12.GetDev()->CreateCommittedResource(&heapProp
 		, D3D12_HEAP_FLAG_NONE
 		, &desc
 		, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE

@@ -110,7 +110,7 @@ HRESULT Dx12CommandList::TransitionBarrier(std::shared_ptr<Dx12BufferObject>& re
 	resource->SetCurrentState(transitionState);
 
 #ifdef _DEBUG
-	rtn = Dx12Ctrl::Instance()->GetDeviceRemoveReason();
+	rtn = Dx12Ctrl::Instance().GetDeviceRemoveReason();
 #else
 	rtn = S_OK;
 #endif

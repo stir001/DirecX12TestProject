@@ -26,7 +26,7 @@ Model::~Model()
 	}
 	for (auto& texObj : mTextureObjects)
 	{
-		TextureLoader::Instance()->Release(texObj->GetFilePath());
+		TextureLoader::Instance().Release(texObj->GetFilePath());
 	}
 	mTextureObjects.clear();
 }

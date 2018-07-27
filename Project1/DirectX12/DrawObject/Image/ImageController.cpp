@@ -41,7 +41,7 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img,
 
 	std::string name = mImgObj->GetTextureName();
 	name += "2DImageVertexBuffer";
-	mVertexBuffer.reset(new VertexBufferObject(name, Dx12Ctrl::Instance()->GetDev(), sizeof(ImageVertex), 4));
+	mVertexBuffer.reset(new VertexBufferObject(name, Dx12Ctrl::Instance().GetDev(), sizeof(ImageVertex), 4));
 
 	std::vector<std::shared_ptr<Dx12BufferObject>> resource;
 	resource.reserve(DEFAULT_RESOURCE_NUM);
@@ -49,7 +49,7 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img,
 
 	name = mImgObj->GetTextureName();
 	name += "ImageDescriptorHeap";
-	mDescHeap.reset(new Dx12DescriptorHeapObject(name, Dx12Ctrl::Instance()->GetDev(), resource, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+	mDescHeap.reset(new Dx12DescriptorHeapObject(name, Dx12Ctrl::Instance().GetDev(), resource, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
 
 	DirectX::XMFLOAT2 size = mImgObj->GetImageSize();
 	DirectX::XMFLOAT3 offset = { size.x / 2.0f,size.y / 2.0f, 0.0f };
@@ -199,7 +199,7 @@ void ImageController::TurnY()
 void ImageController::Draw()
 {
 	//DX12CTRL_INSTANCE;
-	/*auto obj = RenderingPathManager::Instance()->GetRenderTargetViews(0);
+	/*auto obj = RenderingPathManager::Instance().GetRenderTargetViews(0);
 	mCmdList->OMSetRenderTargets(obj.cpuhandles.size(), &obj.rtvDescHeap->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), false, nullptr);*/
 	(this->*mBundleUpdate)();
 	mDescHeap->SetDescriptorHeap(mCmdList);
@@ -224,7 +224,7 @@ DirectX::XMFLOAT2 ImageController::GetImageSize()
 
 std::shared_ptr<ImageController> ImageController::GetNewCopy()
 {
-	std::shared_ptr<ImageController> rtn(new ImageController(mImgObj, Dx12Ctrl::Instance()->GetDev(), mCmdList, mPipelinestate, mRootsignature));
+	std::shared_ptr<ImageController> rtn(new ImageController(mImgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature));
 	return rtn;
 }
 
@@ -321,7 +321,7 @@ void ImageController::UpdateNormvec()
 void ImageController::UpdateBuffer()
 {
 	DX12CTRL_INSTANCE
-	DirectX::XMFLOAT2 size = d12->GetWindowSize();
+	DirectX::XMFLOAT2 size = d12.GetWindowSize();
 	for (int i = 0; i < 4; ++i)
 	{
 		mVertex[i].pos.x = RotationXY(mNormvec[i], mRota).x * mLength[i] * mScaleX + mPivot.x;

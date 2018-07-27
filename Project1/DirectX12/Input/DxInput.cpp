@@ -12,7 +12,7 @@ DxInput::DxInput()
 	ZeroMemory(mPreKeyState, sizeof(mPreKeyState));
 	GetKeyboardState(mKeyState);
 	GetCursorPos(&mMousePos.pos);
-	mHWND = Dx12Ctrl::Instance()->GetWndHandle();
+	mHWND = Dx12Ctrl::Instance().GetWndHandle();
 }
 
 DxInput::~DxInput()

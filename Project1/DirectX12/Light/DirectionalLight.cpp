@@ -21,7 +21,7 @@ DirectionalLight::DirectionalLight(DirectX::XMFLOAT3 & pos, DirectX::XMFLOAT3 & 
 	DirectX::XMMATRIX lightview = DirectX::XMMatrixLookAtLH(lightpos, target, upper);
 	DirectX::XMMATRIX lightprojection = DirectX::XMMatrixOrthographicLH(50, 50, 1.0f, 200.0f);//lightprojections—ñ
 	XMStoreFloat4x4(&mElement.viewProj, lightview * lightprojection);
-	mCbuffer.reset(new ConstantBufferObject("DirectionalLightConstantBuffer",Dx12Ctrl::Instance()->GetDev(),sizeof(DirectionalLightElement), 1));
+	mCbuffer.reset(new ConstantBufferObject("DirectionalLightConstantBuffer",Dx12Ctrl::Instance().GetDev(),sizeof(DirectionalLightElement), 1));
 
 	mCbuffer->WriteBuffer(&mElement, sizeof(mElement));
 }
@@ -42,7 +42,7 @@ DirectionalLight::DirectionalLight(float dirX, float dirY, float dirZ, float len
 	DirectX::XMMATRIX lightview = DirectX::XMMatrixLookAtLH(lightpos, target, upper);
 	DirectX::XMMATRIX lightprojection = DirectX::XMMatrixOrthographicLH(50, 50, 1.0f, 200.0f);//lightprojections—ñ
 	XMStoreFloat4x4(&mElement.viewProj, lightview * lightprojection);
-	mCbuffer.reset(new ConstantBufferObject("DirectionalLightConstantBuffer", Dx12Ctrl::Instance()->GetDev(),sizeof(DirectionalLightElement), 1));
+	mCbuffer.reset(new ConstantBufferObject("DirectionalLightConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(DirectionalLightElement), 1));
 
 	mCbuffer->WriteBuffer(&mElement, sizeof(mElement));
 }

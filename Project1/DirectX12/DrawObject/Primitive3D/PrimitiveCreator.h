@@ -1,12 +1,15 @@
 #pragma once
 #include <vector>
-#include <d3dcommon.h>
+#include <d3d12.h>
+#include <wrl.h>
 #include <DirectXMath.h>
 #include <memory>
 
 class PrimitiveObject;
 class LightObject;
 class PrimitivePlane;
+class RootSignatureObject;
+class PipelineStateObject;
 
 class PrimitiveCreator
 {
@@ -18,5 +21,8 @@ public:
 	std::shared_ptr<PrimitivePlane> CreatePlane(DirectX::XMFLOAT3 pos, float length, float height, DirectX::XMFLOAT3 normal);
 private:
 	std::shared_ptr<LightObject> mLight;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCommnadList;
+	std::shared_ptr<RootSignatureObject> mRootsiganture;
+	std::shared_ptr<PipelineStateObject> mPipelineState;
 };
 

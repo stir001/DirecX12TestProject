@@ -17,14 +17,14 @@ class TextureLoader
 public:
 	~TextureLoader();
 
-	static TextureLoader* Instance()
+	static TextureLoader& Instance()
 	{
 		if (mInstance == nullptr)
 		{
 			mInstance = new TextureLoader();
 		}
 
-		return mInstance;
+		return *mInstance;
 	}
 
 	static void Destroy()

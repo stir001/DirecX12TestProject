@@ -41,10 +41,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	///Direct3D12‚Ì‰Šú‰»
 
-	Dx12Ctrl::Instance()->SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	std::string wName = "FbxLoad";
-	Dx12Ctrl::Instance()->SetWindowName(wName);
-	Dx12Ctrl::Instance()->Dx12Init(hInst);
+	Dx12Ctrl::Instance().SetWindowName(wName);
+	Dx12Ctrl::Instance().Dx12Init(hInst);
 
 	//FbxLoader::Create();
 	//auto modelData = FbxLoader::Instance()->LoadMesh(FBX_MODEL_PATH2);
@@ -65,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	//mgr.CreatePlane(pos, 50, 50, normal);
 	//mgr.SetLightObject(dirLight);
 
-	auto& camera = Dx12Ctrl::Instance()->GetCamera();
+	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 
 	while (ProcessMessage()) {
@@ -87,7 +87,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	pmdContrl = nullptr;
 	loader = nullptr;
 
-	Dx12Ctrl::Instance()->Release();
+	Dx12Ctrl::Instance().Release();
 	Dx12Ctrl::Destroy();
 	
 }

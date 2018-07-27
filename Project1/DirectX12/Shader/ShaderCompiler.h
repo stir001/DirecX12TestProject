@@ -11,14 +11,14 @@ class ShaderCompiler
 public:
 	~ShaderCompiler();
 
-	static ShaderCompiler* Instance()
+	static ShaderCompiler& Instance()
 	{
 		if (mInstance == nullptr)
 		{
 			mInstance = new ShaderCompiler();
 		}
 
-		return mInstance;
+		return *mInstance;
 	}
 
 	static void Destroy()
@@ -53,7 +53,9 @@ public:
 
 	void ReleaseShader(std::string shaderpath);
 
-	void SetDefineMacro(const std::string& name, const std::string& def);
+	void AddDefineMacro(const std::string& name, const std::string& def);
+
+
 private:
 	ShaderCompiler();
 	ShaderCompiler(const ShaderCompiler&);

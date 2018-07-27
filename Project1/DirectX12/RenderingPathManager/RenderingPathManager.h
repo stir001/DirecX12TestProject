@@ -54,13 +54,13 @@ public:
 		bool isActive;
 	};
 
-	static RenderingPathManager* Instance()
+	static RenderingPathManager& Instance()
 	{
 		if (mInstance == nullptr)
 		{
 			mInstance = new RenderingPathManager();
 		}
-		return mInstance;
+		return *mInstance;
 	}
 
 	static void Destroy()

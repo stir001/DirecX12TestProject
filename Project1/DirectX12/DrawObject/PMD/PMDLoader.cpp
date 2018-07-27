@@ -22,7 +22,7 @@ const std::string PMDSHADER_PATH = "shader.hlsl";
 
 PMDLoader::PMDLoader():mLight(new DirectionalLight(1,-1,1))
 {
-	Microsoft::WRL::ComPtr<ID3D12Device> dev = Dx12Ctrl::Instance()->GetDev();
+	Microsoft::WRL::ComPtr<ID3D12Device> dev = Dx12Ctrl::Instance().GetDev();
 	CreateRootsignature(dev);
 	CreatePipelineState(dev);
 }
@@ -286,13 +286,13 @@ void PMDLoader::LoadJoint()
 
 void PMDLoader::CreateIndexBuffer()
 {
-	mLoadingmodel->mIndexBuffer.reset(new IndexBufferObject("PMDIndexBuffer", Dx12Ctrl::Instance()->GetDev(), sizeof(mLoadingmodel->mIndices[0]),static_cast<unsigned int>(mLoadingmodel->mIndices.size()), DXGI_FORMAT_R16_UINT));
+	mLoadingmodel->mIndexBuffer.reset(new IndexBufferObject("PMDIndexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mIndices[0]),static_cast<unsigned int>(mLoadingmodel->mIndices.size()), DXGI_FORMAT_R16_UINT));
 	mLoadingmodel->mIndexBuffer->WriteBuffer(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(sizeof(mLoadingmodel->mIndices[0]) * mLoadingmodel->mIndices.size()));
 }
 
 void PMDLoader::CreateVertexBuffer()
 {
-	mLoadingmodel->mVertexBuffer.reset(new VertexBufferObject("PMDVertexBuffer", Dx12Ctrl::Instance()->GetDev(), sizeof(mLoadingmodel->mVertexes[0]), static_cast<unsigned int>(mLoadingmodel->mVertexes.size())));
+	mLoadingmodel->mVertexBuffer.reset(new VertexBufferObject("PMDVertexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mVertexes[0]), static_cast<unsigned int>(mLoadingmodel->mVertexes.size())));
 	mLoadingmodel->mVertexBuffer->WriteBuffer(&mLoadingmodel->mVertexes[0], static_cast<unsigned int>(sizeof(mLoadingmodel->mVertexes[0]) * mLoadingmodel->mVertexes.size()));
 }
 
@@ -303,13 +303,13 @@ void PMDLoader::CreateTexture()
 	{
 		if (mat.texid == -1) continue;
 		std::string loadPath = mRelativePath + mat.texturePath;
-		mLoadingmodel->mTextureObjects[mat.texid] = TextureLoader::Instance()->LoadTexture(loadPath);
+		mLoadingmodel->mTextureObjects[mat.texid] = TextureLoader::Instance().LoadTexture(loadPath);
 	}
 }
 
 void PMDLoader::CreateMaterialBuffer()
 {
-	mLoadingmodel->mMaterialBuffer.reset(new ConstantBufferObject("PMDMaterialBuffer", Dx12Ctrl::Instance()->GetDev(),sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size())));
+	mLoadingmodel->mMaterialBuffer.reset(new ConstantBufferObject("PMDMaterialBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size())));
 	mLoadingmodel->mD12mat = new Dx12Material[mLoadingmodel->mMaterials.size()];
 	for (unsigned int i = 0; i < mLoadingmodel->mMaterials.size(); i++)
 	{
@@ -376,7 +376,7 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mShader = ShaderCompiler::Instance()->CompileShader("DirectX12/Shader/PMDShader.hlsl"
+	mShader = ShaderCompiler::Instance().CompileShader("DirectX12/Shader/PMDShader.hlsl"
 		, "BasicVS"
 		, "BasicPS"
 		, ""
@@ -386,10 +386,10 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(), dev));
 
-	ShaderCompiler::Instance()->SetDefineMacro("CAMERA_REGISTER", "b0");
-	ShaderCompiler::Instance()->SetDefineMacro("LIGHT_REGISTER", "b1");
+	ShaderCompiler::Instance().AddDefineMacro("CAMERA_REGISTER", "b0");
+	ShaderCompiler::Instance().AddDefineMacro("LIGHT_REGISTER", "b1");
 
-	mSubShader = ShaderCompiler::Instance()->CompileShader("DirectX12/Shader/PMDexistTexShader.hlsl"
+	mSubShader = ShaderCompiler::Instance().CompileShader("DirectX12/Shader/PMDexistTexShader.hlsl"
 		, "BasicVS"
 		, "ExitTexPS"
 		, ""
@@ -403,7 +403,7 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 std::shared_ptr<PMDController> PMDLoader::CreateController(std::shared_ptr<PMDModel>& model, const std::string& path)
 {
 	std::shared_ptr<PMDController> controller(new PMDController(model, mLight, GetModelName(path),
-		Dx12Ctrl::Instance()->GetDev(), mCmdList));
+		Dx12Ctrl::Instance().GetDev(), mCmdList));
 	controller->SetLight(mLight);
 	controller->SetRootSignature(mRootsignature);
 	controller->SetPipelineState(mPipelinestate);

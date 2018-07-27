@@ -188,6 +188,7 @@
     <ClCompile Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.cpp" />
     <ClCompile Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.cpp" />
     <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp" />
+    <ClCompile Include="TransFormMatrixCalculator.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +313,7 @@
     <ClInclude Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.h" />
     <ClInclude Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.h" />
     <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h" />
+    <ClInclude Include="TransFormMatrixCalculator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,7 +20,7 @@ Dx12Camera::Dx12Camera(int wWidth,int wHeight):mWidth(wWidth),mHeight(wHeight)
 	DirectX::XMStoreFloat4x4(&mElement.world, DirectX::XMMatrixIdentity());
 	mWorldRotation = mElement.world;
 
-	mCameraBuffer.reset(new ConstantBufferObject("CameraConstantBuffer", Dx12Ctrl::Instance()->GetDev(),sizeof(mElement), 1));
+	mCameraBuffer.reset(new ConstantBufferObject("CameraConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(mElement), 1));
 
 	UpdateBuffer();
 }
@@ -41,7 +41,7 @@ Dx12Camera::Dx12Camera(int wWidth, int wHeight, DirectX::XMFLOAT3& eye, DirectX:
 	mWorldRotation = mElement.world;
 	UpdateElement();
 
-	mCameraBuffer.reset(new ConstantBufferObject("CameraConstantBuffer", Dx12Ctrl::Instance()->GetDev(),sizeof(mElement), 1));
+	mCameraBuffer.reset(new ConstantBufferObject("CameraConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(mElement), 1));
 
 	UpdateBuffer();
 }

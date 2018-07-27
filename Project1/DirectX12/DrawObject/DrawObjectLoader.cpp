@@ -8,7 +8,7 @@
 
 DrawObjectLoader::DrawObjectLoader()
 	:mPipelinestate(nullptr), mRootsignature(nullptr), 
-	mCmdList(RenderingPathManager::Instance()->GetRenderingPathCommandList(0))
+	mCmdList(RenderingPathManager::Instance().GetRenderingPathCommandList(0))
 {
 	setlocale(LC_ALL, "japanese");
 }

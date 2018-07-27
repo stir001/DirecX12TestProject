@@ -192,23 +192,23 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 
 void Dx12Ctrl::InitFirstPath()
 {
-	RenderingPathManager::Instance()->Init(mDev, mFactory, mhWnd);
+	RenderingPathManager::Instance().Init(mDev, mFactory, mhWnd);
 
 	InitFunctionObject_t initfunc = [&](CmdListsArg_t cmdList, RTResourcesArg_t resource, RTDescHeapArg_t descHeap) {
-		cmdList[0]->ClearDepthStencilView(Dx12Ctrl::Instance()->GetDepthCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, &mRect);
-		cmdList[0]->OMSetRenderTargets(1, &descHeap->GetCPUDescriptorHandleForHeapStart(), false, &Dx12Ctrl::Instance()->GetDepthCpuHandle());
+		cmdList[0]->ClearDepthStencilView(Dx12Ctrl::Instance().GetDepthCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, &mRect);
+		cmdList[0]->OMSetRenderTargets(1, &descHeap->GetCPUDescriptorHandleForHeapStart(), false, &Dx12Ctrl::Instance().GetDepthCpuHandle());
 		cmdList[0]->ClearRenderTargetView(descHeap->GetCPUDescriptorHandleForHeapStart(), mClrcolor, 0, &mRect);
 		cmdList[0]->RSSetViewports(1, &mViewPort);
 		cmdList[0]->RSSetScissorRects(1, &mRect);
 	};
 
-	RenderingPathManager::Instance()->SetInitFunction(0, initfunc);
+	RenderingPathManager::Instance().SetInitFunction(0, initfunc);
 
 	LastFunctionObject_t lastFunc = [](CmdListsArg_t cmdList, RTResourcesArg_t resrouce) {
 
 	};
 
-	RenderingPathManager::Instance()->SetLastFunction(0, lastFunc);
+	RenderingPathManager::Instance().SetLastFunction(0, lastFunc);
 }
 
 void Dx12Ctrl::InitWindowCreate()

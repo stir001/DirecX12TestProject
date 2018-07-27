@@ -62,8 +62,8 @@ Dx12BufferObject::~Dx12BufferObject()
 	region.FirstSubresource = 0;
 	region.NumSubresources = 1;
 
-	Dx12Ctrl::Instance()->GetCmdList()->DiscardResource(mBuffer.Get(), &region);
-	Dx12Ctrl::Instance()->CmdQueueSignal();
+	Dx12Ctrl::Instance().GetCmdList()->DiscardResource(mBuffer.Get(), &region);
+	Dx12Ctrl::Instance().CmdQueueSignal();
 	unsigned long resetCount = mBuffer.Reset();
 	mViewDescs.reset();
 }

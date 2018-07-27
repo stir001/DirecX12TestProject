@@ -86,7 +86,7 @@ void Primitive2DLine::SetBasePoints(const DirectX::XMFLOAT3& point1, const Direc
 void Primitive2DLine::SetPoints(const DirectX::XMFLOAT3& point1, const DirectX::XMFLOAT3& point2)
 {
 	DX12CTRL_INSTANCE
-	DirectX::XMFLOAT2 wndSize = d12->GetWindowSize();
+	DirectX::XMFLOAT2 wndSize = d12.GetWindowSize();
 
 	mVertices[0].pos.x = point1.x  / (wndSize.x * 0.5f);
 	mVertices[0].pos.y = point1.y  / (wndSize.y * 0.5f);

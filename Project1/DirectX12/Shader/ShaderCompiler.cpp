@@ -124,6 +124,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 
 	mMacros.clear();
 	mMacros.shrink_to_fit();
+	mStrData.clear();
 	return mDatas[shaderPath];
 }
 
@@ -132,7 +133,7 @@ void ShaderCompiler::ReleaseShader(std::string shaderpath)
 	mDatas.erase(shaderpath);
 }
 
-void ShaderCompiler::SetDefineMacro(const std::string & name, const std::string & def)
+void ShaderCompiler::AddDefineMacro(const std::string & name, const std::string & def)
 {
 	MacroData strData;
 	strData.name = name;
