@@ -314,9 +314,9 @@ void PMDLoader::CreateMaterialBuffer()
 	for (unsigned int i = 0; i < mLoadingmodel->mMaterials.size(); i++)
 	{
 		mLoadingmodel->mD12mat[i].alpha = mLoadingmodel->mMaterials[i].alpha;
-		mLoadingmodel->mD12mat[i].diffuse = StoreToXMFloat4(mLoadingmodel->mMaterials[i].diffuse);
-		mLoadingmodel->mD12mat[i].ambient = StoreToXMFloat4(mLoadingmodel->mMaterials[i].ambient);
-		mLoadingmodel->mD12mat[i].specular = StoreToXMFloat4(mLoadingmodel->mMaterials[i].specular);
+		mLoadingmodel->mD12mat[i].diffuse = StoreFloat3ToXMFloat4(mLoadingmodel->mMaterials[i].diffuse);
+		mLoadingmodel->mD12mat[i].ambient = StoreFloat3ToXMFloat4(mLoadingmodel->mMaterials[i].ambient);
+		mLoadingmodel->mD12mat[i].specular = StoreFloat3ToXMFloat4(mLoadingmodel->mMaterials[i].specular);
 		mLoadingmodel->mD12mat[i].specularity = mLoadingmodel->mMaterials[i].specularity;
 	}
 

@@ -182,7 +182,17 @@ float GetLengthXMFloat3(const DirectX::XMFLOAT3& val)
 	return sqrtf(DotXMFloat3(val, val));
 }
 
-DirectX::XMFLOAT4 StoreToXMFloat4(const DirectX::XMFLOAT3 & val)
+DirectX::XMFLOAT4 StoreFloat3ToXMFloat4(const DirectX::XMFLOAT3 & val)
 {
 	return DirectX::XMFLOAT4(val.x, val.y, val.z, 1);
+}
+
+DirectX::XMFLOAT4X4 StoreMatirxToXMFloat4(const DirectX::XMMATRIX & val)
+{
+	DirectX::XMFLOAT4X4 rtn;
+	rtn._11 = val.r[0].m128_f32[0]; rtn._12 = val.r[0].m128_f32[1]; rtn._13 = val.r[0].m128_f32[2]; rtn._14 = val.r[0].m128_f32[3];
+	rtn._21 = val.r[1].m128_f32[0]; rtn._22 = val.r[1].m128_f32[1]; rtn._23 = val.r[1].m128_f32[2]; rtn._24 = val.r[1].m128_f32[3];
+	rtn._31 = val.r[2].m128_f32[0]; rtn._32 = val.r[2].m128_f32[1]; rtn._33 = val.r[2].m128_f32[2]; rtn._34 = val.r[2].m128_f32[3];
+	rtn._41 = val.r[3].m128_f32[0]; rtn._42 = val.r[3].m128_f32[1]; rtn._43 = val.r[3].m128_f32[2]; rtn._44 = val.r[3].m128_f32[3];
+	return rtn;
 }

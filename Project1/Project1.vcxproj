@@ -160,6 +160,7 @@
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveCreator.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\TransformMatrixCalculator.cpp" />
     <ClCompile Include="DirectX12\Input\DxInput.cpp" />
     <ClCompile Include="DirectX12\Light\DirectionalLight.cpp" />
     <ClCompile Include="DirectX12\Light\LightObject.cpp" />
@@ -188,7 +189,7 @@
     <ClCompile Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.cpp" />
     <ClCompile Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.cpp" />
     <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp" />
-    <ClCompile Include="TransFormMatrixCalculator.cpp" />
+    <ClCompile Include="Transform3DCalculator.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +286,7 @@
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveCreator.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.h" />
+    <ClInclude Include="DirectX12\DrawObject\TransformMatrixCalculator.h" />
     <ClInclude Include="DirectX12\Input\DxInput.h" />
     <ClInclude Include="DirectX12\Light\DirectionalLight.h" />
     <ClInclude Include="DirectX12\Light\LightObject.h" />
@@ -313,7 +315,7 @@
     <ClInclude Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.h" />
     <ClInclude Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.h" />
     <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h" />
-    <ClInclude Include="TransFormMatrixCalculator.h" />
+    <ClInclude Include="Transform3DCalculator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

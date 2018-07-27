@@ -211,7 +211,10 @@
     <ClCompile Include="DirectX12\DrawObject\DrawController3D.cpp">
       <Filter>DirectX12\DrawObject\3D\Base</Filter>
     </ClCompile>
-    <ClCompile Include="TransFormMatrixCalculator.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\TransformMatrixCalculator.cpp">
+      <Filter>DirectX12\DrawObject\3D\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform3DCalculator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX12\d3dx12.h">
@@ -409,7 +412,10 @@
     <ClInclude Include="DirectX12\DrawObject\DrawController3D.h">
       <Filter>DirectX12\DrawObject\3D\Base</Filter>
     </ClInclude>
-    <ClInclude Include="TransFormMatrixCalculator.h" />
+    <ClInclude Include="DirectX12\DrawObject\TransformMatrixCalculator.h">
+      <Filter>DirectX12\DrawObject\3D\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform3DCalculator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectX12">
