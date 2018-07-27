@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <list>
 
 class ShaderCompiler
 {
@@ -60,8 +61,14 @@ private:
 	ShaderCompiler& operator=(const ShaderCompiler&);
 
 	static ShaderCompiler* mInstance;
+	struct MacroData
+	{
+		std::string name;
+		std::string def;
+	};
 
 	std::map<std::string, ShaderDatas> mDatas;
 	std::vector<D3D_SHADER_MACRO> mMacros;
+	std::list<MacroData> mStrData;
 };
 

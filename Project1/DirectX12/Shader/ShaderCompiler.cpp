@@ -67,6 +67,9 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 
 	HRESULT result;
 
+	D3D_SHADER_MACRO macro = { nullptr, nullptr };
+	mMacros.push_back(macro);
+
 	if (vsName.size() > 0)
 	{
 		ID3DBlob* vertex = nullptr;
@@ -131,8 +134,12 @@ void ShaderCompiler::ReleaseShader(std::string shaderpath)
 
 void ShaderCompiler::SetDefineMacro(const std::string & name, const std::string & def)
 {
+	MacroData strData;
+	strData.name = name;
+	strData.def = def;
+	mStrData.push_back(strData);
 	D3D_SHADER_MACRO macro;
-	macro.Name = name.data() + '\0';
-	macro.Definition = def.data() + '\0';
+	macro.Name = mStrData.back().name.data() + '\0';
+	macro.Definition = mStrData.back().def.data() + '\0';
 	mMacros.push_back(macro);
 }

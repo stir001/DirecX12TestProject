@@ -13,9 +13,9 @@ SamplerState smp : register(s0);
 
 #include "CameraLightcBuffer.hlsl"
 
-CAMERA_CBUFFER(CAMERA_REGISTER)
+CAMERA_CBUFFER(b0)
 
-LIGHT_CBUFFER(LIGHT_REGISTER)
+LIGHT_CBUFFER(b1)
 
 cbuffer bone : register(b2)
 {
