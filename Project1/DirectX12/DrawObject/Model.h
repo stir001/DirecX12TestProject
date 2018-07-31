@@ -14,11 +14,11 @@ class DrawObjectLoader;
 
 struct Dx12Material
 {
-	DirectX::XMFLOAT3 diffuse;
+	DirectX::XMFLOAT4 diffuse;
+	DirectX::XMFLOAT4 specular;
+	DirectX::XMFLOAT4 ambient;
 	float alpha;
 	float specularity;
-	DirectX::XMFLOAT3 specular;
-	DirectX::XMFLOAT3 ambient;
 };
 
 class Model

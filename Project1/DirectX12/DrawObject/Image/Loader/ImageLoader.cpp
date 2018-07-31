@@ -25,9 +25,9 @@ std::unique_ptr<ImageLoader> ImageLoader::mInstance = nullptr;
 ImageLoader::ImageLoader()
 {
 	DX12CTRL_INSTANCE;
-	CreateRootsignature(d12->GetDev());
-	CreatePipelineState(d12->GetDev());
-	mCmdList = RenderingPathManager::Instance()->GetRenderingPathCommandList(0);
+	CreateRootsignature(d12.GetDev());
+	CreatePipelineState(d12.GetDev());
+	mCmdList = RenderingPathManager::Instance().GetRenderingPathCommandList(0);
 }
 
 ImageLoader::~ImageLoader()
@@ -45,14 +45,14 @@ std::shared_ptr<ImageController> ImageLoader::LoadImageData(const std::string& p
 	auto itr = mImages.find(path);
 	if (itr != mImages.end())
 	{
-		imgCtrl.reset(new ImageController(itr->second, Dx12Ctrl::Instance()->GetDev(), mCmdList, mPipelinestate, mRootsignature));
+		imgCtrl.reset(new ImageController(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature));
 		return imgCtrl;
 	}
 	
-	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance()->LoadTexture(path);
+	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance().LoadTexture(path);
 	std::shared_ptr<ImageObject> imgObj(new ImageObject(tObj->GetWidth(), tObj->GetHeight(), tObj));
 	mImages[path] = imgObj;
-	imgCtrl.reset(new ImageController(imgObj, Dx12Ctrl::Instance()->GetDev(), mCmdList,mPipelinestate,mRootsignature));
+	imgCtrl.reset(new ImageController(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList,mPipelinestate,mRootsignature));
 
 	return imgCtrl;
 }
@@ -63,21 +63,21 @@ std::shared_ptr<Image3DController> ImageLoader::LoadImage3D(const std::string& p
 	auto itr = mImages.find(path);
 	if (itr != mImages.end())
 	{
-		imgCtrl.reset(new Image3DController(itr->second, Dx12Ctrl::Instance()->GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature));
+		imgCtrl.reset(new Image3DController(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature));
 		return imgCtrl;
 	}
 
-	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance()->LoadTexture(path);
+	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance().LoadTexture(path);
 	std::shared_ptr<ImageObject> imgObj(new ImageObject(tObj->GetWidth(), tObj->GetHeight(), tObj));
 	mImages[path] = imgObj;
-	imgCtrl.reset(new Image3DController(imgObj, Dx12Ctrl::Instance()->GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature));
+	imgCtrl.reset(new Image3DController(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature));
 
 	return imgCtrl;
 }
 
 void ImageLoader::Release(const std::string& releaseImagePath)
 {
-	TextureLoader::Instance()->Release(releaseImagePath);
+	TextureLoader::Instance().Release(releaseImagePath);
 	mImages.erase(releaseImagePath);
 }
 
@@ -149,7 +149,7 @@ void ImageLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 
 void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mShader = ShaderCompiler::GetInstance()->CompileShader(
+	mShader = ShaderCompiler::Instance().CompileShader(
 		IMAGE_SHADER_PATH,
 		IMAGE_VERTEXSHADER_NAME,
 		IMAGE_PIXCELSHADER_NAME,
@@ -160,7 +160,7 @@ void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(),dev));
 	mRootsignature->GetRootSignature()->SetName(L"ImageRootSignature");
 
-	m3DShader = ShaderCompiler::GetInstance()->CompileShader(
+	m3DShader = ShaderCompiler::Instance().CompileShader(
 		"DirectX12/Shader/Image3DShader.hlsl",
 		"Image3DVS",
 		"Image3DPS",

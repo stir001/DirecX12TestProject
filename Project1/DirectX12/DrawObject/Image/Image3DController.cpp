@@ -34,15 +34,15 @@ Image3DController::Image3DController(std::shared_ptr<ImageObject> img,
 	mPipelinestate = pipelinestate;
 	mRootsignature = rootsignature;
 
-	mCameraBuffer = Dx12Ctrl::Instance()->GetCamera()->GetCameraBuffer();
+	mCameraBuffer = Dx12Ctrl::Instance().GetCamera()->GetCameraBuffer();
 	std::string name = mImgObj->GetTextureName();
 
 	name += "3DImageVertexBuffer";
-	mVertexBuffer.reset(new VertexBufferObject(name, Dx12Ctrl::Instance()->GetDev(), sizeof(Image3DVertex), 4));
+	mVertexBuffer.reset(new VertexBufferObject(name, Dx12Ctrl::Instance().GetDev(), sizeof(Image3DVertex), 4));
 
 	name = mImgObj->GetTextureName();
 	name += "3DImageMatrixConstantBuffer";
-	mImageMatrixBuffer.reset(new ConstantBufferObject(name, Dx12Ctrl::Instance()->GetDev(), sizeof(DirectX::XMFLOAT4X4), 1));
+	mImageMatrixBuffer.reset(new ConstantBufferObject(name, Dx12Ctrl::Instance().GetDev(), sizeof(DirectX::XMFLOAT4X4), 1));
 
 	std::vector<std::shared_ptr<Dx12BufferObject>> resources;
 	resources.reserve(DEFAULT_RESOURCE_NUM);
@@ -51,7 +51,7 @@ Image3DController::Image3DController(std::shared_ptr<ImageObject> img,
 	resources.push_back(mImgObj->GetShaderResource());
 	name = mImgObj->GetTextureName();
 	name += "3DImageDescriptorHeap";
-	mDescHeap.reset(new Dx12DescriptorHeapObject(name, Dx12Ctrl::Instance()->GetDev(), resources, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+	mDescHeap.reset(new Dx12DescriptorHeapObject(name, Dx12Ctrl::Instance().GetDev(), resources, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
 
 	DirectX::XMStoreFloat4x4(&mImageMatrix, DirectX::XMMatrixIdentity());
 	DirectX::XMStoreFloat4x4(&mRotaMatrix, DirectX::XMMatrixIdentity());
@@ -195,8 +195,8 @@ void Image3DController::TurnY()
 void Image3DController::Draw()
 {
 	DX12CTRL_INSTANCE;
-	//auto obj = RenderingPathManager::Instance()->GetRenderTargetViews(0);
-	//mCmdList->OMSetRenderTargets(obj.cpuhandles.size(), &obj.rtvDescHeap->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), false, &Dx12Ctrl::Instance()->GetDepthBuffer()->GetCPUAdress());
+	//auto obj = RenderingPathManager::Instance().GetRenderTargetViews(0);
+	//mCmdList->OMSetRenderTargets(obj.cpuhandles.size(), &obj.rtvDescHeap->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), false, &Dx12Ctrl::Instance().GetDepthBuffer()->GetCPUAdress());
 	(this->*mBundleUpdate)();
 	mDescHeap->SetDescriptorHeap(mCmdList);
 	mCmdList->ExecuteBundle(mBundleCmdList->GetCommandList().Get());
@@ -209,7 +209,7 @@ DirectX::XMFLOAT2 Image3DController::GetImageSize()
 
 std::shared_ptr<Image3DController> Image3DController::GetNewCopy()
 {
-	std::shared_ptr<Image3DController> rtn(new Image3DController(mImgObj,Dx12Ctrl::Instance()->GetDev(), mCmdList, mPipelinestate, mRootsignature));
+	std::shared_ptr<Image3DController> rtn(new Image3DController(mImgObj,Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature));
 	return rtn;
 }
 

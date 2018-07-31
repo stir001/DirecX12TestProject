@@ -67,10 +67,13 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 
 	HRESULT result;
 
+	D3D_SHADER_MACRO macro = { nullptr, nullptr };
+	mMacros.push_back(macro);
+
 	if (vsName.size() > 0)
 	{
 		ID3DBlob* vertex = nullptr;
-		result = D3DCompileFromFile(path, nullptr, &hlslinculde,
+		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
 			vsName.data(), "vs_5_0", compileflag, 0, &vertex, &err);
 		outErr(err);
 		mDatas[shaderPath].vertexShader.Swap(vertex);
@@ -86,7 +89,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	if (psName.size() > 0)
 	{
 		ID3DBlob* pixcel = nullptr;
-		result = D3DCompileFromFile(path, nullptr, &hlslinculde,
+		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
 			psName.data(), "ps_5_0", compileflag, 0, &pixcel, &err);
 		outErr(err);
 		mDatas[shaderPath].pixelShader.Swap(pixcel);
@@ -95,7 +98,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	if (gsName.size() > 0)
 	{
 		ID3DBlob* geometry = nullptr;
-		result = D3DCompileFromFile(path, nullptr, &hlslinculde,
+		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
 			gsName.data(), "gs_5_0", compileflag, 0, &geometry, &err);
 		outErr(err);
 		mDatas[shaderPath].geometryShader.Swap(geometry);
@@ -104,7 +107,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	if (hsName.size() > 0)
 	{
 		ID3DBlob* hull = nullptr;
-		result = D3DCompileFromFile(path, nullptr, &hlslinculde,
+		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
 			hsName.data(), "hs_5_0", compileflag, 0, &hull, &err);
 		outErr(err);
 		mDatas[shaderPath].hullShader.Swap(hull);
@@ -113,16 +116,31 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	if (dsName.size() > 0)
 	{
 		ID3DBlob* domain = nullptr;
-		result = D3DCompileFromFile(path, nullptr, &hlslinculde,
+		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
 			dsName.data(), "ds_5_0", compileflag, 0, &domain, &err);
 		outErr(err);
-		mDatas[shaderPath].domainShader.Swap (domain);
+		mDatas[shaderPath].domainShader.Swap(domain);
 	}
 
+	mMacros.clear();
+	mMacros.shrink_to_fit();
+	mStrData.clear();
 	return mDatas[shaderPath];
 }
 
 void ShaderCompiler::ReleaseShader(std::string shaderpath)
 {
 	mDatas.erase(shaderpath);
+}
+
+void ShaderCompiler::AddDefineMacro(const std::string & name, const std::string & def)
+{
+	MacroData strData;
+	strData.name = name;
+	strData.def = def;
+	mStrData.push_back(strData);
+	D3D_SHADER_MACRO macro;
+	macro.Name = mStrData.back().name.data() + '\0';
+	macro.Definition = mStrData.back().def.data() + '\0';
+	mMacros.push_back(macro);
 }

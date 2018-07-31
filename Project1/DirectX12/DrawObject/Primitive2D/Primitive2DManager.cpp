@@ -11,9 +11,9 @@ Primitive2DManager* Primitive2DManager::mInstance = nullptr;
 
 Primitive2DManager::Primitive2DManager()
 {
-	mCmdList = RenderingPathManager::Instance()->GetRenderingPathCommandList(0);
-	CreateRootsignature(Dx12Ctrl::Instance()->GetDev());
-	CreatePipelineState(Dx12Ctrl::Instance()->GetDev());
+	mCmdList = RenderingPathManager::Instance().GetRenderingPathCommandList(0);
+	CreateRootsignature(Dx12Ctrl::Instance().GetDev());
+	CreatePipelineState(Dx12Ctrl::Instance().GetDev());
 }
 
 
@@ -23,7 +23,7 @@ Primitive2DManager::~Primitive2DManager()
 
 std::shared_ptr<Primitive2DLine> Primitive2DManager::CreatePrimitive2DLine(const DirectX::XMFLOAT3 & point1, const DirectX::XMFLOAT3 & point2)
 {
-	std::shared_ptr<Primitive2DLine> line(new Primitive2DLine(point1, point2, Dx12Ctrl::Instance()->GetDev(), mCmdList));
+	std::shared_ptr<Primitive2DLine> line(new Primitive2DLine(point1, point2, Dx12Ctrl::Instance().GetDev(), mCmdList));
 	line->SetPipelineState(mPipelinestate);
 	line->SetRootSignature(mRootsignature);
 	return line;
@@ -65,7 +65,7 @@ void Primitive2DManager::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device
 
 void Primitive2DManager::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mShader = ShaderCompiler::GetInstance()->CompileShader(
+	mShader = ShaderCompiler::Instance().CompileShader(
 		"DirectX12/Shader/Primitive2D.hlsl",
 		"Primitive2DVS",
 		"Primitive2DPS",

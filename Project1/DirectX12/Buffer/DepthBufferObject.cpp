@@ -79,7 +79,7 @@ DepthBufferObject::~DepthBufferObject()
 		barrier.Transition.StateAfter = mCurrentState;
 		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 		barrier.Transition.Subresource = 0;
-		Dx12Ctrl::Instance()->GetCmdList()->ResourceBarrier(1, &barrier);
+		Dx12Ctrl::Instance().GetCmdList()->ResourceBarrier(1, &barrier);
 	}
 }
 

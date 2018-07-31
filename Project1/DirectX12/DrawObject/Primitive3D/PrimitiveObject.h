@@ -1,4 +1,6 @@
 #pragma once
+#include "DrawController3D.h"
+
 #include <DirectXMath.h>
 #include <vector>
 #include <memory>
@@ -41,7 +43,7 @@ struct PrimitiveVertex
 	}
 };
 
-class PrimitiveObject
+class PrimitiveObject : public DrawController3D
 {
 public:
 	PrimitiveObject();
@@ -53,9 +55,5 @@ public:
 protected:
 	std::vector<PrimitiveVertex> mVertices;
 	std::shared_ptr<VertexBufferObject> mVertexBuffer;
-	std::shared_ptr<PipelineStateObject> mPipelineState;
-	std::shared_ptr<RootSignatureObject> mRootsignature;
-	std::shared_ptr<Dx12CommnadList> mBundleCommnadList;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCmdList;
 };
 

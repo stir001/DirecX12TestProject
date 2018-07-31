@@ -3,7 +3,7 @@
 
  struct DirectionalLightElement
 {
-	DirectX::XMFLOAT3 dir;
+	DirectX::XMFLOAT4 dir;
 	DirectX::XMFLOAT4X4 viewProj;
 };
 

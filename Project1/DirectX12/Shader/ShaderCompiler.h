@@ -3,11 +3,32 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <list>
 
 class ShaderCompiler
 {
 public:
 	~ShaderCompiler();
+
+	static ShaderCompiler& Instance()
+	{
+		if (mInstance == nullptr)
+		{
+			mInstance = new ShaderCompiler();
+		}
+
+		return *mInstance;
+	}
+
+	static void Destroy()
+	{
+		if (mInstance != nullptr)
+		{
+			delete mInstance;
+		}
+		mInstance = nullptr;
+	}
 
 	/**@fn
 	*渡されたシェーダーのパスと名前からシェーターをコンパイルする
@@ -23,32 +44,18 @@ public:
 	*@param (existRootSignature) ルートシグネチャを定義しているかどうか
 	*/
 	ShaderDatas CompileShader(const std::string& shaderPath,
-		const std::string& vsName, 
-		const std::string& psName, 
-		const std::string& gsName, 
+		const std::string& vsName,
+		const std::string& psName,
+		const std::string& gsName,
 		const std::string& hsName,
 		const std::string& dsName,
 		bool existRootSignature);
 
 	void ReleaseShader(std::string shaderpath);
-	static ShaderCompiler* GetInstance()
-	{
-		if (mInstance == nullptr)
-		{
-			mInstance = new ShaderCompiler();
-		}
 
-		return mInstance;
-	}
+	void AddDefineMacro(const std::string& name, const std::string& def);
 
-	static void Destroy()
-	{
-		if (mInstance != nullptr)
-		{
-			delete mInstance;
-		}
-		mInstance = nullptr;
-	}
+
 private:
 	ShaderCompiler();
 	ShaderCompiler(const ShaderCompiler&);
@@ -56,8 +63,14 @@ private:
 	ShaderCompiler& operator=(const ShaderCompiler&);
 
 	static ShaderCompiler* mInstance;
+	struct MacroData
+	{
+		std::string name;
+		std::string def;
+	};
 
 	std::map<std::string, ShaderDatas> mDatas;
-
+	std::vector<D3D_SHADER_MACRO> mMacros;
+	std::list<MacroData> mStrData;
 };
 

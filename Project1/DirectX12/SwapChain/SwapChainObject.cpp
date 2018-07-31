@@ -15,8 +15,8 @@ SwapChainObject::SwapChainObject(HWND& hwnd, Microsoft::WRL::ComPtr<ID3D12Device
 {
 	DX12CTRL_INSTANCE;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.Height = static_cast<UINT>(d12->GetWindowSize().y);
-	swapChainDesc.Width = static_cast<UINT>(d12->GetWindowSize().x);
+	swapChainDesc.Height = static_cast<UINT>(d12.GetWindowSize().y);
+	swapChainDesc.Width = static_cast<UINT>(d12.GetWindowSize().x);
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.Stereo = false;
 	swapChainDesc.SampleDesc.Count = 1;
