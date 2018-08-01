@@ -3,7 +3,7 @@
 #include <d3d12.h>
 
 
-PrimitiveObject::PrimitiveObject()
+PrimitiveObject::PrimitiveObject(const std::string& name): mName(name)
 {
 }
 
@@ -12,12 +12,13 @@ PrimitiveObject::~PrimitiveObject()
 {
 }
 
-void PrimitiveObject::SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState)
+const std::string & PrimitiveObject::GetName() const
 {
-	mPipelineState = pipelineState;
+	return mName;
 }
 
-void PrimitiveObject::SetRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganature)
+std::vector<PrimitiveVertex>& PrimitiveObject::GetVertices()
 {
-	mRootsignature = rootsiganature;
+	return mVertices;
 }
+

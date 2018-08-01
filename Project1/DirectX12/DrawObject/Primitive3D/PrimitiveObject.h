@@ -43,17 +43,16 @@ struct PrimitiveVertex
 	}
 };
 
-class PrimitiveObject : public DrawController3D
+class PrimitiveObject
 {
 public:
-	PrimitiveObject();
+	PrimitiveObject(const std::string& name);
 	~PrimitiveObject();
 
-	virtual void Draw() = 0;
-	virtual void SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelineState);
-	virtual void SetRootsignature(std::shared_ptr<RootSignatureObject>& rootsiganature);
+	virtual const std::string& GetName() const;
+	virtual std::vector<PrimitiveVertex>& GetVertices();
 protected:
 	std::vector<PrimitiveVertex> mVertices;
-	std::shared_ptr<VertexBufferObject> mVertexBuffer;
+	std::string mName;
 };
 

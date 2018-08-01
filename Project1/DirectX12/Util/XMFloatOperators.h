@@ -37,6 +37,8 @@ bool operator!=(const DirectX::XMFLOAT3& lval, const DirectX::XMFLOAT3& rval);
 
 void operator+=(DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT3& rval);
 
+DirectX::XMFLOAT4 operator+=(DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT4& rval);
+
 DirectX::XMFLOAT4X4 operator*(const DirectX::XMFLOAT4X4& lval, const float rval);
 
 DirectX::XMFLOAT4X4 operator*( const float lval, const DirectX::XMFLOAT4X4& rval);
@@ -61,5 +63,5 @@ float GetLengthXMFloat3(const DirectX::XMFLOAT3& val);
 
 DirectX::XMFLOAT4 StoreFloat3ToXMFloat4(const DirectX::XMFLOAT3& val);
 
-DirectX::XMFLOAT4X4 StoreMatirxToXMFloat4(const DirectX::XMMATRIX& val);
+DirectX::XMFLOAT4X4 StoreMatrixToXMFloat4(const DirectX::XMMATRIX& val);
 #endif

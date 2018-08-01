@@ -7,8 +7,8 @@ public:
 	TransformMatrixCalculator();
 	~TransformMatrixCalculator();
 
-	virtual void SetPositon(const DirectX::XMFLOAT3& pos) = 0;
-	virtual void SetScale(DirectX::XMFLOAT3& pos) = 0;
+	virtual void AddPositon(const DirectX::XMFLOAT3& pos) = 0;
+	virtual void AddScale(const DirectX::XMFLOAT3& scale) = 0;
 	virtual void AddRotaX(float deg) = 0;
 	virtual void AddRotaY(float deg) = 0;
 	virtual void AddRotaZ(float deg) = 0;

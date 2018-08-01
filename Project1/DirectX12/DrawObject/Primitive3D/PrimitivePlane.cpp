@@ -8,11 +8,8 @@
 
 using namespace DirectX;
 
-PrimitivePlane::PrimitivePlane()
-{
-}
-
-PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, DirectX::XMFLOAT3 norm)
+PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, DirectX::XMFLOAT3 norm) 
+	: PrimitiveObject("PrimitivePlane")
 {
 	mPos = p;
 	mLength = len;
@@ -76,21 +73,9 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 
 	uv.x = 1;
 	mVertices.push_back(PrimitiveVertex(rdPos, norm, uv));
-
-	int size = sizeof(PrimitiveVertex);
-
-	mVertexBuffer.reset(new VertexBufferObject("PrimitiveVertexBuffer",Dx12Ctrl::Instance().GetDev(),size, vertexCount));
-	mVertexBuffer->WriteBuffer(&mVertices[0], size * vertexCount);
 }
 
 PrimitivePlane::~PrimitivePlane()
 {
 }
 
-void PrimitivePlane::Draw()
-{
-	DX12CTRL_INSTANCE
-	d12.GetCmdList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	mVertexBuffer->SetBuffer(d12.GetCmdList());
-	d12.GetCmdList()->DrawInstanced(static_cast<UINT>(mVertices.size()), 1, 0, 0);
-}

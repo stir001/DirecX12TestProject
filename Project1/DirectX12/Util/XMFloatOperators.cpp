@@ -91,6 +91,15 @@ void operator+=(DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT3& rval)
 	lval.x += rval.x; lval.y += rval.y; lval.z += rval.z;
 }
 
+DirectX::XMFLOAT4 operator+=(DirectX::XMFLOAT4 & lval, const DirectX::XMFLOAT4 & rval)
+{
+	lval.x += rval.x;
+	lval.y += rval.y;
+	lval.z += rval.z;
+	lval.w = 1;
+	return lval;
+}
+
 DirectX::XMFLOAT4X4 operator*(const DirectX::XMFLOAT4X4& lval, const float rval)
 {
 	return DirectX::XMFLOAT4X4(
@@ -187,7 +196,7 @@ DirectX::XMFLOAT4 StoreFloat3ToXMFloat4(const DirectX::XMFLOAT3 & val)
 	return DirectX::XMFLOAT4(val.x, val.y, val.z, 1);
 }
 
-DirectX::XMFLOAT4X4 StoreMatirxToXMFloat4(const DirectX::XMMATRIX & val)
+DirectX::XMFLOAT4X4 StoreMatrixToXMFloat4(const DirectX::XMMATRIX & val)
 {
 	DirectX::XMFLOAT4X4 rtn;
 	rtn._11 = val.r[0].m128_f32[0]; rtn._12 = val.r[0].m128_f32[1]; rtn._13 = val.r[0].m128_f32[2]; rtn._14 = val.r[0].m128_f32[3];

@@ -3,8 +3,8 @@
 
 Transform3DCalculator::Transform3DCalculator():mMatrixUpdate(&Transform3DCalculator::UpdateMatrix)
 , mPos{0,0,0,1}, mScale{1,1,1,1}, mQuaternion(0,0,0,1)
-, mAMatrix(StoreMatirxToXMFloat4(DirectX::XMMatrixIdentity()))
-, mRotaMatrix(StoreMatirxToXMFloat4(DirectX::XMMatrixIdentity()))
+, mAMatrix(StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity()))
+, mRotaMatrix(StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity()))
 {
 }
 
@@ -13,14 +13,14 @@ Transform3DCalculator::~Transform3DCalculator()
 {
 }
 
-void Transform3DCalculator::SetPositon(const DirectX::XMFLOAT3& pos)
+void Transform3DCalculator::AddPositon(const DirectX::XMFLOAT3& pos)
 {
-	mPos = StoreFloat3ToXMFloat4(pos);
+	mPos += StoreFloat3ToXMFloat4(pos);
 }
 
-void Transform3DCalculator::SetScale(DirectX::XMFLOAT3& scale)
+void Transform3DCalculator::AddScale(const DirectX::XMFLOAT3& scale)
 {
-	mScale = StoreFloat3ToXMFloat4(scale);
+	mScale += StoreFloat3ToXMFloat4(scale);
 }
 
 void Transform3DCalculator::AddRotaX(float deg)
@@ -49,6 +49,16 @@ DirectX::XMFLOAT4X4 Transform3DCalculator::GetAMatrix()
 	return mAMatrix;
 }
 
+void Transform3DCalculator::Init()
+{
+	mMatrixUpdate = &Transform3DCalculator::UpdateMatrix;
+	mPos = { 0, 0, 0, 1 };
+	mScale = { 1, 1, 1, 1 };
+	mQuaternion = { 0, 0, 0, 1 };
+	mAMatrix = StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity());
+	mRotaMatrix = StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity());
+}
+
 void Transform3DCalculator::UpdateMatrix()
 {
 	DirectX::XMMATRIX mat = DirectX::XMMatrixIdentity();
@@ -57,7 +67,7 @@ void Transform3DCalculator::UpdateMatrix()
 	mat *= DirectX::XMLoadFloat4x4(&mRotaMatrix);
 	mat *= DirectX::XMMatrixScaling(mScale.x, mScale.y, mScale.z);
 	mat *= DirectX::XMMatrixTranslation(mPos.x, mPos.y, mPos.z);
-	mAMatrix = StoreMatirxToXMFloat4(mat);
+	mAMatrix = StoreMatrixToXMFloat4(mat);
 
 	mMatrixUpdate = &Transform3DCalculator::NonUpdateMatrix;
 }

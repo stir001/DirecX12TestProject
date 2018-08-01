@@ -7,13 +7,14 @@ public:
 	Transform3DCalculator();
 	~Transform3DCalculator();
 
-	void SetPositon(const DirectX::XMFLOAT3& pos);
-	void SetScale(DirectX::XMFLOAT3& scale);
+	void AddPositon(const DirectX::XMFLOAT3& pos);
+	void AddScale(const DirectX::XMFLOAT3& scale);
 	void AddRotaX(float deg);
 	void AddRotaY(float deg);
 	void AddRotaZ(float deg);
 	void SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion);
 	DirectX::XMFLOAT4X4 GetAMatrix();
+	void Init();
 private:
 	void UpdateMatrix();
 	void NonUpdateMatrix();
