@@ -4,8 +4,9 @@
 
 class PrimitiveObject;
 class VertexBufferObject;
+class IndexBufferObject;
 class ConstantBufferObject;
-class DescriptorHeapObject;
+class Dx12DescriptorHeapObject;
 
 class PrimitiveController :
 	public DrawController3D
@@ -22,8 +23,13 @@ public:
 protected:
 	std::shared_ptr<PrimitiveObject> mPrimitive;
 	std::shared_ptr<VertexBufferObject> mVertexBuffer;
+	std::shared_ptr<IndexBufferObject> mIndexBuffer;
 	std::vector<DirectX::XMFLOAT4X4> mInstancesMatrix;
-	std::shared_ptr<ConstantBufferObject> mInstanceMatrixBuffer;
-	std::shared_ptr<DescriptorHeapObject> mDescHeap;
+	std::shared_ptr<VertexBufferObject> mInstanceMatrixBuffer;
+	std::shared_ptr<Dx12DescriptorHeapObject> mDescHeap;
+	void (PrimitiveController::*mUpdate)();
+	
+	void UpdateBuffer();
+	void NonUpdateBuffer();
 };
 

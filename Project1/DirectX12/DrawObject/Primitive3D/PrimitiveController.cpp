@@ -2,6 +2,8 @@
 #include "PrimitiveObject.h"
 #include "ConstantBufferObject.h"
 #include "VertexBufferObject.h"
+#include "IndexBufferObject.h"
+#include "Dx12DescriptorHeapObject.h"
 #include "Dx12Ctrl.h"
 
 
@@ -9,11 +11,13 @@ PrimitiveController::PrimitiveController(std::shared_ptr<PrimitiveObject> primit
 	, Microsoft::WRL::ComPtr<ID3D12Device>& dev
 	, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
 	: DrawController3D(primitive->GetName(),dev, cmdList)
-	, mPrimitive(primitive)
+	, mPrimitive(primitive), mUpdate(&PrimitiveController::UpdateBuffer)
 {
 	mVertexBuffer.reset(new VertexBufferObject(primitive->GetName() + "VertexBuffer", dev, sizeof(PrimitiveVertex), primitive->GetVertices().size()));
-	mInstanceMatrixBuffer.reset(new ConstantBufferObject(primitive->GetName() + "ConstantBuffer", dev, sizeof(DirectX::XMFLOAT4X4), 1));
-
+	mIndexBuffer.reset(new IndexBufferObject(primitive->GetName() + "IndexBuffer", dev, sizeof(unsigned int) ,primitive->GetIndices().size()));
+	std::vector<DirectX::XMFLOAT3> pos(1);
+	pos[0] = DirectX::XMFLOAT3(0, 0, 0);
+	Instancing(pos);
 }
 
 
@@ -35,10 +39,25 @@ void PrimitiveController::Instancing(std::vector<DirectX::XMFLOAT3>& instancePos
 		mInstancesMatrix[i] = mat;
 	}
 
-	mInstanceMatrixBuffer.reset(new ConstantBufferObject(mPrimitive->GetName() + "ConstantBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mInstancesMatrix[0]), mInstancesMatrix.size()));
+	mInstanceMatrixBuffer.reset(new VertexBufferObject(mPrimitive->GetName() + "InstanceVertexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mInstancesMatrix[0]), mInstancesMatrix.size()));
+
+	mUpdate = &PrimitiveController::UpdateBuffer;
 }
 
 void PrimitiveController::Draw()
 {
-	mVertexBuffer->SetBuffer(mCmdList);
+	(this->*mUpdate)();
+	mIndexBuffer->SetBuffer(mCmdList);
+	mVertexBuffer;
+	mDescHeap->SetDescriptorHeap(mCmdList);
+}
+
+void PrimitiveController::UpdateBuffer()
+{
+	mInstanceMatrixBuffer->WriteBuffer256Alignment(mInstancesMatrix.data(), sizeof(mInstancesMatrix[0]), mInstancesMatrix.size());
+	mUpdate = &PrimitiveController::NonUpdateBuffer;
+}
+
+void PrimitiveController::NonUpdateBuffer()
+{
 }

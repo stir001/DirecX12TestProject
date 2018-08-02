@@ -5,7 +5,6 @@
 #include <DirectXMath.h>
 #include <memory>
 
-class PrimitiveObject;
 class LightObject;
 class PrimitivePlane;
 class RootSignatureObject;

@@ -11,6 +11,7 @@ public:
 	~VertexBufferObject();
 
 	void SetBuffer(const Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList) const;
+	const D3D12_VERTEX_BUFFER_VIEW* GetViewPtr() const;
 private:
 	D3D12_VERTEX_BUFFER_VIEW mVbView;
 };
