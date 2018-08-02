@@ -1,6 +1,7 @@
 #include "PrimitiveController.h"
 #include "PrimitiveObject.h"
 #include "ConstantBufferObject.h"
+#include "VertexBufferObject.h"
 #include "Dx12Ctrl.h"
 
 
@@ -10,6 +11,9 @@ PrimitiveController::PrimitiveController(std::shared_ptr<PrimitiveObject> primit
 	: DrawController3D(primitive->GetName(),dev, cmdList)
 	, mPrimitive(primitive)
 {
+	mVertexBuffer.reset(new VertexBufferObject(primitive->GetName() + "VertexBuffer", dev, sizeof(PrimitiveVertex), primitive->GetVertices().size()));
+	mInstanceMatrixBuffer.reset(new ConstantBufferObject(primitive->GetName() + "ConstantBuffer", dev, sizeof(DirectX::XMFLOAT4X4), 1));
+
 }
 
 
@@ -32,5 +36,9 @@ void PrimitiveController::Instancing(std::vector<DirectX::XMFLOAT3>& instancePos
 	}
 
 	mInstanceMatrixBuffer.reset(new ConstantBufferObject(mPrimitive->GetName() + "ConstantBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mInstancesMatrix[0]), mInstancesMatrix.size()));
+}
 
+void PrimitiveController::Draw()
+{
+	mVertexBuffer->SetBuffer(mCmdList);
 }

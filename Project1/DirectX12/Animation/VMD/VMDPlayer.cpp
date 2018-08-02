@@ -9,13 +9,19 @@
 
 using namespace DirectX;
 
-VMDPlayer::VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMFLOAT4X4>& boneMat)
-	:mBoneDatas(bDatas), mBoneNode(node), mFrame(0), mUpdate(&VMDPlayer::StopUpdate), mEndCheck(&VMDPlayer::LoopEndCheck), mId(-1),mCurrentBoneMatrix(boneMat)
+VMDPlayer::VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMFLOAT4X4>& boneMat, std::shared_ptr<ConstantBufferObject>& boneConstantBuffer)
+	:mBoneDatas(bDatas), mBoneNode(node), mFrame(0)
+	, mUpdate(&VMDPlayer::StopUpdate), mEndCheck(&VMDPlayer::LoopEndCheck), mCurrentBoneMatrix(boneMat)
+	, mBoneConstantBuffer(boneConstantBuffer)
 {
 }
 
 VMDPlayer::~VMDPlayer()
 {
+	if (mAnimationId != -1)
+	{
+		AnimationPlayerManager::Instance()->WaitSafeFree();
+	}
 }
 
 void VMDPlayer::Update()
@@ -26,7 +32,21 @@ void VMDPlayer::Update()
 void VMDPlayer::SetVMD(std::shared_ptr<VMDMotion> vmd)
 {
 	mPoses = &vmd->mPoses;
-	//Play();
+	mMaxFrame = 0;
+	for (auto& p : *mPoses)
+	{
+		if (p.second.back().frameNo > mMaxFrame)
+		{
+			mMaxFrame = p.second.back().frameNo;
+		}
+		XMVECTOR v = XMLoadFloat4(&p.second.front().quoternion);
+		XMMATRIX q = XMMatrixRotationQuaternion(v);
+		VMDBoneRotation(p.first, q);
+
+	}
+	WriteBoneMatrix(mBoneConstantBuffer);
+	//mAnimationId = AnimationPlayerManager::Instance()->SetAnimation(this);
+	//mUpdate = &VMDPlayer::PlayingUpdate;
 }
 
 void VMDPlayer::PlayingUpdate()
@@ -74,7 +94,8 @@ void VMDPlayer::PlayingUpdate()
 		}
 	}*/
 	VMDBoneChildRotation(mCurrentBoneMatrix[0], 0);
-	++mFrame %= 121;
+	WriteBoneMatrix(mBoneConstantBuffer);
+	++mFrame %= mMaxFrame * 2;
 	(this->*mEndCheck)();
 }
 
@@ -97,7 +118,6 @@ void VMDPlayer::VMDBoneRotation(const std::string& boneName, XMMATRIX& boneRotaM
 	}
 	if (data == nullptr) return;
 
-
 	XMVECTOR offsetvec = XMLoadFloat3(&data->pos);
 	XMMATRIX boneMat = DirectX::XMMatrixTranslationFromVector(-offsetvec);
 	boneMat *= boneRotaMatrix;
@@ -118,7 +138,7 @@ void VMDPlayer::Play(bool flag)
 {
 	mIsLoop = flag;
 	mUpdate = &VMDPlayer::PlayingUpdate;
-	mId = AnimationPlayerManager::Instance()->SetAnimation(this);
+	mAnimationId = AnimationPlayerManager::Instance()->SetAnimation(this);
 	if (mIsLoop)
 	{
 		mEndCheck = &VMDPlayer::NonCheck;
@@ -141,8 +161,8 @@ void VMDPlayer::NonCheck()
 void VMDPlayer::Stop()
 {
 	mUpdate = &VMDPlayer::StopUpdate;
-	AnimationPlayerManager::Instance()->RemoveAnimation(mId);
-	mId = -1;
+	AnimationPlayerManager::Instance()->RemoveAnimation(mAnimationId);
+	mAnimationId = -1;
 }
 
 void VMDPlayer::WriteBoneMatrix(std::shared_ptr<ConstantBufferObject>& matrixBuffer)

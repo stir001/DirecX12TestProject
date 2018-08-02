@@ -8,13 +8,13 @@
 
 using namespace DirectX;
 
+const unsigned int PLANE_INDICES[] = { 0, 1, 2, 1, 3, 2};
+
 PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, DirectX::XMFLOAT3 norm) 
-	: PrimitiveObject("PrimitivePlane")
+	: PrimitiveObject("PrimitivePlane"), mLength(len), mHeight(hei), mPos(p)
 {
-	mPos = p;
-	mLength = len;
-	mHeight = hei;
-	norm = NormalizeXMFloat3(norm);
+
+	mNormal = NormalizeXMFloat3(norm);
 
 	DirectX::XMVECTOR leftUp = { -mLength / 2.0f, 0, mHeight / 2.0f };
 	DirectX::XMVECTOR rightUp = { mLength / 2.0f, 0, mHeight / 2.0f };
@@ -25,11 +25,10 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 
 	DirectX::XMFLOAT3 defNorm = { 0, 1, 0 };
 
-	DirectX::XMFLOAT3 inNorm = { norm.x, norm.y, norm.z };
+	DirectX::XMFLOAT3 inNorm = { mNormal.x, mNormal.y, mNormal.z };
 
 	float cos = DotXMFloat3(defNorm, inNorm);
 	float rad = acosf(DotXMFloat3(defNorm, inNorm));
-
 
 	DirectX::XMMATRIX m = XMMatrixIdentity();
 
@@ -62,17 +61,24 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 	unsigned int vertexCount = 4;
 	mVertices.reserve(vertexCount);
 	DirectX::XMFLOAT2 uv = { 0,0 };
-	mVertices.push_back(PrimitiveVertex(luPos, norm, uv));
+	mVertices.push_back(PrimitiveVertex(luPos, mNormal, uv));
 
 	uv.x = 1;
-	mVertices.push_back(PrimitiveVertex(ruPos, norm, uv));
+	mVertices.push_back(PrimitiveVertex(ruPos, mNormal, uv));
 
 	uv.x = 0;
 	uv.y = 1;
-	mVertices.push_back(PrimitiveVertex(ldPos, norm,uv));
+	mVertices.push_back(PrimitiveVertex(ldPos, mNormal, uv));
 
 	uv.x = 1;
-	mVertices.push_back(PrimitiveVertex(rdPos, norm, uv));
+	mVertices.push_back(PrimitiveVertex(rdPos, mNormal, uv));
+
+	unsigned int indicesNum = _countof(PLANE_INDICES);
+	mIndices.resize(indicesNum);
+	for (unsigned int i = 0; i < indicesNum; ++i)
+	{
+		mIndices[i] = PLANE_INDICES[i];
+	}
 }
 
 PrimitivePlane::~PrimitivePlane()

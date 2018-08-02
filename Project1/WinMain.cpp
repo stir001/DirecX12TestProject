@@ -11,6 +11,10 @@
 #include "ImageController.h"
 //#include "FbxLoader.h"
 #include "PMDController.h"
+#include "VMDLoader.h"
+#include "PrimitiveCube.h"
+#include "PrimitiveController.h"
+#include "RenderingPathManager.h"
 
 #include <algorithm>
 #include <Windows.h>
@@ -55,10 +59,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	std::shared_ptr<PMDLoader> loader(new PMDLoader());
 	std::shared_ptr<PMDController> pmdContrl = loader->Load(PMD_MODEL_PATH2);
 	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
+	VMDLoader vmdloader;
+	std::shared_ptr<VMDMotion> motion =  vmdloader.LoadMotion("”Ž—í—ì–²/reimu_walk.vmd");
+	pmdContrl->SetMotion(motion);
+	pmdContrl->PlayMotion(true);
+
+	std::shared_ptr<PrimitiveCube> cube(new PrimitiveCube(10.f));
+	std::shared_ptr<PrimitiveController> primitiveCtrl(new PrimitiveController(cube, Dx12Ctrl::Instance().GetDev(), RenderingPathManager::Instance().GetRenderingPathCommandList(0)));
 
 	pmdContrl->SetLight(dirLight);
-
-
 
 	XMFLOAT3 pos = { 0,0,0 };
 	XMFLOAT3 normal = { 0,1,0 };
@@ -74,7 +83,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		camera->DefaultMove(input);
 
-		pmdContrl->AddRotaY(0.1f);
 
 		pmdContrl->Draw();
 		//mgr.Draw();

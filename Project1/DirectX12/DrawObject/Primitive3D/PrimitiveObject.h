@@ -1,6 +1,4 @@
 #pragma once
-#include "DrawController3D.h"
-
 #include <DirectXMath.h>
 #include <vector>
 #include <memory>
@@ -18,6 +16,7 @@ struct PrimitiveVertex
 	DirectX::XMFLOAT4 normal;
 	DirectX::XMFLOAT4 color;
 	DirectX::XMFLOAT2 uv;
+
 	PrimitiveVertex()
 	{
 		pos = { 0, 0, 0, 1};
@@ -50,9 +49,11 @@ public:
 	~PrimitiveObject();
 
 	virtual const std::string& GetName() const;
-	virtual std::vector<PrimitiveVertex>& GetVertices();
+	virtual const std::vector<PrimitiveVertex>& GetVertices() const;
+	virtual const std::vector<unsigned int>& GetIndices() const;
 protected:
 	std::vector<PrimitiveVertex> mVertices;
+	std::vector<unsigned int> mIndices;
 	std::string mName;
 };
 

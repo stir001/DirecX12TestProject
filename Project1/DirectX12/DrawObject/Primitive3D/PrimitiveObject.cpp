@@ -12,13 +12,18 @@ PrimitiveObject::~PrimitiveObject()
 {
 }
 
-const std::string & PrimitiveObject::GetName() const
+const std::string& PrimitiveObject::GetName() const
 {
 	return mName;
 }
 
-std::vector<PrimitiveVertex>& PrimitiveObject::GetVertices()
+const std::vector<PrimitiveVertex>& PrimitiveObject::GetVertices() const
 {
 	return mVertices;
+}
+
+const std::vector<unsigned int>& PrimitiveObject::GetIndices() const
+{
+	return mIndices;
 }
 

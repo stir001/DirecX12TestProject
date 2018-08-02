@@ -16,7 +16,7 @@ struct BoneTree;
 class VMDPlayer : public AnimationPlayer
 {
 public:
-	VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMFLOAT4X4>& boneMat);
+	VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMFLOAT4X4>& boneMat, std::shared_ptr<ConstantBufferObject>& boneConstantBuffer);
 	~VMDPlayer();
 
 	void Stop();
@@ -26,11 +26,12 @@ public:
 	void SetVMD(std::shared_ptr<VMDMotion> vmd);
 private:
 	std::vector<DirectX::XMFLOAT4X4>& mCurrentBoneMatrix;
+	std::shared_ptr<ConstantBufferObject>& mBoneConstantBuffer;
 	std::map<std::string, std::vector<VMDPose>>* mPoses;
 	std::vector<PMDBoneData>& mBoneDatas;
 	BoneTree& mBoneNode;
 	int mFrame;
-	int mId;
+	int mMaxFrame;
 	bool mIsLoop;
 	void (VMDPlayer::*mUpdate)();
 	void (VMDPlayer::*mEndCheck)();

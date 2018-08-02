@@ -9,14 +9,14 @@ public:
 	PrimitivePlane(DirectX::XMFLOAT3 pos, float length, float height, DirectX::XMFLOAT3 norm);
 	~PrimitivePlane();
 
-	void Draw();
-	void RotationXAxis(float deg);
-	void RotationYAxis(float deg);
-	void RotationZAxis(float deg);
+	//void Draw();
+	//void RotationXAxis(float deg);
+	//void RotationYAxis(float deg);
+	//void RotationZAxis(float deg);
 
-	void RotationQuaternion(DirectX::XMFLOAT4& quaternion);
+	//void RotationQuaternion(DirectX::XMFLOAT4& quaternion);
 
-	void SetPos(const DirectX::XMFLOAT3& pos);
+	//void SetPos(const DirectX::XMFLOAT3& pos);
 
 
 private:

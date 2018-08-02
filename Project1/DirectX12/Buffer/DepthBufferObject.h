@@ -13,7 +13,6 @@ public:
 	DepthBufferObject(const std::string& name, Microsoft::WRL::ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state);
 	~DepthBufferObject();
 
-	//D3D12_CPU_DESCRIPTOR_HANDLE GetCPUAdress();
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetDepthBuffer();
 private:
 	void Map();

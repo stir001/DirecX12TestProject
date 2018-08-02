@@ -16,6 +16,7 @@
 #include "Dx12Camera.h"
 #include "Dx12CommandList.h"
 #include "XMFloatOperators.h"
+#include "AnimationPlayerManager.h"
 
 PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<DirectionalLight>& dlight, const std::string& name, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList)
@@ -25,13 +26,17 @@ PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<D
 	mBoneMatrix.resize(mModel->mBoneDatas.size());
 	for (auto& bm : mBoneMatrix)  DirectX::XMStoreFloat4x4(&bm, DirectX::XMMatrixIdentity());
 	mBoneMatrixBuffer->WriteBuffer(&mBoneMatrix[0], static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mModel->mBoneDatas.size()));
-	mVmdPlayer.reset(new VMDPlayer(mModel->mBoneDatas, mModel->mBoneNode, mBoneMatrix));
+	mVmdPlayer.reset(new VMDPlayer(mModel->mBoneDatas, mModel->mBoneNode, mBoneMatrix,mBoneMatrixBuffer));
 
 	CreateDescriptorHeap(dev, name);
 }
 
 PMDController::~PMDController()
 {
+	if (mVmdPlayer->GetID() != -1)
+	{
+		AnimationPlayerManager::Instance()->WaitSafeFree();
+	}
 }
 
 void PMDController::Draw()

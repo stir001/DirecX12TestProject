@@ -17,6 +17,7 @@ public:
 	~PrimitiveController();
 
 	void Instancing(std::vector<DirectX::XMFLOAT3>& instancePositions);
+	void Draw();
 
 protected:
 	std::shared_ptr<PrimitiveObject> mPrimitive;

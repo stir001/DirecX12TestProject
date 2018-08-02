@@ -17,7 +17,7 @@ unsigned int Roundup2Multiplier(unsigned int size)
 
 void CallStartPerGameLoop()
 {
-	//AnimationPlayerManager::Instance()->UpdateAnimations();
+	AnimationPlayerManager::Instance()->UpdateAnimations();
 }
 
 void CallEndPerGameLoop()

@@ -40,31 +40,6 @@ Dx12BufferObject::~Dx12BufferObject()
 	}
 	mElementBuffer = nullptr;
 
-
-	//https://docs.microsoft.com/en-us/windows/desktop/api/d3d12/ns-d3d12-d3d12_discard_region
-	D3D12_DISCARD_REGION region;
-	if (mBuffer->GetDesc().Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)
-	{
-		region.NumRects = 1;
-	}
-	else
-	{
-		region.NumRects = 0;
-	}
-
-	D3D12_RECT rect;
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = static_cast<LONG>(mBuffer->GetDesc().Width);
-	rect.bottom = static_cast<LONG>(mBuffer->GetDesc().Height);
-
-	region.pRects = &rect;
-	region.FirstSubresource = 0;
-	region.NumSubresources = 1;
-
-	Dx12Ctrl::Instance().GetCmdList()->DiscardResource(mBuffer.Get(), &region);
-	Dx12Ctrl::Instance().CmdQueueSignal();
-	unsigned long resetCount = mBuffer.Reset();
 	mViewDescs.reset();
 }
 
