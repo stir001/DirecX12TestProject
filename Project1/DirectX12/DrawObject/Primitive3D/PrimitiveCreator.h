@@ -9,6 +9,7 @@ class LightObject;
 class PrimitiveController;
 class RootSignatureObject;
 class PipelineStateObject;
+class PrimitiveObject;
 
 class PrimitiveCreator
 {
