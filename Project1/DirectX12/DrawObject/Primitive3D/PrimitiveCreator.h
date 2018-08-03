@@ -7,7 +7,7 @@
 
 class PrimitiveObject;
 class LightObject;
-class PrimitivePlane;
+class PrimitiveController;
 class RootSignatureObject;
 class PipelineStateObject;
 
@@ -18,8 +18,12 @@ public:
 	~PrimitiveCreator();
 
 	void SetLightObject(std::shared_ptr<LightObject> inlight);
-	std::shared_ptr<PrimitivePlane> CreatePlane(DirectX::XMFLOAT3 pos, float length, float height, DirectX::XMFLOAT3 normal);
+	std::shared_ptr<PrimitiveController> CreatePlane(DirectX::XMFLOAT3 pos, float length, float height, DirectX::XMFLOAT3 normal);
+	std::shared_ptr<PrimitiveController> CreateCube(float length, const std::string& texPath);
+	void SetParamaters(std::shared_ptr<PrimitiveController>& ctrl);
 private:
+
+	std::shared_ptr<PrimitiveController> CreateController(const std::shared_ptr<PrimitiveObject>& primitive);
 	std::shared_ptr<LightObject> mLight;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCommnadList;
 	std::shared_ptr<RootSignatureObject> mRootsiganture;

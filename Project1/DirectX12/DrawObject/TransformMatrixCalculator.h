@@ -13,6 +13,6 @@ public:
 	virtual void AddRotaY(float deg) = 0;
 	virtual void AddRotaZ(float deg) = 0;
 	virtual void SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion) = 0;
-	virtual DirectX::XMFLOAT4X4 GetAMatrix() const = 0;
+	virtual DirectX::XMFLOAT4X4 GetAMatrix() = 0;
 };
 

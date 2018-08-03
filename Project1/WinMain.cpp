@@ -12,9 +12,10 @@
 //#include "FbxLoader.h"
 #include "PMDController.h"
 #include "VMDLoader.h"
-#include "PrimitiveCube.h"
 #include "PrimitiveController.h"
 #include "RenderingPathManager.h"
+#include "XMFloatOperators.h"
+#include "Transform3DCalculator.h"
 
 #include <algorithm>
 #include <Windows.h>
@@ -46,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	///Direct3D12ÇÃèâä˙âª
 
 	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "FbxLoad";
+	std::string wName = "1601295_ê^ìÁèßàÍòY";
 	Dx12Ctrl::Instance().SetWindowName(wName);
 	Dx12Ctrl::Instance().Dx12Init(hInst);
 
@@ -55,27 +56,64 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	//PrimitiveCreator mgr;
 
-	
+
 	std::shared_ptr<PMDLoader> loader(new PMDLoader());
 	std::shared_ptr<PMDController> pmdContrl = loader->Load(PMD_MODEL_PATH2);
-	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1,-1,1));
+	std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1, -1, 1));
 	VMDLoader vmdloader;
-	std::shared_ptr<VMDMotion> motion =  vmdloader.LoadMotion("îéóÌóÏñ≤/reimu_walk.vmd");
+	std::shared_ptr<VMDMotion> motion = vmdloader.LoadMotion("îéóÌóÏñ≤/reimu_walk.vmd");
 	pmdContrl->SetMotion(motion);
 	pmdContrl->PlayMotion(true);
 
-	std::shared_ptr<PrimitiveCube> cube(new PrimitiveCube(10.f));
-	std::shared_ptr<PrimitiveController> primitiveCtrl(new PrimitiveController(cube, Dx12Ctrl::Instance().GetDev(), RenderingPathManager::Instance().GetRenderingPathCommandList(0)));
+	PrimitiveCreator priCreater;
+
+	float length = 20.f;
+	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCube(length, "cube_tex.png");
+
+	unsigned int xNum = 100;
+	unsigned int zNum = 100;
+	unsigned int yNum = 10;
+	std::vector<DirectX::XMFLOAT3> offsets(xNum * zNum * yNum);
+	for (int y = 0; y < yNum; ++y)
+	{
+		for (int z = 0; z < zNum; ++z)
+		{
+			for (int x = 0; x < xNum; ++x)
+			{
+				offsets[x + z * xNum + y * xNum * zNum] = DirectX::XMFLOAT3(x * length, -y * length, z * length);
+			}
+		}
+	}
+	float deg = -1.0f;
+
+	primitiveCtrl->Instancing(offsets);
 
 	pmdContrl->SetLight(dirLight);
 
 	XMFLOAT3 pos = { 0,0,0 };
 	XMFLOAT3 normal = { 0,1,0 };
-	//mgr.CreatePlane(pos, 50, 50, normal);
-	//mgr.SetLightObject(dirLight);
+
+	Transform3DCalculator calculator;
+
+	XMFLOAT4X4 matrix = StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity());
+
+	std::vector<DirectX::XMFLOAT4X4> instanceMatrix(xNum * zNum);
+
 
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
+
+	DirectX::XMFLOAT3 zVec = { 0, 0, 1 };
+	DirectX::XMFLOAT3 xVec = { 1, 0, 0 };
+	DirectX::XMFLOAT3 vel = { 0 ,0, 0 };
+	float velLength = 2.0f;
+	DirectX::XMFLOAT3 pmdPos = {0, 0, 0};
+	DirectX::XMFLOAT3 initDir = {0, 0, -1};
+	float zvecRota = 90;//-z
+	float xvecRota = 180;//-x
+
+	float modelrota = 0;
+	unsigned int rotaCount = 0;
 
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
@@ -83,9 +121,63 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		camera->DefaultMove(input);
 
+		calculator.AddPositon(DirectX::XMFLOAT3(0, length * 0.5f, length * 0.5f));
+		matrix *= calculator.GetAMatrix();
+		calculator.Init();
+		calculator.SetRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(1, 0, 0), deg));
+		matrix *= calculator.GetAMatrix();
+		calculator.Init();
+		calculator.AddPositon(DirectX::XMFLOAT3(0, -length * 0.5f, -length * 0.5f));
+		matrix *= calculator.GetAMatrix();
+		calculator.Init();
+		for (auto& mat : instanceMatrix)
+		{
+			mat = matrix;
+		}
+		primitiveCtrl->SetInstancingMatrix(instanceMatrix,0, xNum * zNum);
 
+		vel = { 0,0,0 };
+		modelrota = 0.0f;
+		rotaCount = 0;
+
+		//if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4) && input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+		//{
+		//	modelrota = 135;
+		//}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+		{
+			vel += -xVec;
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+		{
+			vel += zVec;
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+		{
+			vel += xVec;
+
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+		{
+			vel += -zVec;
+		}
+
+		if (vel != DirectX::XMFLOAT3(0, 0, 0))
+		{
+			vel = NormalizeXMFloat3(vel);
+			pmdPos += vel * velLength;
+			
+			pmdContrl->SetRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(0, 1, 0), modelrota));
+		}
+		
+		pmdContrl->SetPositon(pmdPos);
 		pmdContrl->Draw();
-		//mgr.Draw();
+
+		primitiveCtrl->Draw();
 
 		CallEndPerGameLoop();
 	}

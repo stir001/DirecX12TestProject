@@ -32,7 +32,17 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 
 	DirectX::XMMATRIX m = XMMatrixIdentity();
 
-	if (defNorm != inNorm)
+	if (defNorm == -inNorm)
+	{
+		defNorm = { 1, 0, 0 };
+
+		DirectX::XMFLOAT3 cross = CrossXMFloat3(defNorm, inNorm);
+
+		DirectX::XMVECTOR q = CreateQuoternion(cross, XMConvertToDegrees(rad));
+
+		m = XMMatrixRotationQuaternion(q);
+	}
+	else if (defNorm != inNorm)
 	{
 		DirectX::XMFLOAT3 cross = CrossXMFloat3(defNorm, inNorm);
 

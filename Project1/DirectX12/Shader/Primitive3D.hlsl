@@ -20,22 +20,37 @@ struct PriOutput
     float4 pos : POSITION0;
     float4 normal : NORMAL;
     float4 color : COLOR;
-    //float2 uv : TEXCOORD;
+    float2 uv : TEXCOORD;
 };
 
-[RootSignature(PRM3DRS)]
-PriOutput PrimitiveVS(float4 pos : POSITION, float4 normal : NORMAL, float4 color : COLOR, float2 uv : TEXCOORD)
+struct PriVSInput
+{
+    float4 pos : POSITION; 
+	float4 normal : NORMAL; 
+	float4 color : COLOR; 
+    float2 uv : TEXCOORD;
+    matrix aMat : INSTANCEROTA;
+    float4 instanceOffset : INSTANCEPOS;
+    uint instanceID : SV_InstanceID;
+};
+
+    [RootSignature(PRM3DRS)]
+PriOutput PrimitiveVS(PriVSInput vsInput)
 {
     PriOutput po;
-    po.svpos = mul(mul(c_projection, mul(c_view, c_world)), pos);
+    matrix pvw = mul(c_projection, mul(c_view, c_world));
+    po.svpos = mul(pvw, mul(vsInput.aMat, vsInput.pos)) + mul(pvw, vsInput.instanceOffset);
     po.pos = po.svpos;
-    po.color = color;
-   // po.uv = (float2(1, 1) + po.shadowpos.xy * float2(1, -1)) * 0.5;
-    po.normal = normal;
+    po.color = vsInput.color;
+	po.uv = vsInput.uv;
+    matrix rotaMat = vsInput.aMat;
+    rotaMat._14_24_34 = 0;
+    po.normal = mul(rotaMat, vsInput.normal);
     return po;
 }
 
 float4 PrimitivePS(PriOutput data) : SV_Target
 {
-    return float4(data.color * dot(data.normal, float4(-dir, 1)));
+    float4 color = (tex.Sample(smp, data.uv)/* + data.color*/) * 0.5f;
+    return saturate(float4(color * dot(data.normal, float4(-dir.xyz, 1)) + color * 0.2f));
 }

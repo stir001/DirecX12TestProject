@@ -1,6 +1,7 @@
 #include "ShaderDatasStructure.h"
 
-ShaderDatas::ShaderDatas()
+ShaderDatas::ShaderDatas() :rootSignature(nullptr), vertexShader(nullptr),
+pixelShader(nullptr), geometryShader(nullptr), hullShader(nullptr), domainShader(nullptr)
 {
 
 }

@@ -244,8 +244,16 @@ void TextureLoader::CreateNullTexture(std::shared_ptr<TextureObject>& inTex)
 std::string TextureLoader::GetTextureName(const std::wstring& filePath)
 {
 	size_t size = filePath.rfind('/');
+	if (size == std::string::npos)
+	{
+		size = 0;
+	}
+	else
+	{
+		size += 1;
+	}
 	
-	std::wstring wstrbuff(filePath.begin() + size + 1, filePath.end());
+	std::wstring wstrbuff(filePath.begin() + size, filePath.end());
 
 	char* charbuf = nullptr;
 

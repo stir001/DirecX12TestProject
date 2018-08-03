@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DirectX12\Animation\Animation.cpp" />
     <ClCompile Include="DirectX12\Animation\AnimationPlayer.cpp" />
     <ClCompile Include="DirectX12\Animation\AnimationPlayerManager.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveController.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveCreator.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveCube.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Transform3DCalculator.cpp" />
@@ -169,8 +171,10 @@
     <ClCompile Include="DirectX12\Master\Dx12Ctrl.cpp" />
     <ClCompile Include="DirectX12\Master\NeedCall.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp" />
+    <ClCompile Include="DirectX12\PipelineState\PrimitivePipelineState.cpp" />
     <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp" />
     <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObject.cpp" />
+    <ClCompile Include="DirectX12\Rootsignature\PrimitiveRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp" />
     <ClCompile Include="DirectX12\Shader\HlslInclude.cpp" />
     <ClCompile Include="DirectX12\Shader\ShaderCompiler.cpp" />
@@ -191,7 +195,6 @@
     <ClCompile Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.cpp" />
     <ClCompile Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.cpp" />
     <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp" />
-    <ClCompile Include="PrimitiveCube.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +254,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="DirectX12\Animation\Animation.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayer.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayerManager.h" />
@@ -287,6 +291,7 @@
     <ClInclude Include="DirectX12\DrawObject\Primitive2D\Primitive2DManager.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveController.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveCreator.h" />
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveCube.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.h" />
     <ClInclude Include="DirectX12\DrawObject\Transform3DCalculator.h" />
@@ -298,8 +303,10 @@
     <ClInclude Include="DirectX12\Master\Dx12ResultCheckDefine.h" />
     <ClInclude Include="DirectX12\Master\NeedCall.h" />
     <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h" />
+    <ClInclude Include="DirectX12\PipelineState\PrimitivePipelineState.h" />
     <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h" />
     <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObject.h" />
+    <ClInclude Include="DirectX12\Rootsignature\PrimitiveRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h" />
     <ClInclude Include="DirectX12\Shader\HlslInclude.h" />
     <ClInclude Include="DirectX12\Shader\ShaderCompiler.h" />
@@ -319,7 +326,6 @@
     <ClInclude Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.h" />
     <ClInclude Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.h" />
     <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h" />
-    <ClInclude Include="PrimitiveCube.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

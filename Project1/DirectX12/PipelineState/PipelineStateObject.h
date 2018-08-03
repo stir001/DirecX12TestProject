@@ -11,7 +11,7 @@ public:
 
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> GetPipelineState() const;
 	void CreatePipelineState(D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device> dev);
-private:
+protected:
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> mPipelineState;
 };
 

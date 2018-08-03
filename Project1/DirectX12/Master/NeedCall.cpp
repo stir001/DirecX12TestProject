@@ -22,7 +22,7 @@ void CallStartPerGameLoop()
 
 void CallEndPerGameLoop()
 {
-	//AnimationPlayerManager::Instance()->WaitSafeFree();
+	AnimationPlayerManager::Instance()->WaitSafeFree();
 	RenderingPathManager::Instance().Render();
 }
 

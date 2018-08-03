@@ -29,6 +29,8 @@ DirectX::XMFLOAT3 CrossXMFloat3(const DirectX::XMFLOAT3& lval, const DirectX::XM
 
 DirectX::XMVECTOR CreateQuoternion(const DirectX::XMFLOAT3& axis, float deg);
 
+DirectX::XMFLOAT4 CreateQuoternionXMFloat4(const DirectX::XMFLOAT3& axis, float deg);
+
 DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& val);
 
 bool operator==(const DirectX::XMFLOAT3& lval, const DirectX::XMFLOAT3& rval);
