@@ -12,18 +12,12 @@ public:
 	void AddRotaX(float deg);
 	void AddRotaY(float deg);
 	void AddRotaZ(float deg);
-	void SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion);
+	void AddRotaQuaternion(const DirectX::XMFLOAT4& quaternion);
 	DirectX::XMFLOAT4X4 GetAMatrix();
 	void Init();
 private:
-	void UpdateMatrix();
-	void NonUpdateMatrix();
+	DirectX::XMFLOAT4X4 Multipli(DirectX::XMFLOAT4X4& matF44, DirectX::XMMATRIX& matXM);
 
-	void (Transform3DCalculator::*mMatrixUpdate)();
 	DirectX::XMFLOAT4X4 mAMatrix;
-	DirectX::XMFLOAT4X4 mRotaMatrix;
-	DirectX::XMFLOAT4 mPos;
-	DirectX::XMFLOAT4 mScale;
-	DirectX::XMFLOAT4 mQuaternion;
 };
 

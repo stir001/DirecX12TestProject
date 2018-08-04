@@ -99,7 +99,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	std::vector<DirectX::XMFLOAT4X4> instanceMatrix(xNum * zNum);
 
-
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 
@@ -122,14 +121,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		camera->DefaultMove(input);
 
 		calculator.AddPositon(DirectX::XMFLOAT3(0, length * 0.5f, length * 0.5f));
-		matrix *= calculator.GetAMatrix();
-		calculator.Init();
-		calculator.SetRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(1, 0, 0), deg));
-		matrix *= calculator.GetAMatrix();
-		calculator.Init();
+		calculator.AddRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(1, 0, 0), deg));
 		calculator.AddPositon(DirectX::XMFLOAT3(0, -length * 0.5f, -length * 0.5f));
-		matrix *= calculator.GetAMatrix();
-		calculator.Init();
+		matrix = calculator.GetAMatrix();
 		for (auto& mat : instanceMatrix)
 		{
 			mat = matrix;
