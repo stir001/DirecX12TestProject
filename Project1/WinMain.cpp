@@ -140,11 +140,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		modelrota = 0.0f;
 		rotaCount = 0;
 
-		//if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4) && input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
-		//{
-		//	modelrota = 135;
-		//}
-
 		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
 		{
 			vel += -xVec;
@@ -158,7 +153,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
 		{
 			vel += xVec;
-
 		}
 
 		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
@@ -169,9 +163,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		if (vel != DirectX::XMFLOAT3(0, 0, 0))
 		{
 			vel = NormalizeXMFloat3(vel);
+			float c = DotXMFloat3(vel, initDir);
+			float rad = 0.0f;
+			if (vel.x > 0)
+			{
+				rad = -acosf(c);
+			}
+			else
+			{
+				rad = acosf(c);
+			}
 			pmdPos += vel * velLength;
 			
-			pmdContrl->SetRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(0, 1, 0), modelrota));
+			pmdContrl->SetRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(0, 1, 0), DirectX::XMConvertToDegrees(rad)));
 		}
 		
 		pmdContrl->SetPositon(pmdPos);
