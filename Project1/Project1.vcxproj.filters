@@ -19,6 +19,9 @@
     <FxCompile Include="DirectX12\Shader\PMDexistTexShader.hlsl">
       <Filter>DirectX12\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="DirectX12\Shader\NormalmapShader.hlsl">
+      <Filter>DirectX12\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp" />
@@ -229,7 +232,6 @@
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveRootSignature.cpp">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX12\d3dx12.h">
@@ -445,7 +447,6 @@
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveRootSignature.h">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectX12">
@@ -541,5 +542,10 @@
     <Filter Include="Game">
       <UniqueIdentifier>{f007b159-fec3-436f-ac62-aab8c0a009f6}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectX12\Shader\MatrixOperation.hlsli">
+      <Filter>DirectX12\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -125,7 +125,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DirectX12\Animation\Animation.cpp" />
     <ClCompile Include="DirectX12\Animation\AnimationPlayer.cpp" />
     <ClCompile Include="DirectX12\Animation\AnimationPlayerManager.cpp" />
@@ -214,6 +213,16 @@
       </EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="DirectX12\Shader\NormalmapShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="DirectX12\Shader\PMDexistTexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -254,7 +263,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="DirectX12\Animation\Animation.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayer.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayerManager.h" />
@@ -326,6 +334,12 @@
     <ClInclude Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.h" />
     <ClInclude Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.h" />
     <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectX12\Shader\MatrixOperation.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

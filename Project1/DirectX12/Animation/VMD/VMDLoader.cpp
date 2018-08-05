@@ -4,22 +4,33 @@
 
 #include <algorithm>
 
-VMDLoader::VMDLoader()
+VMDLoader::VMDLoader():mFp(nullptr)
 {
 }
 
 
 VMDLoader::~VMDLoader()
 {
-	mFp->Close();
-	delete mFp;
+	if (mFp != nullptr)
+	{
+		mFp->Close();
+		delete mFp;
+		mFp = nullptr;
+	}
 	mLoadingMotion = nullptr;
 }
 
 std::shared_ptr<VMDMotion> VMDLoader::LoadMotion(std::string path)
 {
 	if (mMotions.find(path) != mMotions.end()) return mMotions[path];
-	mFp = new File(path);
+	if (mFp == nullptr)
+	{
+		mFp = new File(path);
+	}
+	else
+	{
+		mFp->SetFile(path);
+	}
 	mLoadingMotion.reset(new VMDMotion());
 
 	LoadHeader();

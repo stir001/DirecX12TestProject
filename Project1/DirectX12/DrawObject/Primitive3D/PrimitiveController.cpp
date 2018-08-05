@@ -31,11 +31,12 @@ PrimitiveController::PrimitiveController(std::shared_ptr<PrimitiveObject> primit
 	mVertexBuffer.reset(new VertexBufferObject(primitive->GetName() + "VertexBuffer", dev, sizeof(vertices[0]), vertices.size()));
 	mVertexBuffer->WriteBuffer(vertices.data(), sizeof(vertices[0]) * vertices.size());
 
-	mInstanceVertexBuffer.reset(new VertexBufferObject(primitive->GetName() + "InstanceVertexBuffer", dev, sizeof(mInstanceDatas[0]), 1));
 	InstanceDatas data;
 	DirectX::XMStoreFloat4x4(&data.aMatrix, DirectX::XMMatrixIdentity());
 	data.offset = DirectX::XMFLOAT4(0, 0, 0, 1);
 	mInstanceDatas.push_back(data);
+	mInstanceVertexBuffer.reset(new VertexBufferObject(primitive->GetName() + "InstanceVertexBuffer", dev, sizeof(mInstanceDatas[0]), 1));
+
 	mInstanceUpdate = &PrimitiveController::UpdateInstanceVertexBuffer;
 	mDescHeapCreate = &PrimitiveController::CreateDescHeap;
 }
@@ -75,7 +76,7 @@ void PrimitiveController::Instancing(std::vector<DirectX::XMFLOAT3>& instancePos
 
 void PrimitiveController::SetInstancingMatrix(std::vector<DirectX::XMFLOAT4X4>& matrix, unsigned int startIndex, unsigned int endIndex)
 {
-	for (unsigned int i = 0; i < endIndex - startIndex; ++i)
+	for (unsigned int i = 0; i <= endIndex - startIndex; ++i)
 	{
 		mInstanceDatas[startIndex + i].aMatrix = matrix[i];
 	}

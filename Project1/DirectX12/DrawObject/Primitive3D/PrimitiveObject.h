@@ -21,7 +21,7 @@ struct PrimitiveVertex
 	{
 		pos = { 0, 0, 0, 1};
 		normal = { 0, 0, 0, 1 };
-		color = { 1, 1, 1, 1 };
+		color = { 0, 0, 0, 1 };
 		uv = { 0, 0 };
 	}
 
@@ -30,7 +30,7 @@ struct PrimitiveVertex
 		pos = { inpos.x, inpos.y, inpos.z, 1.0f };
 		normal = { innorm.x, innorm.y, innorm.z, 1.0f };
 		uv = inuv;
-		color = { 1, 1, 1, 1 };
+		color = { 0, 0, 0, 1 };
 	}
 
 	PrimitiveVertex(float x, float y, float z, float nx, float ny, float nz, float u, float v)
@@ -38,7 +38,7 @@ struct PrimitiveVertex
 		pos = { x, y, z, 1.0f };
 		normal = { nx, ny, nz, 1.0f };
 		uv = { u,v };
-		color = { 1, 1, 1, 1 };
+		color = { 0, 0, 0, 1 };
 	}
 };
 

@@ -34,7 +34,7 @@ PrimitivePlane::PrimitivePlane(DirectX::XMFLOAT3 p, float len, float hei, Direct
 
 	if (defNorm == -inNorm)
 	{
-		defNorm = { 1, 0, 0 };
+		defNorm = { 0, 0, 1 };
 
 		DirectX::XMFLOAT3 cross = CrossXMFloat3(defNorm, inNorm);
 
