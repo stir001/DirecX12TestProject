@@ -50,8 +50,8 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
 {
     NormalMapData data;
     matrix pvw = mul(c_projection, mul(c_view, c_world));
-    data.svpos = mul(pvw, mul(vsIn.aMat, vsIn.pos)) + mul(pvw, vsIn.instanceOffset);
-    data.pos = mul(vsIn.aMat, vsIn.pos) + vsIn.instanceOffset;
+    data.svpos = float4(mul(pvw, mul(vsIn.aMat, vsIn.pos)).xyz + mul(pvw, vsIn.instanceOffset).xyz, 1.0f);
+    data.pos = float4((mul(vsIn.aMat, vsIn.pos) + vsIn.instanceOffset).xyz, 1.0f);
     data.color = vsIn.color;
     data.uv = vsIn.uv;
     matrix rotaMat = vsIn.aMat;
@@ -75,8 +75,11 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
         ret[i].uv = vertices[i].uv;
     }
 	
-    float3x3 tangentSpace;
+    matrix tangentSpace;
+    tangentSpace._14_24_34 = 0.0f;
     tangentSpace._31_32_33 = vertices[0].normal.xyz;
+    tangentSpace._41_42_43 = 0.0f;
+    tangentSpace._44 = 1.0f;
 
     float3 deltavXUV01 = float3(vertices[0].pos.x - vertices[1].pos.x, vertices[0].uv - vertices[1].uv);
     float3 deltavXUV03 = float3(vertices[0].pos.x - vertices[2].pos.x, vertices[0].uv - vertices[2].uv);
@@ -104,7 +107,7 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     tangentSpace._31_32_33 = normalize(tangentSpace._31_32_33);
 
     tangentSpace = transpose(tangentSpace);
-    float4 tangentLight = float4(mul(dir.xyz, tangentSpace), 1.0);
+    float4 tangentLight = mul(dir, tangentSpace);
 
     for (i = 0; i < VERTEX_COUNT; ++i)
     {
