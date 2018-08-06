@@ -54,7 +54,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	PrimitiveCreator priCreater;
 
 	float length = 20.f;
-	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "sd_unity_chan_normal.png");
+	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "–‚–@€”õ1.png");
 
 	float deg = -1.0f;
 
@@ -86,11 +86,28 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		camera->DefaultMove(input);
 
-		calculator.AddPositon(DirectX::XMFLOAT3(0, length * 0.5f, length * 0.5f));
-		calculator.AddRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(1, 0, 0), deg));
-		calculator.AddPositon(DirectX::XMFLOAT3(0, -length * 0.5f, -length * 0.5f));
-		instanceMatrix[0] = calculator.GetAMatrix();
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+		{
+			calculator.AddRotaY(-deg);
+		}
 
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+		{
+			calculator.AddRotaX(-deg);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+		{
+			calculator.AddRotaY(deg);
+		}
+
+		if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+		{
+			calculator.AddRotaX(deg);
+		}
+
+		instanceMatrix[0] = calculator.GetAMatrix();
+		primitiveCtrl->SetInstancingMatrix(instanceMatrix, 0, 0);
 
 		vel = { 0,0,0 };
 		modelrota = 0.0f;

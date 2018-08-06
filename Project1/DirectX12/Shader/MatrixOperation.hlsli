@@ -38,3 +38,8 @@ matrix inverse(matrix m)
     return ret;
 }
 
+matrix simpleinverse(matrix m)
+{
+    return transpose(m);
+}
+
