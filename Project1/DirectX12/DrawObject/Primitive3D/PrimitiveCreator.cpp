@@ -8,6 +8,7 @@
 #include "RenderingPathManager.h"
 #include "PrimitiveRootSignature.h"
 #include "PrimitivePipelineState.h"
+#include "PrimitiveNormalMapRootSignature.h"
 #include "DirectionalLight.h"
 #include "PrimitiveCube.h"
 #include "TextureLoader.h"
@@ -18,7 +19,9 @@
 
 PrimitiveCreator::PrimitiveCreator():mRootsiganture(new PrimitiveRootSignature(Dx12Ctrl::Instance().GetDev()))
 	,mPipelineState(new PrimitivePipelineState(mRootsiganture, Dx12Ctrl::Instance().GetDev()))
-	,mLight(new DirectionalLight(1,-1,1)),mCommnadList(RenderingPathManager::Instance().GetRenderingPathCommandList(0))
+	,mLight(new DirectionalLight(1,0,0.5)),mCommnadList(RenderingPathManager::Instance().GetRenderingPathCommandList(0))
+	,mNormalMapRootsignature(new PrimitiveNormalMapRootSignature(Dx12Ctrl::Instance().GetDev()))
+	,mNormalMapPipelineState(new PrimitivePipelineState(mNormalMapRootsignature, Dx12Ctrl::Instance().GetDev()))
 {
 }
 
@@ -38,6 +41,14 @@ std::shared_ptr<PrimitiveController> PrimitiveCreator::CreateCube(float length, 
 	std::shared_ptr<PrimitiveController> rtn = CreateController(std::shared_ptr<PrimitiveCube>(new PrimitiveCube(length)));
 	rtn->SetTexture(tex);
 	return rtn;
+}
+
+std::shared_ptr<PrimitiveController> PrimitiveCreator::CreateCubeNormalMap(float length, const std::string & texPath)
+{
+	auto ret = CreateCube(length, texPath);
+	ret->SetRootSignature(mNormalMapRootsignature);
+	ret->SetPipelineState(mNormalMapPipelineState);
+	return ret;
 }
 
 void PrimitiveCreator::SetParamaters(std::shared_ptr<PrimitiveController>& ctrl)

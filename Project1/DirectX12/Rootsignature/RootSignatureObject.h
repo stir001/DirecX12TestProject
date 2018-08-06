@@ -14,7 +14,7 @@ class RootSignatureObject
 public:
 	RootSignatureObject();
 	RootSignatureObject(ID3D10Blob* signatureBlob, Microsoft::WRL::ComPtr<ID3D12Device>& dev);
-	~RootSignatureObject();
+	virtual ~RootSignatureObject();
 
 	void SetShaderData(const ShaderDatas& shader);
 	ShaderDatas& GetShaderDatas();

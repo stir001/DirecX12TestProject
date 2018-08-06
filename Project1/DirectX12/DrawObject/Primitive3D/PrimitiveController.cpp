@@ -24,12 +24,12 @@ PrimitiveController::PrimitiveController(std::shared_ptr<PrimitiveObject> primit
 	, mInstanceUpdate(&PrimitiveController::UpdateInstanceVertexBuffer)
 {
 	const auto& indices = primitive->GetIndices();
-	mIndexBuffer.reset(new IndexBufferObject(primitive->GetName() + "IndexBuffer", dev, sizeof(indices[0]), indices.size()));
-	mIndexBuffer->WriteBuffer(primitive->GetIndices().data(), sizeof(indices[0]) * indices.size());
+	mIndexBuffer.reset(new IndexBufferObject(primitive->GetName() + "IndexBuffer", dev, sizeof(indices[0]), static_cast<unsigned int>(indices.size())));
+	mIndexBuffer->WriteBuffer(primitive->GetIndices().data(), static_cast<unsigned int>(sizeof(indices[0]) * indices.size()));
 
 	const auto& vertices = primitive->GetVertices();
-	mVertexBuffer.reset(new VertexBufferObject(primitive->GetName() + "VertexBuffer", dev, sizeof(vertices[0]), vertices.size()));
-	mVertexBuffer->WriteBuffer(vertices.data(), sizeof(vertices[0]) * vertices.size());
+	mVertexBuffer.reset(new VertexBufferObject(primitive->GetName() + "VertexBuffer", dev, sizeof(vertices[0]), static_cast<unsigned int>(vertices.size())));
+	mVertexBuffer->WriteBuffer(vertices.data(),static_cast<unsigned int>(sizeof(vertices[0]) * vertices.size()));
 
 	InstanceDatas data;
 	DirectX::XMStoreFloat4x4(&data.aMatrix, DirectX::XMMatrixIdentity());
@@ -70,7 +70,7 @@ void PrimitiveController::Instancing(std::vector<DirectX::XMFLOAT3>& instancePos
 		mInstanceDatas[i].offset = StoreFloat3ToXMFloat4(instancePositions[i]);
 	}
 
-	mInstanceVertexBuffer.reset(new VertexBufferObject(mPrimitive->GetName() + "InstanceVertexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mInstanceDatas[0]), mInstanceDatas.size()));
+	mInstanceVertexBuffer.reset(new VertexBufferObject(mPrimitive->GetName() + "InstanceVertexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mInstanceDatas[0]), static_cast<unsigned int>(mInstanceDatas.size())));
 	mInstanceUpdate = &PrimitiveController::UpdateInstanceVertexBuffer;
 }
 
@@ -100,12 +100,12 @@ void PrimitiveController::Draw()
 	mDescHeap->SetGprahicsDescriptorTable(mCmdList, resourceIndex++, eROOT_PARAMATER_INDEX_CAMERA);
 	mDescHeap->SetGprahicsDescriptorTable(mCmdList, resourceIndex++, eROOT_PARAMATER_INDEX_LIGHT);
 
-	mCmdList->DrawIndexedInstanced(mPrimitive->GetIndices().size(), mInstanceDatas.size(), 0, 0, 0);
+	mCmdList->DrawIndexedInstanced(static_cast<UINT>(mPrimitive->GetIndices().size()), static_cast<UINT>(mInstanceDatas.size()), 0, 0, 0);
 }
 
 void PrimitiveController::UpdateInstanceVertexBuffer()
 {
-	mInstanceVertexBuffer->WriteBuffer(&mInstanceDatas[0], sizeof(mInstanceDatas[0]) * mInstanceDatas.size());
+	mInstanceVertexBuffer->WriteBuffer(&mInstanceDatas[0], static_cast<unsigned int>(sizeof(mInstanceDatas[0]) * mInstanceDatas.size()));
 	mInstanceUpdate = &PrimitiveController::NonUpdate;
 }
 

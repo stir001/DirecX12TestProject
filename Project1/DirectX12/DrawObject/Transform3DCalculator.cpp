@@ -1,13 +1,9 @@
 #include "Transform3DCalculator.h"
 #include "XMFloatOperators.h"
 
-Transform3DCalculator::Transform3DCalculator():
-//, mPos{0,0,0,1}, mScale{1,1,1,1}, mQuaternion(0,0,0,1)
- mAMatrix(StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity()))
-//, mRotaMatrix(StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity()))
+Transform3DCalculator::Transform3DCalculator(): mAMatrix(StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity()))
 {
 }
-
 
 Transform3DCalculator::~Transform3DCalculator()
 {
@@ -51,12 +47,7 @@ DirectX::XMFLOAT4X4 Transform3DCalculator::GetAMatrix()
 
 void Transform3DCalculator::Init()
 {
-	//mMatrixUpdate = &Transform3DCalculator::UpdateMatrix;
-	//mPos = { 0, 0, 0, 1 };
-	//mScale = { 1, 1, 1, 1 };
-	//mQuaternion = { 0, 0, 0, 1 };
 	mAMatrix = StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity());
-	//mRotaMatrix = StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity());
 }
 
 DirectX::XMFLOAT4X4 Transform3DCalculator::Multipli(DirectX::XMFLOAT4X4 & matF44, DirectX::XMMATRIX & matXM)

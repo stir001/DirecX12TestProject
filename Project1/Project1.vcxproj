@@ -173,6 +173,7 @@
     <ClCompile Include="DirectX12\PipelineState\PrimitivePipelineState.cpp" />
     <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp" />
     <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObject.cpp" />
+    <ClCompile Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp" />
     <ClCompile Include="DirectX12\Shader\HlslInclude.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="DirectX12\PipelineState\PrimitivePipelineState.h" />
     <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h" />
     <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObject.h" />
+    <ClInclude Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h" />
     <ClInclude Include="DirectX12\Shader\HlslInclude.h" />

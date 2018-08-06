@@ -122,6 +122,10 @@ void AnimationPlayerManager::NonUpdate()
 
 void AnimationPlayerManager::CommonUpdate()
 {
+	if (mAnimations.size() <= 0)
+	{
+		return;
+	}
 	mThreadObject.front().swap((std::thread([](std::list<AnimatiomInfo>& animInfo) {
 		std::list<std::thread> threadObject;
 		for (auto& anim : animInfo)

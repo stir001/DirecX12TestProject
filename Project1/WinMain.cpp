@@ -47,14 +47,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	///Direct3D12‚Ì‰Šú‰»
 
 	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "DirectX12";
+	std::string wName = "1601295_^“ç§ˆê˜Y";
 	Dx12Ctrl::Instance().SetWindowName(wName);
 	Dx12Ctrl::Instance().Dx12Init(hInst);
 
 	PrimitiveCreator priCreater;
 
 	float length = 20.f;
-	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCube(length, "sd_unity_chan_normal.png");
+	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "sd_unity_chan_normal.png");
 
 	float deg = -1.0f;
 
@@ -90,13 +90,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		calculator.AddRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(1, 0, 0), deg));
 		calculator.AddPositon(DirectX::XMFLOAT3(0, -length * 0.5f, -length * 0.5f));
 		instanceMatrix[0] = calculator.GetAMatrix();
-		//primitiveCtrl->SetInstancingMatrix(instanceMatrix, 0, 0);
-		//primitiveCtrl->
-		//for (auto& mat : instanceMatrix)
-		//{
-		//	mat = matrix;
-		//}
-		//primitiveCtrl->SetInstancingMatrix(instanceMatrix,0, xNum * zNum);
+
 
 		vel = { 0,0,0 };
 		modelrota = 0.0f;

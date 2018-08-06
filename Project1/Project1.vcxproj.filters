@@ -232,6 +232,9 @@
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveRootSignature.cpp">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.cpp">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX12\d3dx12.h">
@@ -445,6 +448,9 @@
       <Filter>DirectX12\PipelineState</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveRootSignature.h">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.h">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClInclude>
   </ItemGroup>

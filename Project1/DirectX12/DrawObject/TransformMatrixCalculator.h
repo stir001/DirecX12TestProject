@@ -5,7 +5,7 @@ class TransformMatrixCalculator
 {
 public:
 	TransformMatrixCalculator();
-	~TransformMatrixCalculator();
+	virtual ~TransformMatrixCalculator();
 
 	virtual void AddPositon(const DirectX::XMFLOAT3& pos) = 0;
 	virtual void AddScale(const DirectX::XMFLOAT3& scale) = 0;

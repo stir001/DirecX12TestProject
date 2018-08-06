@@ -40,12 +40,8 @@ PrimitivePipelineState::PrimitivePipelineState(std::shared_ptr<RootSignatureObje
 	gpsDesc.NodeMask = 0;
 
 	ShaderDatas& data = rootsignature->GetShaderDatas();
-
-	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(data.vertexShader.Get());
-	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(data.pixelShader.Get());
-	gpsDesc.DS;
-	gpsDesc.GS;
-	gpsDesc.HS;
+	
+	SetShaders(gpsDesc, rootsignature->GetShaderDatas());
 
 	CreatePipelineState(gpsDesc, dev);
 }
