@@ -54,7 +54,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	PrimitiveCreator priCreater;
 
 	float length = 20.f;
-	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "Normal_map_example_-_Map.png");
+	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "sd_unity_chan_normal.png");
 
 	float deg = -1.0f;
 
