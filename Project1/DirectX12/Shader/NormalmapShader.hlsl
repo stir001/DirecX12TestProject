@@ -50,8 +50,8 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
 {
     NormalMapData data;
     matrix pvw = mul(c_projection, mul(c_view, c_world));
-    data.svpos = float4(mul(pvw, mul(vsIn.aMat, vsIn.pos)).xyz + mul(pvw, vsIn.instanceOffset).xyz, 1.0f);
-    data.pos = float4((mul(vsIn.aMat, vsIn.pos) + vsIn.instanceOffset).xyz, 1.0f);
+    data.svpos = ((mul(pvw, mul(vsIn.aMat, vsIn.pos)) + mul(pvw, vsIn.instanceOffset)));
+    data.pos = (mul(vsIn.aMat, vsIn.pos));
     data.color = vsIn.color;
     data.uv = vsIn.uv;
     matrix rotaMat = vsIn.aMat;
@@ -81,22 +81,22 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     tangentSpace._41_42_43 = 0.0f;
     tangentSpace._44 = 1.0f;
 
-    float3 deltavXUV01 = float3(vertices[0].pos.x - vertices[1].pos.x, vertices[0].uv - vertices[1].uv);
-    float3 deltavXUV03 = float3(vertices[0].pos.x - vertices[2].pos.x, vertices[0].uv - vertices[2].uv);
+    float3 deltavXUV01 = float3(ret[0].pos.x - ret[1].pos.x, ret[0].uv - ret[1].uv);
+    float3 deltavXUV03 = float3(ret[0].pos.x - ret[2].pos.x, ret[0].uv - ret[2].uv);
     float3 delatacrossXUV = cross(deltavXUV01, deltavXUV03);
 	
     tangentSpace._11 = -delatacrossXUV.y / delatacrossXUV.x;
     tangentSpace._21 = -delatacrossXUV.z / delatacrossXUV.x;
 
-    float3 deltavYUV01 = float3(vertices[0].pos.y - vertices[1].pos.y, vertices[0].uv - vertices[1].uv);
-    float3 deltavYUV03 = float3(vertices[0].pos.y - vertices[2].pos.y, vertices[0].uv - vertices[2].uv);
+    float3 deltavYUV01 = float3(ret[0].pos.y - ret[1].pos.y, ret[0].uv - ret[1].uv);
+    float3 deltavYUV03 = float3(ret[0].pos.y - ret[2].pos.y, ret[0].uv - ret[2].uv);
     float3 delatacrossYUV = cross(deltavYUV01, deltavYUV03);
 
     tangentSpace._12 = -delatacrossYUV.y / delatacrossYUV.x;
     tangentSpace._22 = -delatacrossYUV.z / delatacrossYUV.x;
 
-    float3 deltavZUV01 = float3(vertices[0].pos.z - vertices[1].pos.z, vertices[0].uv - vertices[1].uv);
-    float3 deltavZUV03 = float3(vertices[0].pos.z - vertices[2].pos.z, vertices[0].uv - vertices[2].uv);
+    float3 deltavZUV01 = float3(ret[0].pos.z - ret[1].pos.z, ret[0].uv - ret[1].uv);
+    float3 deltavZUV03 = float3(ret[0].pos.z - ret[2].pos.z, ret[0].uv - ret[2].uv);
     float3 delatacrossZUV = cross(deltavZUV01, deltavZUV03);
 
     tangentSpace._13 = -delatacrossZUV.y / delatacrossZUV.x;
