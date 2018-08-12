@@ -21,6 +21,7 @@ struct NormalMapData
     float4 svpos : SV_POSITION;
     float4 pos : POSITION0;
     float4 normal : NORMAL;
+    matrix aMatrix : MATRIX;
     float4 color : COLOR;
     float2 uv : TEXCOORD;
 };
@@ -31,7 +32,7 @@ struct NormalMapVSInput
     float4 normal : NORMAL;
     float4 color : COLOR;
     float2 uv : TEXCOORD;
-    matrix aMat : INSTANCEROTA;
+    matrix aMat : INSTANCEMAT;
     float4 instanceOffset : INSTANCEPOS;
     uint instanceID : SV_InstanceID;
 };
@@ -51,13 +52,15 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     NormalMapData data;
     matrix pvw = mul(c_projection, mul(c_view, c_world));
     data.svpos = ((mul(pvw, mul(vsIn.aMat, vsIn.pos)) + mul(pvw, vsIn.instanceOffset)));
-    data.pos = (mul(vsIn.aMat, vsIn.pos));
+    data.pos = vsIn.pos;
     data.color = vsIn.color;
     data.uv = vsIn.uv;
     matrix rotaMat = vsIn.aMat;
     rotaMat._14_24_34 = 0;
     rotaMat._41_42_43 = 0;
-    data.normal = mul(rotaMat, vsIn.normal);
+    //data.normal = mul(rotaMat, vsIn.normal);
+    data.normal = vsIn.normal;
+    data.aMatrix = rotaMat;
     return data;
 }
 
@@ -107,7 +110,8 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     tangentSpace._31_32_33 = normalize(tangentSpace._31_32_33);
 
     tangentSpace = transpose(tangentSpace);
-    float4 tangentLight = mul(dir, tangentSpace);
+    matrix localMat = inverse(vertices[0].aMatrix);
+    float4 tangentLight = mul(mul(localMat, dir), tangentSpace);
 
     for (i = 0; i < VERTEX_COUNT; ++i)
     {
