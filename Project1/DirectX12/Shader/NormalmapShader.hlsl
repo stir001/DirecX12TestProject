@@ -40,10 +40,11 @@ struct NormalMapVSInput
 struct PrimitiveVertexData
 {
     float4 svpos : SV_POSITION;
-    float4 pos : POSITION;
-    float4 tangentLight : LIGHT;
     float4 color : COLOR;
     float2 uv : TEXCOORD;
+    float4 tangentLight : LIGHT;
+	matrix uvzMatrix : UVZMAT;
+	matrix localMat : INSTANCEMAT;
 };
 
 [RootSignature(PRM3DRS)]
@@ -67,39 +68,29 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
 #define VERTEX_COUNT 3U
 
 [maxvertexcount(VERTEX_COUNT)]void NormalMapGS(in triangle NormalMapData vertices[VERTEX_COUNT], inout TriangleStream<PrimitiveVertexData> gsOut)
-{
-    PrimitiveVertexData ret[VERTEX_COUNT];
-    uint i = 0;
-    for (i = 0; i < VERTEX_COUNT; ++i)
-    {
-        ret[i].svpos = vertices[i].svpos;
-        ret[i].pos = vertices[i].pos;
-        ret[i].color = vertices[i].color;
-        ret[i].uv = vertices[i].uv;
-    }
-	
+{	
     matrix tangentSpace;
     tangentSpace._14_24_34 = 0.0f;
     tangentSpace._31_32_33 = vertices[0].normal.xyz;
     tangentSpace._41_42_43 = 0.0f;
     tangentSpace._44 = 1.0f;
 
-    float3 deltavXUV01 = float3(ret[0].pos.x - ret[1].pos.x, ret[0].uv - ret[1].uv);
-    float3 deltavXUV03 = float3(ret[0].pos.x - ret[2].pos.x, ret[0].uv - ret[2].uv);
+    float3 deltavXUV01 = float3(vertices[0].pos.x - vertices[1].pos.x, vertices[0].uv - vertices[1].uv);
+    float3 deltavXUV03 = float3(vertices[0].pos.x - vertices[2].pos.x, vertices[0].uv - vertices[2].uv);
     float3 delatacrossXUV = cross(deltavXUV01, deltavXUV03);
 	
     tangentSpace._11 = -delatacrossXUV.y / delatacrossXUV.x;
     tangentSpace._21 = -delatacrossXUV.z / delatacrossXUV.x;
 
-    float3 deltavYUV01 = float3(ret[0].pos.y - ret[1].pos.y, ret[0].uv - ret[1].uv);
-    float3 deltavYUV03 = float3(ret[0].pos.y - ret[2].pos.y, ret[0].uv - ret[2].uv);
+    float3 deltavYUV01 = float3(vertices[0].pos.y - vertices[1].pos.y, vertices[0].uv - vertices[1].uv);
+    float3 deltavYUV03 = float3(vertices[0].pos.y - vertices[2].pos.y, vertices[0].uv - vertices[2].uv);
     float3 delatacrossYUV = cross(deltavYUV01, deltavYUV03);
 
     tangentSpace._12 = -delatacrossYUV.y / delatacrossYUV.x;
     tangentSpace._22 = -delatacrossYUV.z / delatacrossYUV.x;
 
-    float3 deltavZUV01 = float3(ret[0].pos.z - ret[1].pos.z, ret[0].uv - ret[1].uv);
-    float3 deltavZUV03 = float3(ret[0].pos.z - ret[2].pos.z, ret[0].uv - ret[2].uv);
+    float3 deltavZUV01 = float3(vertices[0].pos.z - vertices[1].pos.z, vertices[0].uv - vertices[1].uv);
+    float3 deltavZUV03 = float3(vertices[0].pos.z - vertices[2].pos.z, vertices[0].uv - vertices[2].uv);
     float3 delatacrossZUV = cross(deltavZUV01, deltavZUV03);
 
     tangentSpace._13 = -delatacrossZUV.y / delatacrossZUV.x;
@@ -109,25 +100,34 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     tangentSpace._21_22_23 = normalize(tangentSpace._21_22_23);
     tangentSpace._31_32_33 = normalize(tangentSpace._31_32_33);
 
-    tangentSpace = transpose(tangentSpace);
+    matrix tMat = transpose(tangentSpace);
     matrix localMat = inverse(vertices[0].aMatrix);
-    float4 tangentLight = mul(mul(localMat, dir), tangentSpace);
+    float4 tangentLight = mul(mul(localMat, dir), tMat);
 
-    for (i = 0; i < VERTEX_COUNT; ++i)
+    PrimitiveVertexData ret;
+    ret.color = vertices[0].color;
+    ret.tangentLight = float4(normalize(tangentLight.xyz), 1.0);
+    ret.uvzMatrix = tangentSpace;
+    ret.localMat = vertices[0].aMatrix;
+    for (uint i = 0; i < VERTEX_COUNT; ++i)
     {
-        ret[i].tangentLight = float4(normalize(tangentLight.xyz), 1.0);
-        gsOut.Append(ret[i]);
+        ret.svpos = vertices[i].svpos;
+        ret.uv = vertices[i].uv;
+        gsOut.Append(ret);
     }
     gsOut.RestartStrip();
 }
 
 float4 NormalMapPS(PrimitiveVertexData psIn) : SV_target
 {
-    float3 normal = normalize(((normalmap.Sample(smp, psIn.uv)) * 2.0f - 1.0f).xyz);
+    float4 normal = float4(normalize(((normalmap.Sample(smp, psIn.uv)) * 2.0f - 1.0f).xyz), 1);
+    normal = float4(normalize(normal.x * psIn.uvzMatrix._11_12_13 - normal.y * psIn.uvzMatrix._21_22_23 + normal.z * psIn.uvzMatrix._31_32_33), 1);
+    normal = mul(psIn.localMat, normal);
 
-    float brightness = saturate(dot(-psIn.tangentLight.xyz, normalize(normal.xyz)));
-    return float4(brightness, brightness, brightness, 1);
+    //float brightness = saturate(dot(-psIn.tangentLight.xyz, normalize(normal.xyz)));
+    float brightness = saturate(dot(-dir.xyz, normalize(normal.xyz)));
+    //return float4(normal.xyz, 1);
 
-    //float4 color = saturate(float4((psIn.color * brightness + psIn.color * 0.1).xyz, 1.0f));
-    //return color;
+    float4 color = saturate(float4((psIn.color * brightness + psIn.color * 0.1).xyz, 1.0f));
+    return color;
 }
