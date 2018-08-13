@@ -34,7 +34,6 @@ using namespace DirectX;
 const int WINDOW_WIDTH = 768;
 const int WINDOW_HEIGHT = 448;
 const TCHAR* APP_CLASS_NAME = _T("DirectX12Test");
-const int SCREEN_BUFFER_COUNT = 2;
 const std::string FBX_MODEL_PATH = "Model/FBX/test_model/model/test_model.fbx";
 const std::string PMD_MODEL_PATH = "初音ミク.pmd";
 const std::string PMD_MODEL_PATH2 = "博麗霊夢/reimu_F01.pmd";
@@ -45,7 +44,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	///Direct3D12の初期化
 
 	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "1601295_真鍋奨一郎";
+	std::string wName = "DirectX12";
 	Dx12Ctrl::Instance().SetWindowName(wName);
 	Dx12Ctrl::Instance().Dx12Init(hInst);
 

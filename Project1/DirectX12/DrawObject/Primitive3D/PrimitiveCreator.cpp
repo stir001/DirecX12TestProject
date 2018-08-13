@@ -19,7 +19,7 @@
 
 PrimitiveCreator::PrimitiveCreator():mRootsiganture(new PrimitiveRootSignature(Dx12Ctrl::Instance().GetDev()))
 	,mPipelineState(new PrimitivePipelineState(mRootsiganture, Dx12Ctrl::Instance().GetDev()))
-	,mLight(new DirectionalLight(1.0f,-0.3f,0.5f)),mCommnadList(RenderingPathManager::Instance().GetRenderingPathCommandList(0))
+	,mLight(new DirectionalLight(1.0f,0.0f,0.0f)),mCommnadList(RenderingPathManager::Instance().GetRenderingPathCommandList(0))
 	,mNormalMapRootsignature(new PrimitiveNormalMapRootSignature(Dx12Ctrl::Instance().GetDev()))
 	,mNormalMapPipelineState(new PrimitivePipelineState(mNormalMapRootsignature, Dx12Ctrl::Instance().GetDev()))
 {

@@ -97,12 +97,13 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     tangentSpace._23 = -delatacrossZUV.z / delatacrossZUV.x;
 
     tangentSpace._11_12_13 = normalize(tangentSpace._11_12_13);
-    tangentSpace._21_22_23 = normalize(tangentSpace._21_22_23);
+    tangentSpace._21_22_23 = -normalize(tangentSpace._21_22_23);
     tangentSpace._31_32_33 = normalize(tangentSpace._31_32_33);
 
     matrix tMat = transpose(tangentSpace);
     matrix localMat = inverse(vertices[0].aMatrix);
-    float4 tangentLight = mul(mul(localMat, dir), tMat);
+    float4 localLight = mul(localMat, dir);
+    float4 tangentLight = float4(normalize(mul(localLight, tMat).xyz), 1.0f);
 
     PrimitiveVertexData ret;
     ret.color = vertices[0].color;
@@ -121,12 +122,13 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
 float4 NormalMapPS(PrimitiveVertexData psIn) : SV_target
 {
     float4 normal = float4(normalize(((normalmap.Sample(smp, psIn.uv)) * 2.0f - 1.0f).xyz), 1);
-    normal = float4(normalize(normal.x * psIn.uvzMatrix._11_12_13 - normal.y * psIn.uvzMatrix._21_22_23 + normal.z * psIn.uvzMatrix._31_32_33), 1);
-    normal = mul(psIn.localMat, normal);
+    //normal = mul(normal, psIn.uvzMatrix);
+    //normal = mul(psIn.localMat, normal);
 
-    //float brightness = saturate(dot(-psIn.tangentLight.xyz, normalize(normal.xyz)));
-    float brightness = saturate(dot(-dir.xyz, normalize(normal.xyz)));
+    float brightness = saturate(dot(-psIn.tangentLight.xyz, normalize(normal.xyz)));
+    //float brightness = saturate(dot(-dir.xyz, normalize(normal.xyz)));
     //return float4(normal.xyz, 1);
+    //return psIn.tangentLight;
 
     float4 color = saturate(float4((psIn.color * brightness + psIn.color * 0.1).xyz, 1.0f));
     return color;
