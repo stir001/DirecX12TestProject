@@ -51,7 +51,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	PrimitiveCreator priCreater;
 
 	float length = 20.f;
-	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "1024px-Normal_map_example_-_Map.png");
+	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "NormalMap.png");
+
+	auto t_light = std::shared_ptr<LightObject>(new DirectionalLight(1.0f, -0.3f, 0.5f));
+
+	primitiveCtrl->SetLightBuffer(t_light);
 
 	float deg = -1.0f;
 
@@ -60,7 +64,23 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	Transform3DCalculator calculator;
 
-	std::vector<DirectX::XMFLOAT4X4> instanceMatrix(1);
+	const unsigned int instanceNum = 10U;
+	std::vector<DirectX::XMFLOAT4X4> instanceMatrix(instanceNum);
+	for (auto& mat : instanceMatrix)
+	{
+		mat = StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity());
+	}
+
+	std::vector<DirectX::XMFLOAT3> instanceOffsets(instanceNum);
+	unsigned int offsetX = 0;
+	for (auto& offset : instanceOffsets)
+	{
+		offset = DirectX::XMFLOAT3(offsetX, 0, 0);
+		offsetX += length;
+	}
+
+	primitiveCtrl->Instancing(instanceOffsets);
+	primitiveCtrl->SetInstancingMatrix(instanceMatrix,0 , instanceMatrix.size() - 1);
 
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
@@ -119,5 +139,4 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	Dx12Ctrl::Instance().Release();
 	Dx12Ctrl::Destroy();
-	
 }
