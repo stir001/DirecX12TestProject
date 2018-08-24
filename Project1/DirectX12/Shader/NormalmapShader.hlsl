@@ -130,6 +130,6 @@ float4 NormalMapPS(PrimitiveVertexData psIn) : SV_target
     //return float4(normal.xyz, 1);
     //return psIn.tangentLight;
 
-    float4 color = saturate(float4((psIn.color * brightness + psIn.color * 0.1).xyz, 1.0f));
+    float4 color = saturate(float4((psIn.color * brightness + psIn.color * 0.3).xyz, 1.0f));
     return color;
 }
