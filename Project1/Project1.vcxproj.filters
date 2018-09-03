@@ -118,12 +118,6 @@
     <ClCompile Include="DirectX12\Util\Rect.cpp">
       <Filter>DirectX12\Util</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp">
-      <Filter>DirectX12\RenderingPath</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObject.cpp">
-      <Filter>DirectX12\RenderingPath\Base</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX12\Buffer\RendertargetObject.cpp">
       <Filter>DirectX12\Buffer</Filter>
     </ClCompile>
@@ -235,6 +229,15 @@
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.cpp">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX12\TextDevice\Dx12TextDevice.cpp">
+      <Filter>DirectX12\TextDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\RenderingPathManager\Base\RenderingPathObject.cpp">
+      <Filter>DirectX12\RenderingPath\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\RenderingPathManager\Manager\RenderingPathManager.cpp">
+      <Filter>DirectX12\RenderingPath\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX12\d3dx12.h">
@@ -338,12 +341,6 @@
     </ClInclude>
     <ClInclude Include="DirectX12\Util\Rect.h">
       <Filter>DirectX12\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h">
-      <Filter>DirectX12\RenderingPath</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObject.h">
-      <Filter>DirectX12\RenderingPath\Base</Filter>
     </ClInclude>
     <ClInclude Include="DirectX12\Buffer\RendertargetObject.h">
       <Filter>DirectX12\Buffer</Filter>
@@ -453,6 +450,15 @@
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.h">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\TextDevice\Dx12TextDevice.h">
+      <Filter>DirectX12\TextDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\RenderingPathManager\Base\RenderingPathObject.h">
+      <Filter>DirectX12\RenderingPath\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\RenderingPathManager\Manager\RenderingPathManager.h">
+      <Filter>DirectX12\RenderingPath\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectX12">
@@ -547,6 +553,12 @@
     </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{f007b159-fec3-436f-ac62-aab8c0a009f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\TextDevice">
+      <UniqueIdentifier>{c9b74184-bf2a-4c12-a2d1-43f6d7a147aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\RenderingPath\Manager">
+      <UniqueIdentifier>{e884cb15-8853-4da4-8638-a422b06a231c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

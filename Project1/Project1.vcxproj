@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{709C6AD0-4034-4B95-AE88-FBF401484159}</ProjectGuid>
     <RootNamespace>Project1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -171,8 +171,8 @@
     <ClCompile Include="DirectX12\Master\NeedCall.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PrimitivePipelineState.cpp" />
-    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathManager.cpp" />
-    <ClCompile Include="DirectX12\RenderingPathManager\RenderingPathObject.cpp" />
+    <ClCompile Include="DirectX12\RenderingPathManager\Base\RenderingPathObject.cpp" />
+    <ClCompile Include="DirectX12\RenderingPathManager\Manager\RenderingPathManager.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp" />
@@ -180,6 +180,7 @@
     <ClCompile Include="DirectX12\Shader\ShaderCompiler.cpp" />
     <ClCompile Include="DirectX12\Shader\ShaderDatasStructure.cpp" />
     <ClCompile Include="DirectX12\SwapChain\SwapChainObject.cpp" />
+    <ClCompile Include="DirectX12\TextDevice\Dx12TextDevice.cpp" />
     <ClCompile Include="DirectX12\Texture\TextureLoader.cpp" />
     <ClCompile Include="DirectX12\Texture\TextureObject.cpp" />
     <ClCompile Include="DirectX12\Util\CharToWChar.cpp" />
@@ -313,8 +314,8 @@
     <ClInclude Include="DirectX12\Master\NeedCall.h" />
     <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="DirectX12\PipelineState\PrimitivePipelineState.h" />
-    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathManager.h" />
-    <ClInclude Include="DirectX12\RenderingPathManager\RenderingPathObject.h" />
+    <ClInclude Include="DirectX12\RenderingPathManager\Base\RenderingPathObject.h" />
+    <ClInclude Include="DirectX12\RenderingPathManager\Manager\RenderingPathManager.h" />
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h" />
@@ -322,6 +323,7 @@
     <ClInclude Include="DirectX12\Shader\ShaderCompiler.h" />
     <ClInclude Include="DirectX12\Shader\ShaderDatasStructure.h" />
     <ClInclude Include="DirectX12\SwapChain\SwapChainObject.h" />
+    <ClInclude Include="DirectX12\TextDevice\Dx12TextDevice.h" />
     <ClInclude Include="DirectX12\Texture\TextureLoader.h" />
     <ClInclude Include="DirectX12\Texture\TextureObject.h" />
     <ClInclude Include="DirectX12\Util\CharToWChar.h" />

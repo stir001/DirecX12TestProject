@@ -72,7 +72,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	}
 
 	std::vector<DirectX::XMFLOAT3> instanceOffsets(instanceNum);
-	unsigned int offsetX = 0;
+	float offsetX = 0.0f;
 	for (auto& offset : instanceOffsets)
 	{
 		offset = DirectX::XMFLOAT3(offsetX, 0, 0);
@@ -80,22 +80,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	}
 
 	primitiveCtrl->Instancing(instanceOffsets);
-	primitiveCtrl->SetInstancingMatrix(instanceMatrix,0 , instanceMatrix.size() - 1);
+	primitiveCtrl->SetInstancingMatrix(instanceMatrix,0 , static_cast<unsigned int>(instanceMatrix.size() - 1));
 
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
-
-	DirectX::XMFLOAT3 zVec = { 0, 0, 1 };
-	DirectX::XMFLOAT3 xVec = { 1, 0, 0 };
-	DirectX::XMFLOAT3 vel = { 0 ,0, 0 };
-	float velLength = 2.0f;
-	DirectX::XMFLOAT3 pmdPos = {0, 0, 0};
-	DirectX::XMFLOAT3 initDir = {0, 0, -1};
-	float zvecRota = 90;//-z
-	float xvecRota = 180;//-x
-
-	float modelrota = 0;
-	unsigned int rotaCount = 0;
 
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
@@ -125,10 +113,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		instanceMatrix[0] = calculator.GetAMatrix();
 		primitiveCtrl->SetInstancingMatrix(instanceMatrix, 0, 0);
-
-		vel = { 0,0,0 };
-		modelrota = 0.0f;
-		rotaCount = 0;
 
 		primitiveCtrl->Draw();
 
