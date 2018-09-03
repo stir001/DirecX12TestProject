@@ -13,10 +13,12 @@ Dx12CommandList::Dx12CommandList(const std::string& name, const Microsoft::WRL::
 	std::wstring comName = buf;
 	comName += L"Allocator";
 	dev->CreateCommandAllocator(type, IID_PPV_ARGS(&mCmdallcator));
+	mCmdallcator->SetName(comName.data());
 
 	comName = buf;
 	comName += L"CommandList";
 	dev->CreateCommandList(0, mType ,mCmdallcator.Get(),nullptr,IID_PPV_ARGS(&mCmdList));
+	mCmdList->SetName(comName.data());
 
 	delete buf;
 

@@ -1,6 +1,7 @@
 #include "Dx12TextDevice.h"
 #include <d3d12.h>
 #include <cassert>
+#include <iostream>
 
 Dx12TextDevice::Dx12TextDevice(Microsoft::WRL::ComPtr<ID3D12Device> d3d12Device, const Microsoft::WRL::ComPtr<ID3D12CommandQueue> d3d12CommandQueue)
 {
@@ -44,12 +45,10 @@ Dx12TextDevice::Dx12TextDevice(Microsoft::WRL::ComPtr<ID3D12Device> d3d12Device,
 	mTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 }
 
-
 Dx12TextDevice::~Dx12TextDevice()
 {
 }
 
 void Dx12TextDevice::Render(std::string & str)
 {
-	
 }
