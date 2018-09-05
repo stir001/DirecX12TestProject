@@ -97,7 +97,7 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     tangentSpace._23 = -delatacrossZUV.z / delatacrossZUV.x;
 
     tangentSpace._11_12_13 = normalize(tangentSpace._11_12_13);
-    tangentSpace._21_22_23 = -normalize(tangentSpace._21_22_23);
+    tangentSpace._21_22_23 = normalize(tangentSpace._21_22_23);
     tangentSpace._31_32_33 = normalize(tangentSpace._31_32_33);
 
     matrix tMat = transpose(tangentSpace);

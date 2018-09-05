@@ -42,3 +42,14 @@ bool ProcessMessage()
 
 	return rtn;
 }
+
+const int WINDOW_WIDTH = 768;
+const int WINDOW_HEIGHT = 448;
+
+void Dx12CtrlInit(HINSTANCE hInst)
+{
+	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	std::string wName = "DirectX12";
+	Dx12Ctrl::Instance().SetWindowName(wName);
+	Dx12Ctrl::Instance().Dx12Init(hInst);
+}

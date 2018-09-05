@@ -17,11 +17,13 @@
 #include <d3dcompiler.h>
 #include <tchar.h>
 
-PrimitiveCreator::PrimitiveCreator():mRootsiganture(new PrimitiveRootSignature(Dx12Ctrl::Instance().GetDev()))
-	,mPipelineState(new PrimitivePipelineState(mRootsiganture, Dx12Ctrl::Instance().GetDev()))
-	,mLight(new DirectionalLight(1.0f,-1.0f,0.0f)),mCommnadList(RenderingPathManager::Instance().GetRenderingPathCommandList(0))
-	,mNormalMapRootsignature(new PrimitiveNormalMapRootSignature(Dx12Ctrl::Instance().GetDev()))
-	,mNormalMapPipelineState(new PrimitivePipelineState(mNormalMapRootsignature, Dx12Ctrl::Instance().GetDev()))
+PrimitiveCreator* PrimitiveCreator::mInstance = nullptr;
+
+PrimitiveCreator::PrimitiveCreator():mRootsiganture(std::make_shared<PrimitiveRootSignature>(Dx12Ctrl::Instance().GetDev()))
+	,mPipelineState(std::make_shared<PrimitivePipelineState>(mRootsiganture, Dx12Ctrl::Instance().GetDev()))
+	,mLight(std::make_shared<DirectionalLight>(1.0f,-1.0f,0.0f)),mCommnadList(RenderingPathManager::Instance().GetRenderingPathCommandList(0))
+	,mNormalMapRootsignature(std::make_shared<PrimitiveNormalMapRootSignature>(Dx12Ctrl::Instance().GetDev()))
+	,mNormalMapPipelineState(std::make_shared<PrimitivePipelineState>(mNormalMapRootsignature, Dx12Ctrl::Instance().GetDev()))
 {
 }
 
@@ -32,13 +34,13 @@ PrimitiveCreator::~PrimitiveCreator()
 
 std::shared_ptr<PrimitiveController> PrimitiveCreator::CreatePlane(DirectX::XMFLOAT3 pos, float length, float height, DirectX::XMFLOAT3 normal)
 {
-	return CreateController(std::shared_ptr<PrimitivePlane>(new PrimitivePlane(pos, length, height, normal)));
+	return CreateController(std::shared_ptr<PrimitivePlane>(std::make_shared<PrimitivePlane>(pos, length, height, normal)));
 }
 
 std::shared_ptr<PrimitiveController> PrimitiveCreator::CreateCube(float length, const std::string& texPath)
 {
 	auto tex = TextureLoader::Instance().LoadTexture(texPath);
-	std::shared_ptr<PrimitiveController> rtn = CreateController(std::shared_ptr<PrimitiveCube>(new PrimitiveCube(length)));
+	std::shared_ptr<PrimitiveController> rtn = CreateController(std::make_shared<PrimitiveCube>(length));
 	rtn->SetTexture(tex);
 	return rtn;
 }
@@ -60,7 +62,7 @@ void PrimitiveCreator::SetParamaters(std::shared_ptr<PrimitiveController>& ctrl)
 
 std::shared_ptr<PrimitiveController> PrimitiveCreator::CreateController(const std::shared_ptr<PrimitiveObject>& primitive)
 {
-	std::shared_ptr<PrimitiveController> rtn(new PrimitiveController(primitive, Dx12Ctrl::Instance().GetDev(), mCommnadList, Dx12Ctrl::Instance().GetCamera()));
+	std::shared_ptr<PrimitiveController> rtn = std::make_shared<PrimitiveController>(primitive, Dx12Ctrl::Instance().GetDev(), mCommnadList, Dx12Ctrl::Instance().GetCamera());
 	SetParamaters(rtn);
 	return rtn;
 }

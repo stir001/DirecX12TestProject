@@ -31,9 +31,7 @@
 
 using namespace DirectX;
 
-const int WINDOW_WIDTH = 768;
-const int WINDOW_HEIGHT = 448;
-const TCHAR* APP_CLASS_NAME = _T("DirectX12Test");
+
 const std::string FBX_MODEL_PATH = "Model/FBX/test_model/model/test_model.fbx";
 const std::string PMD_MODEL_PATH = "èââπÉ~ÉN.pmd";
 const std::string PMD_MODEL_PATH2 = "îéóÌóÏñ≤/reimu_F01.pmd";
@@ -43,15 +41,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	///Direct3D12ÇÃèâä˙âª
 
-	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "DirectX12";
-	Dx12Ctrl::Instance().SetWindowName(wName);
-	Dx12Ctrl::Instance().Dx12Init(hInst);
+	Dx12CtrlInit(hInst);
 
 	PrimitiveCreator priCreater;
 
 	float length = 20.f;
-	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "1024px-Normal_map_example_-_Map.png");
+	std::shared_ptr<PrimitiveController> primitiveCtrl = priCreater.CreateCubeNormalMap(length, "NormalMap.png");
+
+	auto t_light = std::shared_ptr<LightObject>(new DirectionalLight(1.0f, -0.3f, 0.5f));
+
+	primitiveCtrl->SetLightBuffer(t_light);
 
 	float deg = -1.0f;
 
@@ -60,22 +59,26 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	Transform3DCalculator calculator;
 
-	std::vector<DirectX::XMFLOAT4X4> instanceMatrix(1);
+	const unsigned int instanceNum = 10U;
+	std::vector<DirectX::XMFLOAT4X4> instanceMatrix(instanceNum);
+	for (auto& mat : instanceMatrix)
+	{
+		mat = StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity());
+	}
+
+	std::vector<DirectX::XMFLOAT3> instanceOffsets(instanceNum);
+	float offsetX = 0.0f;
+	for (auto& offset : instanceOffsets)
+	{
+		offset = DirectX::XMFLOAT3(offsetX, 0, 0);
+		offsetX += length;
+	}
+
+	primitiveCtrl->Instancing(instanceOffsets);
+	primitiveCtrl->SetInstancingMatrix(instanceMatrix,0 , static_cast<unsigned int>(instanceMatrix.size() - 1));
 
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
-
-	DirectX::XMFLOAT3 zVec = { 0, 0, 1 };
-	DirectX::XMFLOAT3 xVec = { 1, 0, 0 };
-	DirectX::XMFLOAT3 vel = { 0 ,0, 0 };
-	float velLength = 2.0f;
-	DirectX::XMFLOAT3 pmdPos = {0, 0, 0};
-	DirectX::XMFLOAT3 initDir = {0, 0, -1};
-	float zvecRota = 90;//-z
-	float xvecRota = 180;//-x
-
-	float modelrota = 0;
-	unsigned int rotaCount = 0;
 
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
@@ -106,10 +109,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		instanceMatrix[0] = calculator.GetAMatrix();
 		primitiveCtrl->SetInstancingMatrix(instanceMatrix, 0, 0);
 
-		vel = { 0,0,0 };
-		modelrota = 0.0f;
-		rotaCount = 0;
-
 		primitiveCtrl->Draw();
 
 		CallEndPerGameLoop();
@@ -119,5 +118,4 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 	Dx12Ctrl::Instance().Release();
 	Dx12Ctrl::Destroy();
-	
 }
