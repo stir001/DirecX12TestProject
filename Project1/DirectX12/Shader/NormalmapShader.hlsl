@@ -122,14 +122,9 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
 float4 NormalMapPS(PrimitiveVertexData psIn) : SV_target
 {
     float4 normal = float4(normalize(((normalmap.Sample(smp, psIn.uv)) * 2.0f - 1.0f).xyz), 1);
-    //normal = mul(normal, psIn.uvzMatrix);
-    //normal = mul(psIn.localMat, normal);
 
-    float brightness = saturate(dot(-psIn.tangentLight.xyz, normalize(normal.xyz)));
-    //float brightness = saturate(dot(-dir.xyz, normalize(normal.xyz)));
-    //return float4(normal.xyz, 1);
-    //return psIn.tangentLight;
+    float brightness = (dot(-psIn.tangentLight.xyz, normalize(normal.xyz)) + 1.0f) * 0.5f;
 
-    float4 color = saturate(float4((psIn.color * brightness + psIn.color * 0.3).xyz, 1.0f));
+    float4 color = saturate(float4((psIn.color * brightness).xyz, 1.0f));
     return color;
 }
