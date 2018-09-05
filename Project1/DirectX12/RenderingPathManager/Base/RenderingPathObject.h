@@ -2,6 +2,7 @@
 #include <wrl.h>
 struct ID3D12CommandQueue;
 struct ID3D12GraphicsCommandList;
+struct ID3D12Resource;
 
 class RenderingPathObject
 {
@@ -16,6 +17,7 @@ public:
 	virtual Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCommnadList() = 0;	//コマンドリストを取得する
 	virtual void SetActive(bool isActive);	//このパスを有効にするか無効にするかの設定を行う
 	virtual bool IsActive() const;			//このパスが有効か無効かを返す:true 有効, false 無効
+	//virtual Microsoft::WRL::ComPtr<ID3D12Resource> GetRenderTarget();	//
 protected:
 private:
 	bool mIsActive;

@@ -7,3 +7,5 @@ void CallEndPerGameLoop();
 void CallStartPerGameLoop();
 
 bool ProcessMessage();
+
+void Dx12CtrlInit(HINSTANCE hInst);

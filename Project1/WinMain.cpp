@@ -31,9 +31,7 @@
 
 using namespace DirectX;
 
-const int WINDOW_WIDTH = 768;
-const int WINDOW_HEIGHT = 448;
-const TCHAR* APP_CLASS_NAME = _T("DirectX12Test");
+
 const std::string FBX_MODEL_PATH = "Model/FBX/test_model/model/test_model.fbx";
 const std::string PMD_MODEL_PATH = "èââπÉ~ÉN.pmd";
 const std::string PMD_MODEL_PATH2 = "îéóÌóÏñ≤/reimu_F01.pmd";
@@ -43,10 +41,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	///Direct3D12ÇÃèâä˙âª
 
-	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "DirectX12";
-	Dx12Ctrl::Instance().SetWindowName(wName);
-	Dx12Ctrl::Instance().Dx12Init(hInst);
+	Dx12CtrlInit(hInst);
 
 	PrimitiveCreator priCreater;
 
