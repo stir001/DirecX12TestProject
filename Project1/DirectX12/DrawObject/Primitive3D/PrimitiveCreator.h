@@ -14,7 +14,6 @@ class PrimitiveObject;
 class PrimitiveCreator
 {
 public:
-	PrimitiveCreator();
 	~PrimitiveCreator();
 
 	static PrimitiveCreator& Instance()
@@ -41,6 +40,8 @@ public:
 	std::shared_ptr<PrimitiveController> CreateCubeNormalMap(float length, const std::string& texPath);
 	void SetParamaters(std::shared_ptr<PrimitiveController>& ctrl);
 private:
+	PrimitiveCreator();
+
 	static PrimitiveCreator* mInstance;
 	PrimitiveCreator(PrimitiveCreator&);
 	PrimitiveCreator(PrimitiveCreator&&);

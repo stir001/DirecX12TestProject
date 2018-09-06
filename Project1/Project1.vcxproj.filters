@@ -465,6 +465,7 @@
     <ClInclude Include="sample\NormalMapCube.h">
       <Filter>Sample\NormalMap</Filter>
     </ClInclude>
+    <ClInclude Include="BulletlibLink.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectX12">
