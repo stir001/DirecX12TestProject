@@ -198,7 +198,7 @@
     <ClCompile Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.cpp" />
     <ClCompile Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.cpp" />
     <ClCompile Include="DirectX12\WIC\WICTextureLoader12.cpp" />
-    <ClCompile Include="NormalMapCube.cpp" />
+    <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -341,7 +341,7 @@
     <ClInclude Include="DirectX12\ViewDesc\Dx12ShaderResourceViewDesc.h" />
     <ClInclude Include="DirectX12\ViewDesc\Dx12UnorderedAccessViewDesc.h" />
     <ClInclude Include="DirectX12\WIC\WICTextureLoader12.h" />
-    <ClInclude Include="NormalMapCube.h" />
+    <ClInclude Include="sample\NormalMapCube.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX12\Shader\MatrixOperation.hlsli">

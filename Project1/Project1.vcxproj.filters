@@ -238,8 +238,8 @@
     <ClCompile Include="DirectX12\RenderingPathManager\Manager\RenderingPathManager.cpp">
       <Filter>DirectX12\RenderingPath\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="NormalMapCube.cpp">
-      <Filter>Sample</Filter>
+    <ClCompile Include="sample\NormalMapCube.cpp">
+      <Filter>Sample\NormalMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -462,8 +462,8 @@
     <ClInclude Include="DirectX12\RenderingPathManager\Manager\RenderingPathManager.h">
       <Filter>DirectX12\RenderingPath\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="NormalMapCube.h">
-      <Filter>Sample</Filter>
+    <ClInclude Include="sample\NormalMapCube.h">
+      <Filter>Sample\NormalMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
