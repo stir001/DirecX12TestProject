@@ -59,7 +59,6 @@ NormalMapData NormalMapVS(NormalMapVSInput vsIn)
     matrix rotaMat = vsIn.aMat;
     rotaMat._14_24_34 = 0;
     rotaMat._41_42_43 = 0;
-    //data.normal = mul(rotaMat, vsIn.normal);
     data.normal = vsIn.normal;
     data.aMatrix = rotaMat;
     return data;
