@@ -268,7 +268,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BulletlibLink.h" />
+    <ClInclude Include="bulletlib\src\BulletlibLink.h" />
     <ClInclude Include="DirectX12\Animation\Animation.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayer.h" />
     <ClInclude Include="DirectX12\Animation\AnimationPlayerManager.h" />

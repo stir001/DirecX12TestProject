@@ -26,9 +26,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 
-
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
 		input.UpdateKeyState();

@@ -8,30 +8,28 @@ VMDLoader::VMDLoader():mFp(nullptr)
 {
 }
 
-
 VMDLoader::~VMDLoader()
 {
 	if (mFp != nullptr)
 	{
 		mFp->Close();
-		delete mFp;
 		mFp = nullptr;
 	}
 	mLoadingMotion = nullptr;
 }
 
-std::shared_ptr<VMDMotion> VMDLoader::LoadMotion(std::string path)
+std::shared_ptr<VMDMotion> VMDLoader::LoadMotion(const std::string& path)
 {
 	if (mMotions.find(path) != mMotions.end()) return mMotions[path];
 	if (mFp == nullptr)
 	{
-		mFp = new File(path);
+		mFp = std::make_shared<File>(path);
 	}
 	else
 	{
 		mFp->SetFile(path);
 	}
-	mLoadingMotion.reset(new VMDMotion());
+	mLoadingMotion = std::make_shared<VMDMotion>();
 
 	LoadHeader();
 	LoadMotionDatas();
@@ -70,7 +68,7 @@ void VMDLoader::CreatePoses()
 		std::string boneName = m.boneName;
 		VMDPose p;
 		p.frameNo = m.frameNo;
-		p.quoternion = m.quoternion;//DirectX::XMLoadFloat4(&m.quoternion);
+		p.quoternion = m.quoternion;
 		mLoadingMotion->mPoses[boneName].push_back(p);
 	}
 

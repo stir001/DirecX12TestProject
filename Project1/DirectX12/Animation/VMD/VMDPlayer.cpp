@@ -29,7 +29,7 @@ void VMDPlayer::Update()
 	(this->*mUpdate)();
 }
 
-void VMDPlayer::SetVMD(std::shared_ptr<VMDMotion> vmd)
+void VMDPlayer::SetVMD(std::shared_ptr<VMDMotion>& vmd)
 {
 	mPoses = &vmd->mPoses;
 	mMaxFrame = 0;
