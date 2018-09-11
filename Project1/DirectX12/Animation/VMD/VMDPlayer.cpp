@@ -11,7 +11,7 @@ using namespace DirectX;
 
 VMDPlayer::VMDPlayer(std::vector<PMDBoneData>& bDatas, BoneTree& node, std::vector<DirectX::XMFLOAT4X4>& boneMat, std::shared_ptr<ConstantBufferObject>& boneConstantBuffer)
 	:mBoneDatas(bDatas), mBoneNode(node), mFrame(0)
-	, mUpdate(&VMDPlayer::StopUpdate), mEndCheck(&VMDPlayer::LoopEndCheck), mCurrentBoneMatrix(boneMat)
+	, mUpdate(&VMDPlayer::StopUpdate), mEndCheck(&VMDPlayer::EndCheck), mCurrentBoneMatrix(boneMat)
 	, mBoneConstantBuffer(boneConstantBuffer)
 {
 }
@@ -20,7 +20,7 @@ VMDPlayer::~VMDPlayer()
 {
 	if (mAnimationId != -1)
 	{
-		AnimationPlayerManager::Instance()->WaitSafeFree();
+		AnimationPlayerManager::Instance().WaitSafeFree();
 	}
 }
 
@@ -45,7 +45,7 @@ void VMDPlayer::SetVMD(std::shared_ptr<VMDMotion>& vmd)
 
 	}
 	WriteBoneMatrix(mBoneConstantBuffer);
-	//mAnimationId = AnimationPlayerManager::Instance()->SetAnimation(this);
+	//mAnimationId = AnimationPlayerManager::Instance().SetAnimation(this);
 	//mUpdate = &VMDPlayer::PlayingUpdate;
 }
 
@@ -104,7 +104,7 @@ void VMDPlayer::StopUpdate()
 
 }
 
-void VMDPlayer::VMDBoneRotation(const std::string& boneName, XMMATRIX& boneRotaMatrix)
+void VMDPlayer::VMDBoneRotation(const std::string& boneName, const XMMATRIX& boneRotaMatrix)
 {
 	PMDBoneData* data = nullptr;
 	unsigned int i = 0;
@@ -125,7 +125,7 @@ void VMDPlayer::VMDBoneRotation(const std::string& boneName, XMMATRIX& boneRotaM
 	DirectX::XMStoreFloat4x4(&mCurrentBoneMatrix[i] ,boneMat * DirectX::XMLoadFloat4x4(&mCurrentBoneMatrix[i]));
 }
 
-void VMDPlayer::VMDBoneChildRotation(XMFLOAT4X4& parentBoneMatrix, int parentIndex)
+void VMDPlayer::VMDBoneChildRotation(const XMFLOAT4X4& parentBoneMatrix, int parentIndex)
 {
 	for (auto& childIndex : mBoneNode.node[parentIndex])
 	{
@@ -138,18 +138,18 @@ void VMDPlayer::Play(bool flag)
 {
 	mIsLoop = flag;
 	mUpdate = &VMDPlayer::PlayingUpdate;
-	mAnimationId = AnimationPlayerManager::Instance()->SetAnimation(this);
+	mAnimationId = AnimationPlayerManager::Instance().SetAnimation(this);
 	if (mIsLoop)
 	{
 		mEndCheck = &VMDPlayer::NonCheck;
 	}
 	else
 	{
-		mEndCheck = &VMDPlayer::LoopEndCheck;
+		mEndCheck = &VMDPlayer::EndCheck;
 	}
 }
 
-void VMDPlayer::LoopEndCheck()
+void VMDPlayer::EndCheck()
 {
 	if (mFrame == 0) Stop();
 }
@@ -161,7 +161,7 @@ void VMDPlayer::NonCheck()
 void VMDPlayer::Stop()
 {
 	mUpdate = &VMDPlayer::StopUpdate;
-	AnimationPlayerManager::Instance()->RemoveAnimation(mAnimationId);
+	AnimationPlayerManager::Instance().RemoveAnimation(mAnimationId);
 	mAnimationId = -1;
 }
 

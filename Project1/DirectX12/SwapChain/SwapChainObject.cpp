@@ -26,7 +26,7 @@ SwapChainObject::SwapChainObject(HWND& hwnd, Microsoft::WRL::ComPtr<ID3D12Device
 	swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
-	swapChainDesc.Flags = 0;//DXGI_SWAP_CHAIN_FLAG_NONPREROTATED;
+	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;//DXGI_SWAP_CHAIN_FLAG_NONPREROTATED;
 
 	factory->CreateSwapChainForHwnd(cmdQueue.Get(), hwnd, &(swapChainDesc), nullptr, nullptr, (IDXGISwapChain1**)(mSwapchain.GetAddressOf()));
 	DXGI_SWAP_CHAIN_DESC swdesc = {};

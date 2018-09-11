@@ -161,7 +161,7 @@ void operator*=(DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT4X4& rval)
 	lval = lval * rval;
 }
 
-DirectX::XMFLOAT4X4 operator*(const DirectX::XMFLOAT4X4& lval, DirectX::XMFLOAT4X4& rval)
+DirectX::XMFLOAT4X4 operator*(const DirectX::XMFLOAT4X4& lval, const DirectX::XMFLOAT4X4& rval)
 {
 	return DirectX::XMFLOAT4X4(
 		(lval._11 * rval._11) + (lval._12 * rval._21) + (lval._13 * rval._31) + (lval._14 * rval._41),
@@ -186,7 +186,7 @@ DirectX::XMFLOAT4X4 operator*(const DirectX::XMFLOAT4X4& lval, DirectX::XMFLOAT4
 		);
 }
 
-void operator*=(DirectX::XMFLOAT4X4& lval, DirectX::XMFLOAT4X4& rval)
+void operator*=(DirectX::XMFLOAT4X4& lval, const DirectX::XMFLOAT4X4& rval)
 {
 	lval = lval * rval;
 }

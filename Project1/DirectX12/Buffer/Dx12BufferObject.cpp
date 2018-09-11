@@ -91,27 +91,27 @@ D3D12_RESOURCE_STATES Dx12BufferObject::GetDefaultState() const
 
 void Dx12BufferObject::CreateConstantBufferViewDesc()
 {
-	mViewDescs.reset(new Dx12ConstantBufferViewDesc(mBuffer->GetGPUVirtualAddress(),(mElementSize + 0xff) & ~0xff, mElementCount));
+	mViewDescs = std::make_shared<Dx12ConstantBufferViewDesc>(mBuffer->GetGPUVirtualAddress(),(mElementSize + 0xff) & ~0xff, mElementCount);
 }
 
 void Dx12BufferObject::CreateUnorderdAccessViewDesc()
 {
-	mViewDescs.reset(new Dx12UnorderedAccessViewDesc(mElementCount, mElementSize));
+	mViewDescs = std::make_shared<Dx12UnorderedAccessViewDesc>(mElementCount, mElementSize);
 }
 
 void Dx12BufferObject::CreateShaderResourceViewDesc()
 {
-	mViewDescs.reset(new Dx12ShaderResourceViewDesc(mBuffer->GetDesc().Format));
+	mViewDescs = std::make_shared<Dx12ShaderResourceViewDesc>(mBuffer->GetDesc().Format);
 }
 
 void Dx12BufferObject::CreateRenderTargetViewDesc()
 {
-	mViewDescs.reset(new Dx12RenderTargetViewDesc(mBuffer->GetDesc().Format));
+	mViewDescs = std::make_shared<Dx12RenderTargetViewDesc>(mBuffer->GetDesc().Format);
 }
 
 void Dx12BufferObject::CreateDepthStecilViewDesc()
 {
-	mViewDescs.reset(new Dx12DepthStencilViewDesc(mBuffer->GetDesc().Format));
+	mViewDescs = std::make_shared<Dx12DepthStencilViewDesc>(mBuffer->GetDesc().Format);
 }
 
 const std::shared_ptr<Dx12BufferViewDesc>& Dx12BufferObject::GetViewDesc() const

@@ -17,12 +17,12 @@ unsigned int Roundup2Multiplier(unsigned int size)
 
 void CallStartPerGameLoop()
 {
-	AnimationPlayerManager::Instance()->UpdateAnimations();
+	AnimationPlayerManager::Instance().UpdateAnimations();
 }
 
 void CallEndPerGameLoop()
 {
-	AnimationPlayerManager::Instance()->WaitSafeFree();
+	AnimationPlayerManager::Instance().WaitSafeFree();
 	RenderingPathManager::Instance().Render();
 }
 

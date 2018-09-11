@@ -57,9 +57,9 @@ DirectX::XMFLOAT4 operator*(const DirectX::XMFLOAT4& lval, const DirectX::XMFLOA
 
 void operator*=(DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT4X4& rval);
 
-DirectX::XMFLOAT4X4 operator*(const DirectX::XMFLOAT4X4& lval, DirectX::XMFLOAT4X4& rval);
+DirectX::XMFLOAT4X4 operator*(const DirectX::XMFLOAT4X4& lval, const DirectX::XMFLOAT4X4& rval);
 
-void operator*=(DirectX::XMFLOAT4X4& lval, DirectX::XMFLOAT4X4& rval);
+void operator*=(DirectX::XMFLOAT4X4& lval, const DirectX::XMFLOAT4X4& rval);
 
 float GetLengthXMFloat3(const DirectX::XMFLOAT3& val);
 

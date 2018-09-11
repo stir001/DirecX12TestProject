@@ -16,7 +16,7 @@ class VMDMotion;
 class File;
 
 /**
-*@ingroup PMD_Animation
+*	@ingroup PMD_Animation
 *	@class VMDLoader
 *	@brief VMDファイルをロードしデータを保持するクラス
 */

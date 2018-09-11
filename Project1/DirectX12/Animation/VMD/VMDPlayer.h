@@ -40,13 +40,13 @@ public:
 
 	/**
 	*	@brief 計算を始める
-	*	@param[i]	isLoop	ループ処理をするかどうかのフラグ
+	*	@param[in]	isLoop	ループ処理をするかどうかのフラグ
 	*						true:ループ処理をする
 	*						false:ループ処理をしない
 	*/
 	void Play(bool isLoop = false);
 
-	/*
+	/**
 	*	状態に応じて計算をする
 	*/
 	void Update();
@@ -64,25 +64,88 @@ public:
 	void SetVMD(std::shared_ptr<VMDMotion>& vmd);
 private:
 	/**
-	*	
+	*	VMDPlayerを保持しているモデルのボーン回転情報
 	*/
 	std::vector<DirectX::XMFLOAT4X4>& mCurrentBoneMatrix;
+
+	/**
+	*	ボーンの回転情報を書き込むバッファ
+	*/
 	std::shared_ptr<ConstantBufferObject>& mBoneConstantBuffer;
+
+	/**
+	*	ポーズ情報へのポインタ
+	*/
 	std::map<std::string, std::vector<VMDPose>>* mPoses;
+
+	/**
+	*	ボーンの情報
+	*/
 	std::vector<PMDBoneData>& mBoneDatas;
+
+	/**
+	*	ボーンの親子関係情報
+	*/
 	BoneTree& mBoneNode;
+
+	/**
+	*	現在のフレームナンバー
+	*/
 	int mFrame;
+
+	/**
+	*	現在のアニメーションの終了フレーム
+	*/
 	int mMaxFrame;
+
+	/**
+	*	アニメーションをループするかどうかのフラグ
+	*	ture:ループする	false:ループしない
+	*/
 	bool mIsLoop;
+
+	/**
+	*	更新ステート保持変数
+	*/
 	void (VMDPlayer::*mUpdate)();
+
+	/**
+	*	終了チェックステート保持変数
+	*/
 	void (VMDPlayer::*mEndCheck)();
 
-	void VMDBoneRotation(const std::string& boneName, DirectX::XMMATRIX& boneRotaMatrix);
-	void VMDBoneChildRotation(DirectX::XMFLOAT4X4& parentBoneMatrix, int parentIndex);
+	/**
+	*	@brief	対象のボーンを回転させる
+	*	@param[in]	boneName	回転させるボーンの名前
+	*	@param[in]	boneRotaMatrix	ボーン回転行列
+	*/
+	void VMDBoneRotation(const std::string& boneName, const DirectX::XMMATRIX& boneRotaMatrix);
 
-	void LoopEndCheck();
+	/**
+	*	@brief	再帰的に対象のボーンの子ボーンを回転させる
+	*	@param[i]	parentBoneMatrix	ボーン回転行列
+	*	@param[i]	子供を回転させたいボーンのインデックス
+	*/
+	void VMDBoneChildRotation(const DirectX::XMFLOAT4X4& parentBoneMatrix, int parentIndex);
+
+	/**
+	*	終了チェックをするステート
+	*/
+	void EndCheck();
+
+	/**
+	*	終了チェックをしないステート
+	*/
 	void NonCheck();
+
+	/**
+	*	更新状態のUpdateステート
+	*/
 	void PlayingUpdate();
+
+	/**
+	*	停止状態のUpdateステート
+	*/
 	void StopUpdate();
 };
 

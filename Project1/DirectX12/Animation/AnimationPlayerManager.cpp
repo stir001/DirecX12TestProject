@@ -24,14 +24,14 @@ AnimationPlayerManager::~AnimationPlayerManager()
 	}
 }
 
-AnimationPlayerManager* AnimationPlayerManager::Instance()
+AnimationPlayerManager& AnimationPlayerManager::Instance()
 {
 	static AnimationPlayerManager* animplayer = nullptr;
 	if (animplayer == nullptr)
 	{
 		animplayer = new AnimationPlayerManager();
 	}
-	return animplayer;
+	return *animplayer;
 }
 
 int AnimationPlayerManager::SetAnimation(AnimationPlayer* anim)

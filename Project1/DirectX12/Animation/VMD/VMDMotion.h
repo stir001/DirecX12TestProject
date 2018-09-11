@@ -19,6 +19,7 @@ class PMDModel;
 
 /**
 *	@ingroup PMD_Animation
+*	@ingroup Animation
 *	@struct VMDHeader
 *	@brief VMD‚Ìƒwƒbƒ_•”•ª
 */
