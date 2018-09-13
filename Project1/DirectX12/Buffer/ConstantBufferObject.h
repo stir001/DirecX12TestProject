@@ -13,7 +13,7 @@
 
 /**
 *	@ingroup Dx12Resource
-*	@class ConstansBufferObject
+*	@class ConstantBufferObject
 *	@brief ConstantBuffer‚ğˆø”‚ÉŠî‚Ã‚¢‚Äì¬‚·‚é
 */
 class ConstantBufferObject :

@@ -38,11 +38,11 @@ Image3DController::Image3DController(std::shared_ptr<ImageObject> img,
 	std::string name = mImgObj->GetTextureName();
 
 	name += "3DImageVertexBuffer";
-	mVertexBuffer.reset(new VertexBufferObject(name, Dx12Ctrl::Instance().GetDev(), sizeof(Image3DVertex), 4));
+	mVertexBuffer = std::make_shared<VertexBufferObject>(name, Dx12Ctrl::Instance().GetDev(), sizeof(Image3DVertex), 4);
 
 	name = mImgObj->GetTextureName();
 	name += "3DImageMatrixConstantBuffer";
-	mImageMatrixBuffer.reset(new ConstantBufferObject(name, Dx12Ctrl::Instance().GetDev(), sizeof(DirectX::XMFLOAT4X4), 1));
+	mImageMatrixBuffer = std::make_shared<ConstantBufferObject>(name, Dx12Ctrl::Instance().GetDev(), sizeof(DirectX::XMFLOAT4X4), 1);
 
 	std::vector<std::shared_ptr<Dx12BufferObject>> resources;
 	resources.reserve(DEFAULT_RESOURCE_NUM);
@@ -158,7 +158,7 @@ void Image3DController::SetScale(const float sx, const float sy, const float sz)
 	UpdateBuffer();
 }
 
-void Image3DController::TurnX()
+void Image3DController::TurnU()
 {
 	DirectX::XMFLOAT2 uv;
 	uv = mVertex[0].uv;
@@ -175,7 +175,7 @@ void Image3DController::TurnX()
 	UpdateBuffer();
 }
 
-void Image3DController::TurnY()
+void Image3DController::TurnV()
 {
 	DirectX::XMFLOAT2 uv;
 	uv = mVertex[0].uv;
@@ -194,9 +194,6 @@ void Image3DController::TurnY()
 
 void Image3DController::Draw()
 {
-	DX12CTRL_INSTANCE;
-	//auto obj = RenderingPathManager::Instance().GetRenderTargetViews(0);
-	//mCmdList->OMSetRenderTargets(obj.cpuhandles.size(), &obj.rtvDescHeap->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), false, &Dx12Ctrl::Instance().GetDepthBuffer()->GetCPUAdress());
 	(this->*mBundleUpdate)();
 	mDescHeap->SetDescriptorHeap(mCmdList);
 	mCmdList->ExecuteBundle(mBundleCmdList->GetCommandList().Get());
@@ -209,7 +206,7 @@ DirectX::XMFLOAT2 Image3DController::GetImageSize()
 
 std::shared_ptr<Image3DController> Image3DController::GetNewCopy()
 {
-	std::shared_ptr<Image3DController> rtn(new Image3DController(mImgObj,Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature));
+	std::shared_ptr<Image3DController> rtn = std::make_shared<Image3DController>(mImgObj,Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature);
 	return rtn;
 }
 
