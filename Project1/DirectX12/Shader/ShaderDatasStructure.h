@@ -10,6 +10,7 @@ struct ShaderDatas
 	Microsoft::WRL::ComPtr<ID3DBlob> geometryShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> hullShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> domainShader;
+	Microsoft::WRL::ComPtr<ID3DBlob> computeShader;
 	ShaderDatas();
 	~ShaderDatas();
 };

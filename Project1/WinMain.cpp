@@ -26,9 +26,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 
-	clock_t sub = 0;
-	clock_t preClock = 0;
-	clock_t currentClock = 0;
 	while (ProcessMessage()) {
 		CallStartPerGameLoop();
 		input.UpdateKeyState();

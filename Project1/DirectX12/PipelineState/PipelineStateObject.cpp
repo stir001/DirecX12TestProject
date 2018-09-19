@@ -1,12 +1,21 @@
 #include "PipelineStateObject.h"
+#include "CharToWChar.h"
 #include "d3dx12.h"
 
-PipelineStateObject::PipelineStateObject(D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device> dev)
+
+PipelineStateObject::PipelineStateObject(const std::string& name, D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev):mName(name + "GraphicsPipelineState")
 {
-	HRESULT hr = dev->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&mPipelineState));
+	dev->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&mPipelineState));
+	SetName(mName);
 }
 
-PipelineStateObject::PipelineStateObject():mPipelineState(nullptr)
+PipelineStateObject::PipelineStateObject(const std::string & name, D3D12_COMPUTE_PIPELINE_STATE_DESC & cpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev):mName(name + "ComputePipelineState")
+{
+	dev->CreateComputePipelineState(&cpsDesc, IID_PPV_ARGS(&mPipelineState));
+	SetName(mName);
+}
+
+PipelineStateObject::PipelineStateObject():mPipelineState(nullptr),mName()
 {
 }
 
@@ -20,10 +29,20 @@ Microsoft::WRL::ComPtr<ID3D12PipelineState> PipelineStateObject::GetPipelineStat
 	return mPipelineState;
 }
 
-void PipelineStateObject::CreatePipelineState(D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device> dev)
+void PipelineStateObject::CreatePipelineState(const std::string& name, D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
 	if (mPipelineState != nullptr) return;
+	mName = name + "GraphicsPipelineState";
 	dev->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&mPipelineState));
+	SetName(mName);
+}
+
+void PipelineStateObject::CreatePipelineState(const std::string & name, D3D12_COMPUTE_PIPELINE_STATE_DESC & gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+{
+	if (mPipelineState != nullptr) return;
+	mName = name + "ComputePipelineState";
+	dev->CreateComputePipelineState(&gpsDesc, IID_PPV_ARGS(&mPipelineState));
+	SetName(mName);
 }
 
 void PipelineStateObject::SetShaders(D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, const ShaderDatas& shaders)
@@ -52,4 +71,11 @@ void PipelineStateObject::SetShaders(D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc
 	{
 		gpsDesc.HS = CD3DX12_SHADER_BYTECODE(shaders.hullShader.Get());
 	}
+}
+
+void PipelineStateObject::SetName(const std::string & name)
+{
+	std::wstring buf;
+	ToWChar(buf, name);
+	mPipelineState->SetName(buf.data());
 }

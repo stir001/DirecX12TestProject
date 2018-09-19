@@ -1,4 +1,13 @@
 #pragma once
+/**
+*	@addtogroup DrawObjectController
+*	@file DrawObjectController.h
+*	@brief 描画オブジェクトを操作する基底クラス
+*
+*	@author 真鍋奨一郎
+*
+*	@par 最終更新日	2018/9/14
+*/
 #include <memory>
 #include <wrl.h>
 #include <d3d12.h>

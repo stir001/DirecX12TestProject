@@ -1,4 +1,13 @@
 #pragma once
+/**
+*	@file ImageLoader.h
+*	@brief 2D画像をロードしそれを保持、管理するクラス
+*
+*	@author 真鍋奨一郎
+*
+*	@par 最終更新日	2018/9/15
+*/
+
 #include "ShaderDatasStructure.h"
 #include "DrawObjectLoader.h"
 
@@ -13,27 +22,59 @@ class ImageObject;
 class RootSignatureObject;
 class PipelineStateObject;
 
+/**
+*	@ingroup DrawObjectLoader
+*	@class ImageLoader
+*	@brief 2D画像をロードしてそれを保持、管理する
+*			保持しているものをもう一度ロードしようとした場合すでにロードしているものを使って処理をする
+*			データを解放するためにはRelease関数を呼ぶ
+*/
 class ImageLoader : public DrawObjectLoader
 {
 public:
 	~ImageLoader();
+
+	/**
+	*	@brief	2D画像をロードし2Dとして操作するコントローラーを返す
+	*	@param[in]	path	ロードする2D画像パス
+	*/
 	std::shared_ptr<ImageController> LoadImageData(const std::string& path);
+
+	/**
+	*	@brief	2D画像をロードし3Dとして操作するコントローラーを返す
+	*	@param[in]	path	ロードする2D画像パス
+	*/
 	std::shared_ptr<Image3DController> LoadImage3D(const std::string& path);
 	
+	/**
+	*	@brief	指定されたファイルパスでロードしたオブジェクトの所有権を手放す
+	*	@param[in]	releaseImagePath	解放したいファイルパス
+	*/
 	void Release(const std::string& releaseImagePath);
 
-	static  std::unique_ptr<ImageLoader>& Instance()
+	/**
+	*	@brief	ImageLodaerの参照を取得する
+	*	@return	ImageLoaderの参照
+	*/
+	static  ImageLoader& Instance()
 	{
 		if (mInstance == nullptr)
 		{
-			mInstance.reset(new ImageLoader());
+			mInstance = new ImageLoader();
 		}
-		return mInstance;
+		return *mInstance;
 	}
 
+	/**
+	*	@brief	ImageLoaderを破棄する
+	*/
 	static void Destroy()
 	{
-		mInstance.reset();
+		if (mInstance != nullptr)
+		{
+			delete mInstance;
+			mInstance = nullptr;
+		}
 	}
 private:
 	ImageLoader();
@@ -41,16 +82,56 @@ private:
 	ImageLoader(const ImageLoader&&);
 	ImageLoader& operator=(const ImageLoader&);
 
-	static std::unique_ptr<ImageLoader> mInstance;
+	/**
+	*	インスタンスの実態保持用
+	*/
+	static ImageLoader* mInstance;
+
+	/**
+	*	2D画像情報管理用
+	*/
 	std::map<std::string, std::shared_ptr<ImageObject>> mImages;
+
+	/**
+	*	2D画像描画に使用するrootsiganture
+	*/
 	std::shared_ptr<RootSignatureObject> mRootsignature;
+
+	/**
+	*	2D画像描画に使用するpipelinestate
+	*/
 	std::shared_ptr<PipelineStateObject> mPipelinestate;
+
+	/**
+	*	2D画像を3Dとして描画するときに使用するrootsiganaure
+	*/
 	std::shared_ptr<RootSignatureObject> m3DRootsignature;
+
+	/**
+	*	2D画像を3Dとして描画するときに使用するrootsignature
+	*/
 	std::shared_ptr<PipelineStateObject> m3DPipelinestate;
+
+	/**
+	*	2D画像描画用のシェーダー情報
+	*/
 	ShaderDatas mShader;
+
+	/**
+	*	2D画像を3Dとして描画するときのシェーダ情報
+	*/
 	ShaderDatas m3DShader;
 
+	/**
+	*	@brief	pipelinestateを作成する
+	*	@param[in]	dev		ID3D12Deviceの参照
+	*/
 	void CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+
+	/**
+	*	@brief	rootsignatureを作成する
+	*	@param[in]	dev		ID3D12Deviceの参照
+	*/
 	void CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 };
 

@@ -4,7 +4,7 @@
 #include "d3dx12.h"
 
 
-PrimitivePipelineState::PrimitivePipelineState(std::shared_ptr<RootSignatureObject>& rootsignature, Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+PrimitivePipelineState::PrimitivePipelineState(std::shared_ptr<RootSignatureObject>& rootsignature, Microsoft::WRL::ComPtr<ID3D12Device>& dev):PipelineStateObject()
 {
 	CD3DX12_RASTERIZER_DESC rastarizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	rastarizer.CullMode = D3D12_CULL_MODE_NONE;
@@ -43,7 +43,7 @@ PrimitivePipelineState::PrimitivePipelineState(std::shared_ptr<RootSignatureObje
 	
 	SetShaders(gpsDesc, rootsignature->GetShaderDatas());
 
-	CreatePipelineState(gpsDesc, dev);
+	CreatePipelineState("Primitive",gpsDesc, dev);
 }
 
 PrimitivePipelineState::~PrimitivePipelineState()

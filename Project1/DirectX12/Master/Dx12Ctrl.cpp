@@ -118,6 +118,7 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 		{
 			continue;
 		}
+
 		std::wstring description = desc.Description;
 		size_t size = description.find(searchStr);
 		if (size >= description.size())
@@ -126,7 +127,7 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 		}
 
 		for (auto i : levels) {
-			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), i, _uuidof(ID3D12Device), nullptr))) {
+			if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), i, __uuidof(ID3D12Device), nullptr))) {
 				level = i;
 				hardwareAdapter = adapter;
 				break;

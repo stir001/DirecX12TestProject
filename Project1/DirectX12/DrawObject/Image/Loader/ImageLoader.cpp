@@ -20,7 +20,7 @@ const std::string IMAGE_GEOMETRYSHADER_NAME = "";
 const std::string IMAGE_HULLSHADER_NAME = "";
 const std::string IMAGE_DOMAINSHADER_NAME = "";
 
-std::unique_ptr<ImageLoader> ImageLoader::mInstance = nullptr;
+ImageLoader* ImageLoader::mInstance = nullptr;
 
 ImageLoader::ImageLoader()
 {
@@ -45,14 +45,14 @@ std::shared_ptr<ImageController> ImageLoader::LoadImageData(const std::string& p
 	auto itr = mImages.find(path);
 	if (itr != mImages.end())
 	{
-		imgCtrl.reset(new ImageController(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature));
+		imgCtrl = std::make_shared<ImageController>(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature);
 		return imgCtrl;
 	}
 	
 	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance().LoadTexture(path);
-	std::shared_ptr<ImageObject> imgObj(new ImageObject(tObj->GetWidth(), tObj->GetHeight(), tObj));
+	std::shared_ptr<ImageObject> imgObj = std::make_shared <ImageObject>(tObj->GetWidth(), tObj->GetHeight(), tObj);
 	mImages[path] = imgObj;
-	imgCtrl.reset(new ImageController(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList,mPipelinestate,mRootsignature));
+	imgCtrl = std::make_shared<ImageController>(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList,mPipelinestate,mRootsignature);
 
 	return imgCtrl;
 }
@@ -63,14 +63,14 @@ std::shared_ptr<Image3DController> ImageLoader::LoadImage3D(const std::string& p
 	auto itr = mImages.find(path);
 	if (itr != mImages.end())
 	{
-		imgCtrl.reset(new Image3DController(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature));
+		imgCtrl = std::make_shared<Image3DController>(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature);
 		return imgCtrl;
 	}
 
 	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance().LoadTexture(path);
-	std::shared_ptr<ImageObject> imgObj(new ImageObject(tObj->GetWidth(), tObj->GetHeight(), tObj));
+	std::shared_ptr<ImageObject> imgObj = std::make_shared<ImageObject>(tObj->GetWidth(), tObj->GetHeight(), tObj);
 	mImages[path] = imgObj;
-	imgCtrl.reset(new Image3DController(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature));
+	imgCtrl = std::make_shared<Image3DController>(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature);
 
 	return imgCtrl;
 }
@@ -127,7 +127,7 @@ void ImageLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixelShader.Get());
 
 	
-	mPipelinestate.reset(new PipelineStateObject(gpsDesc, dev));
+	mPipelinestate = std::make_shared <PipelineStateObject>("Image2D",gpsDesc, dev);
 
 	D3D12_INPUT_ELEMENT_DESC image3DinputDescs[] = {
 		{ "POSITION",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
@@ -144,7 +144,7 @@ void ImageLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(m3DShader.pixelShader.Get());
 	gpsDesc.pRootSignature = m3DRootsignature->GetRootSignature().Get();
 
-	m3DPipelinestate.reset(new PipelineStateObject(gpsDesc, dev));
+	m3DPipelinestate = std::make_shared<PipelineStateObject>("Image3D",gpsDesc, dev);
 }
 
 void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
@@ -157,7 +157,7 @@ void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 		IMAGE_HULLSHADER_NAME,
 		IMAGE_DOMAINSHADER_NAME,
 		true);
-	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(),dev));
+	mRootsignature = std::make_shared<RootSignatureObject>("Image2D",mShader.rootSignature.Get(),dev);
 	mRootsignature->GetRootSignature()->SetName(L"ImageRootSignature");
 
 	m3DShader = ShaderCompiler::Instance().CompileShader(
@@ -168,6 +168,6 @@ void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 		"",
 		"",
 		true);
-	m3DRootsignature.reset(new RootSignatureObject(m3DShader.rootSignature.Get(), dev));
+	m3DRootsignature = std::make_shared<RootSignatureObject>("Image3D",m3DShader.rootSignature.Get(), dev);
 	m3DRootsignature->GetRootSignature()->SetName(L"Image3DRootSignature");
 }

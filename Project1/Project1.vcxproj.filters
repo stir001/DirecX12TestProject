@@ -241,6 +241,7 @@
     <ClCompile Include="sample\NormalMapCube.cpp">
       <Filter>Sample\NormalMap</Filter>
     </ClCompile>
+    <ClCompile Include="Image2DPipelineState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX12\d3dx12.h">
@@ -466,6 +467,7 @@
       <Filter>Sample\NormalMap</Filter>
     </ClInclude>
     <ClInclude Include="bulletlib\src\BulletlibLink.h" />
+    <ClInclude Include="Image2DPipelineState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectX12">

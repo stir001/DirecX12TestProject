@@ -24,6 +24,19 @@ size_t ToWChar(wchar_t** ppBuf, std::string cstr)
 	return rtn;
 }
 
+size_t ToWChar(std::wstring& wstr, std::string cstr)
+{
+	size_t rtn = 0;
+
+	cstr.push_back('\0');
+	wchar_t* buf = new wchar_t[cstr.size()];
+	mbstowcs_s(&rtn, buf, cstr.size(), cstr.data(), _TRUNCATE);
+	wstr.resize(rtn);
+	wstr = buf;
+
+	return rtn;
+}
+
 size_t ToChar(char** ppBuf, size_t ppBufSizeInByte, const wchar_t* wcStr, size_t convertWordNum)
 {
 	size_t rtn = 0;

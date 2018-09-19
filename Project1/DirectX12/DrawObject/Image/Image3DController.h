@@ -1,6 +1,5 @@
 #pragma once
 /**
-*	@addtogroup DrawObjectController
 *	@file Image3DController.h
 *	@brief 3Dの四角形ポリゴンに2DImageを張るクラス
 *
@@ -40,6 +39,7 @@ public:
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList,
 		std::shared_ptr<PipelineStateObject>& pipelinestate,
 		std::shared_ptr<RootSignatureObject>& rootsignature);
+
 	~Image3DController();
 
 	/**
@@ -213,27 +213,94 @@ private:
 	*/
 	float mScaleZ;
 
+	/**
+	*	回転行列
+	*/
 	DirectX::XMFLOAT4X4 mRotaMatrix;
+
+	/**
+	*	アフィン行列
+	*/
 	DirectX::XMFLOAT4X4 mImageMatrix;
 
+	/**
+	*	反転しているかどうかの符号(1:正方向	-1:逆方向)
+	*/
 	DirectX::XMFLOAT2 mTurnSign;
-	DirectX::XMFLOAT3 mCenter;//描画の際の基準点(画面座標)回転や反転の中心
-	DirectX::XMFLOAT4 mNormal;
-	Image3DVertex mVertex[4];
-	std::shared_ptr<VertexBufferObject> mVertexBuffer;
-	std::shared_ptr<ConstantBufferObject> mImageMatrixBuffer;
-	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
-	Rect* mRect;//画像内の切り抜きローカル座標矩形
 
+	/**
+	*	描画の際の基準点(画面座標)回転や反転の中心
+	*/
+	DirectX::XMFLOAT3 mCenter;
+
+	/**
+	*	法線情報
+	*/
+	DirectX::XMFLOAT4 mNormal;
+
+	/**
+	*	頂点情報
+	*/
+	Image3DVertex mVertex[4];
+
+	/**
+	*	頂点用のバッファ
+	*/
+	std::shared_ptr<VertexBufferObject> mVertexBuffer;
+
+	/**
+	*	アフィン行列用のバッファ
+	*/
+	std::shared_ptr<ConstantBufferObject> mImageMatrixBuffer;
+
+	/**
+	*	カメラ行列用のバッファ
+	*/
+	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
+	
+	/**
+	*	画像内の切り抜きローカル座標矩形
+	*/
+	std::shared_ptr<Rect> mRect;
+
+	/**
+	*	2D画像情報を持つ
+	*/
 	std::shared_ptr<ImageObject> mImgObj;
+
+	/**
+	*	DescriptorHeap
+	*/
 	std::shared_ptr<Dx12DescriptorHeapObject> mDescHeap;
 
+	/**
+	*	bundle用のアップデートステート変数
+	*/
 	void (Image3DController::*mBundleUpdate)();
 
+	/**
+	*	UVを更新する
+	*/
 	void UpdateUV();
+
+	/**
+	*	アフィン行列を更新する
+	*/
 	void UpdateMatrix();
+
+	/**
+	*	アフィン行列をバッファに書き込む
+	*/
 	void UpdateBuffer();
+
+	/**
+	*	バンドルを更新する
+	*/
 	void UpdateBundle();
+
+	/**
+	*	バンドルの更新をしない
+	*/
 	void NonUpdateBundle();
 };
 

@@ -42,7 +42,7 @@ protected:
 	unsigned int mTexturecount;
 	std::vector<std::shared_ptr<TextureObject>> mTextureObjects;
 	std::shared_ptr<ConstantBufferObject> mMaterialBuffer;
-	Dx12Material* mD12mat;
+	std::vector<Dx12Material> mD12mat;
 
 	std::string mModelName;
 	std::string mModelPath;

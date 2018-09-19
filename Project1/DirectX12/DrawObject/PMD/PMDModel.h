@@ -11,7 +11,7 @@ class PMDModel : public Model
 {
 	friend class PMDLoader;
 public:
-	~PMDModel();
+	virtual ~PMDModel();
 
 	enum eROOT_PARAMATER_INDEX
 	{
@@ -42,7 +42,9 @@ public:
 	BoneTree mBoneNode;
 
 	void SetMaterialBuffer();
+
 private:
+	static std::shared_ptr<PMDModel> Create();
 	PMDModel();
 };
 

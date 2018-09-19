@@ -10,7 +10,7 @@
 #include "TextureObject.h"
 
 
-Model::Model():mTexturecount(0),mIndexBuffer(nullptr),mVertexBuffer(nullptr), mD12mat(nullptr)
+Model::Model():mTexturecount(0),mIndexBuffer(nullptr),mVertexBuffer(nullptr)
 {
 }
 
@@ -19,11 +19,6 @@ Model::~Model()
 	mIndexBuffer.reset();
 	mVertexBuffer.reset();
 	mMaterialBuffer.reset();
-	if (mD12mat == nullptr)
-	{
-		delete mD12mat;
-		mD12mat = nullptr;
-	}
 	for (auto& texObj : mTextureObjects)
 	{
 		TextureLoader::Instance().Release(texObj->GetFilePath());

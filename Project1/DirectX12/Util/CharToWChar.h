@@ -11,4 +11,6 @@ size_t ToWChar(wchar_t** ppBuf, size_t charWordLen, const char* pCharWord, size_
 
 size_t ToWChar(wchar_t** ppBuf, std::string cstr);
 
+size_t ToWChar(std::wstring& wstr, std::string cstr);
+
 size_t ToChar(char** ppBuf, size_t ppBufSizeInByte, const wchar_t* wcStr, size_t convertWordNum);

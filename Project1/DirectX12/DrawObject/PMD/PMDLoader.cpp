@@ -20,7 +20,7 @@
 
 const std::string PMDSHADER_PATH = "shader.hlsl";
 
-PMDLoader::PMDLoader():mLight(new DirectionalLight(1,-1,1))
+PMDLoader::PMDLoader():mLight(std::make_shared<DirectionalLight>(1,-1,1))
 {
 	Microsoft::WRL::ComPtr<ID3D12Device> dev = Dx12Ctrl::Instance().GetDev();
 	CreateRootsignature(dev);
@@ -38,9 +38,9 @@ std::shared_ptr<PMDController> PMDLoader::Load(const std::string& path)
 	{
 		return CreateController((*itr).second, path);
 	}
-	mFp = new File(path);
+	mFp = std::make_shared<File>(path);
 	GetRelativePath(path);
-	mLoadingmodel.reset(new PMDModel());
+	mLoadingmodel = PMDModel::Create();
 
 	mLoadingmodel->mPath = path;
 	mModels[path] = mLoadingmodel;
@@ -286,13 +286,13 @@ void PMDLoader::LoadJoint()
 
 void PMDLoader::CreateIndexBuffer()
 {
-	mLoadingmodel->mIndexBuffer.reset(new IndexBufferObject("PMDIndexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mIndices[0]),static_cast<unsigned int>(mLoadingmodel->mIndices.size()), DXGI_FORMAT_R16_UINT));
+	mLoadingmodel->mIndexBuffer = std::make_shared<IndexBufferObject>("PMDIndexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mIndices[0]),static_cast<unsigned int>(mLoadingmodel->mIndices.size()), DXGI_FORMAT_R16_UINT);
 	mLoadingmodel->mIndexBuffer->WriteBuffer(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(sizeof(mLoadingmodel->mIndices[0]) * mLoadingmodel->mIndices.size()));
 }
 
 void PMDLoader::CreateVertexBuffer()
 {
-	mLoadingmodel->mVertexBuffer.reset(new VertexBufferObject("PMDVertexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mVertexes[0]), static_cast<unsigned int>(mLoadingmodel->mVertexes.size())));
+	mLoadingmodel->mVertexBuffer = std::make_shared<VertexBufferObject>("PMDVertexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mVertexes[0]), static_cast<unsigned int>(mLoadingmodel->mVertexes.size()));
 	mLoadingmodel->mVertexBuffer->WriteBuffer(&mLoadingmodel->mVertexes[0], static_cast<unsigned int>(sizeof(mLoadingmodel->mVertexes[0]) * mLoadingmodel->mVertexes.size()));
 }
 
@@ -309,8 +309,8 @@ void PMDLoader::CreateTexture()
 
 void PMDLoader::CreateMaterialBuffer()
 {
-	mLoadingmodel->mMaterialBuffer.reset(new ConstantBufferObject("PMDMaterialBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size())));
-	mLoadingmodel->mD12mat = new Dx12Material[mLoadingmodel->mMaterials.size()];
+	mLoadingmodel->mMaterialBuffer = std::make_shared<ConstantBufferObject>("PMDMaterialBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));
+	mLoadingmodel->mD12mat.resize(mLoadingmodel->mMaterials.size());
 	for (unsigned int i = 0; i < mLoadingmodel->mMaterials.size(); i++)
 	{
 		mLoadingmodel->mD12mat[i].alpha = mLoadingmodel->mMaterials[i].alpha;
@@ -320,7 +320,7 @@ void PMDLoader::CreateMaterialBuffer()
 		mLoadingmodel->mD12mat[i].specularity = mLoadingmodel->mMaterials[i].specularity;
 	}
 
-	mLoadingmodel->mMaterialBuffer->WriteBuffer256Alignment(mLoadingmodel->mD12mat, sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));
+	mLoadingmodel->mMaterialBuffer->WriteBuffer256Alignment(mLoadingmodel->mD12mat.data(), sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));
 }
 
 
@@ -361,7 +361,7 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.GS;
 	gpsDesc.HS;
 
-	mPipelinestate.reset(new PipelineStateObject(gpsDesc,dev));
+	mPipelinestate = std::make_shared<PipelineStateObject>("PMD", gpsDesc,dev);
 
 	gpsDesc.pRootSignature = mSubRootsiganture->GetRootSignature().Get();
 	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mSubShader.vertexShader.Get());
@@ -370,7 +370,7 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.GS;
 	gpsDesc.HS;
 
-	mSubPipelineState.reset(new PipelineStateObject(gpsDesc, dev));
+	mSubPipelineState = std::make_shared<PipelineStateObject>("PMDSub", gpsDesc, dev);
 
 }
 
@@ -384,7 +384,7 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 		, ""
 		, true);
 
-	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(), dev));
+	mRootsignature = std::make_shared<RootSignatureObject>(mShader.rootSignature.Get(), dev);
 
 	ShaderCompiler::Instance().AddDefineMacro("CAMERA_REGISTER", "b0");
 	ShaderCompiler::Instance().AddDefineMacro("LIGHT_REGISTER", "b1");
@@ -397,13 +397,13 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 		, ""
 		, true);
 
-	mSubRootsiganture.reset(new RootSignatureObject(mSubShader.rootSignature.Get(), dev));
+	mSubRootsiganture = std::make_shared<RootSignatureObject>(mSubShader.rootSignature.Get(), dev);
 }
 
 std::shared_ptr<PMDController> PMDLoader::CreateController(std::shared_ptr<PMDModel>& model, const std::string& path)
 {
-	std::shared_ptr<PMDController> controller(new PMDController(model, mLight, GetModelName(path),
-		Dx12Ctrl::Instance().GetDev(), mCmdList));
+	std::shared_ptr<PMDController> controller = std::make_shared<PMDController>(model, mLight, GetModelName(path),
+		Dx12Ctrl::Instance().GetDev(), mCmdList);
 	controller->SetLight(mLight);
 	controller->SetRootSignature(mRootsignature);
 	controller->SetPipelineState(mPipelinestate);

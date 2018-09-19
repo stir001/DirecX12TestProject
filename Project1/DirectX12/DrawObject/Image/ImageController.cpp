@@ -33,7 +33,7 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img,
 	,{ { 0.0f,0.0f , 0.0f },{ 0.f, 1.f }, img->GetGamma() }/* v3 */
 	,{ { img->GetImageSize().x, 0.0f, 0.f },{ 1.f, 1.f }, img->GetGamma() }/* v4 */ }
 	, mScaleX(1.0f), mScaleY(1.0f), mRota(0.0f), mPivot{ 0.f,0.f,0.f }, mCenterOffset(0,0,0)
-	, mRect(new Rect(mPivot, img->GetImageSize().x, img->GetImageSize().y))
+	, mRect(std::make_shared<Rect>(mPivot, img->GetImageSize().x, img->GetImageSize().y))
 	, mTurnSign(1,1), mBundleUpdate(&ImageController::UpdateBundle)
 {
 	mPipelinestate = pipelinestate;
@@ -65,8 +65,6 @@ ImageController::ImageController(std::shared_ptr<ImageObject> img,
 
 ImageController::~ImageController()
 {
-	mVertexBuffer.reset();
-	delete(mRect);
 }
 
 void ImageController::AddPos(const float x, const float y, const float z)
@@ -164,7 +162,7 @@ void ImageController::SetCenterOffset(const DirectX::XMFLOAT3& offset)
 	SetCenterOffset(offset.x, offset.y, offset.z);
 }
 
-void ImageController::TurnX()
+void ImageController::TurnU()
 {
 	DirectX::XMFLOAT2 uv;
 	uv = mVertex[0].uv;
@@ -180,7 +178,7 @@ void ImageController::TurnX()
 	UpdateBuffer();
 }
 
-void ImageController::TurnY()
+void ImageController::TurnV()
 {
 	DirectX::XMFLOAT2 uv;
 	uv = mVertex[0].uv;
@@ -207,12 +205,12 @@ void ImageController::Draw()
 
 }
 
-bool ImageController::IsTurnX() const
+bool ImageController::IsTurnU() const
 {
 	return mTurnSign.x == -1;
 }
 
-bool ImageController::IsTurnY() const
+bool ImageController::IsTurnV() const
 {
 	return mTurnSign.y == -1;
 }

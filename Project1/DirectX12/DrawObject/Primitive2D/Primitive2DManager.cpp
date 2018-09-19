@@ -23,7 +23,7 @@ Primitive2DManager::~Primitive2DManager()
 
 std::shared_ptr<Primitive2DLine> Primitive2DManager::CreatePrimitive2DLine(const DirectX::XMFLOAT3 & point1, const DirectX::XMFLOAT3 & point2)
 {
-	std::shared_ptr<Primitive2DLine> line(new Primitive2DLine(point1, point2, Dx12Ctrl::Instance().GetDev(), mCmdList));
+	std::shared_ptr<Primitive2DLine> line = std::make_shared<Primitive2DLine>(point1, point2, Dx12Ctrl::Instance().GetDev(), mCmdList);
 	line->SetPipelineState(mPipelinestate);
 	line->SetRootSignature(mRootsignature);
 	return line;
@@ -33,7 +33,7 @@ void Primitive2DManager::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device
 {
 	D3D12_INPUT_ELEMENT_DESC pmv2DinputDescs[] = {
 		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
-	{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
 	};
 
 	CD3DX12_RASTERIZER_DESC rastarizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
@@ -60,7 +60,7 @@ void Primitive2DManager::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device
 	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mShader.vertexShader.Get());
 	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixelShader.Get());
 
-	mPipelinestate.reset(new PipelineStateObject(gpsDesc, dev));
+	mPipelinestate = std::make_shared<PipelineStateObject>("Primitive2D", gpsDesc, dev);
 }
 
 void Primitive2DManager::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)

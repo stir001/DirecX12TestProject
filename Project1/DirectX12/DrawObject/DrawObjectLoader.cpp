@@ -15,7 +15,6 @@ DrawObjectLoader::DrawObjectLoader()
 
 DrawObjectLoader::~DrawObjectLoader()
 {
-	delete mFp;
 }
 
 void DrawObjectLoader::GetRelativePath(const std::string& path)

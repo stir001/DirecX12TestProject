@@ -5,9 +5,9 @@ RootSignatureObject::RootSignatureObject(): mRootSignature(nullptr)
 {
 }
 
-RootSignatureObject::RootSignatureObject(ID3D10Blob* signatureBlob,Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+RootSignatureObject::RootSignatureObject(const std::string& name, ID3D10Blob* signatureBlob,Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	CreateRootSignature(signatureBlob, dev);
+	CreateRootSignature(name, signatureBlob, dev);
 }
 
 RootSignatureObject::~RootSignatureObject()
@@ -30,7 +30,7 @@ Microsoft::WRL::ComPtr<ID3D12RootSignature>& RootSignatureObject::GetRootSignatu
 	return mRootSignature;
 }
 
-void RootSignatureObject::CreateRootSignature(ID3D10Blob * signatureBlob, Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+void RootSignatureObject::CreateRootSignature(const std::string& name, ID3D10Blob * signatureBlob, Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
 	dev->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&mRootSignature));
 }
