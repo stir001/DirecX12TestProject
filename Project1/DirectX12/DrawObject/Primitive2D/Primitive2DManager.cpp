@@ -75,5 +75,5 @@ void Primitive2DManager::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device
 		true
 	);
 
-	mRootsignature.reset(new RootSignatureObject(mShader.rootSignature.Get(), dev));
+	mRootsignature = (std::make_shared<RootSignatureObject>("Primitive2DRootSignature",mShader.rootSignature.Get(), dev));
 }

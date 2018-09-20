@@ -35,13 +35,13 @@ public:
 	~ImageLoader();
 
 	/**
-	*	@brief	2D画像をロードし2Dとして操作するコントローラーを返す
+	*	@brief	2D画像をロードし、2Dとして操作するコントローラーを返す
 	*	@param[in]	path	ロードする2D画像パス
 	*/
 	std::shared_ptr<ImageController> LoadImageData(const std::string& path);
 
 	/**
-	*	@brief	2D画像をロードし3Dとして操作するコントローラーを返す
+	*	@brief	2D画像をロードし、3Dとして操作するコントローラーを返す
 	*	@param[in]	path	ロードする2D画像パス
 	*/
 	std::shared_ptr<Image3DController> LoadImage3D(const std::string& path);

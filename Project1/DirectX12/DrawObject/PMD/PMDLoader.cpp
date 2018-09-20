@@ -89,8 +89,8 @@ void PMDLoader::LoadVertex()
 		mFp->LoadFile(&v.normal);
 		mFp->LoadFile(&v.uv.x);
 		mFp->LoadFile(&v.uv.y);
-		mFp->LoadFile(&v.bornNum[0], 2);
-		mFp->LoadFile(&v.bornWeight);
+		mFp->LoadFile(&v.boneNum[0], 2);
+		mFp->LoadFile(&v.boneWeight);
 		mFp->LoadFile(&v.edgeFlag);
 	}
 }
