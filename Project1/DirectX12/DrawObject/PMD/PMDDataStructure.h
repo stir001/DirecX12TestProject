@@ -6,7 +6,7 @@
 *
 *	@author 真鍋奨一郎
 *
-*	@par 最終更新日	2018/9/20
+*	@par 最終更新日	2018/9/21
 */
 #include <vector>
 #include <DirectXMath.h>
@@ -74,97 +74,212 @@ struct PMDVertex
 	/**
 	*	ボーン番号の0番目のボーンから影響を受けるウェイト
 	*/
-	unsigned char boneWeight;//ウェイト(1バイト) 
+	unsigned char boneWeight;
 	unsigned char edgeFlag;//輪郭線フラグ(1バイト) 
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDMaterial
+*	@brief PMDのマテリアル情報
 */
 struct PMDMaterial {
+	/**
+	*	diffuseカラー、拡散反射
+	*/
 	DirectX::XMFLOAT3 diffuse;
+
+	/**
+	*	α成分
+	*/
 	float alpha;
+
+	/**
+	*	鏡面性
+	*/
 	float specularity;
+
+	/**
+	*	鏡面反射
+	*/
 	DirectX::XMFLOAT3 specular;
+
+	/**
+	*	環境光
+	*/
 	DirectX::XMFLOAT3 ambient;
+
+	/**
+	*	toonTextureのIndex
+	*/
 	unsigned char toonIndex;
+
+	/**
+	*	輪郭フラグ	0:通常	1:無効
+	*/
 	unsigned char edgeFlag;
+
+	/**
+	*	面頂点リストの数
+	*/
 	unsigned int indexCount;
+
+	/**
+	*	テクスチャファイル名
+	*/
 	char texturePath[20];
+
+	/**
+	*	テクスチャのID(独自付加している情報)
+	*/
 	int texid;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDBoneData
+*	@brief PMDのボーン情報
 */
 struct PMDBoneData
 {
-	char boneName[20];//ボーン名
-	unsigned short parentIndex;//親番号
-	unsigned short tailIndex;//終端番号
-	unsigned char type;//種類
-	unsigned short ikParentIndex;//IK親番号
-	DirectX::XMFLOAT3 pos;//座標
-};
+	/**
+	*	ボーンの名前
+	*/
+	char boneName[20];
 
-/**
-*	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
-*/
-struct PMDIKData
-{
-	unsigned short ikBoneIndex;
-	unsigned short ikTargetBoneIndex;
-	unsigned char ikChainLength;//IKチェーンの長さ
-	unsigned short iterations;//再起演算回数 IK値1
-	float controlWeight;//演算一回当たりの制限角度 IK値2
-	std::vector<unsigned short> ikChildBoneIndex;//IK影響かのボーン番号(要素数はikChainLength数)
-};
+	/**
+	*	ボーンの親番号(ないものは0xffff)
+	*/
+	unsigned short parentIndex;
 
-/**
-*	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
-*/
-struct PMDIKList
-{
-	unsigned short ikCount;
-	std::vector<PMDIKData> ikDatas;
-};
+	/**
+	*	ボーンの終端番号(ない場合は0)
+	*/
+	unsigned short tailIndex;
 
-/**
-*	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
-*/
-struct PMDSkinVertexData
-{
-	unsigned int index;
+	/**
+	*	ボーンの種類
+	*	0:回転 1:回転と移動 2:IK 3:不明 4:IK影響下 5:回転影響下 6:IK接続先 7:非表示 8:捻り 9:回転運動
+	*/
+	unsigned char type;
+
+	/**
+	*	影響を受けるIKボーン番号(ない場合は0)
+	*/
+	unsigned short ikParentIndex;
+
+	/**
+	*	ボーンのヘッドの座標
+	*/
 	DirectX::XMFLOAT3 pos;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDIKData
+*	@brief IKBoneのデータ
 */
-struct PMDSkinData
+struct PMDIKData
 {
-	char skinName[20];
-	unsigned int skinvertexcount;
-	char skintype;//0:base,1:まゆ,2:目,3:リップ,4:その他
-	std::vector<PMDSkinVertexData> vertexeis;
+	/**
+	*	IKボーン番号
+	*/
+	unsigned short ikBoneIndex;
+
+	/**
+	*	IKターゲットボーン番号 IKボーンが最初に接続するボーン
+	*/
+	unsigned short ikTargetBoneIndex;
+
+	/**
+	*	IKチェーンの長さ(子の数)
+	*/
+	unsigned char ikChainLength;
+
+	/**
+	*	再帰演算回数 IK値1
+	*/
+	unsigned short iterations;
+
+	/**
+	*	演算一回当たりの制限角度 IK値2
+	*/
+	float controlWeight;
+
+	/**
+	*	IK影響下のボーン番号 要素数はikChainLength数)
+	*/
+	std::vector<unsigned short> ikChildBoneIndex;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDIKList
+*	@brief PMDIK情報をまとめて保持
+*/
+struct PMDIKList
+{
+	/**
+	*	IKボーンの数
+	*/
+	unsigned short ikCount;
+
+	/**
+	*	IKのデータ群
+	*/
+	std::vector<PMDIKData> ikDatas;
+};
+
+/**
+*	@ingroup PMD_Data
+*	@struct PMDSkinVertexData
+*	@brief PMDの表情用の頂点データ
+*/
+struct PMDSkinVertexData
+{
+	/**
+	*	頂点インデックス
+	*/
+	unsigned int index;
+
+	/**
+	*	頂点座標
+	*/
+	DirectX::XMFLOAT3 pos;
+};
+
+/**
+*	@ingroup PMD_Data
+*	@struct PMDSkinData
+*	@brief PMDの表情情報
+*/
+struct PMDSkinData
+{
+	/**
+	*	表情の名前
+	*/
+	char skinName[20];
+
+	/**
+	*	表情要の頂点数
+	*/
+	unsigned int skinVertexCount;
+
+	/**
+	*	表情の種類 0:base,1:まゆ,2:目,3:リップ,4:その他
+	*/
+	char skintype;
+
+	/**
+	*	表情用の頂点情報群
+	*/
+	std::vector<PMDSkinVertexData> vertices;
+};
+
+/**
+*	@ingroup PMD_Data
+*	@struct PMDSkin
+*	@brief PMDの表情用の情報群
 */
 struct PMDSkin
 {
@@ -174,141 +289,296 @@ struct PMDSkin
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDSkinDisp
+*	@brief 表情枠用表示リスト
 */
 struct PMDSkinDisp
 {
+	/**
+	*	表情枠に表示する表情数
+	*/
 	unsigned char skindispcount;
+
+	/**
+	*	表情番号
+	*/
 	std::vector<unsigned short> skinIndices;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDBoneFrameDispName
+*	@brief ボーン枠用の名前
 */
 struct PMDBoneFrameDispName
 {
+	/**
+	*	枠の名前
+	*/
 	char name[50];
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDBoneFrameDisp
+*	@brief ボーン枠表示用情報
 */
 struct PMDBoneFrameDisp
 {
+	/**
+	*	ボーン枠の名前の数
+	*/
 	unsigned char boneDispNameCount;
 	std::vector<PMDBoneFrameDispName> names;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct クラス名
-*	@brief クラスの詳細
+*	@struct PMDBoneDispIndex
+*	@brief ボーンの名前表示用情報
 */
 struct PMDBoneDispIndex
 {
+	/**
+	*	ボーンの番号
+	*/
 	unsigned short boneIndex;
+
+	/**
+	*	ボーンの表示用枠の番号
+	*/
 	unsigned char boneDispFrameIndex;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct
-*	@brief
+*	@struct PMDBoneDisp
+*	@brief	ボーンの名前表示用の情報群
 */
 struct PMDBoneDisp
 {
-	unsigned int boneocunt;//0以外のボーン数の合計
+	/**
+	*	0以外のボーンの数の合計
+	*/
+	unsigned int boneocunt;
+
+	/**
+	*	ボーン名表示用の情報群
+	*/
 	std::vector<PMDBoneDispIndex> boneDispIndices;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct
-*	@brief
+*	@struct PMDToonPath
+*	@brief PMDのトゥーン用のテクスチャパス格納用
 */
 struct PMDToonPath
 {
+	/**
+	*	テクスチャパス[100]	最大数[10]
+	*/
 	char path[100][10];
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct
-*	@brief
+*	@struct PMDRigidBodyData
+*	@brief PMDの剛体データ
 */
 struct PMDRigidBodyData
 {
+	/**
+	*	剛体の名前
+	*/
 	char rigidBodyName[20];
-	unsigned short rigidbodyRelBoneIndex;//関連ボーン番号
+
+	/**
+	*	剛体と関連するボーン番号
+	*/
+	unsigned short rigidbodyRelBoneIndex;
+
+	/**
+	*	剛体グループ番号
+	*/
 	unsigned char rigidbodyGroupIndex;
+
+	/**
+	*	剛体グループ対象番号
+	*/
 	unsigned short rigidbodyGroupTarget;
-	unsigned char shapeType; // 形状：タイプ(0:球、1:箱、2:カプセル) // 00 // 球
-	float shapeW; // 形状：半径(幅) // CD CC CC 3F // 1.6
-	float shapeH; // 形状：高さ // CD CC CC 3D // 0.1
-	float shapeD; // 形状：奥行 // CD CC CC 3D // 0.1
-	DirectX::XMFLOAT3 pos; // 位置：位置(x, y, z)
-	DirectX::XMFLOAT3 rot; // 位置：回転(rad(x), rad(y), rad(z))ラジアン
-	float weight; // 諸データ：質量 // 00 00 80 3F // 1.0
-	float posDim; // 諸データ：移動減 // 00 00 00 00
-	float rotDim; // 諸データ：回転減 // 00 00 00 00
-	float recoil; // 諸データ：反発力 // 00 00 00 00
-	float friction; // 諸データ：摩擦力 // 00 00 00 00
-	unsigned char rigidbodyType; // 諸データ：タイプ(0:Bone追従、1:物理演算、2:物理演算(Bone位置合せ)) // 00 // Bone追従
+
+	/**
+	*	形状の種類	0:球 1:箱 2:カプセル
+	*/
+	unsigned char shapeType;
+
+	/**
+	*	形状の半径(幅) 
+	*/
+	float shapeW;
+
+	/**
+	*	形状の高さ
+	*/
+	float shapeH;
+
+	/**
+	*	形状の奥行
+	*/
+	float shapeD;
+
+	/**
+	*	剛体の位置
+	*/
+	DirectX::XMFLOAT3 pos;
+
+	/**
+	*	剛体の回転(radian,弧度法)
+	*/
+	DirectX::XMFLOAT3 rot;
+
+	/**
+	*	質量
+	*/
+	float weight;
+
+	/**
+	*	移動減衰量
+	*/
+	float posDim;
+
+	/**
+	*	回転減衰量
+	*/
+	float rotDim;
+
+	/**
+	*	反発力
+	*/
+	float recoil;
+
+	/**
+	*	摩擦力
+	*/
+	float friction;
+
+	/**
+	*	剛体の種類	0:Bone追従 1:物理演算 2:物理演算(Bone位置合せ)
+	*/
+	unsigned char rigidbodyType;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct
-*	@brief
+*	@struct PMDRigidBody
+*	@brief 剛体情報群
 */
 struct PMDRigdBody
 {
+	/**
+	*	剛体の個数
+	*/
 	unsigned int rigidbodycount;
+
+	/**
+	*	剛体の情報群
+	*/
 	std::vector<PMDRigidBodyData> datas;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct
-*	@brief
+*	@struct PMDJointData
+*	@brief 物理演算のジョイントの情報
 */
 struct PMDJointData
 {
-	char jointName[20]; // 諸データ：名称 // 右髪1
-	unsigned int jointRigidbodyA; // 諸データ：剛体A
-	unsigned int jointRigidbodyB; // 諸データ：剛体B
-	DirectX::XMFLOAT3 jointPos; // 諸データ：位置(x, y, z) // 諸データ：位置合せでも設定可
-	DirectX::XMFLOAT3 jointRot; // 諸データ：回転(rad(x), rad(y), rad(z))
-	DirectX::XMFLOAT3 constrainPos1; // 制限：移動1(x, y, z)
+	/**
+	*	ジョイントの名前
+	*/
+	char jointName[20];
+
+	/**
+	*	剛体A(の番号?)
+	*/
+	unsigned int jointRigidbodyA;
+
+	/**
+	*	剛体B(の番号?)
+	*/
+	unsigned int jointRigidbodyB;
+
+	/**
+	*	ジョイントの座標
+	*/
+	DirectX::XMFLOAT3 jointPos;
+
+	/**
+	*	ジョイントの回転(radian,弧度法)
+	*/
+	DirectX::XMFLOAT3 jointRot;
+
+	/**
+	*	ジョイントの移動制限1
+	*/
+	DirectX::XMFLOAT3 constrainPos1;
+
+	/**
+	*	ジョイントの移動制限2
+	*/
 	DirectX::XMFLOAT3 constrainPos2; // 制限：移動2(x, y, z)
-	DirectX::XMFLOAT3 constrainRot1; // 制限：回転1(rad(x), rad(y), rad(z))
-	DirectX::XMFLOAT3 constrainRot2; // 制限：回転2(rad(x), rad(y), rad(z))
-	DirectX::XMFLOAT3 springPos; // ばね：移動(x, y, z)
+
+	/**
+	*	ジョイントの回転制限(radian,弧度法)
+	*/
+	DirectX::XMFLOAT3 constrainRot1;
+
+	/**
+	*	ジョイントの回転制限(radian,弧度法)
+	*/
+	DirectX::XMFLOAT3 constrainRot2;
+
+	/**
+	*	ばねの移動
+	*/
+	DirectX::XMFLOAT3 springPos;
+
+	/**
+	*	ばねの回転(radian,弧度法)
+	*/
 	DirectX::XMFLOAT3 springRot; // ばね：回転(rad(x), rad(y), rad(z))
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct
-*	@brief
+*	@struct PMDJoint
+*	@brief ジョイントの情報群
 */
 struct PMDJoint
 {
+	/**
+	*	ジョイントの総数
+	*/
 	unsigned int jointcount;
+
+	/**
+	*	ジョイントの情報群
+	*/
 	std::vector<PMDJointData> datas;
 };
 
 /**
 *	@ingroup PMD_Data
-*	@struct
-*	@brief
+*	@struct BoneTree
+*	@brief ボーンの親子構造保存用
 */
 struct BoneTree
 {
+	/**
+	*	親子関係を番号で管理 関係は以下の通り
+	*	nは子のボーンの総数(node[親ボーン番号].size())より小さい番号
+	*	node[親ボーン番号][n] = 子のboneIndex
+	*/
 	std::vector<std::vector<int>> node;
 };

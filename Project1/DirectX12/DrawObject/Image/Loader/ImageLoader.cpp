@@ -50,7 +50,7 @@ std::shared_ptr<ImageController> ImageLoader::LoadImageData(const std::string& p
 	}
 	
 	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance().LoadTexture(path);
-	std::shared_ptr<ImageObject> imgObj = std::make_shared <ImageObject>(tObj->GetWidth(), tObj->GetHeight(), tObj);
+	std::shared_ptr<ImageObject> imgObj = ImageObject::Create(tObj->GetWidth(), tObj->GetHeight(), tObj);
 	mImages[path] = imgObj;
 	imgCtrl = std::make_shared<ImageController>(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList,mPipelinestate,mRootsignature);
 
@@ -68,7 +68,7 @@ std::shared_ptr<Image3DController> ImageLoader::LoadImage3D(const std::string& p
 	}
 
 	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance().LoadTexture(path);
-	std::shared_ptr<ImageObject> imgObj = std::make_shared<ImageObject>(tObj->GetWidth(), tObj->GetHeight(), tObj);
+	std::shared_ptr<ImageObject> imgObj = ImageObject::Create(tObj->GetWidth(), tObj->GetHeight(), tObj);
 	mImages[path] = imgObj;
 	imgCtrl = std::make_shared<Image3DController>(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature);
 

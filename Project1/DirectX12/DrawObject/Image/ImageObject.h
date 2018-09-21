@@ -89,5 +89,7 @@ private:
 	*	‰æ‘œî•ñ‚ğ•Û
 	*/
 	std::shared_ptr<TextureObject> mTexObj;
+
+	static std::shared_ptr<ImageObject> Create(int width, int height, std::shared_ptr<TextureObject> texObj);
 };
 

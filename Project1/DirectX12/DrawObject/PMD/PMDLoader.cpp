@@ -185,10 +185,10 @@ void PMDLoader::LoadSkin()
 	for (auto& s : mLoadingmodel->mSkins.datas)
 	{
 		mFp->LoadFile(&s.skinName[0], sizeof(s.skinName));
-		mFp->LoadFile(&s.skinvertexcount);
+		mFp->LoadFile(&s.skinVertexCount);
 		mFp->LoadFile(&s.skintype);
-		s.vertexeis.resize(s.skinvertexcount);
-		mFp->LoadFile(&s.vertexeis[0], s.skinvertexcount);
+		s.vertices.resize(s.skinVertexCount);
+		mFp->LoadFile(&s.vertices[0], s.skinVertexCount);
 	}
 }
 
@@ -361,7 +361,7 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.GS;
 	gpsDesc.HS;
 
-	mPipelinestate = std::make_shared<PipelineStateObject>("PMD", gpsDesc,dev);
+	mPipelinestate = std::make_shared<PipelineStateObject>("PMDMaterial", gpsDesc,dev);
 
 	gpsDesc.pRootSignature = mSubRootsiganture->GetRootSignature().Get();
 	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mSubShader.vertexShader.Get());
@@ -370,7 +370,7 @@ void PMDLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	gpsDesc.GS;
 	gpsDesc.HS;
 
-	mSubPipelineState = std::make_shared<PipelineStateObject>("PMDSub", gpsDesc, dev);
+	mSubPipelineState = std::make_shared<PipelineStateObject>("PMDTex", gpsDesc, dev);
 
 }
 
@@ -384,7 +384,7 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 		, ""
 		, true);
 
-	mRootsignature = std::make_shared<RootSignatureObject>(mShader.rootSignature.Get(), dev);
+	mRootsignature = std::make_shared<RootSignatureObject>("PMDMaterial",mShader.rootSignature.Get(), dev);
 
 	ShaderCompiler::Instance().AddDefineMacro("CAMERA_REGISTER", "b0");
 	ShaderCompiler::Instance().AddDefineMacro("LIGHT_REGISTER", "b1");
@@ -397,7 +397,7 @@ void PMDLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 		, ""
 		, true);
 
-	mSubRootsiganture = std::make_shared<RootSignatureObject>(mSubShader.rootSignature.Get(), dev);
+	mSubRootsiganture = std::make_shared<RootSignatureObject>("PMDTex",mSubShader.rootSignature.Get(), dev);
 }
 
 std::shared_ptr<PMDController> PMDLoader::CreateController(std::shared_ptr<PMDModel>& model, const std::string& path)

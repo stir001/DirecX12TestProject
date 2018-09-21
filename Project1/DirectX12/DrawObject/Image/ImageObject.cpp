@@ -11,9 +11,19 @@ ImageObject::ImageObject(int inwidth, int inheight, std::shared_ptr<TextureObjec
 {
 }
 
+std::shared_ptr<ImageObject> ImageObject::Create(int width, int height, std::shared_ptr<TextureObject> texObj)
+{
+	class CreateImageObjcetHelper : public ImageObject
+	{
+	public:
+		CreateImageObjcetHelper(int width, int height, std::shared_ptr<TextureObject> texObj) :ImageObject(width, height, texObj) {}
+		~CreateImageObjcetHelper() { ImageObject::~ImageObject(); };
+	};
+	return std::make_shared<CreateImageObjcetHelper>(width,height,texObj);
+}
+
 ImageObject::~ImageObject()
 {
-	mTexObj.reset();
 }
 
 DirectX::XMFLOAT2 ImageObject::GetImageSize()
