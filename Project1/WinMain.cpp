@@ -1,8 +1,5 @@
-#include "Dx12Ctrl.h"
-#include "NeedCall.h"
-#include "Dx12Camera.h"
-#include "DxInput.h"
-#include "XMFloatOperators.h"
+#include "Dx12MSLib.h"
+#include "NormalMapCube.h"
 
 #include <Windows.h>
 #include <d3d12.h>
@@ -20,7 +17,7 @@ using namespace DirectX;
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
-	///Direct3D12‚Ì‰Šú‰»
+	//Direct3D12‚Ì‰Šú‰»
 	Dx12CtrlInit(hInst);
 
 	auto& camera = Dx12Ctrl::Instance().GetCamera();

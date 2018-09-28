@@ -1,9 +1,5 @@
 #include "NormalMapCube.h"
-#include "PrimitiveCreator.h"
-#include "PrimitiveController.h"
-#include "DxInput.h"
-#include "Transform3DCalculator.h"
-#include "XMFloatOperators.h"
+#include "Dx12MSLib.h"
 
 
 NormalMapCube::NormalMapCube(float length, const std::string& normalMapPath) :
@@ -11,7 +7,7 @@ NormalMapCube::NormalMapCube(float length, const std::string& normalMapPath) :
 	mCubeCtrl(PrimitiveCreator::Instance().CreateCubeNormalMap(length, normalMapPath)),
 	mRotaDeg(1.0f)
 {
-	mInstanceMatrix.push_back(StoreMatrixToXMFloat4(DirectX::XMMatrixIdentity()));
+	mInstanceMatrix.push_back(ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity()));
 }
 
 
