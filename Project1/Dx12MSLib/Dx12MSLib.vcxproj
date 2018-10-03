@@ -206,7 +206,6 @@
     <ClInclude Include="DirectX12\DrawObject\Image\Image3DController.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\ImageController.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\ImageControllerStructure.h" />
-    <ClInclude Include="DirectX12\DrawObject\Image\ImageData.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\ImageObject.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\Loader\ImageLoader.h" />
     <ClInclude Include="DirectX12\DrawObject\Model.h" />
@@ -297,7 +296,6 @@
     <ClCompile Include="DirectX12\DrawObject\Image\Image3DController.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\ImageController.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\ImageControllerStructure.cpp" />
-    <ClCompile Include="DirectX12\DrawObject\Image\ImageData.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\ImageObject.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Image\Loader\ImageLoader.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Model.cpp" />

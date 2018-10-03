@@ -10,7 +10,6 @@ NormalMapCube::NormalMapCube(float length, const std::string& normalMapPath) :
 	mInstanceMatrix.push_back(ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity()));
 }
 
-
 NormalMapCube::~NormalMapCube()
 {
 }

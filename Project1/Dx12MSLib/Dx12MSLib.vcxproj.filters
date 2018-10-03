@@ -207,9 +207,6 @@
     <ClInclude Include="DirectX12\DrawObject\Image\ImageControllerStructure.h">
       <Filter>DirectX12\DrawObject\Image</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX12\DrawObject\Image\ImageData.h">
-      <Filter>DirectX12\DrawObject\Image</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX12\DrawObject\Image\ImageObject.h">
       <Filter>DirectX12\DrawObject\Image</Filter>
     </ClInclude>
@@ -468,9 +465,6 @@
       <Filter>DirectX12\DrawObject\Fbx</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\DrawObject\Image\ImageControllerStructure.cpp">
-      <Filter>DirectX12\DrawObject\Image</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX12\DrawObject\Image\ImageData.cpp">
       <Filter>DirectX12\DrawObject\Image</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\DrawObject\Image\ImageObject.cpp">

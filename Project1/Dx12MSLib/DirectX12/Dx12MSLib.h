@@ -48,7 +48,6 @@
 #include "DrawObject/Image/Image3DController.h"
 #include "DrawObject/Image/ImageController.h"
 #include "DrawObject/Image/ImageControllerStructure.h"
-#include "DrawObject/Image/ImageData.h"
 #include "DrawObject/Image/ImageObject.h"
 #include "DrawObject/Image/Loader/ImageLoader.h"
 #include "DrawObject/PMD/PMDController.h"

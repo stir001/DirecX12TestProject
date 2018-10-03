@@ -48,9 +48,6 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 	DirectX::TexMetadata texMetaData = {};
 	DX12CTRL_INSTANCE
 	d12.result = DirectX::LoadFromWICFile(wstrPath.data(), 0, &texMetaData, *rtn->mImageData);
-	rtn->mSubresource.pData = rtn->mImageData->GetPixels();
-	rtn->mSubresource.RowPitch = rtn->mImageData->GetImages()->rowPitch;//画像の横幅のバイト単位のサイズ
-	rtn->mSubresource.SlicePitch =  rtn->mImageData->GetImages()->slicePitch;//画像全体のサイズ
 
 	if (FAILED(d12.result))
 	{
@@ -64,6 +61,12 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 		rtn->mTextureName = GetTextureName(wstrPath);
 		mTextures[filepath] = rtn;
 		return rtn;
+	}
+	else
+	{
+		rtn->mSubresource.pData = rtn->mImageData->GetPixels();
+		rtn->mSubresource.RowPitch = rtn->mImageData->GetImages()->rowPitch;//画像の横幅のバイト単位のサイズ
+		rtn->mSubresource.SlicePitch = rtn->mImageData->GetImages()->slicePitch;//画像全体のサイズ
 	}
 
 	{

@@ -2,6 +2,7 @@
 #include "DrawObject/DrawObjectLoader.h"
 #include "FbxStructure.h"
 
+#include <functional>
 #include <string>
 #include <vector>
 #include <DirectXMath.h>
@@ -32,6 +33,10 @@ struct NodeTree
 	std::string nodeName;
 	fbxsdk::FbxAMatrix globalPosition;
 	fbxsdk::FbxAMatrix globalOffsetPosition;
+	fbxsdk::FbxNodeAttribute* attribute;
+	DirectX::XMFLOAT3 translation;
+	DirectX::XMFLOAT3 rotation;
+	DirectX::XMFLOAT3 scale;
 	std::vector<NodeTree> children;
 };
 
@@ -115,7 +120,7 @@ private:
 
 	void FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh* mesh);
 
-	void StackSearchNode(fbxsdk::FbxNode* parent, FbxNodeAttribute::EType searchtype, NodeTree& parentodetree);
+	void StackSearchNode(fbxsdk::FbxNode* parent, FbxNodeAttribute::EType searchtype, NodeTree& parenTree, std::function<void(fbxsdk::FbxNode*)> hitFunction);
 
 	void StackNode(fbxsdk::FbxNode* pNode, FbxNodeAttribute::EType type, fbxsdk::FbxArray<fbxsdk::FbxNode*>& nodeArray);
 
@@ -141,7 +146,7 @@ private:
 
 	void DestroyNode(fbxsdk::FbxNode* node);
 
-	fbxsdk::FbxAMatrix GetGlobalPosition(fbxsdk::FbxNode* pNode, const fbxsdk::FbxTime& pTime, fbxsdk::FbxPose* pPose = nullptr, fbxsdk::FbxAMatrix* pParentGlobalPosition = nullptr);
+	/*fbxsdk::FbxAMatrix GetGlobalPosition(fbxsdk::FbxNode* pNode, const fbxsdk::FbxTime& pTime, fbxsdk::FbxPose* pPose = nullptr, fbxsdk::FbxAMatrix* pParentGlobalPosition = nullptr);
 
 	fbxsdk::FbxAMatrix GetPoseMatrix(fbxsdk::FbxPose* pPose, int pNodeIndex);
 
@@ -168,13 +173,13 @@ private:
 		fbxsdk::FbxMesh* pMesh,
 		fbxsdk::FbxTime& pTime,
 		fbxsdk::FbxVector4* pVertexArray,
-		fbxsdk::FbxPose* pPose);
+		fbxsdk::FbxPose* pPose);*/
 
 	std::vector<fbxsdk::FbxTime> ExtractingKeyFrames(fbxsdk::FbxScene* scene, unsigned int meshId, std::vector<fbxsdk::FbxNode*>& linkNode);
 
-	const NodeTree* GetNodeTree(std::string nodename);
+	//const NodeTree* GetNodeTree(std::string nodename);
 
-	const NodeTree* GetNodeTreeRecursive(std::string nodeName, const NodeTree& nodeTree);
+	//const NodeTree* GetNodeTreeRecursive(std::string nodeName, const NodeTree& nodeTree);
 
 };
 
