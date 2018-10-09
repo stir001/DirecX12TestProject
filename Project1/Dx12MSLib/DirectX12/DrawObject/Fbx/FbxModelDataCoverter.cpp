@@ -40,7 +40,7 @@ std::shared_ptr<FbxModel> FbxModelDataConverter::ConvertToFbxModel(std::shared_p
 
 	size_t size = data->modelPath.rfind('/');
 
-	for (unsigned int i = size + 1; i < static_cast<int>(data->modelPath.size()); ++i)
+	for (unsigned int i = static_cast<unsigned int>(size) + 1U; i < static_cast<unsigned int>(data->modelPath.size()); ++i)
 	{
 		mModel.lock()->mModelName.push_back(data->modelPath[i]);
 	}
@@ -60,7 +60,7 @@ void FbxModelDataConverter::ConvertIndex(Microsoft::WRL::ComPtr<ID3D12Device>& d
 	std::string name = mModel.lock()->GetModelName();
 	name += "IndexBuffer";
 
-	mModel.lock()->mIndexBuffer.reset(new IndexBufferObject(name,dev,sizeof(mModel.lock()->mIndexes[0]), static_cast<unsigned int>( mModel.lock()->mIndexes.size())));
+	mModel.lock()->mIndexBuffer = std::make_shared<IndexBufferObject>(name, dev, sizeof(mModel.lock()->mIndexes[0]), static_cast<unsigned int>(mModel.lock()->mIndexes.size()));
 	mModel.lock()->mIndexBuffer->WriteBuffer(&mModel.lock()->mIndexes[0], static_cast<unsigned int>(mModel.lock()->mIndexes.size() * sizeof(mModel.lock()->mIndexes[0])));
 }
 
@@ -72,43 +72,42 @@ void FbxModelDataConverter::ConvertVertex(Microsoft::WRL::ComPtr<ID3D12Device>& 
 void FbxModelDataConverter::ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
 	unsigned int texCount = 0;
-	for (auto& texInfo : mConvertData.lock()->textures)
+	for (auto& texSet : mConvertData.lock()->textures)
 	{
-		texCount += static_cast<int>(texInfo.textures.size());
+		texCount += static_cast<unsigned int>(texSet.size());
 	}
 
 	mModel.lock()->mTextureObjects.reserve(TEXTURECONT);
 
 	std::wstring wpath;
 	wpath.resize(mRelativePath.size());
-	for (unsigned int i = 0; i < mRelativePath.size(); ++i)
+	for (unsigned int i = 0; i < static_cast<unsigned int>(mRelativePath.size()); ++i)
 	{
 		wpath[i] = mRelativePath[i];
 	}
 
 	int tableIndex = 0;
-	for (unsigned int i = 0, j = 0; tableIndex < 3 && i < mConvertData.lock()->textures.size(); ++i)
+	for (unsigned int i = 0, j = 0; tableIndex < 3 && i < static_cast<unsigned int>(mConvertData.lock()->textures.size()); ++i)
 	{
 		j = 0;
 		auto& texlayer = mConvertData.lock()->textures[i];
-		for (; j < texlayer.textures.size(); ++j)
+		for (; j < texlayer.size(); ++j)
 		{
-			if (texlayer.textures[j].texturePath.rfind(TEXTURE_SETABLE[tableIndex])
-				<= texlayer.textures[j].texturePath.size())
+			if (texlayer[j].texturePath.rfind(TEXTURE_SETABLE[tableIndex])
+				<= texlayer[j].texturePath.size())
 			{
 				break;
 			}
 		}
 
-		if (texlayer.textures.size() == j)
+		if (texlayer.size() == j)
 		{
 			continue;
 		}
 
-		auto& tex = texlayer.textures[j];
+		auto& tex = texlayer[j];
 		
 		mModel.lock()->mTextureObjects.push_back(TextureLoader::Instance().LoadTexture(mRelativePath + tex.texturePath));
-
 
 		i = 0;
 		++tableIndex;
@@ -120,12 +119,12 @@ void FbxModelDataConverter::ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>&
 	
 	convertStr += "NullTexture";
 
-	if (mModel.lock()->mTextureObjects.size() == 0)
+	if (static_cast<unsigned int>(mModel.lock()->mTextureObjects.size()) == 0)
 	{
 		mModel.lock()->mTextureObjects.push_back(TextureLoader::Instance().LoadTexture(convertStr));
 	}
 
-	for (unsigned int i = static_cast<int>(mModel.lock()->mTextureObjects.size()); i < TEXTURECONT; ++i)
+	for (unsigned int i = static_cast<unsigned int>(mModel.lock()->mTextureObjects.size()); i < TEXTURECONT; ++i)
 	{
 		mModel.lock()->mTextureObjects.push_back(TextureLoader::Instance().LoadTexture(convertStr));
 	}
@@ -135,15 +134,20 @@ void FbxModelDataConverter::ConvertBone(Microsoft::WRL::ComPtr<ID3D12Device>& de
 {
 	mModel.lock()->mBones.resize(mConvertData.lock()->bones.size());
 	
-	for (unsigned int i = 0; i < mModel.lock()->mBones.size(); ++i)
+	for (unsigned int i = 0; i < static_cast<unsigned int>(mModel.lock()->mBones.size()); ++i)
 	{
 		mModel.lock()->mBones[i] = mConvertData.lock()->bones[i];
 	}
 
-	if (mModel.lock()->mBones.size() == 0)
+	if (static_cast<unsigned int>(mModel.lock()->mBones.size()) == 0)
 	{
 		Fbx::FbxBone bone;
 		DirectX::XMStoreFloat4x4(&bone.initMatrix, DirectX::XMMatrixIdentity());
 		mModel.lock()->mBones.push_back(bone);
 	}
+}
+
+void FbxModelDataConverter::ConvertSkeltons(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+{
+
 }

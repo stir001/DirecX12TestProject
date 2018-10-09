@@ -182,7 +182,6 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 	InitFirstPath();
 
 	return true;
-
 }
 
 void Dx12Ctrl::InitFirstPath()
@@ -370,7 +369,6 @@ D3D12_CPU_DESCRIPTOR_HANDLE Dx12Ctrl::GetDepthCpuHandle() const
 	return mDepthDescHeap->GetCPUHeapHandleStart();
 }
 
-//テスト用関数
 std::shared_ptr<Dx12Camera> Dx12Ctrl::GetCamera() const
 {
 	return mCamera;

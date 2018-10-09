@@ -28,5 +28,6 @@ private:
 	void ConvertVertex(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	void ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	void ConvertBone(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	void ConvertSkeltons(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 };
 

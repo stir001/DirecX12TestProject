@@ -59,9 +59,11 @@ Output FbxVS(Input input)
 
 float4 FbxPS(Output output) : SV_Target
 {
+    //return output.normal;
 	float bright = dot(output.normal.xyz, -dir.xyz);
+    return float4(bright, bright, bright, 1);
     float4 diffusecolor = (diffsemap.Sample(smp, output.uv));
-   return saturate(float4(saturate(diffusecolor.rgb * bright) + 0.5f * diffusecolor.rgb, 1));
+    return float4(saturate(diffusecolor.rgb * bright + 0.5f * diffusecolor.rgb), 1);
 }
 
 float2 PackingNormal(float2 viewNorm)

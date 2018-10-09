@@ -8,7 +8,7 @@
 
 class ConstantBufferObject;
 class VertexBufferObject;
-class DirectionalLight;
+class LightObject;
 class FbxModelDataConverter;
 class RootSignatureObject;
 class PipelineStateObject;
@@ -35,7 +35,7 @@ public:
 	~FbxModelController();
 
 	void Draw();
-	void SetLight(std::shared_ptr<DirectionalLight>& dirlight);
+	void SetLight(std::shared_ptr<LightObject> dirlight);
 
 	/*void SetPositon(const DirectX::XMFLOAT3& pos);
 	void SetScale(float scale);

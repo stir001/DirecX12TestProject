@@ -23,16 +23,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 
-	FbxLoader::Create();
-	auto fbxmodel = FbxLoader::Instance()->LoadMesh("kouhai/Kouhai_chan.fbx");
+	auto fbxmodel = FbxLoader::Instance().LoadMesh("Senpai_san/Senpai_san.fbx");
 
 	while (ProcessMessage()) {
-		CallStartPerGameLoop();
 		input.UpdateKeyState();
-
+		fbxmodel->AddRotaY(0.1f);
 		camera->DefaultMove(input);
-
-		CallEndPerGameLoop();
+		fbxmodel->Draw();
 	}
 
 	camera = nullptr;

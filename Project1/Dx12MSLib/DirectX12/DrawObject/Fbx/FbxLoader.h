@@ -14,6 +14,7 @@ class FbxModelDataConverter;
 class FbxModelController;
 class FbxMotionData;
 class FbxMotionConverter;
+class LightObject;
 
 namespace Fbx {
 	struct FbxModelData;
@@ -24,7 +25,6 @@ namespace Fbx {
 	struct FbxMaterial;
 	struct FbxTexture;
 	struct FbxBoneInfo;
-	struct FbxTextureInfo;
 	class FbxModel;
 }
 
@@ -33,7 +33,7 @@ struct NodeTree
 	std::string nodeName;
 	fbxsdk::FbxAMatrix globalPosition;
 	fbxsdk::FbxAMatrix globalOffsetPosition;
-	fbxsdk::FbxNodeAttribute* attribute;
+	fbxsdk::FbxNodeAttribute::EType attributeType;
 	DirectX::XMFLOAT3 translation;
 	DirectX::XMFLOAT3 rotation;
 	DirectX::XMFLOAT3 scale;
@@ -46,18 +46,17 @@ class FbxLoader : public DrawObjectLoader
 public:
 	~FbxLoader();
 
-	static void Create() {
-		if (mInstance == nullptr)
-			mInstance.reset(new FbxLoader());
-	};
 	static void Destroy() {
 		if (mInstance != nullptr) {
-			mInstance.reset();
 			mInstance = nullptr;
 		}
 	};
-	static std::unique_ptr<FbxLoader>& Instance() {
-		return mInstance;
+	static FbxLoader& Instance() {
+		if (mInstance == nullptr)
+		{
+			mInstance = new FbxLoader();
+		}
+		return *mInstance;
 	};
 	std::shared_ptr<FbxModelController>	LoadMesh(const std::string& modelPath);
 
@@ -98,7 +97,7 @@ private:
 	std::shared_ptr<FbxModelDataConverter> mModelConverter;
 	std::shared_ptr<FbxMotionConverter> mMotionConverter;
 
-	static std::unique_ptr<FbxLoader> mInstance;
+	static FbxLoader* mInstance;
 	std::vector<fbxsdk::FbxMesh*> mMeshDatas;
 	std::vector<fbxsdk::FbxNode*> mNodeDatas;
 	std::vector<Fbx::AnimationData> mAnimCurves;
@@ -108,6 +107,10 @@ private:
 	std::vector<Fbx::TmpVertex> mTmpVertices;
 	std::vector<int> mTmpIndexes;
 	std::vector<Fbx::TmpBone> mBones;
+	std::vector<Fbx::FbxSkeleton> mSkeltons;
+	std::vector<unsigned int> mSkeltonIndices;
+
+	std::shared_ptr<LightObject> mLight;
 
 	bool LoaderInitializie(std::string fbxPath);
 	void CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
@@ -120,9 +123,9 @@ private:
 
 	void FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh* mesh);
 
-	void StackSearchNode(fbxsdk::FbxNode* parent, FbxNodeAttribute::EType searchtype, NodeTree& parenTree, std::function<void(fbxsdk::FbxNode*)> hitFunction);
+	void StackSearchNode(fbxsdk::FbxNode* parent, fbxsdk::FbxNodeAttribute::EType searchtype, NodeTree& parenTree, std::function<void(fbxsdk::FbxNode*)> hitFunction);
 
-	void StackNode(fbxsdk::FbxNode* pNode, FbxNodeAttribute::EType type, fbxsdk::FbxArray<fbxsdk::FbxNode*>& nodeArray);
+	void StackNode(fbxsdk::FbxNode* pNode, fbxsdk::FbxNodeAttribute::EType type, fbxsdk::FbxArray<fbxsdk::FbxNode*>& nodeArray);
 
 	std::shared_ptr<Fbx::FbxModelData> MainLoad(fbxsdk::FbxMesh* mesh, std::string path);
 

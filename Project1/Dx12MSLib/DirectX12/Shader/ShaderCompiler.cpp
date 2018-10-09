@@ -71,11 +71,13 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	D3D_SHADER_MACRO macro = { nullptr, nullptr };
 	mMacros.push_back(macro);
 
+	ID3D12ShaderReflection* id3d12ref = nullptr;
+
 	if (vsName.size() > 0)
 	{
 		ID3DBlob* vertex = nullptr;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			vsName.data(), "vs_5_0", compileflag, 0, &vertex, &err);
+			vsName.data(), "vs_5_1", compileflag, 0, &vertex, &err);
 		outErr(err);
 		mDatas[shaderPath].vertexShader.Swap(vertex);
 
@@ -85,13 +87,17 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 			result = D3DGetBlobPart(vertex->GetBufferPointer() , vertex->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &root);
 			mDatas[shaderPath].rootSignature.Swap(root);
 		}
+
+		D3DReflect(vertex->GetBufferPointer(), vertex->GetBufferSize(),IID_PPV_ARGS(&id3d12ref));
 	}
+	D3D12_SHADER_DESC shaderDesc = {};
+	id3d12ref->GetDesc(&shaderDesc);
 
 	if (psName.size() > 0)
 	{
 		ID3DBlob* pixcel = nullptr;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			psName.data(), "ps_5_0", compileflag, 0, &pixcel, &err);
+			psName.data(), "ps_5_1", compileflag, 0, &pixcel, &err);
 		outErr(err);
 		mDatas[shaderPath].pixelShader.Swap(pixcel);
 	}
@@ -100,7 +106,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	{
 		ID3DBlob* geometry = nullptr;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			gsName.data(), "gs_5_0", compileflag, 0, &geometry, &err);
+			gsName.data(), "gs_5_1", compileflag, 0, &geometry, &err);
 		outErr(err);
 		mDatas[shaderPath].geometryShader.Swap(geometry);
 	}
@@ -109,7 +115,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	{
 		ID3DBlob* hull = nullptr;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			hsName.data(), "hs_5_0", compileflag, 0, &hull, &err);
+			hsName.data(), "hs_5_1", compileflag, 0, &hull, &err);
 		outErr(err);
 		mDatas[shaderPath].hullShader.Swap(hull);
 	}
@@ -118,7 +124,7 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	{
 		ID3DBlob* domain = nullptr;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			dsName.data(), "ds_5_0", compileflag, 0, &domain, &err);
+			dsName.data(), "ds_5_1", compileflag, 0, &domain, &err);
 		outErr(err);
 		mDatas[shaderPath].domainShader.Swap(domain);
 	}

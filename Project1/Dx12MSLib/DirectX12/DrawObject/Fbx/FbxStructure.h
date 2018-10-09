@@ -64,18 +64,16 @@ namespace Fbx
 		unsigned int surfaceVertex;
 	};
 
-
 	struct FbxTexture
 	{
 		std::string	textureName;
 		std::string	texturePath;
 		std::string	uvSetName;
+		
 		unsigned int textureCount;
 	};
 
-	struct FbxTextureInfo {
-		std::vector<FbxTexture> textures;
-	};
+	typedef class std::vector<FbxTexture> FbxTexturesSet;
 
 	struct FbxBoneInfo {
 		DirectX::XMMATRIX initMatrix;
@@ -91,14 +89,23 @@ namespace Fbx
 		DirectX::XMFLOAT4X4 initMatrix;
 	};
 
+	struct FbxSkeleton {
+		std::string name;
+		DirectX::XMFLOAT4 pos;
+		DirectX::XMFLOAT4 rotation;
+		DirectX::XMFLOAT4 scale;
+	};
+
 	struct FbxModelData
 	{
 		std::string modelPath;
 		FbxIndexes	indexes;
 		FbxVertexesInfo	vertexesInfo;
 		std::vector<FbxMaterial> materials;
-		std::vector<FbxTextureInfo>	textures;
+		std::vector<FbxTexturesSet>	textures;
 		std::vector<FbxBone> bones;
+		std::vector<Fbx::FbxSkeleton> skeltons;
+		std::vector<unsigned int> skeltonIndices;
 	};
 
 	struct BoneFrameData
@@ -115,9 +122,7 @@ namespace Fbx
 	};
 
 	typedef std::vector<BoneMatrixData> AnimationDatas_t;
-}
 
-namespace Fbx {
 	//頂点整合用のデータ
 	struct VertexResource {
 		std::vector<DirectX::XMFLOAT3> pos;
@@ -147,6 +152,7 @@ namespace Fbx {
 				this->uv.x == rval.uv.x &&
 				this->uv.y == rval.uv.y);
 		}
+		TmpNormalUV() :normal{ 0,0,0 }, uv{ 0, 0 }, vertexNo(0){};
 	};
 
 	struct TmpVertex

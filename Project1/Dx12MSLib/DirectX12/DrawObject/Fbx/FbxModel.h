@@ -9,7 +9,6 @@
 #include <DirectXMath.h>
 
 class FbxModelDataConverter;
-struct ID3D12GraphicsCommandList;
 
 namespace Fbx {
 
@@ -36,6 +35,8 @@ namespace Fbx {
 		std::vector<unsigned int> mIndexes;
 		std::vector<FbxVertex> mVertexes;
 		std::vector<Fbx::FbxBone> mBones;
+		std::vector<Fbx::FbxSkeleton> mSkelton;
+		std::vector<unsigned int> mSkeltonIndices;
 	private:
 	};
 }

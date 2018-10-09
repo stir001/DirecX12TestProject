@@ -3,7 +3,7 @@
 #include "FbxModel.h"
 #include "FbxMotionPlayer.h"
 #include "Master/Dx12Ctrl.h"
-#include "Light/DirectionalLight.h"
+#include "Light/LightObject.h"
 #include "Buffer/ConstantBufferObject.h"
 #include "PipelineState/PipelineStateObject.h"
 #include "Rootsignature/RootSignatureObject.h"
@@ -36,11 +36,8 @@ FbxModelController::FbxModelController(std::shared_ptr<FbxModel>& model,
 	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMMatrixIdentity());
 	XMStoreFloat4(&mQuaternion, XMQuaternionIdentity());
 	std::string cbufferName = mModel->GetModelName();
-	cbufferName += "MatrixBuffer";
-	mModelMatrixBuffer = std::make_shared<ConstantBufferObject>(cbufferName, dev,sizeof(XMMATRIX), 1);
 
-	cbufferName = mModel->GetModelName();
-	cbufferName += "ColorBuffer";
+	mModelMatrixBuffer = std::make_shared<ConstantBufferObject>(cbufferName + "MatrixBuffer", dev, sizeof(XMMATRIX), 1);
 
 	mVertexElements.resize(mModel->mVertexes.size());
 	for (unsigned int i = 0; i < (mVertexElements.size()); ++i)
@@ -51,17 +48,13 @@ FbxModelController::FbxModelController(std::shared_ptr<FbxModel>& model,
 		DirectX::XMStoreFloat4x4(&mVertexElements[i].vertexMatrix, DirectX::XMMatrixIdentity());
 	}
 
-	cbufferName = mModel->GetModelName();
-	cbufferName += "VertexBuffer";
-
-	mCtrlVertexBuffer = (std::make_shared<VertexBufferObject>(cbufferName,dev,sizeof(mVertexElements[0]), mVertexElements.size()));
+	mCtrlVertexBuffer = (std::make_shared<VertexBufferObject>(cbufferName + "VertexBuffer", dev, sizeof(mVertexElements[0]), mVertexElements.size()));
 	UpdateVertex();
 
 	mMotionPlayer = std::make_shared<FbxMotionPlayer>(mModel->mBones, mModel->mVertexes, mVertexElements);
 
 	mCameraBuffer = Dx12Ctrl::Instance().GetCamera()->GetCameraBuffer();
 
-	mBundleCmdList->Close();
 	UpdateMatrix();
 }
 
@@ -82,48 +75,12 @@ void FbxModelController::Draw()
 	}
 }
 
-void FbxModelController::SetLight(std::shared_ptr<DirectionalLight>& dirlight)
+void FbxModelController::SetLight(std::shared_ptr<LightObject> dirlight)
 {
 	mDirLightBuffer = dirlight->GetLightBuffer();
 	UpdateDescriptorHeap();
 	mBundleUpdate = &FbxModelController::UpdateBundle;
 }
-
-//void FbxModelController::SetPositon(const DirectX::XMFLOAT3& pos)
-//{
-//	mPos = pos;
-//	UpdateMatrix();
-//}
-//
-//void FbxModelController::SetScale(float scale)
-//{
-//	mScale = scale;
-//	UpdateMatrix();
-//}
-//
-//void  FbxModelController::AddRotaX(float deg)
-//{
-//	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationX(XMConvertToRadians(deg)));
-//	UpdateMatrix();
-//}
-//
-//void  FbxModelController::AddRotaY(float deg)
-//{
-//	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationY(XMConvertToRadians(deg)));
-//	UpdateMatrix();
-//}
-//
-//void  FbxModelController::AddRotaZ(float deg)
-//{
-//	DirectX::XMStoreFloat4x4(&mRotationMatrix, XMLoadFloat4x4(&mRotationMatrix) * XMMatrixRotationZ(XMConvertToRadians(deg)));
-//	UpdateMatrix();
-//}
-//
-//void FbxModelController::SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion)
-//{
-//	mQuaternion = quaternion;
-//	UpdateMatrix();
-//}
 
 void FbxModelController::SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsignature)
 {
@@ -221,6 +178,7 @@ void FbxModelController::UpdateBundle()
 	{
 		mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_MAX + offsetIndex++);
 	}
+	bundle->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	bundle->DrawIndexedInstanced(static_cast<UINT>(mModel->mIndexes.size()), 1, 0, 0, 0);
 	bundle->Close();
 

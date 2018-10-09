@@ -15,19 +15,17 @@ unsigned int Roundup2Multiplier(unsigned int size)
 	return size + ((bit << 1) - size) % bit;
 }
 
-void CallStartPerGameLoop()
-{
-	AnimationPlayerManager::Instance().UpdateAnimations();
-}
-
-void CallEndPerGameLoop()
+void CallEveryFrame()
 {
 	AnimationPlayerManager::Instance().WaitSafeFree();
 	RenderingPathManager::Instance().Render();
+	AnimationPlayerManager::Instance().UpdateAnimations();
 }
 
 bool ProcessMessage()
 {
+	CallEveryFrame();
+
 	MSG msg = {};
 	bool rtn = true;
 	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -43,13 +41,11 @@ bool ProcessMessage()
 	return rtn;
 }
 
-const int WINDOW_WIDTH = 768;
-const int WINDOW_HEIGHT = 448;
-
-void Dx12CtrlInit(HINSTANCE hInst)
+void Dx12CtrlInit(HINSTANCE hInst,
+	std::string wndName = "DirectX12",
+	unsigned int wndWidth = 768, unsigned int wndHeight = 448)
 {
-	Dx12Ctrl::Instance().SetWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	std::string wName = "DirectX12";
-	Dx12Ctrl::Instance().SetWindowName(wName);
+	Dx12Ctrl::Instance().SetWindowSize(wndWidth, wndHeight);
+	Dx12Ctrl::Instance().SetWindowName(wndName);
 	Dx12Ctrl::Instance().Dx12Init(hInst);
 }
