@@ -57,6 +57,7 @@ public:
 
 	void AddDefineMacro(const std::string& name, const std::string& def);
 
+	void SetShaderModel(const std::string& shaderModel);
 private:
 	ShaderCompiler();
 	ShaderCompiler(const ShaderCompiler&);
@@ -73,5 +74,6 @@ private:
 	std::map<std::string, ShaderDatas> mDatas;
 	std::vector<D3D_SHADER_MACRO> mMacros;
 	std::list<MacroData> mStrData;
+	std::string mShaderModel;
 };
 

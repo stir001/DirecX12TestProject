@@ -1,3 +1,4 @@
+#include "ShaderCompiler.h"
 #include "stdafx.h"
 #include "ShaderCompiler.h"
 #include "Util/Util.h"
@@ -8,12 +9,13 @@
 #include <d3dcompiler.h>
 #include <functional>
 #include <d3dcommon.h>
+#include <cassert>
 
 using Microsoft::WRL::ComPtr;
 
 ShaderCompiler* ShaderCompiler::mInstance = nullptr;
 
-ShaderCompiler::ShaderCompiler()
+ShaderCompiler::ShaderCompiler() : mShaderModel("5_0")
 {
 }
 
@@ -76,57 +78,65 @@ ShaderDatas ShaderCompiler::CompileShader(const std::string& shaderPath,
 	if (vsName.size() > 0)
 	{
 		ID3DBlob* vertex = nullptr;
+		std::string vsModel = "vs_" + mShaderModel;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			vsName.data(), "vs_5_1", compileflag, 0, &vertex, &err);
+			vsName.data(), vsModel.data(), compileflag, 0, &vertex, &err);
 		outErr(err);
 		mDatas[shaderPath].vertexShader.Swap(vertex);
+
+		assert(SUCCEEDED(result));
 
 		if (existRootSignature)
 		{
 			ID3DBlob* root = nullptr;
 			result = D3DGetBlobPart(vertex->GetBufferPointer() , vertex->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &root);
 			mDatas[shaderPath].rootSignature.Swap(root);
+			assert(SUCCEEDED(result));
 		}
-
-		D3DReflect(vertex->GetBufferPointer(), vertex->GetBufferSize(),IID_PPV_ARGS(&id3d12ref));
 	}
-	D3D12_SHADER_DESC shaderDesc = {};
-	id3d12ref->GetDesc(&shaderDesc);
 
 	if (psName.size() > 0)
 	{
 		ID3DBlob* pixcel = nullptr;
+		std::string psModel = "ps_" + mShaderModel;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			psName.data(), "ps_5_1", compileflag, 0, &pixcel, &err);
+			psName.data(), psModel.data(), compileflag, 0, &pixcel, &err);
 		outErr(err);
 		mDatas[shaderPath].pixelShader.Swap(pixcel);
+		assert(SUCCEEDED(result));
 	}
 
 	if (gsName.size() > 0)
 	{
 		ID3DBlob* geometry = nullptr;
+		std::string gsModel = "gs_" + mShaderModel;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			gsName.data(), "gs_5_1", compileflag, 0, &geometry, &err);
+			gsName.data(), gsModel.data(), compileflag, 0, &geometry, &err);
 		outErr(err);
 		mDatas[shaderPath].geometryShader.Swap(geometry);
+		assert(SUCCEEDED(result));
 	}
 
 	if (hsName.size() > 0)
 	{
 		ID3DBlob* hull = nullptr;
+		std::string hsModel = "hs_" + mShaderModel;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			hsName.data(), "hs_5_1", compileflag, 0, &hull, &err);
+			hsName.data(), hsModel.data(), compileflag, 0, &hull, &err);
 		outErr(err);
 		mDatas[shaderPath].hullShader.Swap(hull);
+		assert(SUCCEEDED(result));
 	}
 
 	if (dsName.size() > 0)
 	{
 		ID3DBlob* domain = nullptr;
+		std::string dsModel = "ds_" + mShaderModel;
 		result = D3DCompileFromFile(path, mMacros.data(), &hlslinculde,
-			dsName.data(), "ds_5_1", compileflag, 0, &domain, &err);
+			dsName.data(), dsModel.data(), compileflag, 0, &domain, &err);
 		outErr(err);
 		mDatas[shaderPath].domainShader.Swap(domain);
+		assert(SUCCEEDED(result));
 	}
 
 	mMacros.clear();
@@ -150,4 +160,9 @@ void ShaderCompiler::AddDefineMacro(const std::string & name, const std::string 
 	macro.Name = mStrData.back().name.data() + '\0';
 	macro.Definition = mStrData.back().def.data() + '\0';
 	mMacros.push_back(macro);
+}
+
+void ShaderCompiler::SetShaderModel(const std::string& shaderModel)
+{
+	mShaderModel = shaderModel;
 }
