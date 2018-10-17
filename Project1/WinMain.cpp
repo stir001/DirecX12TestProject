@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 	{
-		auto fbxmodel = FbxLoader::Instance().LoadMesh("Senpai_san/Senpai_san.fbx");
+		auto fbxmodel = FbxLoader::Instance().LoadMesh("kouhai/Kouhai_chan.fbx");
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
