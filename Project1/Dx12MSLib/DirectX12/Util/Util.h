@@ -9,4 +9,6 @@ namespace DirectX
 
 std::string GetRelativePath(const std::string& path);
 
-void StoreMatrixToFloat4x4(DirectX::XMFLOAT4X4& f44, const DirectX::XMMATRIX& mat);
+std::string ConvertNumberToString(unsigned int num);
+
+std::string ConvertNumberToString(unsigned char num);

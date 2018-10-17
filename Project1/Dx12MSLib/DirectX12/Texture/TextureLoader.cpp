@@ -6,9 +6,11 @@
 #include "Texture/TextureObject.h"
 #include "Buffer/ShaderResourceObject.h"
 #include "Util/CharToWChar.h"
+#include "Util/Util.h"
 
 #include <tchar.h>
 #include <DirectXMath.h>
+#include <algorithm>
 
 TextureLoader* TextureLoader::mInstance = nullptr;
 
@@ -36,7 +38,6 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 	ToWChar(&buf, filepath);
 	wstrPath = buf;
 	delete buf;
-
 
 	auto tex = mTextures.find(filepath);
 	if (tex != mTextures.end())
@@ -71,7 +72,7 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 
 	{
 		rtn->mTextureName = GetTextureName(wstrPath);
-		rtn->mShaderResource = std::make_shared<ShaderResourceObject>(rtn->mTextureName, d12.GetDev(),texMetaData.width,texMetaData.height,texMetaData.format);
+		rtn->mShaderResource = std::make_shared<ShaderResourceObject>(rtn->mTextureName, d12.GetDev(),static_cast<unsigned int>(texMetaData.width),static_cast<unsigned int>(texMetaData.height),texMetaData.format);
 		rtn->mShaderResource->CreateShaderResourceViewDesc();
 	}
 
@@ -88,6 +89,89 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 
 	rtn->mFilepath = filepath;
 	mTextures[filepath] = rtn;
+	return rtn;
+}
+
+std::shared_ptr<TextureObject> TextureLoader::CreateSingleColorTexture(const DirectX::XMFLOAT4& color)
+{
+	float maxValue = 255.0f;
+	const unsigned int colorNum = 4;
+	unsigned char uc_color[colorNum] = { static_cast<unsigned char>(color.x * maxValue),
+		static_cast<unsigned char>(color.y * maxValue),
+		static_cast<unsigned char>(color.z * maxValue),
+		static_cast<unsigned char>(color.w * maxValue) };
+	std::string texName = "ColorTexture";
+	for (int i = 0; i < colorNum; ++i)
+	{
+		texName += ConvertNumberToString(uc_color[i]);
+	}
+
+	auto findTex = mTextures.find(texName);
+	if (findTex != mTextures.end())
+	{
+		return findTex->second;
+	}
+
+	const unsigned int width = 16;
+	const unsigned int height = 16;
+	std::vector<unsigned char> colorDatas(width * height * colorNum);
+	for(unsigned int i = 0; i < static_cast<unsigned int>(colorDatas.size()); i += colorNum)
+	{
+		for (unsigned int j = 0; j < colorNum; ++j)
+		{
+			colorDatas[i + j] = uc_color[j];
+		}
+	}
+		
+	std::shared_ptr<TextureObject> rtn = std::make_shared<TextureObject>();
+	rtn->mSubresource.pData = colorDatas.data();
+	rtn->mSubresource.RowPitch = width * sizeof(uc_color);
+	rtn->mSubresource.SlicePitch = rtn->mSubresource.RowPitch * height;
+	rtn->mTextureName = texName;
+
+	DX12CTRL_INSTANCE
+
+	rtn->mShaderResource = std::make_shared<ShaderResourceObject>(rtn->mTextureName, d12.GetDev(), width, height, DXGI_FORMAT_R8G8B8A8_UNORM);
+	rtn->mShaderResource->CreateShaderResourceViewDesc();
+	rtn->mGamma = 1.0f;
+	CreateTexUpdateSubResources(rtn);
+	rtn->mFilepath = texName;
+	mTextures[rtn->mFilepath] = rtn;
+	return rtn;
+}
+
+std::shared_ptr<TextureObject> TextureLoader::CreateSingleColorTexture(const float color)
+{
+	float maxValue = 255.0f;
+	unsigned char uc_color = static_cast<unsigned char>(color * maxValue);
+	std::string texName = "SingleColorTexture";
+	texName += ConvertNumberToString(uc_color);
+
+	auto findTex = mTextures.find(texName);
+	if (findTex != mTextures.end())
+	{
+		return findTex->second;
+	}
+
+	const unsigned int width = 16;
+	const unsigned int height = 16;
+	std::vector<unsigned char> colorDatas(width * height);
+	std::fill(colorDatas.begin(), colorDatas.end(), uc_color);
+
+	std::shared_ptr<TextureObject> rtn = std::make_shared<TextureObject>();
+	rtn->mSubresource.pData = colorDatas.data();
+	rtn->mSubresource.RowPitch = width * sizeof(uc_color);
+	rtn->mSubresource.SlicePitch = rtn->mSubresource.RowPitch * height;
+	rtn->mTextureName = texName;
+	
+	DX12CTRL_INSTANCE
+	
+	rtn->mShaderResource = std::make_shared<ShaderResourceObject>(rtn->mTextureName, d12.GetDev(), width, height, DXGI_FORMAT_R8_UNORM);
+	rtn->mShaderResource->CreateShaderResourceViewDesc();
+	rtn->mGamma = 1.0f;
+	CreateTexUpdateSubResources(rtn);
+	rtn->mFilepath = texName;
+	mTextures[rtn->mFilepath] = rtn;
 	return rtn;
 }
 
@@ -177,6 +261,17 @@ void TextureLoader::CreateTexUpdateSubResources(std::shared_ptr<TextureObject>& 
 
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList = d12.GetCmdList();
 
+	//https://msdn.microsoft.com/en-us/library/windows/desktop/dn986740(v=vs.85).aspx
+	D3D12_RESOURCE_BARRIER barrier;
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = dstResource.Get();
+	barrier.Transition.Subresource = 0;
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	cmdList->ResourceBarrier(1, &barrier);
+
 	UINT64 num = UpdateSubresources(cmdList.Get(),
 		dstResource.Get(),
 		updateBuffer.Get(),
@@ -185,16 +280,8 @@ void TextureLoader::CreateTexUpdateSubResources(std::shared_ptr<TextureObject>& 
 		1,
 		&inTex->mSubresource);
 
-
-	//https://msdn.microsoft.com/en-us/library/windows/desktop/dn986740(v=vs.85).aspx
-	D3D12_RESOURCE_BARRIER barrier;
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = dstResource.Get();
-	barrier.Transition.Subresource = 0;
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	cmdList->ResourceBarrier(1, &barrier);
 
 	cmdList->Close();
@@ -242,7 +329,7 @@ void TextureLoader::CreateNullTexture(std::shared_ptr<TextureObject>& inTex)
 		, nullptr
 		, IID_PPV_ARGS(&dstResource));
 
-	inTex->mShaderResource.reset(new ShaderResourceObject(inTex->mTextureName, dstResource));
+	inTex->mShaderResource = std::make_shared<ShaderResourceObject>(inTex->mTextureName, dstResource);
 }
 
 std::string TextureLoader::GetTextureName(const std::wstring& filePath)

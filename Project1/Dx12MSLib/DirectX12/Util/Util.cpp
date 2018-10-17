@@ -11,11 +11,30 @@ std::string GetRelativePath(const std::string& path)
 	return rtn;
 }
 
-
-void StoreMatrixToFloat4x4(DirectX::XMFLOAT4X4& f44, const DirectX::XMMATRIX& mat)
+template <typename T>
+std::string ConvertNumToString(T num, const unsigned int maxDigit)
 {
-	f44._11 = mat.r[0].m128_f32[0]; f44._12 = mat.r[0].m128_f32[1]; f44._13 = mat.r[0].m128_f32[2]; f44._14 = mat.r[0].m128_f32[3];
-	f44._21 = mat.r[1].m128_f32[0]; f44._22 = mat.r[1].m128_f32[1]; f44._23 = mat.r[1].m128_f32[2]; f44._24 = mat.r[1].m128_f32[3];
-	f44._31 = mat.r[2].m128_f32[0]; f44._32 = mat.r[2].m128_f32[1]; f44._33 = mat.r[2].m128_f32[2]; f44._34 = mat.r[2].m128_f32[3];
-	f44._41 = mat.r[3].m128_f32[0]; f44._42 = mat.r[3].m128_f32[1]; f44._43 = mat.r[3].m128_f32[2]; f44._44 = mat.r[3].m128_f32[3];
+	std::string rtn;
+	rtn.resize(maxDigit);
+	unsigned int extractDigit = 10;
+
+	for (unsigned int i = 0; i < maxDigit; ++i)
+	{
+		T currentDigit = num % extractDigit;
+		rtn[maxDigit - 1 - i] = currentDigit + '0';
+		num /= 10;
+	}
+	return rtn;
+}
+
+std::string ConvertNumberToString(unsigned int num)
+{
+	const unsigned int MAX_DIGIT = 10;
+	return ConvertNumToString(num,MAX_DIGIT);
+}
+
+std::string ConvertNumberToString(unsigned char num)
+{
+	const unsigned int MAX_DIGIT = 3;
+	return ConvertNumToString(num,MAX_DIGIT);
 }

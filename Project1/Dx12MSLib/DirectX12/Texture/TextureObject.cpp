@@ -14,9 +14,7 @@ TextureObject::TextureObject():mImageData(std::make_shared<DirectX::ScratchImage
 
 TextureObject::~TextureObject()
 {
-	mSubresource.pData = nullptr;
 }
-
 
 int TextureObject::GetWidth() const
 {

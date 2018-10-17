@@ -13,14 +13,14 @@
 
 using namespace Fbx;
 
-const unsigned int TEXTURECONT = 3;
-
-const std::string TEXTURE_SETABLE[TEXTURECONT] =
-{
-	{"_d.png"},
-	{"_s.png"},
-	{"_b.png"},
-};
+//const unsigned int TEXTURECONT = 3;
+//
+//const std::string TEXTURE_SETABLE[TEXTURECONT] =
+//{
+//	{"_d.png"},
+//	{"_s.png"},
+//	{"_b.png"},
+//};
 
 FbxModelDataConverter::FbxModelDataConverter()
 {
@@ -71,14 +71,17 @@ void FbxModelDataConverter::ConvertVertex(Microsoft::WRL::ComPtr<ID3D12Device>& 
 
 void FbxModelDataConverter::ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	unsigned int texCount = 0;
-	for (auto& texSet : mConvertData.lock()->textures)
-	{
-		texCount += static_cast<unsigned int>(texSet.size());
-	}
+	//unsigned int texCount = 0;
+	//for (auto& mat : mConvertData.lock()->materials)
+	//{
+	//	for (int type = 0; type < Fbx::FbxMaterial::eELEMENT_TYPE::eELEMENT_TYPE_NUM; ++type)
+	//	{
+	//		texCount += static_cast<unsigned int>(mat.GetTexture(Fbx::FbxMaterial::eELEMENT_TYPE(type)).size());
+	//	}
+	//}
 
-	mModel.lock()->mTextureObjects.reserve(TEXTURECONT);
-
+	mModel.lock()->mMaterials.resize(mConvertData.lock()->materials.size());
+	
 	std::wstring wpath;
 	wpath.resize(mRelativePath.size());
 	for (unsigned int i = 0; i < static_cast<unsigned int>(mRelativePath.size()); ++i)
@@ -86,36 +89,30 @@ void FbxModelDataConverter::ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>&
 		wpath[i] = mRelativePath[i];
 	}
 
-	int tableIndex = 0;
-	for (unsigned int i = 0, j = 0; tableIndex < 3 && i < static_cast<unsigned int>(mConvertData.lock()->textures.size()); ++i)
+	auto& mats = mConvertData.lock()->materials;
+	for (int i = 0; i < static_cast<int>(mConvertData.lock()->materials.size()); ++i)
 	{
-		j = 0;
-		auto& texlayer = mConvertData.lock()->textures[i];
-		for (; j < texlayer.size(); ++j)
+		for (int j = 0; j < Fbx::FbxMaterial::eELEMENT_TYPE::eELEMENT_TYPE_NUM; ++j)
 		{
-			if (texlayer[j].texturePath.rfind(TEXTURE_SETABLE[tableIndex])
-				<= texlayer[j].texturePath.size())
+			auto& textures = mats[i].GetTexture(static_cast<Fbx::FbxMaterial::eELEMENT_TYPE>(j));
+			if (textures.size() != 0)
 			{
-				break;
+				for (auto tex : textures)
+				{
+					mModel.lock()->mMaterials[i].textures.push_back(TextureLoader::Instance().LoadTexture(mRelativePath + tex.texturePath));
+				}
 			}
+			else
+			{
+				mModel.lock()->mMaterials[i].textures.push_back(mats[i].CreateTextureUseElement(static_cast<Fbx::FbxMaterial::eELEMENT_TYPE>(j)));
+			}
+			mModel.lock()->mMaterials[i].drawIndexNum = mConvertData.lock()->materials[i].effectIndexNum;
 		}
-
-		if (texlayer.size() == j)
-		{
-			continue;
-		}
-
-		auto& tex = texlayer[j];
-		
-		mModel.lock()->mTextureObjects.push_back(TextureLoader::Instance().LoadTexture(mRelativePath + tex.texturePath));
-
-		i = 0;
-		++tableIndex;
 	}
 	
 	//足りないテクスチャ分のヌルテクスチャを作成
 
-	std::string convertStr = mConvertData.lock()->modelPath;
+	/*std::string convertStr = mConvertData.lock()->modelPath;
 	
 	convertStr += "NullTexture";
 
@@ -127,7 +124,7 @@ void FbxModelDataConverter::ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>&
 	for (unsigned int i = static_cast<unsigned int>(mModel.lock()->mTextureObjects.size()); i < TEXTURECONT; ++i)
 	{
 		mModel.lock()->mTextureObjects.push_back(TextureLoader::Instance().LoadTexture(convertStr));
-	}
+	}*/
 }
 
 void FbxModelDataConverter::ConvertBone(Microsoft::WRL::ComPtr<ID3D12Device>& dev)

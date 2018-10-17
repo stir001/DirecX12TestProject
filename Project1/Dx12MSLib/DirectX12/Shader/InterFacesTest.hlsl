@@ -42,8 +42,6 @@ cbuffer LightingClassBuffer : register(b0)
 
 ILighting g_lightingClass;
 
-ConstantBuffer<PointLight> lightconstant : register(b1, space0);
-
 float4 vs(float4 pos : POSITION) : SV_Position
 {
     return pos;

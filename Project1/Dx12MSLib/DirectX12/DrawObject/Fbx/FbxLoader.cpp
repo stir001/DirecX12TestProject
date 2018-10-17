@@ -21,6 +21,7 @@
 #include <cassert>
 #include <algorithm>
 #include <Windows.h>
+#include <cassert>
 
 FbxLoader* FbxLoader::mInstance = nullptr;
 
@@ -104,8 +105,8 @@ void FbxLoader::SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsigna
 
 FbxLoader::~FbxLoader()
 {
-	mModelConverter;
-	mMotionConverter;
+	mModelConverter = nullptr;
+	mMotionConverter = nullptr;
 	mModelDatas.clear();
 	mModelDatas.clear();
 }
@@ -171,7 +172,7 @@ std::shared_ptr<FbxModelController> FbxLoader::LoadMesh(const std::string& model
 	auto itr = mModelDatas.find(modelPath);
 	if (itr != mModelDatas.end())
 	{
-		rtn.reset(new FbxModelController(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature));
+		rtn = std::make_shared<FbxModelController>(itr->second, Dx12Ctrl::Instance().GetDev(), mCmdList, mPipelinestate, mRootsignature);
 		return rtn;
 	}
 
@@ -818,7 +819,7 @@ int FbxLoader::CheckVertexDiff(int vertexIndex, std::vector<Fbx::FbxVertex>& ver
 }
 
 //テスト用ローカル関数
-bool GetTexture(fbxsdk::FbxProperty& prop, std::shared_ptr<Fbx::FbxModelData> model)
+bool GetTexture(fbxsdk::FbxProperty& prop, Fbx::FbxTexturesSet& textures)
 {
 	bool rtn = false;
 	Fbx::FbxTexturesSet texSet;
@@ -842,7 +843,6 @@ bool GetTexture(fbxsdk::FbxProperty& prop, std::shared_ptr<Fbx::FbxModelData> mo
 				texSet.push_back(tex);
 				rtn = true;
 			}
-			model->textures.push_back(texSet);
 		}
 		else
 		{
@@ -853,54 +853,20 @@ bool GetTexture(fbxsdk::FbxProperty& prop, std::shared_ptr<Fbx::FbxModelData> mo
 			tex.uvSetName = fileTex->UVSet.Get().Buffer();
 			texSet.push_back(tex);
 			rtn = true;
-			model->textures.push_back(texSet);
 		}
 	}
 
-	//int layerdTextureCount = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
-	//if (layerdTextureCount != 0)
-	//{
-	//	for (int layer = 0; layer < layerdTextureCount; ++layer)
-	//	{
-	//		lTex = prop.GetSrcObject<fbxsdk::FbxLayeredTexture>(layer);
-	//		int srcObjectCount = lTex->GetSrcObjectCount();
-	//		for (int src = 0; src < srcObjectCount; ++src)
-	//		{
-	//			ftex = lTex->GetSrcObject<fbxsdk::FbxFileTexture>(src);
-	//			tex.texturePath = ftex->GetRelativeFileName();
-	//			tex.uvSetName = ftex->UVSet.Get().Buffer();
-	//			tex.textureName = ftex->GetFileName();
-	//			texInfo.textures.push_back(tex);
-	//			rtn = true;
-	//		}
-	//		model->textures.push_back(texInfo);
-	//	}
-	//	return rtn;
-	//}
+	textures = std::move(texSet);
 
-
-
-	//int count = prop.GetSrcObjectCount<fbxsdk::FbxFileTexture>();//おそらく0か1しかない？一応ループ処理はする
-	//for (int i = 0; i < count; ++i)
-	//{
-	//	ftex = prop.GetSrcObject<fbxsdk::FbxFileTexture>(i);
-	//	
-	//	tex.texturePath = ftex->GetRelativeFileName();
-	//	tex.uvSetName = ftex->UVSet.Get().Buffer();
-	//	tex.textureName = ftex->GetFileName();
-	//	texInfo.textures.push_back(tex);
-	//	model->textures.push_back(texInfo);
-	//	rtn = true;
-	//}
 	char doubleslash = '\\';
-	if (model->textures.size() != 0)
+	if (textures.size() != 0)
 	{
 		for (bool convertFinish = false; !convertFinish;)
 		{
-			size_t size = model->textures.back().back().texturePath.find(doubleslash);
-			if (size <= model->textures.back().back().texturePath.size())
+			size_t size = textures.back().texturePath.find(doubleslash);
+			if (size <= textures.back().texturePath.size())
 			{
-				model->textures.back().back().texturePath[size] = '/';
+				textures.back().texturePath[size] = '/';
 			}
 			else
 			{
@@ -1010,46 +976,10 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 
 	//END store bone data
 
-	//START store texture path
-
-	const std::vector<std::string> MaterialTypeTable = {
-		fbxsdk::FbxSurfaceMaterial::sDiffuse,
-		fbxsdk::FbxSurfaceMaterial::sDiffuseFactor,
-		fbxsdk::FbxSurfaceMaterial::sAmbient,
-		fbxsdk::FbxSurfaceMaterial::sAmbientFactor,
-		fbxsdk::FbxSurfaceMaterial::sSpecular,
-		fbxsdk::FbxSurfaceMaterial::sSpecularFactor,
-		fbxsdk::FbxSurfaceMaterial::sEmissive,
-		fbxsdk::FbxSurfaceMaterial::sEmissiveFactor,
-		fbxsdk::FbxSurfaceMaterial::sNormalMap,
-		fbxsdk::FbxSurfaceMaterial::sBump,
-		fbxsdk::FbxSurfaceMaterial::sShininess,
-		fbxsdk::FbxSurfaceMaterial::sTransparentColor,
-		fbxsdk::FbxSurfaceMaterial::sTransparencyFactor,
-		fbxsdk::FbxSurfaceMaterial::sReflection,
-		fbxsdk::FbxSurfaceMaterial::sReflectionFactor,
-	};
-
-	int materialcount = mesh->GetNode()->GetMaterialCount();
-	for (int i = 0; i < materialcount; ++i)
+	for (auto& mat : model->materials)
 	{
-		fbxsdk::FbxSurfaceMaterial* surfaceMaterial = mesh->GetNode()->GetMaterial(i);
-		fbxsdk::FbxString string;
-		fbxsdk::FbxProperty prop = surfaceMaterial->RootProperty;
-		//prop.FindSrcProperty();
-		while (prop.IsValid())
-		{
-			string = prop.GetName();
-			if (GetTexture(prop, model))
-			{
-				auto type = prop.GetPropertyDataType();
-				int a = 0;
-			}
-			prop = surfaceMaterial->GetNextProperty(prop);
-		}
+		mat.effectIndexNum = static_cast<unsigned int>(model->indexes.indexes.size());
 	}
-
-	//EBD store texture path
 }
 
 void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, fbxsdk::FbxNodeAttribute::EType searchtype, NodeTree& parentTree, std::function<void(fbxsdk::FbxNode*)> hitFunction)
@@ -1092,16 +1022,6 @@ void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, fbxsdk::FbxNodeAttribut
 		else
 		{
 			++skipCount;
-			/*auto t_translation = childNode->LclTranslation.Get();
-			childNodeTree.translation = { static_cast<float>(t_translation.mData[0]), static_cast<float>(t_translation.mData[1]) , static_cast<float>(t_translation.mData[2]) };
-			childNodeTree.translation += parentTree.translation;
-			auto t_rotation = childNode->LclRotation.Get();
-			childNodeTree.rotation = { static_cast<float>(t_rotation.mData[0]), static_cast<float>(t_rotation.mData[1]), static_cast<float>(t_rotation.mData[2]) };
-			childNodeTree.rotation += parentTree.rotation;
-			auto t_scale = childNode->LclScaling.Get();
-			childNodeTree.scale = { static_cast<float>(t_scale.mData[0]), static_cast<float>(t_scale.mData[1]), static_cast<float>(t_scale.mData[2]) };
-			childNodeTree.scale += parentTree.scale;*/
-
 			StackSearchNode(childNode, searchtype, parentTree, hitFunction);
 		}
 	}
@@ -1118,6 +1038,8 @@ std::shared_ptr<Fbx::FbxModelData> FbxLoader::MainLoad(fbxsdk::FbxMesh* mesh, st
 	LoadVertexUV(mesh);
 
 	LoadBone(mesh);
+
+	LoadMatarial(model, mesh);
 
 	FixVertexInfo(model, mesh);
 
@@ -1200,14 +1122,6 @@ std::shared_ptr<Fbx::FbxModelData> FbxLoader::ConnectMeshes(std::vector<std::sha
 		ConnectSTLVectorData(rtn->vertexesInfo.vertexes, datas[i]->vertexesInfo.vertexes);
 
 		ConnectSTLVectorData(rtn->materials, datas[i]->materials);
-
-		endCount = static_cast<int>(rtn->textures.size());
-		addCount = static_cast<int>(datas[i]->textures.size());
-		rtn->materials.reserve(endCount + addCount);
-		for (auto& t : datas[i]->textures)
-		{
-			rtn->textures.push_back(t);
-		}
 
 		endCount = static_cast<int>(rtn->bones.size());
 		addCount = static_cast<int>(datas[i]->bones.size());
@@ -1428,7 +1342,7 @@ void FbxLoader::DestroyNode(fbxsdk::FbxNode* node)
 {
 	if (node == nullptr)
 	{
-		return;
+return;
 	}
 	int count = node->GetChildCount();
 	for (int i = 0; i < count; ++i)
@@ -1437,4 +1351,240 @@ void FbxLoader::DestroyNode(fbxsdk::FbxNode* node)
 	}
 
 	node->Destroy();
+}
+
+void StoreDiffuse(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.diffuse.element.x = static_cast<float>(lambert->Diffuse.Get()[0]);
+		material.diffuse.element.y = static_cast<float>(lambert->Diffuse.Get()[1]);
+		material.diffuse.element.z = static_cast<float>(lambert->Diffuse.Get()[2]);
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.diffuse.element.x = static_cast<float>(phong->Diffuse.Get()[0]);
+		material.diffuse.element.y = static_cast<float>(phong->Diffuse.Get()[1]);
+		material.diffuse.element.z = static_cast<float>(phong->Diffuse.Get()[2]);
+	}
+}
+
+void StoreDiffuseFactor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.diffuseFactor.element = static_cast<float>(lambert->DiffuseFactor.Get());
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.diffuseFactor.element = static_cast<float>(phong->DiffuseFactor.Get());
+	}
+}
+
+void StoreAmbient(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.ambient.element.x = static_cast<float>(lambert->Ambient.Get()[0]);
+		material.ambient.element.y = static_cast<float>(lambert->Ambient.Get()[1]);
+		material.ambient.element.z = static_cast<float>(lambert->Ambient.Get()[2]);
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.ambient.element.x = static_cast<float>(phong->Ambient.Get()[0]);
+		material.ambient.element.y = static_cast<float>(phong->Ambient.Get()[1]);
+		material.ambient.element.z = static_cast<float>(phong->Ambient.Get()[2]);
+	}
+}
+
+void StoreAmbientFactor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.ambientFactor.element = static_cast<float>(lambert->DiffuseFactor.Get());
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.ambientFactor.element = static_cast<float>(phong->DiffuseFactor.Get());
+	}
+}
+
+void StoreSpecular(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		material.specular.element.x = 0.0f;
+		material.specular.element.y = 0.0f;
+		material.specular.element.z = 0.0f;
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.specular.element.x = static_cast<float>(phong->Specular.Get()[0]);
+		material.specular.element.y = static_cast<float>(phong->Specular.Get()[1]);
+		material.specular.element.z = static_cast<float>(phong->Specular.Get()[2]);
+	}
+}
+
+void StoreSpecularFactor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceMaterial::ClassId))
+	{
+		material.specularFactor.element = 1.0f;
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.specularFactor.element = static_cast<float>(phong->SpecularFactor.Get());
+	}
+}
+
+void StoreShininess(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceMaterial::ClassId))
+	{
+		material.shininess.element = 1.0f;
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.shininess.element = static_cast<float>(phong->Shininess.Get());
+	}
+}
+
+void StoreEmissive(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.emissive.element.x = static_cast<float>(lambert->Emissive.Get()[0]);
+		material.emissive.element.y = static_cast<float>(lambert->Emissive.Get()[1]);
+		material.emissive.element.z = static_cast<float>(lambert->Emissive.Get()[2]);
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.emissive.element.x = static_cast<float>(phong->Emissive.Get()[0]);
+		material.emissive.element.y = static_cast<float>(phong->Emissive.Get()[1]);
+		material.emissive.element.z = static_cast<float>(phong->Emissive.Get()[2]);
+	}
+}
+
+void StoreEmissiveFactor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.emissiveFactor.element = static_cast<float>(lambert->EmissiveFactor.Get());
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.emissiveFactor.element = static_cast<float>(phong->EmissiveFactor.Get());
+	}
+}
+
+void StoreTransparentColor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.transparentColor.element.x = static_cast<float>(lambert->TransparentColor.Get()[0]);
+		material.transparentColor.element.y = static_cast<float>(lambert->TransparentColor.Get()[1]);
+		material.transparentColor.element.z = static_cast<float>(lambert->TransparentColor.Get()[2]);
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.transparentColor.element.x = static_cast<float>(phong->TransparentColor.Get()[0]);
+		material.transparentColor.element.y = static_cast<float>(phong->TransparentColor.Get()[1]);
+		material.transparentColor.element.z = static_cast<float>(phong->TransparentColor.Get()[2]);
+	}
+}
+
+void StoreTransparencyFactor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
+{
+	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
+	{
+		auto lambert = (fbxsdk::FbxSurfaceLambert*)(surfaceMaterial);
+		material.transparencyFactor.element = static_cast<float>(lambert->TransparencyFactor.Get());
+	}
+	else if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+	{
+		auto phong = (fbxsdk::FbxSurfacePhong*)(surfaceMaterial);
+		material.transparencyFactor.element = static_cast<float>(phong->TransparencyFactor.Get());
+	}
+}
+
+void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh * mesh)
+{
+	//START store texture path
+
+	const std::vector<std::string> TEXTURE_TABLE = {
+		fbxsdk::FbxSurfaceMaterial::sDiffuse,
+		fbxsdk::FbxSurfaceMaterial::sDiffuseFactor,
+		fbxsdk::FbxSurfaceMaterial::sAmbient,
+		fbxsdk::FbxSurfaceMaterial::sAmbientFactor,
+		fbxsdk::FbxSurfaceMaterial::sSpecular,
+		fbxsdk::FbxSurfaceMaterial::sSpecularFactor,
+		fbxsdk::FbxSurfaceMaterial::sShininess,
+		fbxsdk::FbxSurfaceMaterial::sEmissive,
+		fbxsdk::FbxSurfaceMaterial::sEmissiveFactor,
+		//fbxsdk::FbxSurfaceMaterial::sNormalMap,
+		//fbxsdk::FbxSurfaceMaterial::sBump,
+		fbxsdk::FbxSurfaceMaterial::sTransparentColor,
+		fbxsdk::FbxSurfaceMaterial::sTransparencyFactor,
+		//fbxsdk::FbxSurfaceMaterial::sReflection,
+		//fbxsdk::FbxSurfaceMaterial::sReflectionFactor,
+	};
+
+	const std::vector <std::function<void(Fbx::FbxMaterial&, const fbxsdk::FbxSurfaceMaterial*)>> MATERIAL_TABLE = {
+		StoreDiffuse,
+		StoreDiffuseFactor,
+		StoreAmbient,
+		StoreAmbientFactor,
+		StoreSpecular,
+		StoreSpecularFactor,
+		StoreShininess,
+		StoreEmissive,
+		StoreEmissiveFactor,
+		StoreTransparentColor,
+		StoreTransparencyFactor,
+	};
+
+	//マテリアルは１メッシュに一つの場合のみ対応
+	int materialcount = mesh->GetNode()->GetMaterialCount();
+	model->materials.resize(materialcount);
+	assert(materialcount <= 1);
+	for (int i = 0; i < materialcount; ++i)
+	{
+		fbxsdk::FbxSurfaceMaterial* surfaceMaterial = mesh->GetNode()->GetMaterial(i);
+
+		for (unsigned int j = 0; j < static_cast<unsigned int>(TEXTURE_TABLE.size());++j)
+		{
+			auto findPorp = surfaceMaterial->FindProperty(TEXTURE_TABLE[j].data());
+			if (findPorp.IsValid())
+			{
+				Fbx::FbxTexturesSet texSet;
+				if (GetTexture(findPorp, texSet))
+				{
+					model->materials[i].SetTexture((Fbx::FbxMaterial::eELEMENT_TYPE)(j), texSet);
+				}
+				else
+				{
+					MATERIAL_TABLE[j](model->materials[i], surfaceMaterial);
+				}
+			}
+		}
+	}
+
+	//EBD store texture path
 }

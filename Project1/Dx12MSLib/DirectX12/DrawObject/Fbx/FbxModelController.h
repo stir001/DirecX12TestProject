@@ -63,12 +63,6 @@ private:
 	std::shared_ptr<VertexBufferObject> mCtrlVertexBuffer;
 	std::shared_ptr<Fbx::FbxModel> mModel;
 
-	//DirectX::XMFLOAT4X4 mModelMatrix;
-	//float mScale;
-	//DirectX::XMFLOAT3 mPos;
-	//DirectX::XMFLOAT4X4 mRotationMatrix;
-	//DirectX::XMFLOAT4 mQuaternion;
-
 	std::shared_ptr<ConstantBufferObject> mDirLightBuffer;
 	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
 
@@ -77,7 +71,6 @@ private:
 
 	void (FbxModelController::*mBundleUpdate)();
 
-	//void UpdateMatrix();
 	void UpdateVertex();
 	void UpdateBundle();
 	void NonBundleUpdate();

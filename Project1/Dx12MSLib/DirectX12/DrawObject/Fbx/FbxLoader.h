@@ -44,10 +44,11 @@ struct NodeTree
 class FbxLoader : public DrawObjectLoader
 {
 public:
-	~FbxLoader();
+	virtual ~FbxLoader();
 
 	static void Destroy() {
 		if (mInstance != nullptr) {
+			delete mInstance;
 			mInstance = nullptr;
 		}
 	};
@@ -149,34 +150,7 @@ private:
 
 	void DestroyNode(fbxsdk::FbxNode* node);
 
-	/*fbxsdk::FbxAMatrix GetGlobalPosition(fbxsdk::FbxNode* pNode, const fbxsdk::FbxTime& pTime, fbxsdk::FbxPose* pPose = nullptr, fbxsdk::FbxAMatrix* pParentGlobalPosition = nullptr);
-
-	fbxsdk::FbxAMatrix GetPoseMatrix(fbxsdk::FbxPose* pPose, int pNodeIndex);
-
-	fbxsdk::FbxAMatrix GetGeometry(fbxsdk::FbxNode* pNode);
-
-	void DrawNodeRecursive(fbxsdk::FbxNode* pNode, fbxsdk::FbxTime& pTime, fbxsdk::FbxAnimLayer* pAnimLayer,
-		fbxsdk::FbxAMatrix& pParentGlobalPosition, fbxsdk::FbxPose* pPose);
-
-	void DrawNode(fbxsdk::FbxNode* pNode,
-		fbxsdk::FbxTime& pTime,
-		fbxsdk::FbxAnimLayer* pAnimLayer,
-		fbxsdk::FbxAMatrix& pParentGlobalPosition,
-		fbxsdk::FbxAMatrix& pGlobalPosition,
-		fbxsdk::FbxPose* pPose);
-
-	void ComputeClusterDeformation(const fbxsdk::FbxAMatrix& pGlobalPosition,
-		fbxsdk::FbxMesh* pMesh,
-		fbxsdk::FbxCluster* pCluster,
-		fbxsdk::FbxAMatrix& pVertexTransformMatrix,
-		fbxsdk::FbxTime pTime,
-		fbxsdk::FbxPose* pPose);
-
-	void ComputeLinearDeformation(fbxsdk::FbxAMatrix& pGlobalPosition,
-		fbxsdk::FbxMesh* pMesh,
-		fbxsdk::FbxTime& pTime,
-		fbxsdk::FbxVector4* pVertexArray,
-		fbxsdk::FbxPose* pPose);*/
+	void LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh* mesh);
 
 	std::vector<fbxsdk::FbxTime> ExtractingKeyFrames(fbxsdk::FbxScene* scene, unsigned int meshId, std::vector<fbxsdk::FbxNode*>& linkNode);
 

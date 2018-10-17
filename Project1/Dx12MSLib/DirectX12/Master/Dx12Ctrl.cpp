@@ -11,6 +11,7 @@
 #include "DrawObject/Image/Loader/ImageLoader.h"
 #include "Shader/ShaderCompiler.h"
 #include "DrawObject/Primitive2D/Primitive2DManager.h"
+#include "DrawObject/Fbx/FbxLoader.h"
 
 #include <d3d12.h>
 #include <dxgi1_4.h>
@@ -143,7 +144,7 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 		}
 	}
 #ifdef _DEBUG
-	//mDev->QueryInterface(mDebugDevice.GetAddressOf());
+	mDev->QueryInterface(mDebugDevice.GetAddressOf());
 #endif // _DEBUG
 	adapter.Detach();
 
@@ -164,7 +165,10 @@ bool Dx12Ctrl::Dx12Init( HINSTANCE winHInstance)
 	t_buffer.clear();
 
 	result = mDev->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&mCmdAllocator));
+	mCmdAllocator->SetName(L"MasterCommandAllocator");
+
 	result = mDev->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, mCmdAllocator.Get(), nullptr, IID_PPV_ARGS(&mCmdList));
+	mCmdList->SetName(L"MasterCommandList");
 
 	D3D12_COMMAND_QUEUE_DESC cmdQueueDesc = {};
 	cmdQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -326,7 +330,7 @@ void Dx12Ctrl::Release()
 	mDepthDescHeap.reset();
 	TextureLoader::Destroy();
 	RenderingPathManager::Destroy();
-	//FbxLoader::Destroy();
+	FbxLoader::Destroy();
 	ImageLoader::Destroy();
 	ShaderCompiler::Destroy();
 	mCamera.reset();
@@ -337,6 +341,7 @@ void Dx12Ctrl::Release()
 	mCmdQueue.Reset();
 	mFactory.Reset();
 	mFence.Reset();
+	ReportLiveObject();
 }
 
 void Dx12Ctrl::SetWindowSize(int inw, int inh)

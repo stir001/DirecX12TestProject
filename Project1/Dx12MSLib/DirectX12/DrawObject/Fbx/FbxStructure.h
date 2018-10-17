@@ -3,6 +3,9 @@
 #include <DirectXMath.h>
 #include <string>
 #include <fbxsdk.h>
+#include <memory>
+
+class TextureObject;
 
 namespace Fbx
 {
@@ -37,43 +40,100 @@ namespace Fbx
 		std::vector<FbxVertex> vertexes;
 	};
 
-	struct FbxMaterial {
-		DirectX::XMFLOAT3 ambient;
-		float ambientFactor;
-
-		DirectX::XMFLOAT3 diffuse;
-		float diffuseFactor;
-
-		DirectX::XMFLOAT3 emissive;
-		float emissiveFactor;
-
-		DirectX::XMFLOAT3 bump;
-		float bumpFactor;
-
-		DirectX::XMFLOAT3 transparent;
-		float transparentFactor;
-
-		DirectX::XMFLOAT3 specular;
-		float specularFactor;
-
-		float shininess;
-
-		DirectX::XMFLOAT3 reflection;
-		float reflectionPower;
-
-		unsigned int surfaceVertex;
-	};
-
 	struct FbxTexture
 	{
+		enum eBLEND_MODE{
+			eBLEND_MODE_TRANSLUCENT,	
+			eBLEND_MODE_ADDITIVE,		
+			eBLEND_MODE_MODULATE,		
+			eBLEND_MODE_MODULATE2,		
+			eBLEND_MODE_OVER,			
+			eBLEND_MODE_NORMAL,			
+			eBLEND_MODE_DISSOLVE,		
+			eBLEND_MODE_DARKEN,			
+			eBLEND_MODE_COLOR_BURN,		
+			eBLEND_MODE_LINEAR_BURN,	
+			eBLEND_MODE_DRARLER_COLOR,	
+			eBLEND_MODE_LIGHTEN,		
+			eBLEND_MODE_SCREEN,			
+			eBLEND_MODE_COLOR_DODGE,	
+			eBLEND_MODE_LINEAR_DODGE,	
+			eBLEND_MODE_LINEAR_COLOR,	
+			eBLEND_MODE_SOFT_LIGHT,
+			eBLEND_MODE_HARD_LIGHT,
+			eBLEND_MODE_VIVID_LIGHT,
+			eBLEND_MODE_PIN_LIGHT,
+			eBLEND_MODE_HARD_MIX,
+			eBLEND_MODE_DIFFERENCE,
+			eBLEND_MODE_EXCLUSION,
+			eBLEND_MODE_SUBTRACT,
+			eBLEND_MODE_DIVIDE,
+			eBLEND_MODE_HUE,
+			eBLEND_MODE_SATURATION,
+			eBLEND_MODE_COLOR,
+			eBLEND_MODE_LUMINOSITY,
+			eBLEND_MODE_OVERLAY,
+			eBLEND_MODE_BLEND_MODE_COUNT,
+			eBLEND_MODE_NON_TEXTURE,
+		};
 		std::string	textureName;
 		std::string	texturePath;
 		std::string	uvSetName;
+		eBLEND_MODE blendMode;
 		
 		unsigned int textureCount;
 	};
 
 	typedef class std::vector<FbxTexture> FbxTexturesSet;
+
+	template<typename T> struct MaterialElements
+	{
+		FbxTexturesSet textures;
+		T element;
+	};
+
+	struct FbxMaterial
+	{
+		unsigned int effectIndexNum;
+
+		MaterialElements<DirectX::XMFLOAT4> diffuse;
+		MaterialElements<float> diffuseFactor;
+
+		MaterialElements<DirectX::XMFLOAT4> ambient;
+		MaterialElements<float> ambientFactor;
+
+		MaterialElements<DirectX::XMFLOAT4> specular;
+		MaterialElements<float> specularFactor;
+		MaterialElements<float> shininess;	//specular‚Ìpower
+
+		MaterialElements<DirectX::XMFLOAT4> emissive;
+		MaterialElements<float> emissiveFactor;
+
+		MaterialElements<DirectX::XMFLOAT4> transparentColor;
+		MaterialElements<float> transparencyFactor;
+
+		enum eELEMENT_TYPE
+		{
+			eELEMENT_TYPE_DIFFUSE,
+			eELEMENT_TYPE_DIFFUSE_FACTOR,
+			eELEMENT_TYPE_AMBIENT,
+			eELEMENT_TYPE_AMBIENT_FACTOR,
+			eELEMENT_TYPE_SPECULAR,
+			eELEMENT_TYPE_SPECULAR_FACTOR,
+			eELEMENT_TYPE_SHININESS,
+			eELEMENT_TYPE_EMISSIVE,
+			eELEMENT_TYPE_EMISSIVE_FACTOR,
+			eELEMENT_TYPE_TRANSPARENT_COLOR,
+			eELEMENT_TYPE_TRANSPARENCY_FACTOR,
+			eELEMENT_TYPE_NUM,
+		};
+
+		FbxTexturesSet GetTexture(eELEMENT_TYPE type);
+
+		std::shared_ptr<TextureObject> CreateTextureUseElement(eELEMENT_TYPE type);
+
+		void SetTexture(eELEMENT_TYPE type, FbxTexturesSet& texSet);
+	};
 
 	struct FbxBoneInfo {
 		DirectX::XMMATRIX initMatrix;
@@ -102,7 +162,6 @@ namespace Fbx
 		FbxIndexes	indexes;
 		FbxVertexesInfo	vertexesInfo;
 		std::vector<FbxMaterial> materials;
-		std::vector<FbxTexturesSet>	textures;
 		std::vector<FbxBone> bones;
 		std::vector<Fbx::FbxSkeleton> skeltons;
 		std::vector<unsigned int> skeltonIndices;
@@ -208,5 +267,11 @@ namespace Fbx
 	{
 		std::string skeletonName;
 		std::vector<AnimationMatrix> animMatrix;
+	};
+
+	struct FbxTextureMaterial
+	{
+		unsigned int drawIndexNum;
+		std::vector<std::shared_ptr<TextureObject>> textures;
 	};
 }

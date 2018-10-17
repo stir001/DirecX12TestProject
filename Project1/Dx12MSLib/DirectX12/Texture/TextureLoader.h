@@ -4,6 +4,7 @@
 #include <string>
 #include <d3d12.h>
 #include <wrl.h>
+#include <DirectXMath.h>
 
 struct ID3D12Resource;
 struct D3D12_SUBRESOURCE_DATA;
@@ -39,6 +40,9 @@ public:
 	void Release(const std::string& filePath);
 
 	std::shared_ptr<TextureObject> LoadTexture(const std::string& filepath);
+
+	std::shared_ptr<TextureObject> CreateSingleColorTexture(const DirectX::XMFLOAT4& color);
+	std::shared_ptr<TextureObject> CreateSingleColorTexture(const float color);
 private:
 	TextureLoader();
 	TextureLoader(const TextureLoader&);

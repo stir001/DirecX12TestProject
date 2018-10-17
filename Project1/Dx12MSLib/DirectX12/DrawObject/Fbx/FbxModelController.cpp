@@ -19,8 +19,6 @@
 using namespace Fbx;
 using namespace DirectX;
 
-const unsigned int DEFALUT_RESOURCE_NUM = 6;
-
 FbxModelController::FbxModelController(std::shared_ptr<FbxModel>& model,
 	const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList,
@@ -141,19 +139,6 @@ void FbxModelController::UpdateVertex()
 	mCtrlVertexBuffer->WriteBuffer(&mVertexElements[0], static_cast<int>(sizeof(mVertexElements[0]) * mVertexElements.size()));
 }
 
-//void FbxModelController::UpdateMatrix()
-//{
-//	XMMATRIX mat = XMMatrixIdentity();
-//	XMVECTOR q = XMLoadFloat4(&mQuaternion);
-//	mat *= XMMatrixRotationQuaternion(q);
-//	mat *= DirectX::XMLoadFloat4x4(&mRotationMatrix);
-//	mat *= XMMatrixScaling(mScale, mScale, mScale);
-//	mat *= XMMatrixTranslation(mPos.x, mPos.y, mPos.z);
-//	DirectX::XMStoreFloat4x4(&mModelMatrix, mat);
-//
-//	mModelMatrixBuffer->WriteBuffer256Alignment(&mModelMatrix, sizeof(mModelMatrix), 1);
-//}
-
 void FbxModelController::UpdateBundle()
 {
 	mBundleCmdList->Reset();
@@ -164,22 +149,30 @@ void FbxModelController::UpdateBundle()
 	mModel->SetIndexBuffer(bundle);
 	mCtrlVertexBuffer->SetBuffer(bundle);
 
+	bundle->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	unsigned int resourceIndex = 0;
 
 	mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_CAMERA);
 	mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_LIGHT);
 	mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_MATRIX);
-	mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_DIFFUSE);
-	mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_SPECULAR);
-	mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_BUMP);
-
 	unsigned int offsetIndex = 0;
 	for (auto& buffer : mAddConstantBuffers)
 	{
 		mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, FbxModel::eROOT_PARAMATER_INDEX_MAX + offsetIndex++);
 	}
-	bundle->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	bundle->DrawIndexedInstanced(static_cast<UINT>(mModel->mIndexes.size()), 1, 0, 0, 0);
+
+	unsigned int indexOffset = 0;
+	for (auto& mat : mModel->mMaterials)
+	{
+		for (unsigned int i = 0; i < Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR + 1; ++i)
+		{
+			mDescHeap->SetGprahicsDescriptorTable(bundle, resourceIndex++, static_cast<Fbx::FbxModel::eROOT_PARAMATER_INDEX>(i));
+		}
+		bundle->DrawIndexedInstanced(static_cast<UINT>(mat.drawIndexNum), 1, indexOffset, 0, 0);
+		indexOffset += mat.drawIndexNum;
+	}
+	
 	bundle->Close();
 
 	mBundleUpdate = &FbxModelController::NonBundleUpdate;
@@ -192,19 +185,23 @@ void FbxModelController::NonBundleUpdate()
 void FbxModelController::UpdateDescriptorHeap()
 {
 	std::vector<std::shared_ptr<Dx12BufferObject>> bufferObj;
-	bufferObj.reserve(DEFALUT_RESOURCE_NUM + mAddConstantBuffers.size());
+	bufferObj.reserve((Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR + 1)* mModel->mMaterials.size() + (Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR - (Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR + 1)) + mAddConstantBuffers.size());
 	bufferObj.push_back(mCameraBuffer);
 	bufferObj.push_back(mDirLightBuffer);
 	bufferObj.push_back(mModelMatrixBuffer);
-	auto& texObjects = mModel->GetTextureObjects();
-	bufferObj.push_back(texObjects[0]->GetShaderResource());
-	bufferObj.push_back(texObjects[1]->GetShaderResource());
-	bufferObj.push_back(texObjects[2]->GetShaderResource());
 	for (auto& addcbuf : mAddConstantBuffers)
 	{
 		bufferObj.push_back(addcbuf);
 	}
+	for (auto& mat : mModel->mMaterials)
+	{
+		for (auto& tex : mat.textures)
+		{
+			bufferObj.push_back(tex->GetShaderResource());
+		}
+	}
+
 	std::string name = mModel->GetModelName();
 	name += "DescriptorHeap";
-	mDescHeap.reset(new Dx12DescriptorHeapObject(name, Dx12Ctrl::Instance().GetDev(), bufferObj, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+	mDescHeap = std::make_shared<Dx12DescriptorHeapObject>(name, Dx12Ctrl::Instance().GetDev(), bufferObj, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
