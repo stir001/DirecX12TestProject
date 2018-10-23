@@ -52,7 +52,7 @@ FbxLoader::FbxLoader():mModelConverter(std::make_shared<FbxModelDataConverter>()
 void FbxLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
 	CD3DX12_RASTERIZER_DESC rastarizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	rastarizer.CullMode = D3D12_CULL_MODE_NONE;
+	rastarizer.CullMode = D3D12_CULL_MODE_BACK;
 
 	D3D12_INPUT_ELEMENT_DESC fbxinputDescs[] = {
 		{ "POSITION",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
@@ -146,18 +146,13 @@ bool FbxLoader::LoaderInitializie(std::string fbxPath)
 
 	fbxsdk::FbxAxisSystem sceneAxisSystem = mScene->GetGlobalSettings().GetAxisSystem();
 
-	fbxsdk::FbxAxisSystem directXAxisSys(fbxsdk::FbxAxisSystem::EUpVector::eYAxis,
-		fbxsdk::FbxAxisSystem::EFrontVector::eParityOdd,
-		fbxsdk::FbxAxisSystem::ECoordSystem::eLeftHanded);
+	fbxsdk::FbxAxisSystem directXAxisSys(fbxsdk::FbxAxisSystem::eDirectX);
 
 	fbxsdk::FbxAxisSystem maxAxisSys(fbxsdk::FbxAxisSystem::Max);
 	fbxsdk::FbxAxisSystem mayaAxisSysY(fbxsdk::FbxAxisSystem::MayaYUp);
 	fbxsdk::FbxAxisSystem mayaAxisSysZ(fbxsdk::FbxAxisSystem::MayaZUp);
 
 	fbxsdk::FbxAxisSystem system = maxAxisSys;
-
-	//fbxsdk::FbxAxisSystem directXAxisSys(fbxsdk::FbxAxisSystem::eDirectX);
-
 	if (sceneAxisSystem != system)
 	{
 		system.ConvertScene(mScene);
@@ -575,7 +570,8 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 
 	fbxsdk::FbxStringList t_UVSetNameList;
 	mesh->GetUVSetNames(t_UVSetNameList);
-	for (int uvSetIndex = 0; uvSetIndex < t_UVSetNameList.GetCount(); ++uvSetIndex)
+	int uvSetCount = t_UVSetNameList.GetCount();
+	for (int uvSetIndex = 0; uvSetIndex < uvSetCount; ++uvSetIndex)
 	{
 		const char* t_uvSetName = t_UVSetNameList.GetStringAt(uvSetIndex);
 
@@ -606,6 +602,7 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 
 					mTmpVertices[i].normalandUV[0].uv.x = static_cast<float>(uvArray->GetAt(i)[0]);
 					mTmpVertices[i].normalandUV[0].uv.y = 1.0f - static_cast<float>(uvArray->GetAt(i)[0]);
+					mTmpVertices[i].normalandUV[0].uvSetName = t_uvSetName;
 				}
 				break;
 			case fbxsdk::FbxLayerElement::eIndex:
@@ -616,6 +613,7 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 					t_uv.x = static_cast<float>(uvArray->GetAt(uvArrayIndicesArray->GetAt(i))[0]);
 					t_uv.y = 1.0f - static_cast<float>(uvArray->GetAt(uvArrayIndicesArray->GetAt(i))[1]);
 					mTmpVertices[i].normalandUV[0].uv = t_uv;
+					mTmpVertices[i].normalandUV[0].uvSetName = t_uvSetName;
 				}
 				break;
 			default:
@@ -631,7 +629,9 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 
 					t_uv.x = static_cast<float>(uvArray->GetAt(i)[0]);
 					t_uv.y = 1.0f - static_cast<float>(uvArray->GetAt(i)[1]);
-					mTmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]++].uv = t_uv;
+					mTmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]].uv = t_uv;
+					mTmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]].uvSetName = t_uvSetName;
+					++vertexRefCount[polygonvertices[i]];
 				}
 				break;
 			case fbxsdk::FbxLayerElement::eIndex:
@@ -644,7 +644,9 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 
 					t_uv.x = static_cast<float>(uvArray->GetAt(uvArrayIndicesArray->GetAt(i))[0]);
 					t_uv.y = 1.0f - static_cast<float>(uvArray->GetAt(uvArrayIndicesArray->GetAt(i))[1]);
-					mTmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]++].uv = t_uv;
+					mTmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]].uv = t_uv;
+					mTmpVertices[polygonvertices[i]].normalandUV[vertexRefCount[polygonvertices[i]]].uvSetName = t_uvSetName;
+					++vertexRefCount[polygonvertices[i]];
 				}
 				break;
 			default:
@@ -818,66 +820,6 @@ int FbxLoader::CheckVertexDiff(int vertexIndex, std::vector<Fbx::FbxVertex>& ver
 	return v.normalandUV[0].vertexNo;
 }
 
-//テスト用ローカル関数
-bool GetTexture(fbxsdk::FbxProperty& prop, Fbx::FbxTexturesSet& textures)
-{
-	bool rtn = false;
-	Fbx::FbxTexturesSet texSet;
-	Fbx::FbxTexture tex;
-
-	int textureCount = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
-
-	for (int i = 0; i < textureCount; ++i)
-	{
-		auto layeredTexture = prop.GetSrcObject<fbxsdk::FbxLayeredTexture>(i);
-		if (layeredTexture != nullptr)
-		{
-			int inTextureNum = layeredTexture->GetSrcObjectCount<fbxsdk::FbxTexture>();
-			for (int j = 0; j < inTextureNum; ++j)
-			{
-				auto fbxTex = layeredTexture->GetSrcObject<fbxsdk::FbxTexture>(j);
-				auto fileTex = fbxsdk::FbxCast<FbxFileTexture>(fbxTex);
-				tex.textureName = fileTex->GetName();
-				tex.texturePath = fileTex->GetRelativeFileName();
-				tex.uvSetName = fileTex->UVSet.Get().Buffer();
-				texSet.push_back(tex);
-				rtn = true;
-			}
-		}
-		else
-		{
-			auto fbxTex = prop.GetSrcObject<fbxsdk::FbxTexture>(i);
-			auto fileTex = fbxsdk::FbxCast<FbxFileTexture>(fbxTex);
-			tex.textureName = fileTex->GetName();
-			tex.texturePath = fileTex->GetRelativeFileName();
-			tex.uvSetName = fileTex->UVSet.Get().Buffer();
-			texSet.push_back(tex);
-			rtn = true;
-		}
-	}
-
-	textures = std::move(texSet);
-
-	char doubleslash = '\\';
-	if (textures.size() != 0)
-	{
-		for (bool convertFinish = false; !convertFinish;)
-		{
-			size_t size = textures.back().texturePath.find(doubleslash);
-			if (size <= textures.back().texturePath.size())
-			{
-				textures.back().texturePath[size] = '/';
-			}
-			else
-			{
-				convertFinish = true;
-			}
-		}
-	}
-
-	return rtn;
-}
-
 void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh* mesh)
 {
 	//START store vertex data
@@ -899,7 +841,9 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 	int indexplus2 = 0;
 
 	int vNum = 0;
-	for (int pi = 0, pvi = 0; pi < polygoncount; ++pi) {
+
+	auto& mats = model->materials;
+	for (unsigned int pi = 0, pvi = 0, materialId = 0, polygonCount = 0; static_cast<int>(pi) < polygoncount; ++pi) {
 		polygonsize = mesh->GetPolygonSize(pi);
 		switch (polygonsize)
 		{
@@ -910,6 +854,7 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 
 			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
 
+			mats[materialId].effectIndexNum += 3;
 			break;
 		case 4:
 			model->indexes.indexes.push_back(indexplus1 = CheckVertexDiff(indexBuffer[pvi], model->vertexesInfo.vertexes));
@@ -925,11 +870,20 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 
 			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi + 3], model->vertexesInfo.vertexes));
 
+			mats[materialId].effectIndexNum += 6;
+
 			pvi += 4;
 			break;
 		default:
 			++error;
 			break;
+		}
+
+		++polygonCount;
+		if (mMaterialSets[materialId].polygonCount <= polygonCount)
+		{
+			++materialId;
+			polygonCount = 0;
 		}
 	}
 
@@ -975,11 +929,6 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 	model->skeltonIndices = std::move(mSkeltonIndices);
 
 	//END store bone data
-
-	for (auto& mat : model->materials)
-	{
-		mat.effectIndexNum = static_cast<unsigned int>(model->indexes.indexes.size());
-	}
 }
 
 void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, fbxsdk::FbxNodeAttribute::EType searchtype, NodeTree& parentTree, std::function<void(fbxsdk::FbxNode*)> hitFunction)
@@ -1155,14 +1104,16 @@ void FbxLoader::ClearTmpInfo()
 	mAnimCurves.shrink_to_fit();
 	mSkeletonMatrix.clear();
 	mSkeletonMatrix.shrink_to_fit();
-	mNodeTree.children.clear();
 	fbxsdk::FbxAMatrix identity;
 	identity.SetIdentity();
 	mNodeTree.globalOffsetPosition = identity;
 	mNodeTree.globalPosition = identity;
 	mNodeTree.nodeName.clear();
 	mNodeTree.nodeName.shrink_to_fit();
+	mNodeTree.children.clear();
 	mNodeTree.children.shrink_to_fit();
+	mMaterialSets.clear();
+	mMaterialSets.shrink_to_fit();
 }
 
 void FbxLoader::LoadAnimationMain(fbxsdk::FbxScene* scene, unsigned int meshId)
@@ -1353,6 +1304,8 @@ return;
 	node->Destroy();
 }
 
+/**ローカル関数定義**/
+
 void StoreDiffuse(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfaceMaterial* surfaceMaterial)
 {
 	if (surfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfaceLambert::ClassId))
@@ -1524,6 +1477,68 @@ void StoreTransparencyFactor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfac
 	}
 }
 
+bool GetTexture(fbxsdk::FbxProperty& prop, Fbx::FbxTexturesSet& textures)
+{
+	bool rtn = false;
+	Fbx::FbxTexturesSet texSet;
+	Fbx::FbxTexture tex;
+
+	int textureCount = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
+
+	for (int i = 0; i < textureCount; ++i)
+	{
+		auto layeredTexture = prop.GetSrcObject<fbxsdk::FbxLayeredTexture>(i);
+		if (layeredTexture != nullptr)
+		{
+			int inTextureNum = layeredTexture->GetSrcObjectCount<fbxsdk::FbxTexture>();
+			for (int j = 0; j < inTextureNum; ++j)
+			{
+				auto fbxTex = layeredTexture->GetSrcObject<fbxsdk::FbxTexture>(j);
+				auto fileTex = fbxsdk::FbxCast<FbxFileTexture>(fbxTex);
+				tex.textureName = fileTex->GetName();
+				tex.texturePath = fileTex->GetRelativeFileName();
+				tex.uvSetName = fileTex->UVSet.Get().Buffer();
+				texSet.push_back(tex);
+				rtn = true;
+			}
+		}
+		else
+		{
+			auto fbxTex = prop.GetSrcObject<fbxsdk::FbxTexture>(i);
+			auto fileTex = fbxsdk::FbxCast<FbxFileTexture>(fbxTex);
+			tex.textureName = fileTex->GetName();
+			tex.texturePath = fileTex->GetRelativeFileName();
+			fbxsdk::FbxString path = fileTex->GetRelativeFileName();
+			tex.uvSetName = fileTex->UVSet.Get().Buffer();
+			texSet.push_back(tex);
+			rtn = true;
+		}
+	}
+
+	textures = std::move(texSet);
+
+	char doubleslash = '\\';
+	if (textures.size() != 0)
+	{
+		for (bool convertFinish = false; !convertFinish;)
+		{
+			size_t size = textures.back().texturePath.find(doubleslash);
+			if (size <= textures.back().texturePath.size())
+			{
+				textures.back().texturePath[size] = '/';
+			}
+			else
+			{
+				convertFinish = true;
+			}
+		}
+	}
+
+	return rtn;
+}
+
+/**ローカル関数定義終了**/
+
 void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh * mesh)
 {
 	//START store texture path
@@ -1562,8 +1577,36 @@ void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::F
 
 	//マテリアルは１メッシュに一つの場合のみ対応
 	int materialcount = mesh->GetNode()->GetMaterialCount();
+	int elementMaterialCount = mesh->GetElementMaterialCount();
+
+	mMaterialSets.resize(materialcount);
+	auto polygonVerticesCount = mesh->GetPolygonVertexCount();
+	auto polygonCount = mesh->GetPolygonCount();
+	const int TRIANGEL_POLYGON_SIZE = 3;
+	for(int element = 0; element < elementMaterialCount; ++element)
+	{
+		auto elementMaterial = mesh->GetElementMaterial(element);
+		auto attribute = elementMaterial->GetMappingMode();
+
+		if (attribute == fbxsdk::FbxLayerElement::eByPolygon)
+		{
+			fbxsdk::FbxLayerElementArrayTemplate<int>& polygonMaterialArray = elementMaterial->GetIndexArray();
+			unsigned int indexCount = polygonMaterialArray.GetCount();
+			Fbx::MaterialIndexSet matSet = { static_cast<unsigned int>(polygonMaterialArray.GetAt(0)), 0U };//ループの中でインクリメントするのでカウントは0初期化
+			for (unsigned int i = 0; i < indexCount; ++i)
+			{
+				unsigned int currentRefMaterialId = polygonMaterialArray.GetAt(i);//同じマテリアルを複数回に分けて描画する場合には対応していない
+				mMaterialSets[currentRefMaterialId].materialId = currentRefMaterialId;
+				++mMaterialSets[currentRefMaterialId].polygonCount;
+			}
+		}
+		else if (attribute == fbxsdk::FbxLayerElement::eAllSame)
+		{
+			mMaterialSets[0].polygonCount = polygonCount;
+		}
+	}
+
 	model->materials.resize(materialcount);
-	assert(materialcount <= 1);
 	for (int i = 0; i < materialcount; ++i)
 	{
 		fbxsdk::FbxSurfaceMaterial* surfaceMaterial = mesh->GetNode()->GetMaterial(i);

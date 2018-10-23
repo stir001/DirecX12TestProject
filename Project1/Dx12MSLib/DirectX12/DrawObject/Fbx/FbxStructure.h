@@ -203,6 +203,7 @@ namespace Fbx
 		DirectX::XMFLOAT3 normal;
 		DirectX::XMFLOAT2 uv;
 		int vertexNo;			//‰¼‘z“I‚È’¸“_”Ô†
+		std::string uvSetName;
 		bool operator ==(const TmpNormalUV& rval)
 		{
 			return (this->normal.x == rval.normal.x &&
@@ -273,5 +274,11 @@ namespace Fbx
 	{
 		unsigned int drawIndexNum;
 		std::vector<std::shared_ptr<TextureObject>> textures;
+	};
+
+	struct MaterialIndexSet
+	{
+		unsigned int materialId;
+		unsigned int polygonCount;
 	};
 }

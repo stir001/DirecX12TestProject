@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TextureLoader.h"
-#include "Master/Dx12Ctrl.h"
 #include "DirectXTex.h"
+#include "Master/Dx12Ctrl.h"
 #include "d3dx12.h"
 #include "Texture/TextureObject.h"
 #include "Buffer/ShaderResourceObject.h"
@@ -9,7 +9,6 @@
 #include "Util/Util.h"
 
 #include <tchar.h>
-#include <DirectXMath.h>
 #include <algorithm>
 
 TextureLoader* TextureLoader::mInstance = nullptr;
@@ -48,7 +47,11 @@ std::shared_ptr<TextureObject> TextureLoader::LoadTexture(const std::string& fil
 
 	DirectX::TexMetadata texMetaData = {};
 	DX12CTRL_INSTANCE
-	d12.result = DirectX::LoadFromWICFile(wstrPath.data(), 0, &texMetaData, *rtn->mImageData);
+	d12.result = LoadWIC(wstrPath, texMetaData, *rtn->mImageData);
+	if (FAILED(d12.result))
+	{
+		d12.result = LoadTGA(wstrPath, texMetaData, *rtn->mImageData);
+	}
 
 	if (FAILED(d12.result))
 	{
@@ -367,4 +370,14 @@ bool TextureLoader::IsUseGamma(DXGI_FORMAT fomat)
 		DXGI_FORMAT_B8G8R8A8_UNORM_SRGB == fomat ||
 		DXGI_FORMAT_B8G8R8X8_UNORM_SRGB == fomat ||
 		DXGI_FORMAT_BC7_UNORM_SRGB == fomat);
+}
+
+HRESULT TextureLoader::LoadWIC(const std::wstring& path, DirectX::TexMetadata& metaData, DirectX::ScratchImage& scratchImage)
+{
+	return DirectX::LoadFromWICFile(path.data(), 0, &metaData, scratchImage);
+}
+
+HRESULT TextureLoader::LoadTGA(const std::wstring & path, DirectX::TexMetadata & metaData, DirectX::ScratchImage & scratchmage)
+{
+	return DirectX::LoadFromTGAFile(path.data(), &metaData, scratchmage);
 }

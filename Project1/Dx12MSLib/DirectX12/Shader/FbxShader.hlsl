@@ -68,16 +68,13 @@ Output FbxVS(Input input)
 float4 FbxPS(Output output) : SV_Target
 {
     float bright = dot(output.normal.xyz, -dir.xyz);
-    //return float4(bright, bright, bright, 1);
-    //return float4(diffseFactorMap.Sample(smp, output.uv), 0, 0, 0);
     float4 color = saturate((diffseMap.Sample(smp, output.uv)) * diffseFactorMap.Sample(smp, output.uv) * bright);
     return color;
     color += ambientMap.Sample(smp, output.uv) * ambinetFactorMap.Sample(smp, output.uv);
-    color += specularMap.Sample(smp, output.uv) 
-	* pow(max(0.0f, dot(normalize(reflect(-dir, output.normal)), -(output.pos - eye))), shininessMap.Sample(smp, output.uv))
-	* specularFactorMap.Sample(smp, output.uv);
+    color += specularMap.Sample(smp, output.uv) * pow(max(0.0f, dot(normalize(reflect(-dir, output.normal)), -(output.pos - eye))), shininessMap.Sample(smp, output.uv)) * specularFactorMap.Sample(smp, output.uv);
     color += emissiveMap.Sample(smp, output.uv) * emissiveFactorMap.Sample(smp, output.uv);
-	return float4(saturate(color.rgb), 1);
+    color.a *= transparencyFactorMap.Sample(smp, output.uv).r * transparencyFactorMap.Sample(smp, output.uv);
+	return color;
 }
 
 float2 PackingNormal(float2 viewNorm)

@@ -23,11 +23,28 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 	{
-		auto fbxmodel = FbxLoader::Instance().LoadMesh("kouhai/Kouhai_chan.fbx");
-
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("Senpai_san/Senpai_san.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("kouhai/Kouhai_chan.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_MMD.FBX");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_Unity.FBX");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("shachiku/ShachikuChan_ver3.fbx");
+		auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti/Hutyakiti_hatON_lowVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("douki/Douki_chan/Douki_chan.fbx");
+		float scale = 1.0f;
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 			fbxmodel->AddRotaY(0.1f);
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
+			{
+				scale += 0.1f;
+				fbxmodel->SetScale(scale);
+			}
+
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
+			{
+				scale -= 0.1f;
+				fbxmodel->SetScale(scale);
+			}
 			camera->DefaultMove(input);
 			fbxmodel->Draw();
 		}

@@ -110,6 +110,7 @@ private:
 	std::vector<Fbx::TmpBone> mBones;
 	std::vector<Fbx::FbxSkeleton> mSkeltons;
 	std::vector<unsigned int> mSkeltonIndices;
+	std::vector<Fbx::MaterialIndexSet> mMaterialSets;
 
 	std::shared_ptr<LightObject> mLight;
 
@@ -157,6 +158,5 @@ private:
 	//const NodeTree* GetNodeTree(std::string nodename);
 
 	//const NodeTree* GetNodeTreeRecursive(std::string nodeName, const NodeTree& nodeTree);
-
 };
 

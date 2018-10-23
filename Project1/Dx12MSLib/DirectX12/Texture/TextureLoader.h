@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory>
 #include <map>
 #include <string>
@@ -12,6 +13,12 @@ struct ID3D12DescriptorHeap;
 class TextureObject;
 class TextureMgr;
 class Dx12DescriptorHeapObject;
+
+namespace DirectX
+{
+	struct TexMetadata;
+	class ScratchImage;
+}
 
 class TextureLoader
 {
@@ -60,5 +67,7 @@ private:
 
 	std::string GetTextureName(const std::wstring& filePath);
 	bool IsUseGamma(DXGI_FORMAT fomat);
+	HRESULT LoadWIC(const std::wstring& path, DirectX::TexMetadata& metaData, DirectX::ScratchImage& scracgImage);
+	HRESULT LoadTGA(const std::wstring& path, DirectX::TexMetadata& metaData, DirectX::ScratchImage& scracgImage);
 };
 
