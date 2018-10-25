@@ -363,6 +363,9 @@
     <ClInclude Include="DirectX12\DrawObject\Image\Loader\ImageLoader.h">
       <Filter>DirectX12\DrawObject\Image</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Fbx\FbxsdkHaveStruct.h">
+      <Filter>DirectX12\DrawObject\Fbx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

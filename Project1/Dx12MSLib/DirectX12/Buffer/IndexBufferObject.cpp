@@ -38,7 +38,7 @@ IndexBufferObject::IndexBufferObject(const std::string& name, const Microsoft::W
 
 	mDeafultState = mCurrentState = D3D12_RESOURCE_STATE_GENERIC_READ;
 
-	dev->CreateCommittedResource(&heapProp,
+	HRESULT hr = dev->CreateCommittedResource(&heapProp,
 		D3D12_HEAP_FLAG_NONE,
 		&rscDesc,
 		mDeafultState,

@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
+#include <list>
 #include <DirectXMath.h>
 #include <string>
-#include <fbxsdk.h>
+//#include <fbxsdk.h>
 #include <memory>
 
 class TextureObject;
@@ -159,10 +160,10 @@ namespace Fbx
 	struct FbxModelData
 	{
 		std::string modelPath;
-		FbxIndexes	indexes;
-		FbxVertexesInfo	vertexesInfo;
-		std::vector<FbxMaterial> materials;
-		std::vector<FbxBone> bones;
+		Fbx::FbxIndexes	indexes;
+		Fbx::FbxVertexesInfo vertexesInfo;
+		std::vector<Fbx::FbxMaterial> materials;
+		std::vector<Fbx::FbxBone> bones;
 		std::vector<Fbx::FbxSkeleton> skeltons;
 		std::vector<unsigned int> skeltonIndices;
 	};
@@ -230,46 +231,6 @@ namespace Fbx
 		DirectX::XMMATRIX matrix;
 	};
 
-	struct AnimKeyData
-	{
-		float value;
-		long long int time;
-	};
-
-	struct AnimCurveData
-	{
-		fbxsdk::FbxAnimCurve* curve;
-		fbxsdk::FbxArray<AnimKeyData> keys;
-	};
-
-	struct AnimationData
-	{
-		std::string skeletonName;
-		AnimCurveData translationX;
-		AnimCurveData translationY;
-		AnimCurveData translationZ;
-
-		AnimCurveData rotationX;
-		AnimCurveData rotationY;
-		AnimCurveData rotationZ;
-
-		AnimCurveData scaleX;
-		AnimCurveData scaleY;
-		AnimCurveData scaleZ;
-	};
-
-	struct AnimationMatrix
-	{
-		fbxsdk::FbxTime frame;
-		DirectX::XMMATRIX matrix;
-	};
-
-	struct SkeletonAnimationData
-	{
-		std::string skeletonName;
-		std::vector<AnimationMatrix> animMatrix;
-	};
-
 	struct FbxTextureMaterial
 	{
 		unsigned int drawIndexNum;
@@ -280,5 +241,8 @@ namespace Fbx
 	{
 		unsigned int materialId;
 		unsigned int polygonCount;
+		std::list<unsigned int> polygonIds;
+		MaterialIndexSet() :materialId(0), polygonCount(0) {};
+		MaterialIndexSet(unsigned int matId, unsigned int polygonNum) : materialId(matId), polygonCount(polygonNum) {};
 	};
 }

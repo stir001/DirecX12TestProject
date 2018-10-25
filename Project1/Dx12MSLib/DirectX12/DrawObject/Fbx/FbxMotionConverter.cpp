@@ -2,6 +2,7 @@
 #include "FbxMotionConverter.h"
 #include "FbxMotionData.h"
 #include "FbxStructure.h"
+#include "FbxsdkHaveStruct.h"
 
 FbxMotionConverter::FbxMotionConverter()
 {
@@ -25,7 +26,7 @@ FbxMotionData* FbxMotionConverter::ConvertMotionData(const std::vector<Fbx::Skel
 		for (unsigned int j = 0; j <mMotion->mAnimData[i].frameData.size(); ++j)
 		{
 			mMotion->mAnimData[i].frameData[j].matrix = data[i].animMatrix[j].matrix;
-			mMotion->mAnimData[i].frameData[j].frame = static_cast<int>(data[i].animMatrix[j].frame.Get());
+			mMotion->mAnimData[i].frameData[j].frame = data[i].animMatrix[j].frame;
 		}
 	}
 

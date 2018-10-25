@@ -35,10 +35,10 @@ FbxModelController::FbxModelController(std::shared_ptr<FbxModel>& model,
 	XMStoreFloat4(&mQuaternion, XMQuaternionIdentity());
 	std::string cbufferName = mModel->GetModelName();
 
-	mModelMatrixBuffer = std::make_shared<ConstantBufferObject>(cbufferName + "MatrixBuffer", dev, sizeof(XMMATRIX), 1);
+	mModelMatrixBuffer = std::make_shared<ConstantBufferObject>(cbufferName + "MatrixBuffer", dev, static_cast<unsigned int>(sizeof(XMMATRIX)), 1);
 
 	mVertexElements.resize(mModel->mVertexes.size());
-	for (unsigned int i = 0; i < (mVertexElements.size()); ++i)
+	for (unsigned int i = 0; i < static_cast<unsigned int>(mVertexElements.size()); ++i)
 	{
 		mVertexElements[i].pos = mModel->mVertexes[i].pos;
 		mVertexElements[i].normal = mModel->mVertexes[i].normal;
@@ -46,7 +46,7 @@ FbxModelController::FbxModelController(std::shared_ptr<FbxModel>& model,
 		DirectX::XMStoreFloat4x4(&mVertexElements[i].vertexMatrix, DirectX::XMMatrixIdentity());
 	}
 
-	mCtrlVertexBuffer = (std::make_shared<VertexBufferObject>(cbufferName + "VertexBuffer", dev, sizeof(mVertexElements[0]), mVertexElements.size()));
+	mCtrlVertexBuffer = (std::make_shared<VertexBufferObject>(cbufferName + "VertexBuffer", dev, static_cast<unsigned int>(sizeof(mVertexElements[0])), static_cast<unsigned int>(mVertexElements.size())));
 	UpdateVertex();
 
 	mMotionPlayer = std::make_shared<FbxMotionPlayer>(mModel->mBones, mModel->mVertexes, mVertexElements);
@@ -136,7 +136,7 @@ std::string FbxModelController::GetModelPath() const
 
 void FbxModelController::UpdateVertex()
 {
-	mCtrlVertexBuffer->WriteBuffer(&mVertexElements[0], static_cast<int>(sizeof(mVertexElements[0]) * mVertexElements.size()));
+	mCtrlVertexBuffer->WriteBuffer(&mVertexElements[0], static_cast<unsigned int>(sizeof(mVertexElements[0]) * mVertexElements.size()));
 }
 
 void FbxModelController::UpdateBundle()
@@ -185,7 +185,7 @@ void FbxModelController::NonBundleUpdate()
 void FbxModelController::UpdateDescriptorHeap()
 {
 	std::vector<std::shared_ptr<Dx12BufferObject>> bufferObj;
-	bufferObj.reserve((Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR + 1)* mModel->mMaterials.size() + (Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR - (Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR + 1)) + mAddConstantBuffers.size());
+	bufferObj.reserve((Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR + 1) * mModel->mMaterials.size() + (Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR - (Fbx::FbxModel::eROOT_PARAMATER_INDEX_TRANSPARENCY_FACTOR + 1)) + mAddConstantBuffers.size());
 	bufferObj.push_back(mCameraBuffer);
 	bufferObj.push_back(mDirLightBuffer);
 	bufferObj.push_back(mModelMatrixBuffer);

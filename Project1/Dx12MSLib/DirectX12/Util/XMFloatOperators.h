@@ -66,4 +66,6 @@ float GetLengthXMFloat3(const DirectX::XMFLOAT3& val);
 DirectX::XMFLOAT4 ConvertXMFloat3ToXMFloat4(const DirectX::XMFLOAT3& val);
 
 DirectX::XMFLOAT4X4 ConvertXMMATRIXToXMFloat4x4(const DirectX::XMMATRIX& val);
+
+DirectX::XMMATRIX ConvertXMFloat4x4ToXMMatrix(const DirectX::XMFLOAT4X4& val);
 #endif

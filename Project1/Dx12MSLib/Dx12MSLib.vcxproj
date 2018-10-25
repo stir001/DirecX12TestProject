@@ -202,6 +202,7 @@
     <ClInclude Include="DirectX12\DrawObject\Fbx\FbxMotionConverter.h" />
     <ClInclude Include="DirectX12\DrawObject\Fbx\FbxMotionData.h" />
     <ClInclude Include="DirectX12\DrawObject\Fbx\FbxMotionPlayer.h" />
+    <ClInclude Include="DirectX12\DrawObject\Fbx\FbxsdkHaveStruct.h" />
     <ClInclude Include="DirectX12\DrawObject\Fbx\FbxStructure.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\Image3DController.h" />
     <ClInclude Include="DirectX12\DrawObject\Image\ImageController.h" />

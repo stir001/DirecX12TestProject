@@ -1,6 +1,7 @@
 #pragma once
 #include "DrawObject/DrawObjectLoader.h"
 #include "FbxStructure.h"
+#include "FbxsdkHaveStruct.h"
 
 #include <functional>
 #include <string>
@@ -25,15 +26,32 @@ namespace Fbx {
 	struct FbxMaterial;
 	struct FbxTexture;
 	struct FbxBoneInfo;
+	struct AnimationData;
+	struct AnimCurveData;
+	struct AnimKeyData;
 	class FbxModel;
+	struct SkeletonAnimationData;
+}
+
+namespace fbxsdk
+{
+	class FbxAMatrix;
+	class FbxNodeAttribute;
+	class FbxMesh;
+	class FbxNode;
+	class FbxManager;
+	class FbxScene;
+	class FbxImporter;
+	class FbxPose;
+	class FbxTime;
 }
 
 struct NodeTree
 {
 	std::string nodeName;
-	fbxsdk::FbxAMatrix globalPosition;
-	fbxsdk::FbxAMatrix globalOffsetPosition;
-	fbxsdk::FbxNodeAttribute::EType attributeType;
+	DirectX::XMFLOAT4X4 globalPosition;
+	DirectX::XMFLOAT4X4 globalOffsetPosition;
+	unsigned int attributeType;
 	DirectX::XMFLOAT3 translation;
 	DirectX::XMFLOAT3 rotation;
 	DirectX::XMFLOAT3 scale;
@@ -103,7 +121,7 @@ private:
 	std::vector<fbxsdk::FbxNode*> mNodeDatas;
 	std::vector<Fbx::AnimationData> mAnimCurves;
 	std::vector<Fbx::SkeletonAnimationData> mSkeletonMatrix;
-	fbxsdk::FbxAMatrix mGeometryOffset;
+	DirectX::XMFLOAT4X4 mGeometryOffset;
 
 	std::vector<Fbx::TmpVertex> mTmpVertices;
 	std::vector<int> mTmpIndexes;
@@ -111,6 +129,8 @@ private:
 	std::vector<Fbx::FbxSkeleton> mSkeltons;
 	std::vector<unsigned int> mSkeltonIndices;
 	std::vector<Fbx::MaterialIndexSet> mMaterialSets;
+	//ポリゴンの順番に対応したそのポリゴンに対応するマテリアルのIDの情報
+	std::vector<int> mMaterialIDPerPolygon;
 
 	std::shared_ptr<LightObject> mLight;
 
@@ -121,13 +141,13 @@ private:
 	std::shared_ptr<Fbx::FbxModelData> ConnectMeshes(std::vector<std::shared_ptr<Fbx::FbxModelData>>& datas);
 
 	//頂点整合用関数
-	int CheckVertexDiff(int vertexIndex, std::vector<Fbx::FbxVertex>& vertex);
+	int AlignVertex(int vertexIndex, std::vector<Fbx::FbxVertex>& vertex);
 
 	void FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh* mesh);
 
-	void StackSearchNode(fbxsdk::FbxNode* parent, fbxsdk::FbxNodeAttribute::EType searchtype, NodeTree& parenTree, std::function<void(fbxsdk::FbxNode*)> hitFunction);
+	void StackSearchNode(fbxsdk::FbxNode* parent, unsigned int searchtype, NodeTree& parenTree, std::function<void(fbxsdk::FbxNode*)> hitFunction);
 
-	void StackNode(fbxsdk::FbxNode* pNode, fbxsdk::FbxNodeAttribute::EType type, fbxsdk::FbxArray<fbxsdk::FbxNode*>& nodeArray);
+	void StackNode(fbxsdk::FbxNode* pNode, unsigned int type, std::vector<fbxsdk::FbxNode*>& nodeArray);
 
 	std::shared_ptr<Fbx::FbxModelData> MainLoad(fbxsdk::FbxMesh* mesh, std::string path);
 
@@ -137,7 +157,7 @@ private:
 
 	void LoadVertexUV(fbxsdk::FbxMesh* mesh);
 
-	void LoadBone(fbxsdk::FbxMesh* mesh);
+	void LoadCluster(fbxsdk::FbxMesh* mesh);
 
 	void ClearTmpInfo();
 
@@ -145,13 +165,13 @@ private:
 
 	void LoadCurve(Fbx::AnimCurveData& curveData);
 
-	void StackAnimationTime(const fbxsdk::FbxArray<Fbx::AnimKeyData>& data, std::vector<fbxsdk::FbxTime>& stack);
-
 	void DestroyScence(fbxsdk::FbxScene* scene);
 
 	void DestroyNode(fbxsdk::FbxNode* node);
 
 	void LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh* mesh);
+
+	void LoadSkeltons();
 
 	std::vector<fbxsdk::FbxTime> ExtractingKeyFrames(fbxsdk::FbxScene* scene, unsigned int meshId, std::vector<fbxsdk::FbxNode*>& linkNode);
 

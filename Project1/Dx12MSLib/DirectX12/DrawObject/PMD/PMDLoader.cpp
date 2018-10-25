@@ -21,7 +21,7 @@
 
 const std::string PMDSHADER_PATH = "shader.hlsl";
 
-PMDLoader::PMDLoader():mLight(std::make_shared<DirectionalLight>(1,-1,1))
+PMDLoader::PMDLoader():mLight(std::make_shared<DirectionalLight>(1.f,-1.f,1.f))
 {
 	Microsoft::WRL::ComPtr<ID3D12Device> dev = Dx12Ctrl::Instance().GetDev();
 	CreateRootsignature(dev);
@@ -287,13 +287,13 @@ void PMDLoader::LoadJoint()
 
 void PMDLoader::CreateIndexBuffer()
 {
-	mLoadingmodel->mIndexBuffer = std::make_shared<IndexBufferObject>("PMDIndexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mIndices[0]),static_cast<unsigned int>(mLoadingmodel->mIndices.size()), DXGI_FORMAT_R16_UINT);
+	mLoadingmodel->mIndexBuffer = std::make_shared<IndexBufferObject>("PMDIndexBuffer", Dx12Ctrl::Instance().GetDev(), static_cast<unsigned int>(sizeof(mLoadingmodel->mIndices[0])),static_cast<unsigned int>(mLoadingmodel->mIndices.size()), DXGI_FORMAT_R16_UINT);
 	mLoadingmodel->mIndexBuffer->WriteBuffer(&mLoadingmodel->mIndices[0], static_cast<unsigned int>(sizeof(mLoadingmodel->mIndices[0]) * mLoadingmodel->mIndices.size()));
 }
 
 void PMDLoader::CreateVertexBuffer()
 {
-	mLoadingmodel->mVertexBuffer = std::make_shared<VertexBufferObject>("PMDVertexBuffer", Dx12Ctrl::Instance().GetDev(), sizeof(mLoadingmodel->mVertexes[0]), static_cast<unsigned int>(mLoadingmodel->mVertexes.size()));
+	mLoadingmodel->mVertexBuffer = std::make_shared<VertexBufferObject>("PMDVertexBuffer", Dx12Ctrl::Instance().GetDev(), static_cast<unsigned int>(sizeof(mLoadingmodel->mVertexes[0])), static_cast<unsigned int>(mLoadingmodel->mVertexes.size()));
 	mLoadingmodel->mVertexBuffer->WriteBuffer(&mLoadingmodel->mVertexes[0], static_cast<unsigned int>(sizeof(mLoadingmodel->mVertexes[0]) * mLoadingmodel->mVertexes.size()));
 }
 
@@ -310,9 +310,9 @@ void PMDLoader::CreateTexture()
 
 void PMDLoader::CreateMaterialBuffer()
 {
-	mLoadingmodel->mMaterialBuffer = std::make_shared<ConstantBufferObject>("PMDMaterialBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(Dx12Material), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));
+	mLoadingmodel->mMaterialBuffer = std::make_shared<ConstantBufferObject>("PMDMaterialBuffer", Dx12Ctrl::Instance().GetDev(),static_cast<unsigned int>(sizeof(Dx12Material)), static_cast<unsigned int>(mLoadingmodel->mMaterials.size()));
 	mLoadingmodel->mD12mat.resize(mLoadingmodel->mMaterials.size());
-	for (unsigned int i = 0; i < mLoadingmodel->mMaterials.size(); i++)
+	for (unsigned int i = 0; i < static_cast<unsigned int>(mLoadingmodel->mMaterials.size()); i++)
 	{
 		mLoadingmodel->mD12mat[i].alpha = mLoadingmodel->mMaterials[i].alpha;
 		mLoadingmodel->mD12mat[i].diffuse = ConvertXMFloat3ToXMFloat4(mLoadingmodel->mMaterials[i].diffuse);

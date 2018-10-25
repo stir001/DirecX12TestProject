@@ -13,7 +13,7 @@
 #include "Light/DirectionalLight.h"
 #include "RenderingPath/Manager/RenderingPathManager.h"
 #include "d3dx12.h"
-
+#include "FbxsdkHaveStruct.h"
 
 #include <fbxsdk.h>
 #include <memory>
@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <Windows.h>
 #include <cassert>
+#include <atlstr.h>
 
 FbxLoader* FbxLoader::mInstance = nullptr;
 
@@ -31,6 +32,8 @@ const std::string FBX_PIXCELSHADER_NAME = "FbxPS";
 const std::string FBX_GEOMETRYSHADER_NAME = "";
 const std::string FBX_HULLSHADER_NAME = "";
 const std::string FBX_DOMAINSHADER_NAME = "";
+
+void StoreFbxMatrixToXMMatrix(const fbxsdk::FbxAMatrix& fmat, DirectX::XMMATRIX& xmmat);
 
 FbxLoader::FbxLoader():mModelConverter(std::make_shared<FbxModelDataConverter>()),mMotionConverter(std::make_shared<FbxMotionConverter>()),mLight(std::make_shared<DirectionalLight>(1.0f,-1.0f,1.0f))
 {
@@ -137,22 +140,23 @@ bool FbxLoader::LoaderInitializie(std::string fbxPath)
 
 	//インポーター初期化
 	if (!mImporter->Initialize(fbxPath.c_str(), fileFormat)) {
-		MessageBox(nullptr, L"Load Error <Imprter is null>", L"FBXModelLoader", MB_OK);
+		ATL::CString str = fbxPath.c_str();
+		MessageBox(nullptr, L"Load Error ファイルパスが不正です : " + str, L"FBXModelLoader", MB_OK);
 		return false;
 	}
 
 	//ロードしたファイルをシーンにインポート
 	mImporter->Import(mScene);
 
+	fbxsdk::FbxGeometryConverter geometryConverter(mManager);
+	//bool isSpilted = geometryConverter.SplitMeshesPerMaterial(mScene, true);
+	geometryConverter.Triangulate(mScene, true);
+
 	fbxsdk::FbxAxisSystem sceneAxisSystem = mScene->GetGlobalSettings().GetAxisSystem();
 
 	fbxsdk::FbxAxisSystem directXAxisSys(fbxsdk::FbxAxisSystem::eDirectX);
 
-	fbxsdk::FbxAxisSystem maxAxisSys(fbxsdk::FbxAxisSystem::Max);
-	fbxsdk::FbxAxisSystem mayaAxisSysY(fbxsdk::FbxAxisSystem::MayaYUp);
-	fbxsdk::FbxAxisSystem mayaAxisSysZ(fbxsdk::FbxAxisSystem::MayaZUp);
-
-	fbxsdk::FbxAxisSystem system = maxAxisSys;
+	fbxsdk::FbxAxisSystem system = directXAxisSys;
 	if (sceneAxisSystem != system)
 	{
 		system.ConvertScene(mScene);
@@ -195,8 +199,6 @@ std::shared_ptr<FbxModelController> FbxLoader::LoadMesh(const std::string& model
 		NodeTree rNode;
 		rNode.nodeName = rootNode->GetName();
 		fbxsdk::FbxTime t = 0;
-		//rNode.globalPosition = GetGlobalPosition(rootNode,t,mPose,&dummy);
-		//rNode.globalOffsetPosition = rNode.globalPosition * GetGeometry(rootNode);
 		mNodeTree = rNode;
 		StackSearchNode(rootNode, FbxNodeAttribute::EType::eMesh, mNodeTree, [&](fbxsdk::FbxNode* node) {
 			mNodeDatas.push_back(node);
@@ -220,13 +222,14 @@ std::shared_ptr<FbxModelController> FbxLoader::LoadMesh(const std::string& model
 		FbxVector4 t0 = mNodeDatas[i]->GetGeometricTranslation(FbxNode::eSourcePivot);
 		FbxVector4 r0 = mNodeDatas[i]->GetGeometricRotation(FbxNode::eSourcePivot);
 		FbxVector4 s0 = mNodeDatas[i]->GetGeometricScaling(FbxNode::eSourcePivot);
-		mGeometryOffset = FbxAMatrix(t0, r0, s0);
+		DirectX::XMMATRIX xmMat;
+		StoreFbxMatrixToXMMatrix(FbxAMatrix(t0, r0, s0), xmMat);
+		mGeometryOffset = ConvertXMMATRIXToXMFloat4x4(xmMat);
 		models[i] = MainLoad(mMeshDatas[i], modelPath);
 		models[i]->modelPath = modelPath;
 	}
-	
 
-	//変更必要
+	LoadSkeltons();
 	
 	std::shared_ptr<Fbx::FbxModel> model(mModelConverter->ConvertToFbxModel(ConnectMeshes(models)));
 	mModelDatas[modelPath] = model;
@@ -247,9 +250,6 @@ std::shared_ptr<FbxMotionData> FbxLoader::LoadAnimation(const std::string& anima
 	{
 		return nullptr;
 	}
-
-	FbxGeometryConverter geometryConverter(mManager);
-	geometryConverter.Triangulate(mScene, true);
 
 	const int poseCount = mScene->GetPoseCount();
 	if (poseCount != 1)
@@ -285,16 +285,17 @@ std::shared_ptr<FbxMotionData> FbxLoader::LoadAnimation(const std::string& anima
 
 	mScene->FillAnimStackNameArray(mAnimStacknameArray);
 
-	fbxsdk::FbxArray<fbxsdk::FbxNode*> cameraArray;
-
-	cameraArray.Clear();
+	std::vector<fbxsdk::FbxNode*> cameraArray;
 
 	StackNode(mScene->GetRootNode(), fbxsdk::FbxNodeAttribute::eCamera, cameraArray);
 
 	FbxVector4 t0 = mNodeDatas[0]->GetGeometricTranslation(FbxNode::eSourcePivot);
 	FbxVector4 r0 = mNodeDatas[0]->GetGeometricRotation(FbxNode::eSourcePivot);
 	FbxVector4 s0 = mNodeDatas[0]->GetGeometricScaling(FbxNode::eSourcePivot);
-	mGeometryOffset = FbxAMatrix(t0, r0, s0);
+	DirectX::XMMATRIX xmMat;
+	StoreFbxMatrixToXMMatrix(FbxAMatrix(t0, r0, s0), xmMat);
+	mGeometryOffset = ConvertXMMATRIXToXMFloat4x4(xmMat);
+
 
 	LoadAnimationMain(mScene, 0);
 
@@ -392,7 +393,7 @@ void StoreFbxMatrixToXMMatrix(const fbxsdk::FbxAMatrix& fmat, DirectX::XMMATRIX&
 	xmmat.r[3].m128_f32[0] = static_cast<float>(fmat.Get(0, 3)); xmmat.r[3].m128_f32[1] = static_cast<float>(fmat.Get(1, 3)); xmmat.r[3].m128_f32[2] = static_cast<float>(fmat.Get(2, 3)); xmmat.r[3].m128_f32[3] = static_cast<float>(fmat.Get(3, 3));*/
 }
 
-void FbxLoader::StackNode(fbxsdk::FbxNode* pNode, FbxNodeAttribute::EType type, fbxsdk::FbxArray<fbxsdk::FbxNode*>& nodeArray)
+void FbxLoader::StackNode(fbxsdk::FbxNode* pNode, unsigned int type, std::vector<fbxsdk::FbxNode*>& nodeArray)
 {
 	if (pNode)
 	{
@@ -400,7 +401,7 @@ void FbxLoader::StackNode(fbxsdk::FbxNode* pNode, FbxNodeAttribute::EType type, 
 		{
 			if (pNode->GetNodeAttribute()->GetAttributeType() == type)
 			{
-				nodeArray.Add(pNode);
+				nodeArray.push_back(pNode);
 			}
 			const int count = pNode->GetChildCount();
 			for (int i = 0; i < count; ++i)
@@ -693,12 +694,10 @@ void CreateSkeltonData(const NodeTree& skeltonTree,
 		skeltonIndices.push_back(skeltonIndex);
 
 		CreateSkeltonData(skeltonTree.children[j], skeltonIndices, skeltons, skeltonIndex);
-		//SkeltonStore(skl, skeltonTree.children[j]);
-		//skeltons[skeltonIndex++] = skl;
 	}
 }
 
-void FbxLoader::LoadBone(fbxsdk::FbxMesh* mesh)
+void FbxLoader::LoadCluster(fbxsdk::FbxMesh* mesh)
 {
 	//START vertex bone weight load
 	int t_skinCount = mesh->GetDeformerCount(FbxDeformer::eSkin);
@@ -746,26 +745,6 @@ void FbxLoader::LoadBone(fbxsdk::FbxMesh* mesh)
 		}
 	}
 	//EMD vertex bone weight load
-
-	//START skelton Load
-	fbxsdk::FbxNode* root = mScene->GetRootNode();
-	NodeTree skeltonTree = {};
-	std::vector<fbxsdk::FbxNode*> skeltonNode;
-	StackSearchNode(root, fbxsdk::FbxNodeAttribute::eSkeleton, skeltonTree, [&skeltonNode](fbxsdk::FbxNode* node) {
-		skeltonNode.push_back(node);
-	});
-
-	//ルートボーン用に一つ余分に確保
-	mSkeltons.resize(skeltonNode.size() +  1);
-	//基本的には2倍で足りると思う
-	mSkeltonIndices.reserve(skeltonNode.size() * 2);
-
-	unsigned int skeltonNum = static_cast<unsigned int>(skeltonNode.size());
-	unsigned int skeltonIndex = 0;
-
-	CreateSkeltonData(skeltonTree, mSkeltonIndices, mSkeltons, skeltonIndex);
-	mSkeltonIndices.shrink_to_fit();
-	//END skelton Load
 }
 
 //@param out mv: モデル頂点データ 
@@ -788,7 +767,7 @@ void StoreTmpVertexToModelVertex(Fbx::FbxVertex& mv, const Fbx::TmpVertex& tv, i
 
 //頂点整合用関数
 //@return 整合用頂点番号
-int FbxLoader::CheckVertexDiff(int vertexIndex, std::vector<Fbx::FbxVertex>& vertex)
+int FbxLoader::AlignVertex(int vertexIndex, std::vector<Fbx::FbxVertex>& vertex)
 {
 	int refcount = mTmpVertices[vertexIndex].refcount++;
 	if (refcount == 0)
@@ -832,7 +811,6 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 	int error = 0;
 
 	int polygonvertexcount = mesh->GetPolygonVertexCount();
-	model->indexes.indexes.reserve(polygoncount * 6);
 	model->vertexesInfo.vertexes.resize(polygoncount * 6);
 
 	int index = indexBuffer[polygonvertexcount - 1];
@@ -843,32 +821,42 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 	int vNum = 0;
 
 	auto& mats = model->materials;
+	std::vector<std::vector<unsigned int>> indicesPerMaterial(mMaterialSets.size());
+	for (auto& idxMat : indicesPerMaterial)
+	{
+		idxMat.reserve(polygoncount * 6);
+	}
+	auto matIDPerPolyItr = mMaterialIDPerPolygon.begin();
 	for (unsigned int pi = 0, pvi = 0, materialId = 0, polygonCount = 0; static_cast<int>(pi) < polygoncount; ++pi) {
+		if (mMaterialSets[materialId].polygonCount <= polygonCount)
+		{
+			++materialId;
+			polygonCount = 0;
+		}
 		polygonsize = mesh->GetPolygonSize(pi);
 		switch (polygonsize)
 		{
 		case 3:
-			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
-
-			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
-
-			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi++], model->vertexesInfo.vertexes));
+			for (int i = 0; i < polygonsize; ++i)
+			{
+				indicesPerMaterial[*matIDPerPolyItr].push_back(AlignVertex(indexBuffer[pvi++], model->vertexesInfo.vertexes));
+			}
 
 			mats[materialId].effectIndexNum += 3;
 			break;
 		case 4:
-			model->indexes.indexes.push_back(indexplus1 = CheckVertexDiff(indexBuffer[pvi], model->vertexesInfo.vertexes));
+			indicesPerMaterial[*matIDPerPolyItr].push_back(indexplus1 = AlignVertex(indexBuffer[pvi], model->vertexesInfo.vertexes));
 
-			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi + 1], model->vertexesInfo.vertexes));
+			indicesPerMaterial[*matIDPerPolyItr].push_back(AlignVertex(indexBuffer[pvi + 1], model->vertexesInfo.vertexes));
 
-			model->indexes.indexes.push_back(indexplus2 = CheckVertexDiff(indexBuffer[pvi + 2], model->vertexesInfo.vertexes));
+			indicesPerMaterial[*matIDPerPolyItr].push_back(indexplus2 = AlignVertex(indexBuffer[pvi + 2], model->vertexesInfo.vertexes));
 
 
-			model->indexes.indexes.push_back(indexplus1);
+			indicesPerMaterial[*matIDPerPolyItr].push_back(indexplus1);
 
-			model->indexes.indexes.push_back(indexplus2);
+			indicesPerMaterial[*matIDPerPolyItr].push_back(indexplus2);
 
-			model->indexes.indexes.push_back(CheckVertexDiff(indexBuffer[pvi + 3], model->vertexesInfo.vertexes));
+			indicesPerMaterial[*matIDPerPolyItr].push_back(AlignVertex(indexBuffer[pvi + 3], model->vertexesInfo.vertexes));
 
 			mats[materialId].effectIndexNum += 6;
 
@@ -878,13 +866,17 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 			++error;
 			break;
 		}
-
 		++polygonCount;
-		if (mMaterialSets[materialId].polygonCount <= polygonCount)
-		{
-			++materialId;
-			polygonCount = 0;
-		}
+		++matIDPerPolyItr;
+	}
+
+	auto& modelIndices = model->indexes.indexes;
+	size_t itrOffset = 0;
+	for (auto& idxPerMatItr : indicesPerMaterial)
+	{
+		itrOffset = idxPerMatItr.size();
+		modelIndices.resize(modelIndices.size() + itrOffset);
+		std::copy(idxPerMatItr.begin(), idxPerMatItr.end(), modelIndices.end() - itrOffset);
 	}
 
 	if (error > 0)
@@ -925,13 +917,10 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 		model->bones[i].initMatrix = ConvertXMMATRIXToXMFloat4x4(mBones[i].matrix);
 	}
 
-	model->skeltons = std::move(mSkeltons);
-	model->skeltonIndices = std::move(mSkeltonIndices);
-
 	//END store bone data
 }
 
-void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, fbxsdk::FbxNodeAttribute::EType searchtype, NodeTree& parentTree, std::function<void(fbxsdk::FbxNode*)> hitFunction)
+void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, unsigned int searchtype, NodeTree& parentTree, std::function<void(fbxsdk::FbxNode*)> hitFunction)
 {
 	fbxsdk::FbxTime t = 0;
 
@@ -986,7 +975,7 @@ std::shared_ptr<Fbx::FbxModelData> FbxLoader::MainLoad(fbxsdk::FbxMesh* mesh, st
 
 	LoadVertexUV(mesh);
 
-	LoadBone(mesh);
+	LoadCluster(mesh);
 
 	LoadMatarial(model, mesh);
 
@@ -1031,11 +1020,8 @@ void ConnectSTLVectorData(std::vector<T>& resultData,const std::vector<T>& conne
 {
 	unsigned int endNum = static_cast<unsigned int>(resultData.size());
 	unsigned int addNum = static_cast<unsigned int>(connectData.size());
-	resultData.reserve(endNum + addNum);
-	for (auto& data : connectData)
-	{
-		resultData.push_back(data);
-	}
+	resultData.resize(endNum + addNum);
+	std::copy(connectData.begin(), connectData.end(), resultData.begin() + endNum);
 }
 
 /**
@@ -1081,6 +1067,9 @@ std::shared_ptr<Fbx::FbxModelData> FbxLoader::ConnectMeshes(std::vector<std::sha
 		}
 	}
 
+	rtn->skeltons = std::move(mSkeltons);
+	rtn->skeltonIndices = std::move(mSkeltonIndices);
+
 	return rtn;
 }
 
@@ -1104,8 +1093,8 @@ void FbxLoader::ClearTmpInfo()
 	mAnimCurves.shrink_to_fit();
 	mSkeletonMatrix.clear();
 	mSkeletonMatrix.shrink_to_fit();
-	fbxsdk::FbxAMatrix identity;
-	identity.SetIdentity();
+	DirectX::XMFLOAT4X4 identity;
+	identity = ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity());
 	mNodeTree.globalOffsetPosition = identity;
 	mNodeTree.globalPosition = identity;
 	mNodeTree.nodeName.clear();
@@ -1127,8 +1116,10 @@ void FbxLoader::LoadAnimationMain(fbxsdk::FbxScene* scene, unsigned int meshId)
 
 	FbxAMatrix poseAMatrix;
 	memcpy((double*)poseAMatrix, (double*)poseMatrix, sizeof(poseMatrix.mData));
+	DirectX::XMMATRIX xmMat;
+	StoreFbxMatrixToXMMatrix(poseAMatrix, xmMat);
 
-	fbxsdk::FbxAMatrix globalOffsetPosition = poseAMatrix * mGeometryOffset;
+	DirectX::XMMATRIX globalOffsetPosition = xmMat * ConvertXMFloat4x4ToXMMatrix(mGeometryOffset);
 	fbxsdk::FbxLongLong oneFrameValue = fbxsdk::FbxTime::GetOneFrameValue(fbxsdk::FbxTime::eFrames60);
 
 	for (int i = 0; i < static_cast<int>(linkNode.size()); ++i)
@@ -1138,13 +1129,24 @@ void FbxLoader::LoadAnimationMain(fbxsdk::FbxScene* scene, unsigned int meshId)
 		for (int j = 0; j < static_cast<int>(times.size()); ++j)
 		{
 			//FbxAMatrix globalPosition = mNodeDatas[meshId]->EvaluateGlobalTransform(times[j]);
-			
-			FbxAMatrix fmat = linkNode[i]->EvaluateGlobalTransform(times[j]);
-			DirectX::XMMATRIX dmat;
+			DirectX::XMMATRIX t_mat;
+			StoreFbxMatrixToXMMatrix(linkNode[i]->EvaluateGlobalTransform(times[j]), t_mat);
+			DirectX::XMVECTOR dst;
+			globalOffsetPosition = DirectX::XMMatrixInverse(&dst,globalOffsetPosition) * t_mat;
+			mSkeletonMatrix[i].animMatrix[j].matrix = globalOffsetPosition;
+			mSkeletonMatrix[i].animMatrix[j].frame = static_cast<int>(times[j].Get() / oneFrameValue);
+		}
+	}
+}
 
-			StoreFbxMatrixToXMMatrix(globalOffsetPosition.Inverse() * fmat, dmat);
-			mSkeletonMatrix[i].animMatrix[j].matrix = dmat;
-			mSkeletonMatrix[i].animMatrix[j].frame = times[j] / oneFrameValue;
+void StackAnimationTime(const std::vector<Fbx::AnimKeyData>& data, std::vector<fbxsdk::FbxTime>& stack)
+{
+	for (int i = 0; i < data.size(); ++i)
+	{
+		auto itr = std::find_if(stack.begin(), stack.end(), [&data, i](const fbxsdk::FbxTime& t) {return t.Get() == (data[i].time); });
+		if (itr == stack.end())
+		{
+			stack.push_back(data[i].time);
 		}
 	}
 }
@@ -1261,25 +1263,13 @@ void FbxLoader::LoadCurve(Fbx::AnimCurveData& curveData)
 		return;
 	}
 	int keyCount = curveData.curve->KeyGetCount();
-	curveData.keys.Resize(keyCount);
+	curveData.keys.resize(keyCount);
 	Fbx::AnimKeyData keydata;
 	for (int key = 0; key < keyCount; ++key)
 	{
 		keydata.time = curveData.curve->KeyGetTime(key).Get();
 		keydata.value = curveData.curve->KeyGetValue(key);
 		curveData.keys[key] = (keydata);
-	}
-}
-
-void FbxLoader::StackAnimationTime(const fbxsdk::FbxArray<Fbx::AnimKeyData>& data, std::vector<fbxsdk::FbxTime>& stack)
-{
-	for (int i = 0;i < data.Size(); ++i)
-	{
-		auto itr = std::find_if(stack.begin(), stack.end(), [&data,i](const fbxsdk::FbxTime& t) {return t.Get() == (data[i].time); });
-		if (itr == stack.end())
-		{
-			stack.push_back(data[i].time);
-		}
 	}
 }
 
@@ -1578,11 +1568,13 @@ void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::F
 	//マテリアルは１メッシュに一つの場合のみ対応
 	int materialcount = mesh->GetNode()->GetMaterialCount();
 	int elementMaterialCount = mesh->GetElementMaterialCount();
-
+	mMaterialSets.clear();
 	mMaterialSets.resize(materialcount);
 	auto polygonVerticesCount = mesh->GetPolygonVertexCount();
 	auto polygonCount = mesh->GetPolygonCount();
-	const int TRIANGEL_POLYGON_SIZE = 3;
+	mMaterialIDPerPolygon.clear();
+	mMaterialIDPerPolygon.reserve(polygonCount);
+
 	for(int element = 0; element < elementMaterialCount; ++element)
 	{
 		auto elementMaterial = mesh->GetElementMaterial(element);
@@ -1592,17 +1584,21 @@ void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::F
 		{
 			fbxsdk::FbxLayerElementArrayTemplate<int>& polygonMaterialArray = elementMaterial->GetIndexArray();
 			unsigned int indexCount = polygonMaterialArray.GetCount();
-			Fbx::MaterialIndexSet matSet = { static_cast<unsigned int>(polygonMaterialArray.GetAt(0)), 0U };//ループの中でインクリメントするのでカウントは0初期化
+			Fbx::MaterialIndexSet matSet(static_cast<unsigned int>(polygonMaterialArray.GetAt(0)), 0U );//ループの中でインクリメントするのでカウントは0初期化
 			for (unsigned int i = 0; i < indexCount; ++i)
 			{
 				unsigned int currentRefMaterialId = polygonMaterialArray.GetAt(i);//同じマテリアルを複数回に分けて描画する場合には対応していない
 				mMaterialSets[currentRefMaterialId].materialId = currentRefMaterialId;
+				mMaterialSets[currentRefMaterialId].polygonIds.push_back(i);
 				++mMaterialSets[currentRefMaterialId].polygonCount;
+				mMaterialIDPerPolygon.push_back(currentRefMaterialId);
 			}
 		}
 		else if (attribute == fbxsdk::FbxLayerElement::eAllSame)
 		{
 			mMaterialSets[0].polygonCount = polygonCount;
+			mMaterialIDPerPolygon.resize(polygonCount);
+			std::fill(mMaterialIDPerPolygon.begin(), mMaterialIDPerPolygon.end(), 0);
 		}
 	}
 
@@ -1630,4 +1626,27 @@ void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::F
 	}
 
 	//EBD store texture path
+}
+
+void FbxLoader::LoadSkeltons()
+{
+	//START skelton Load
+	fbxsdk::FbxNode* root = mScene->GetRootNode();
+	NodeTree skeltonTree = {};
+	std::vector<fbxsdk::FbxNode*> skeltonNode;
+	StackSearchNode(root, fbxsdk::FbxNodeAttribute::eSkeleton, skeltonTree, [&skeltonNode](fbxsdk::FbxNode* node) {
+		skeltonNode.push_back(node);
+	});
+
+	//ルートボーン用に一つ余分に確保
+	mSkeltons.resize(skeltonNode.size() + 1);
+	//基本的には2倍で足りると思う
+	mSkeltonIndices.reserve(skeltonNode.size() * 2);
+
+	unsigned int skeltonNum = static_cast<unsigned int>(skeltonNode.size());
+	unsigned int skeltonIndex = 0;
+
+	CreateSkeltonData(skeltonTree, mSkeltonIndices, mSkeltons, skeltonIndex);
+	mSkeltonIndices.shrink_to_fit();
+	//END skelton Load
 }

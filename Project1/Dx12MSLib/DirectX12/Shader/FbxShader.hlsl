@@ -3,8 +3,8 @@
 #define SMAPLWEDEFINE ", StaticSampler(s0, filter = FILTER_MIN_MAG_LINEAR_MIP_POINT"   \
         ", addressU = TEXTURE_ADDRESS_CLAMP, addressV = TEXTURE_ADDRESS_CLAMP, addressW = TEXTURE_ADDRESS_CLAMP)"
 
-Texture2D<float4> diffseMap:register(t0);
-Texture2D<float> diffseFactorMap : register(t1);
+Texture2D<float4> diffuseMap:register(t0);
+Texture2D<float> diffuseFactorMap : register(t1);
 Texture2D<float4> ambientMap:register(t2);
 Texture2D<float> ambinetFactorMap : register(t3);
 Texture2D<float4> specularMap : register(t4);
@@ -68,13 +68,23 @@ Output FbxVS(Input input)
 float4 FbxPS(Output output) : SV_Target
 {
     float bright = dot(output.normal.xyz, -dir.xyz);
-    float4 color = saturate((diffseMap.Sample(smp, output.uv)) * diffseFactorMap.Sample(smp, output.uv) * bright);
-    return color;
-    color += ambientMap.Sample(smp, output.uv) * ambinetFactorMap.Sample(smp, output.uv);
-    color += specularMap.Sample(smp, output.uv) * pow(max(0.0f, dot(normalize(reflect(-dir, output.normal)), -(output.pos - eye))), shininessMap.Sample(smp, output.uv)) * specularFactorMap.Sample(smp, output.uv);
-    color += emissiveMap.Sample(smp, output.uv) * emissiveFactorMap.Sample(smp, output.uv);
+    float4 diffuse = (diffuseMap.Sample(smp, output.uv)) * diffuseFactorMap.Sample(smp, output.uv);
+    float4 color = saturate(diffuse * bright);
+    float4 ambient = diffuse * ambientMap.Sample(smp, output.uv) * ambinetFactorMap.Sample(smp, output.uv);
+    color = saturate(color - ambient) + ambient;
+    float4 specular = specularMap.Sample(smp, output.uv) 
+		*	pow(
+				max(0.0f, 
+					dot(normalize
+						(reflect(-dir, output.normal)), -normalize((output.pos - eye))
+						)
+					), shininessMap.Sample(smp, output.uv)
+				) 
+		* specularFactorMap.Sample(smp, output.uv);
+    color += saturate(specular);
+    color += diffuse * emissiveMap.Sample(smp, output.uv) * emissiveFactorMap.Sample(smp, output.uv);
     color.a *= transparencyFactorMap.Sample(smp, output.uv).r * transparencyFactorMap.Sample(smp, output.uv);
-	return color;
+    return saturate(color);
 }
 
 float2 PackingNormal(float2 viewNorm)
@@ -88,7 +98,7 @@ PSOutput FBXGeometryPS(Output input)
     float2 viewNorm = mul(c_view,input.normal).xy;
     viewNorm = PackingNormal(viewNorm);//法線パッキング
     output.normal = viewNorm;
-    output.albedo = (diffseMap.Sample(smp, input.uv.xy));
+    output.albedo = (diffuseMap.Sample(smp, input.uv.xy));
     output.specular = specularMap.Sample(smp, input.uv.xy);
 
     return output;

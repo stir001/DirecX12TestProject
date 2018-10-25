@@ -13,15 +13,6 @@
 
 using namespace Fbx;
 
-//const unsigned int TEXTURECONT = 3;
-//
-//const std::string TEXTURE_SETABLE[TEXTURECONT] =
-//{
-//	{"_d.png"},
-//	{"_s.png"},
-//	{"_b.png"},
-//};
-
 FbxModelDataConverter::FbxModelDataConverter()
 {
 }
@@ -60,7 +51,7 @@ void FbxModelDataConverter::ConvertIndex(Microsoft::WRL::ComPtr<ID3D12Device>& d
 	std::string name = mModel.lock()->GetModelName();
 	name += "IndexBuffer";
 
-	mModel.lock()->mIndexBuffer = std::make_shared<IndexBufferObject>(name, dev, sizeof(mModel.lock()->mIndexes[0]), static_cast<unsigned int>(mModel.lock()->mIndexes.size()));
+	mModel.lock()->mIndexBuffer = std::make_shared<IndexBufferObject>(name, dev, static_cast<unsigned int>(sizeof(mModel.lock()->mIndexes[0])), static_cast<unsigned int>(mModel.lock()->mIndexes.size()));
 	mModel.lock()->mIndexBuffer->WriteBuffer(&mModel.lock()->mIndexes[0], static_cast<unsigned int>(mModel.lock()->mIndexes.size() * sizeof(mModel.lock()->mIndexes[0])));
 }
 
@@ -71,15 +62,6 @@ void FbxModelDataConverter::ConvertVertex(Microsoft::WRL::ComPtr<ID3D12Device>& 
 
 void FbxModelDataConverter::ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	//unsigned int texCount = 0;
-	//for (auto& mat : mConvertData.lock()->materials)
-	//{
-	//	for (int type = 0; type < Fbx::FbxMaterial::eELEMENT_TYPE::eELEMENT_TYPE_NUM; ++type)
-	//	{
-	//		texCount += static_cast<unsigned int>(mat.GetTexture(Fbx::FbxMaterial::eELEMENT_TYPE(type)).size());
-	//	}
-	//}
-
 	mModel.lock()->mMaterials.resize(mConvertData.lock()->materials.size());
 	
 	std::wstring wpath;
@@ -109,22 +91,6 @@ void FbxModelDataConverter::ConvertTexture(Microsoft::WRL::ComPtr<ID3D12Device>&
 			mModel.lock()->mMaterials[i].drawIndexNum = mConvertData.lock()->materials[i].effectIndexNum;
 		}
 	}
-	
-	//足りないテクスチャ分のヌルテクスチャを作成
-
-	/*std::string convertStr = mConvertData.lock()->modelPath;
-	
-	convertStr += "NullTexture";
-
-	if (static_cast<unsigned int>(mModel.lock()->mTextureObjects.size()) == 0)
-	{
-		mModel.lock()->mTextureObjects.push_back(TextureLoader::Instance().LoadTexture(convertStr));
-	}
-
-	for (unsigned int i = static_cast<unsigned int>(mModel.lock()->mTextureObjects.size()); i < TEXTURECONT; ++i)
-	{
-		mModel.lock()->mTextureObjects.push_back(TextureLoader::Instance().LoadTexture(convertStr));
-	}*/
 }
 
 void FbxModelDataConverter::ConvertBone(Microsoft::WRL::ComPtr<ID3D12Device>& dev)

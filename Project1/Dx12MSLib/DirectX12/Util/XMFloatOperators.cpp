@@ -211,3 +211,14 @@ DirectX::XMFLOAT4X4 ConvertXMMATRIXToXMFloat4x4(const DirectX::XMMATRIX & val)
 	rtn._41 = val.r[3].m128_f32[0]; rtn._42 = val.r[3].m128_f32[1]; rtn._43 = val.r[3].m128_f32[2]; rtn._44 = val.r[3].m128_f32[3];
 	return rtn;
 }
+
+DirectX::XMMATRIX ConvertXMFloat4x4ToXMMatrix(const DirectX::XMFLOAT4X4 & val)
+{
+	DirectX::XMMATRIX rtn;
+	rtn.r[0].m128_f32[0] = val._11; rtn.r[0].m128_f32[1] = val._12; rtn.r[0].m128_f32[2] = val._13; rtn.r[0].m128_f32[3] = val._14;
+	rtn.r[1].m128_f32[0] = val._21; rtn.r[1].m128_f32[1] = val._22; rtn.r[1].m128_f32[2] = val._23; rtn.r[1].m128_f32[3] = val._24;
+	rtn.r[2].m128_f32[0] = val._31; rtn.r[2].m128_f32[1] = val._32; rtn.r[2].m128_f32[2] = val._33; rtn.r[2].m128_f32[3] = val._34;
+	rtn.r[3].m128_f32[0] = val._41; rtn.r[3].m128_f32[1] = val._42; rtn.r[3].m128_f32[2] = val._43; rtn.r[3].m128_f32[3] = val._44;
+	return rtn;
+}
+
