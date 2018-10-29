@@ -25,8 +25,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	{
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("Senpai_san/Senpai_san.fbx");
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("kouhai/Kouhai_chan.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_MMD.FBX");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_Unity.FBX");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_MMD.FBX");//テキストベース
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_Unity.FBX");//テキストベース
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("shachiku/ShachikuChan_ver3.fbx");
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti/Hutyakiti_hatON_lowVer.fbx");
 		auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");

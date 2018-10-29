@@ -37,13 +37,6 @@ public:
 	void Draw();
 	void SetLight(std::shared_ptr<LightObject> dirlight);
 
-	/*void SetPositon(const DirectX::XMFLOAT3& pos);
-	void SetScale(float scale);
-	void AddRotaX(float deg);
-	void AddRotaY(float deg);
-	void AddRotaZ(float deg);
-	void SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion);*/
-
 	void SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsignature);
 	void SetPipelineState(std::shared_ptr<PipelineStateObject>& pipelinestate);
 	void SetCommandList(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
@@ -68,6 +61,8 @@ private:
 
 	std::shared_ptr<Dx12DescriptorHeapObject> mDescHeap;
 	std::vector<std::shared_ptr<ConstantBufferObject>> mAddConstantBuffers;
+
+	std::shared_ptr<ConstantBufferObject> mSkeltonBuffer;
 
 	void (FbxModelController::*mBundleUpdate)();
 

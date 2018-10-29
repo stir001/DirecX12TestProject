@@ -42,6 +42,7 @@ std::shared_ptr<FbxModel> FbxModelDataConverter::ConvertToFbxModel(std::shared_p
 	ConvertVertex(dev);
 	ConvertTexture(dev);
 	ConvertBone(dev);
+	ConvertSkeltons(dev);
 	return model;
 }
 
@@ -112,5 +113,12 @@ void FbxModelDataConverter::ConvertBone(Microsoft::WRL::ComPtr<ID3D12Device>& de
 
 void FbxModelDataConverter::ConvertSkeltons(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-
+	mModel.lock()->mSkelton = mConvertData.lock()->skeltons;
+	mModel.lock()->mSkeltonIndices = mConvertData.lock()->skeltonIndices;
+	unsigned int skeltonNum = static_cast<unsigned int>(mModel.lock()->mSkelton.size());
+	mModel.lock()->mSkeltonPos.resize(skeltonNum);
+	for (unsigned int i = 0;i < skeltonNum; ++i)
+	{
+		mModel.lock()->mSkeltonPos[i] = mModel.lock()->mSkelton[i].pos;
+	}
 }

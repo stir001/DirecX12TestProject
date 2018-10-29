@@ -44,6 +44,7 @@ namespace Fbx {
 		std::vector<FbxVertex> mVertexes;
 		std::vector<Fbx::FbxBone> mBones;
 		std::vector<Fbx::FbxSkeleton> mSkelton;
+		std::vector<DirectX::XMFLOAT4> mSkeltonPos;
 		std::vector<unsigned int> mSkeltonIndices;
 		std::vector<Fbx::FbxTextureMaterial> mMaterials;
 	private:

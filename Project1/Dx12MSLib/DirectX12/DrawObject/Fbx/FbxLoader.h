@@ -125,7 +125,7 @@ private:
 
 	std::vector<Fbx::TmpVertex> mTmpVertices;
 	std::vector<int> mTmpIndexes;
-	std::vector<Fbx::TmpBone> mBones;
+	std::map<std::string,Fbx::TmpBone> mBones;
 	std::vector<Fbx::FbxSkeleton> mSkeltons;
 	std::vector<unsigned int> mSkeltonIndices;
 	std::vector<Fbx::MaterialIndexSet> mMaterialSets;

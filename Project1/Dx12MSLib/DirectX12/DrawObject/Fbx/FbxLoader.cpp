@@ -716,8 +716,6 @@ void FbxLoader::LoadCluster(fbxsdk::FbxMesh* mesh)
 		{
 			t_cluster = static_cast<fbxsdk::FbxSkin*> (mesh->GetDeformer(i, FbxDeformer::eSkin))->GetCluster(j);
 
-			fbxsdk::FbxAMatrix transformMatrix = {};
-
 			fbxsdk::FbxCluster::ELinkMode mode = t_cluster->GetLinkMode();
 
 			int ctrlPointIndicesCount = t_cluster->GetControlPointIndicesCount();
@@ -726,7 +724,13 @@ void FbxLoader::LoadCluster(fbxsdk::FbxMesh* mesh)
 
 			Fbx::TmpWeight t_weight;
 
-			t_bone.boneName = t_cluster->GetLink()->GetName();
+			t_bone.skeltonName = t_cluster->GetLink()->GetName();
+
+			auto itr = mBones.find(t_bone.skeltonName);
+			if (itr != mBones.end())
+			{
+				t_bone = itr->second;
+			}
 
 			std::vector<int> t_vertexIndicesArray;
 			t_vertexIndicesArray.reserve(ctrlPointIndicesCount);
@@ -735,13 +739,11 @@ void FbxLoader::LoadCluster(fbxsdk::FbxMesh* mesh)
 				t_weight.weight = static_cast<float>(ctrlPointWeightArray[k]);
 				t_weight.boneNo = offset;
 				mTmpVertices[ctrlPointIndicesArray[k]].weights.push_back(t_weight);
-				mTmpVertices[ctrlPointIndicesArray[k]].boneName.push_back(t_cluster->GetLink()->GetName());
+				mTmpVertices[ctrlPointIndicesArray[k]].boneName.push_back(t_bone.skeltonName);
 				t_vertexIndicesArray.push_back(ctrlPointIndicesArray[k]);
 			}
 
-			StoreFbxMatrixToXMMatrix(transformMatrix, t_bone.matrix);
-
-			mBones.push_back(t_bone);
+			mBones[t_bone.skeltonName] = (t_bone);
 		}
 	}
 	//EMD vertex bone weight load
@@ -910,12 +912,15 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 	model->bones.resize(size);
 
 	int iCounter = 0;
-	for (unsigned int i = 0; i < size; i++)
+	auto boneItr = mBones.begin();
+	for (unsigned int i = 0; i < size; i++, ++boneItr)
 	{
-		model->bones[i].boneName = mBones[i].boneName;
+		model->bones[i].boneName = boneItr->second.skeltonName;
 		model->bones[i].index = i;
-		model->bones[i].initMatrix = ConvertXMMATRIXToXMFloat4x4(mBones[i].matrix);
+		model->bones[i].initMatrix = ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity());
 	}
+
+	mBones.clear();
 
 	//END store bone data
 }
@@ -945,13 +950,12 @@ void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, unsigned int searchtype
 			//http://help.autodesk.com/view/FBX/2019/ENU/?guid=FBX_Developer_Help_nodes_and_scene_graph_fbx_nodes_transformation_data_html
 			auto t_translation = childNode->LclTranslation.Get();
 			childNodeTree.translation = { static_cast<float>(t_translation.mData[0]), static_cast<float>(t_translation.mData[1]) , static_cast<float>(t_translation.mData[2]) };
-			childNodeTree.translation += parentTree.translation;
+			//childNodeTree.translation += parentTree.translation;
 			auto t_rotation = childNode->LclRotation.Get();
 			childNodeTree.rotation = { static_cast<float>(t_rotation.mData[0]), static_cast<float>(t_rotation.mData[1]), static_cast<float>(t_rotation.mData[2]) };
-			childNodeTree.rotation += parentTree.rotation;
+			//childNodeTree.rotation += parentTree.rotation;
 			auto t_scale = childNode->LclScaling.Get();
 			childNodeTree.scale = { static_cast<float>(t_scale.mData[0]), static_cast<float>(t_scale.mData[1]), static_cast<float>(t_scale.mData[2]) };
-			childNodeTree.scale += parentTree.scale;
 
 			parentTree.children.push_back(childNodeTree);
 			hitFunction(childNode);
@@ -1041,6 +1045,20 @@ void ConnectSTLVectorIndices(std::vector<T>& resultIndices, const std::vector<T>
 	}
 }
 
+void ConnectClusters(std::vector<Fbx::FbxBone>& resultBone, const std::vector<Fbx::FbxBone>& connectBone)
+{
+	const unsigned int connectBoneOffset = static_cast<unsigned int>(resultBone.size());
+	resultBone.reserve(resultBone.size() + connectBone.size());
+	for (auto& cBone : connectBone)
+	{
+		auto itr = std::find_if(resultBone.begin(), resultBone.end(), [&cBone](const Fbx::FbxBone& bone) { return bone.boneName == cBone.boneName; });
+		if (itr != resultBone.end()) continue;
+		resultBone.push_back(cBone);
+		resultBone.back().index = static_cast<int>(resultBone.size());
+	}
+	resultBone.shrink_to_fit();
+}
+
 std::shared_ptr<Fbx::FbxModelData> FbxLoader::ConnectMeshes(std::vector<std::shared_ptr<Fbx::FbxModelData>>& datas)
 {
 	std::shared_ptr<Fbx::FbxModelData> rtn = std::make_shared<Fbx::FbxModelData>();
@@ -1058,13 +1076,14 @@ std::shared_ptr<Fbx::FbxModelData> FbxLoader::ConnectMeshes(std::vector<std::sha
 
 		ConnectSTLVectorData(rtn->materials, datas[i]->materials);
 
-		endCount = static_cast<int>(rtn->bones.size());
-		addCount = static_cast<int>(datas[i]->bones.size());
-		rtn->bones.reserve(endCount + addCount);
-		for (auto& b : datas[i]->bones)
-		{
-			rtn->bones.push_back(b);
-		}
+		//endCount = static_cast<int>(rtn->bones.size());
+		//addCount = static_cast<int>(datas[i]->bones.size());
+		//rtn->bones.reserve(endCount + addCount);
+		//for (auto& b : datas[i]->bones)
+		//{
+		//	rtn->bones.push_back(b);
+		//}
+		ConnectClusters(rtn->bones, datas[i]->bones);
 	}
 
 	rtn->skeltons = std::move(mSkeltons);
@@ -1084,7 +1103,6 @@ void FbxLoader::ClearTmpInfo()
 	mTmpIndexes.clear();
 	mTmpIndexes.shrink_to_fit();
 	mBones.clear();
-	mBones.shrink_to_fit();
 	mSkeltons.clear();
 	mSkeltons.shrink_to_fit();
 	mSkeltonIndices.clear();
@@ -1141,7 +1159,7 @@ void FbxLoader::LoadAnimationMain(fbxsdk::FbxScene* scene, unsigned int meshId)
 
 void StackAnimationTime(const std::vector<Fbx::AnimKeyData>& data, std::vector<fbxsdk::FbxTime>& stack)
 {
-	for (int i = 0; i < data.size(); ++i)
+	for (int i = 0; i < static_cast<int>(data.size()); ++i)
 	{
 		auto itr = std::find_if(stack.begin(), stack.end(), [&data, i](const fbxsdk::FbxTime& t) {return t.Get() == (data[i].time); });
 		if (itr == stack.end())
@@ -1467,6 +1485,7 @@ void StoreTransparencyFactor(Fbx::FbxMaterial& material, const fbxsdk::FbxSurfac
 	}
 }
 
+//ファイルパスの文字コード変換関数　FbxUTF8ToAnsi　などを使った変換をしていないので一部ファイルは読み込めない
 bool GetTexture(fbxsdk::FbxProperty& prop, Fbx::FbxTexturesSet& textures)
 {
 	bool rtn = false;
@@ -1498,7 +1517,6 @@ bool GetTexture(fbxsdk::FbxProperty& prop, Fbx::FbxTexturesSet& textures)
 			auto fileTex = fbxsdk::FbxCast<FbxFileTexture>(fbxTex);
 			tex.textureName = fileTex->GetName();
 			tex.texturePath = fileTex->GetRelativeFileName();
-			fbxsdk::FbxString path = fileTex->GetRelativeFileName();
 			tex.uvSetName = fileTex->UVSet.Get().Buffer();
 			texSet.push_back(tex);
 			rtn = true;
@@ -1533,6 +1551,7 @@ void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::F
 {
 	//START store texture path
 
+	//コメントアウトしている部分は未対応
 	const std::vector<std::string> TEXTURE_TABLE = {
 		fbxsdk::FbxSurfaceMaterial::sDiffuse,
 		fbxsdk::FbxSurfaceMaterial::sDiffuseFactor,
@@ -1587,7 +1606,7 @@ void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::F
 			Fbx::MaterialIndexSet matSet(static_cast<unsigned int>(polygonMaterialArray.GetAt(0)), 0U );//ループの中でインクリメントするのでカウントは0初期化
 			for (unsigned int i = 0; i < indexCount; ++i)
 			{
-				unsigned int currentRefMaterialId = polygonMaterialArray.GetAt(i);//同じマテリアルを複数回に分けて描画する場合には対応していない
+				unsigned int currentRefMaterialId = polygonMaterialArray.GetAt(i);
 				mMaterialSets[currentRefMaterialId].materialId = currentRefMaterialId;
 				mMaterialSets[currentRefMaterialId].polygonIds.push_back(i);
 				++mMaterialSets[currentRefMaterialId].polygonCount;

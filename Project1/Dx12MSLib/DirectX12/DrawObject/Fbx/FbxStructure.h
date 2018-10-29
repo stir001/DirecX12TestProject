@@ -227,8 +227,7 @@ namespace Fbx
 
 	struct TmpBone
 	{
-		std::string boneName;
-		DirectX::XMMATRIX matrix;
+		std::string skeltonName;
 	};
 
 	struct FbxTextureMaterial

@@ -26,8 +26,6 @@
 #include <crtdbg.h>
 #endif
 
-#pragma comment(lib,"d3dcompiler.lib")
-
 Dx12Ctrl* Dx12Ctrl::inst = nullptr;
 
 LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);

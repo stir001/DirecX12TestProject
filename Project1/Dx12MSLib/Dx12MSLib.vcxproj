@@ -104,7 +104,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(DIRECTXTEX_LIB)\x64\debug;$(FBXSDK_DIR)lib\vs2015\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib;d3dcompiler.lib;d3d12.lib;dxgi.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -116,6 +116,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(FBXSDK_DIR)include;$(SolutionDir)Project1\Dx12MSLib/DirectX12;$(SolutionDir)Project1\Dx12MSLib;$(DIRECTXTEX_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,7 +124,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(FBXSDK_DIR)lib\vs2015\x86\debug;$(DIRECTXTEX_LIB)\Win32\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib;d3dcompiler.lib;d3d12.lib;dxgi.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,6 +138,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(FBXSDK_DIR)include;$(SolutionDir)Project1\Dx12MSLib/DirectX12;$(SolutionDir)Project1\Dx12MSLib;$(DIRECTXTEX_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,7 +148,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(FBXSDK_DIR)lib\vs2015\x86\release;$(DIRECTXTEX_LIB)\Win32\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib;d3dcompiler.lib;d3d12.lib;dxgi.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,7 +172,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(FBXSDK_DIR)lib\vs2015\x64\release;$(DIRECTXTEX_LIB)\x64\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-mt.lib;DirectXTex.lib;d3dcompiler.lib;d3d12.lib;dxgi.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -383,6 +385,8 @@
     <FxCompile Include="DirectX12\Shader\InterFacesTest.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="DirectX12\Shader\NormalmapShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
