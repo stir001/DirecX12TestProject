@@ -29,8 +29,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_Unity.FBX");//テキストベース
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("shachiku/ShachikuChan_ver3.fbx");
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti/Hutyakiti_hatON_lowVer.fbx");
-		auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("douki/Douki_chan/Douki_chan.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
+		auto fbxmodel = FbxLoader::Instance().LoadMesh("douki/Douki_chan/Douki_chan.fbx");
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh("Yuko'sRoom/Yuko'sRoom/Yuko'sRoom.fbx");
 		float scale = 1.0f;
 		while (ProcessMessage()) {
@@ -48,7 +48,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				fbxmodel->SetScale(scale);
 			}
 			camera->DefaultMove(input);
-			fbxmodel->Draw();
+			//fbxmodel->Draw();
+			fbxmodel->DrawSkeleton();
 		}
 	}
 	camera = nullptr;

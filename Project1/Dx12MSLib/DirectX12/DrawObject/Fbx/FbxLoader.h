@@ -126,8 +126,8 @@ private:
 	std::vector<Fbx::TmpVertex> mTmpVertices;
 	std::vector<int> mTmpIndexes;
 	std::map<std::string,Fbx::TmpBone> mBones;
-	std::vector<Fbx::FbxSkeleton> mSkeltons;
-	std::vector<unsigned int> mSkeltonIndices;
+	std::vector<Fbx::FbxSkeleton> mSkeletons;
+	std::vector<unsigned int> mSkeletonIndices;
 	std::vector<Fbx::MaterialIndexSet> mMaterialSets;
 	//ポリゴンの順番に対応したそのポリゴンに対応するマテリアルのIDの情報
 	std::vector<int> mMaterialIDPerPolygon;
@@ -171,7 +171,7 @@ private:
 
 	void LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::FbxMesh* mesh);
 
-	void LoadSkeltons();
+	void LoadSkeletons();
 
 	std::vector<fbxsdk::FbxTime> ExtractingKeyFrames(fbxsdk::FbxScene* scene, unsigned int meshId, std::vector<fbxsdk::FbxNode*>& linkNode);
 

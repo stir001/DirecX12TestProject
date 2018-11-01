@@ -235,15 +235,19 @@
     <ClInclude Include="DirectX12\Master\Dx12Ctrl.h" />
     <ClInclude Include="DirectX12\Master\Dx12ResultCheckDefine.h" />
     <ClInclude Include="DirectX12\Master\NeedCall.h" />
+    <ClInclude Include="DirectX12\PipelineState\FbxPipelineState.h" />
     <ClInclude Include="DirectX12\PipelineState\Image2DPipelineState.h" />
     <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="DirectX12\PipelineState\PrimitivePipelineState.h" />
+    <ClInclude Include="DirectX12\PipelineState\SkeletonPipelineState.h" />
     <ClInclude Include="DirectX12\RenderingPath\Base\RenderingPathObject.h" />
     <ClInclude Include="DirectX12\RenderingPath\FirstPathObject.h" />
     <ClInclude Include="DirectX12\RenderingPath\Manager\RenderingPathManager.h" />
+    <ClInclude Include="DirectX12\Rootsignature\FbxRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h" />
+    <ClInclude Include="DirectX12\Rootsignature\SkeletonRootSignature.h" />
     <ClInclude Include="DirectX12\Shader\HlslInclude.h" />
     <ClInclude Include="DirectX12\Shader\ShaderCompiler.h" />
     <ClInclude Include="DirectX12\Shader\ShaderDatasStructure.h" />
@@ -322,15 +326,19 @@
     <ClCompile Include="DirectX12\Light\LightObject.cpp" />
     <ClCompile Include="DirectX12\Master\Dx12Ctrl.cpp" />
     <ClCompile Include="DirectX12\Master\NeedCall.cpp" />
+    <ClCompile Include="DirectX12\PipelineState\FbxPipelineState.cpp" />
     <ClCompile Include="DirectX12\PipelineState\Image2DPipelineState.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PrimitivePipelineState.cpp" />
+    <ClCompile Include="DirectX12\PipelineState\SkeletonPipelineState.cpp" />
     <ClCompile Include="DirectX12\RenderingPath\Base\RenderingPathObject.cpp" />
     <ClCompile Include="DirectX12\RenderingPath\FirstPathObject.cpp" />
     <ClCompile Include="DirectX12\RenderingPath\Manager\RenderingPathManager.cpp" />
+    <ClCompile Include="DirectX12\Rootsignature\FbxRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp" />
+    <ClCompile Include="DirectX12\Rootsignature\SkeletonRootSignature.cpp" />
     <ClCompile Include="DirectX12\Shader\HlslInclude.cpp" />
     <ClCompile Include="DirectX12\Shader\ShaderCompiler.cpp" />
     <ClCompile Include="DirectX12\Shader\ShaderDatasStructure.cpp" />
@@ -413,6 +421,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="DirectX12\Shader\Primitive3D.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\SkeletonShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

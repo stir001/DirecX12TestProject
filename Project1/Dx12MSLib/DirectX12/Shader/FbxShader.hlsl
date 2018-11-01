@@ -23,7 +23,7 @@ CAMERA_CBUFFER(b0)
 
 LIGHT_CBUFFER(b1)
 
-cbuffer offset: register(b2)
+cbuffer affinematrix: register(b2)
 {
    float4x4 modelMatrix;
 }
@@ -92,7 +92,7 @@ float2 PackingNormal(float2 viewNorm)
     return float2(0.5 * (viewNorm.xy + 1.0f));
 }
 
-PSOutput FBXGeometryPS(Output input)
+PSOutput FbxGeometryPS(Output input)
 {
     PSOutput output;
     float2 viewNorm = mul(c_view,input.normal).xy;

@@ -58,7 +58,7 @@ protected:
 	*	@param[in]	signatureBlob	rootsignature‚Ìî•ñ‚ğ‚à‚Âblob
 	*	@param[in]	dev		ID3D12Device‚ÌQÆ
 	*/
-	void CreateRootSignature(const std::string& name, ID3D10Blob* signatureBlob, Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	void CreateRootSignature(const std::string& name, ID3D10Blob* signatureBlob, const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 
 	/**
 	*	ì¬‚µ‚½rootsigantrue

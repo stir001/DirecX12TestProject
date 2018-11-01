@@ -3,12 +3,12 @@
 #include "RootSignature/RootSignatureObject.h"
 #include "d3dx12.h"
 
-PrimitivePipelineState::PrimitivePipelineState(std::shared_ptr<RootSignatureObject>& rootsignature, Microsoft::WRL::ComPtr<ID3D12Device>& dev):PipelineStateObject()
+PrimitivePipelineState::PrimitivePipelineState(std::shared_ptr<RootSignatureObject>& rootsignature, const Microsoft::WRL::ComPtr<ID3D12Device>& dev):PipelineStateObject()
 {
 	CD3DX12_RASTERIZER_DESC rastarizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	rastarizer.CullMode = D3D12_CULL_MODE_BACK;
 
-	D3D12_INPUT_ELEMENT_DESC fbxinputDescs[] = {
+	D3D12_INPUT_ELEMENT_DESC primitiveinputDescs[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0 ,D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0 , DXGI_FORMAT_R32G32B32A32_FLOAT, 0 , D3D12_APPEND_ALIGNED_ELEMENT , D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
@@ -21,17 +21,17 @@ PrimitivePipelineState::PrimitivePipelineState(std::shared_ptr<RootSignatureObje
 	};
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = {};
-	gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);	//ブレンドするか
-	gpsDesc.DepthStencilState.DepthEnable = true;			//デプスを使うか
+	gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+	gpsDesc.DepthStencilState.DepthEnable = true;
 	gpsDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	gpsDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-	gpsDesc.DepthStencilState.StencilEnable = false;		//???
+	gpsDesc.DepthStencilState.StencilEnable = false;
 	gpsDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	gpsDesc.InputLayout.NumElements = sizeof(fbxinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
-	gpsDesc.InputLayout.pInputElementDescs = fbxinputDescs;
-	gpsDesc.pRootSignature = rootsignature->GetRootSignature().Get();//ルートシグネチャポインタ
-	gpsDesc.RasterizerState = rastarizer;	//ラスタライザーの設定
-	gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//
+	gpsDesc.InputLayout.NumElements = sizeof(primitiveinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
+	gpsDesc.InputLayout.pInputElementDescs = primitiveinputDescs;
+	gpsDesc.pRootSignature = rootsignature->GetRootSignature().Get();
+	gpsDesc.RasterizerState = rastarizer;
+	gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	gpsDesc.SampleDesc.Count = 1;
 	gpsDesc.NumRenderTargets = 1;

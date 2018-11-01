@@ -13,7 +13,7 @@ class PrimitivePipelineState :
 {
 public:
 	PrimitivePipelineState(std::shared_ptr<RootSignatureObject>& rootsignature, 
-		Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+		const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	~PrimitivePipelineState();
 };
 

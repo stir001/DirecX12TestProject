@@ -5,7 +5,7 @@ class PrimitiveRootSignature :
 	public RootSignatureObject
 {
 public:
-	PrimitiveRootSignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	PrimitiveRootSignature(const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	~PrimitiveRootSignature();
 };
 

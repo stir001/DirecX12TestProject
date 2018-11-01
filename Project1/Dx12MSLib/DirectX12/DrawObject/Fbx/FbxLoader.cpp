@@ -6,47 +6,30 @@
 #include "FbxMotionConverter.h"
 #include "FbxMotionData.h"
 #include "Shader/ShaderCompiler.h"
-#include "Rootsignature/RootSignatureObject.h"
 #include "Master/Dx12Ctrl.h"
-#include "PipelineState/PipelineStateObject.h"
 #include "Util/XMFloatOperators.h"
 #include "Light/DirectionalLight.h"
 #include "RenderingPath/Manager/RenderingPathManager.h"
 #include "d3dx12.h"
 #include "FbxsdkHaveStruct.h"
+#include "PipelineState/FbxPipelineState.h"
+#include "Rootsignature/FbxRootSignature.h"
 
 #include <fbxsdk.h>
 #include <memory>
-#include <exception>
 #include <cassert>
 #include <algorithm>
 #include <Windows.h>
-#include <cassert>
 #include <atlstr.h>
 
 FbxLoader* FbxLoader::mInstance = nullptr;
 
-const std::string FBX_SHADER_PATH = SHADERDIR_PATH + "FbxShader.hlsl";
-const std::string FBX_VERTEXSHADER_NAME = "FbxVS";
-const std::string FBX_PIXCELSHADER_NAME = "FbxPS";
-const std::string FBX_GEOMETRYSHADER_NAME = "";
-const std::string FBX_HULLSHADER_NAME = "";
-const std::string FBX_DOMAINSHADER_NAME = "";
 
 void StoreFbxMatrixToXMMatrix(const fbxsdk::FbxAMatrix& fmat, DirectX::XMMATRIX& xmmat);
 
 FbxLoader::FbxLoader():mModelConverter(std::make_shared<FbxModelDataConverter>()),mMotionConverter(std::make_shared<FbxMotionConverter>()),mLight(std::make_shared<DirectionalLight>(1.0f,-1.0f,1.0f))
 {
-	mShader = ShaderCompiler::Instance().CompileShader(
-		FBX_SHADER_PATH,
-		FBX_VERTEXSHADER_NAME,
-		FBX_PIXCELSHADER_NAME,
-		FBX_GEOMETRYSHADER_NAME,
-		FBX_HULLSHADER_NAME,
-		FBX_DOMAINSHADER_NAME,
-		true);
-
-	DX12CTRL_INSTANCE;
+	DX12CTRL_INSTANCE
 	CreateRootsignature(d12.GetDev());
 	CreatePipelineState(d12.GetDev());
 	mCmdList = RenderingPathManager::Instance().GetRenderingPathCommandList(0);
@@ -54,46 +37,12 @@ FbxLoader::FbxLoader():mModelConverter(std::make_shared<FbxModelDataConverter>()
 
 void FbxLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	CD3DX12_RASTERIZER_DESC rastarizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	rastarizer.CullMode = D3D12_CULL_MODE_BACK;
-
-	D3D12_INPUT_ELEMENT_DESC fbxinputDescs[] = {
-		{ "POSITION",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
-		{ "NORMAL",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
-		{ "TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
-	};
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = {};
-	gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);	//ブレンドするか
-	gpsDesc.DepthStencilState.DepthEnable = true;			//デプスを使うか
-	gpsDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	gpsDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-	gpsDesc.DepthStencilState.StencilEnable = false;		//???
-	gpsDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	gpsDesc.InputLayout.NumElements = sizeof(fbxinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
-	gpsDesc.InputLayout.pInputElementDescs = fbxinputDescs;
-	gpsDesc.pRootSignature = mRootsignature->GetRootSignature().Get();//ルートシグネチャポインタ
-	gpsDesc.RasterizerState = rastarizer;	//ラスタライザーの設定
-	gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//
-	gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	gpsDesc.SampleDesc.Count = 1;
-	gpsDesc.NumRenderTargets = 1;
-	gpsDesc.SampleMask = 0xffffff;
-	gpsDesc.NodeMask = 0;
-
-	gpsDesc.VS = CD3DX12_SHADER_BYTECODE(mShader.vertexShader.Get());
-	gpsDesc.PS = CD3DX12_SHADER_BYTECODE(mShader.pixelShader.Get());
-	gpsDesc.DS;
-	gpsDesc.GS;
-	gpsDesc.HS;
-
-	mPipelinestate = std::make_shared<PipelineStateObject>("FbxPipelineState",gpsDesc,dev);
+	mPipelinestate = std::make_shared<FbxPipelineState>(mRootsignature,dev);
 }
 
 void FbxLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mRootsignature = std::make_shared<RootSignatureObject>("FbxRootSignature",mShader.rootSignature.Get(), dev);
-	mRootsignature->GetRootSignature()->SetName(L"FbxRootSignature");
+	mRootsignature = std::make_shared<FbxRootSignature>(dev);
 }
 
 void FbxLoader::SetPipelineState(std::shared_ptr<PipelineStateObject>& Pipelinestate)
@@ -229,7 +178,7 @@ std::shared_ptr<FbxModelController> FbxLoader::LoadMesh(const std::string& model
 		models[i]->modelPath = modelPath;
 	}
 
-	LoadSkeltons();
+	LoadSkeletons();
 	
 	std::shared_ptr<Fbx::FbxModel> model(mModelConverter->ConvertToFbxModel(ConnectMeshes(models)));
 	mModelDatas[modelPath] = model;
@@ -668,32 +617,32 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 	//END vertex uv load
 }
 
-void SkeltonStore(Fbx::FbxSkeleton& skl, const NodeTree& tree) {
+void skeletonStore(Fbx::FbxSkeleton& skl, const NodeTree& tree) {
 	skl.name = tree.nodeName;
 	skl.pos = ConvertXMFloat3ToXMFloat4(tree.translation);
 	skl.rotation = ConvertXMFloat3ToXMFloat4(tree.rotation);
 	skl.scale = ConvertXMFloat3ToXMFloat4(tree.scale);
 };
 
-void CreateSkeltonData(const NodeTree& skeltonTree,
-	std::vector<unsigned int>& skeltonIndices, 
-	std::vector<Fbx::FbxSkeleton>& skeltons,
-	unsigned int& skeltonIndex)
+void CreateskeletonData(const NodeTree& skeletonTree,
+	std::vector<unsigned int>& skeletonIndices, 
+	std::vector<Fbx::FbxSkeleton>& skeletons,
+	unsigned int& skeletonIndex)
 {
 	unsigned int parentIndex = 0;
 	//親ボーンの処理
 	Fbx::FbxSkeleton skl;
-	SkeltonStore(skl, skeltonTree);
-	skeltons[parentIndex = skeltonIndex++] = skl;
+	skeletonStore(skl, skeletonTree);
+	skeletons[parentIndex = skeletonIndex++] = skl;
 
 	//子ボーンの処理とインデックスの作成
-	for (unsigned int j = 0; j < static_cast<unsigned int>(skeltonTree.children.size()); ++j)
+	for (unsigned int j = 0; j < static_cast<unsigned int>(skeletonTree.children.size()); ++j)
 	{
 		//インデックスの作成
-		skeltonIndices.push_back(parentIndex);
-		skeltonIndices.push_back(skeltonIndex);
+		skeletonIndices.push_back(parentIndex);
+		skeletonIndices.push_back(skeletonIndex);
 
-		CreateSkeltonData(skeltonTree.children[j], skeltonIndices, skeltons, skeltonIndex);
+		CreateskeletonData(skeletonTree.children[j], skeletonIndices, skeletons, skeletonIndex);
 	}
 }
 
@@ -724,9 +673,9 @@ void FbxLoader::LoadCluster(fbxsdk::FbxMesh* mesh)
 
 			Fbx::TmpWeight t_weight;
 
-			t_bone.skeltonName = t_cluster->GetLink()->GetName();
+			t_bone.skeletonName = t_cluster->GetLink()->GetName();
 
-			auto itr = mBones.find(t_bone.skeltonName);
+			auto itr = mBones.find(t_bone.skeletonName);
 			if (itr != mBones.end())
 			{
 				t_bone = itr->second;
@@ -739,11 +688,11 @@ void FbxLoader::LoadCluster(fbxsdk::FbxMesh* mesh)
 				t_weight.weight = static_cast<float>(ctrlPointWeightArray[k]);
 				t_weight.boneNo = offset;
 				mTmpVertices[ctrlPointIndicesArray[k]].weights.push_back(t_weight);
-				mTmpVertices[ctrlPointIndicesArray[k]].boneName.push_back(t_bone.skeltonName);
+				mTmpVertices[ctrlPointIndicesArray[k]].boneName.push_back(t_bone.skeletonName);
 				t_vertexIndicesArray.push_back(ctrlPointIndicesArray[k]);
 			}
 
-			mBones[t_bone.skeltonName] = (t_bone);
+			mBones[t_bone.skeletonName] = (t_bone);
 		}
 	}
 	//EMD vertex bone weight load
@@ -915,7 +864,7 @@ void FbxLoader::FixVertexInfo(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::
 	auto boneItr = mBones.begin();
 	for (unsigned int i = 0; i < size; i++, ++boneItr)
 	{
-		model->bones[i].boneName = boneItr->second.skeltonName;
+		model->bones[i].boneName = boneItr->second.skeletonName;
 		model->bones[i].index = i;
 		model->bones[i].initMatrix = ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity());
 	}
@@ -950,10 +899,10 @@ void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, unsigned int searchtype
 			//http://help.autodesk.com/view/FBX/2019/ENU/?guid=FBX_Developer_Help_nodes_and_scene_graph_fbx_nodes_transformation_data_html
 			auto t_translation = childNode->LclTranslation.Get();
 			childNodeTree.translation = { static_cast<float>(t_translation.mData[0]), static_cast<float>(t_translation.mData[1]) , static_cast<float>(t_translation.mData[2]) };
-			//childNodeTree.translation += parentTree.translation;
+			childNodeTree.translation += parentTree.translation;
 			auto t_rotation = childNode->LclRotation.Get();
 			childNodeTree.rotation = { static_cast<float>(t_rotation.mData[0]), static_cast<float>(t_rotation.mData[1]), static_cast<float>(t_rotation.mData[2]) };
-			//childNodeTree.rotation += parentTree.rotation;
+			childNodeTree.rotation += parentTree.rotation;
 			auto t_scale = childNode->LclScaling.Get();
 			childNodeTree.scale = { static_cast<float>(t_scale.mData[0]), static_cast<float>(t_scale.mData[1]), static_cast<float>(t_scale.mData[2]) };
 
@@ -1086,8 +1035,8 @@ std::shared_ptr<Fbx::FbxModelData> FbxLoader::ConnectMeshes(std::vector<std::sha
 		ConnectClusters(rtn->bones, datas[i]->bones);
 	}
 
-	rtn->skeltons = std::move(mSkeltons);
-	rtn->skeltonIndices = std::move(mSkeltonIndices);
+	rtn->skeletons = std::move(mSkeletons);
+	rtn->skeletonIndices = std::move(mSkeletonIndices);
 
 	return rtn;
 }
@@ -1103,10 +1052,10 @@ void FbxLoader::ClearTmpInfo()
 	mTmpIndexes.clear();
 	mTmpIndexes.shrink_to_fit();
 	mBones.clear();
-	mSkeltons.clear();
-	mSkeltons.shrink_to_fit();
-	mSkeltonIndices.clear();
-	mSkeltonIndices.shrink_to_fit();
+	mSkeletons.clear();
+	mSkeletons.shrink_to_fit();
+	mSkeletonIndices.clear();
+	mSkeletonIndices.shrink_to_fit();
 	mAnimCurves.clear();
 	mAnimCurves.shrink_to_fit();
 	mSkeletonMatrix.clear();
@@ -1647,25 +1596,25 @@ void FbxLoader::LoadMatarial(std::shared_ptr<Fbx::FbxModelData> model, fbxsdk::F
 	//EBD store texture path
 }
 
-void FbxLoader::LoadSkeltons()
+void FbxLoader::LoadSkeletons()
 {
-	//START skelton Load
+	//START skeleton Load
 	fbxsdk::FbxNode* root = mScene->GetRootNode();
-	NodeTree skeltonTree = {};
-	std::vector<fbxsdk::FbxNode*> skeltonNode;
-	StackSearchNode(root, fbxsdk::FbxNodeAttribute::eSkeleton, skeltonTree, [&skeltonNode](fbxsdk::FbxNode* node) {
-		skeltonNode.push_back(node);
+	NodeTree skeletonTree = {};
+	std::vector<fbxsdk::FbxNode*> skeletonNode;
+	StackSearchNode(root, fbxsdk::FbxNodeAttribute::eSkeleton, skeletonTree, [&skeletonNode](fbxsdk::FbxNode* node) {
+		skeletonNode.push_back(node);
 	});
 
 	//ルートボーン用に一つ余分に確保
-	mSkeltons.resize(skeltonNode.size() + 1);
+	mSkeletons.resize(skeletonNode.size() + 1);
 	//基本的には2倍で足りると思う
-	mSkeltonIndices.reserve(skeltonNode.size() * 2);
+	mSkeletonIndices.reserve(skeletonNode.size() * 2);
 
-	unsigned int skeltonNum = static_cast<unsigned int>(skeltonNode.size());
-	unsigned int skeltonIndex = 0;
+	unsigned int skeletonNum = static_cast<unsigned int>(skeletonNode.size());
+	unsigned int skeletonIndex = 0;
 
-	CreateSkeltonData(skeltonTree, mSkeltonIndices, mSkeltons, skeltonIndex);
-	mSkeltonIndices.shrink_to_fit();
-	//END skelton Load
+	CreateskeletonData(skeletonTree, mSkeletonIndices, mSkeletons, skeletonIndex);
+	mSkeletonIndices.shrink_to_fit();
+	//END skeleton Load
 }

@@ -54,12 +54,12 @@ public:
 protected:
 
 	/**
-	*	使用するrootsignature
+	*	通常描画時に使用するrootsignature
 	*/
 	std::shared_ptr<RootSignatureObject> mRootsignature;
 
 	/**
-	*	使用するpipelinestate
+	*	通常描画時に使用するpipelinestate
 	*/
 	std::shared_ptr<PipelineStateObject> mPipelinestate;
 

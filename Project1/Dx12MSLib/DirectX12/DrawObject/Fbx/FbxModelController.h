@@ -8,6 +8,7 @@
 
 class ConstantBufferObject;
 class VertexBufferObject;
+class IndexBufferObject;
 class LightObject;
 class FbxModelDataConverter;
 class RootSignatureObject;
@@ -35,6 +36,7 @@ public:
 	~FbxModelController();
 
 	void Draw();
+	void DrawSkeleton();
 	void SetLight(std::shared_ptr<LightObject> dirlight);
 
 	void SetRootSignature(std::shared_ptr<RootSignatureObject>& rootsignature);
@@ -49,8 +51,6 @@ public:
 	std::string GetModelPath() const;
 private:
 	std::shared_ptr<FbxMotionPlayer> mMotionPlayer;
-	DirectX::XMFLOAT3 mColor;
-
 
 	std::vector<Fbx::FbxVertexElement> mVertexElements;
 	std::shared_ptr<VertexBufferObject> mCtrlVertexBuffer;
@@ -61,8 +61,6 @@ private:
 
 	std::shared_ptr<Dx12DescriptorHeapObject> mDescHeap;
 	std::vector<std::shared_ptr<ConstantBufferObject>> mAddConstantBuffers;
-
-	std::shared_ptr<ConstantBufferObject> mSkeltonBuffer;
 
 	void (FbxModelController::*mBundleUpdate)();
 

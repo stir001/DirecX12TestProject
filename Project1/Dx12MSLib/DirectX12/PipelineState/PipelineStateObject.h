@@ -27,14 +27,14 @@ public:
 	*	@param[in]	gpsDesc	GraphicsPipelineのDesc
 	*	@param[in]	dev		ID3D12Deviceの参照
 	*/
-	PipelineStateObject(const std::string& name, D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	PipelineStateObject(const std::string& name, D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 
 	/**
 	*	@param[in]	name	ComputePipelineの名前
 	*	@param[in]	cpsDesc	ComputePipelineのDesc
 	*	@param[in]	dev		ID3D12Deviceの参照
 	*/
-	PipelineStateObject(const std::string& name, D3D12_COMPUTE_PIPELINE_STATE_DESC& cpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	PipelineStateObject(const std::string& name, D3D12_COMPUTE_PIPELINE_STATE_DESC& cpsDesc, const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	virtual ~PipelineStateObject();
 
 	/**
@@ -51,7 +51,7 @@ protected:
 	*	@param[in]	gpsDesc	GraphicsPipelineのDesc
 	*	@param[in]	dev		ID3D12Deviceの参照
 	*/
-	void CreatePipelineState(const std::string& name, D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	void CreatePipelineState(const std::string& name, D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc, const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 
 	/**
 	*	@brief	ComputePipelineStateを作成する
@@ -59,7 +59,7 @@ protected:
 	*	@param[in]	cpsDesc	ComputePipelineのDesc
 	*	@param[in]	dev		ID3D12Deviceの参照
 	*/
-	void CreatePipelineState(const std::string& name, D3D12_COMPUTE_PIPELINE_STATE_DESC& cpsDesc, Microsoft::WRL::ComPtr<ID3D12Device>& dev);
+	void CreatePipelineState(const std::string& name, D3D12_COMPUTE_PIPELINE_STATE_DESC& cpsDesc, const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 
 	/**
 	*	@brief	GraphicsPipelineのDescにシェーダーをセットする

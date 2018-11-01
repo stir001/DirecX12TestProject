@@ -5,12 +5,15 @@
 *
 *	@author 真鍋奨一郎
 *
-*	@par 最終更新日	2018/9/20
+*	@par 最終更新日	2018/10/30
 */
 #include "DrawObjectController.h"
 #include <DirectXMath.h>
 
 class ConstantBufferObject;
+class IndexBufferObject;
+class VertexBufferObject;
+class Dx12DescriptorHeapObject;
 
 /**
 *	@ingroup DrawObjectController
@@ -101,5 +104,30 @@ protected:
 	*	回転を表す四元数
 	*/
 	DirectX::XMFLOAT4 mQuaternion;
+
+	/**
+	*	骨を表示するときに使用するrootsignature
+	*/
+	std::shared_ptr<RootSignatureObject> mSkeletonRootsignature;
+
+	/**
+	*	骨を表示するときに使用するpipelinestate
+	*/
+	std::shared_ptr<PipelineStateObject> mSkeletonPipelineState;
+
+	/**
+	*	骨用のインデックスバッファ
+	*/
+	std::shared_ptr<IndexBufferObject> mSkeletonIndexBuffer;
+
+	/**
+	*	骨用の頂点バッファ
+	*/
+	std::shared_ptr<VertexBufferObject> mSkeletonVertexBuffer;
+
+	/**
+	*	骨用のDescriptorHeap
+	*/
+	std::shared_ptr<Dx12DescriptorHeapObject> mSkeletonHeap;
 };
 

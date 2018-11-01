@@ -22,7 +22,7 @@ DirectionalLight::DirectionalLight(DirectX::XMFLOAT3 & pos, DirectX::XMFLOAT3 & 
 	DirectX::XMMATRIX lightview = DirectX::XMMatrixLookAtLH(lightpos, target, upper);
 	DirectX::XMMATRIX lightprojection = DirectX::XMMatrixOrthographicLH(50, 50, 1.0f, 200.0f);//lightprojectionçsóÒ
 	XMStoreFloat4x4(&mElement.viewProj, lightview * lightprojection);
-	mCbuffer = std::make_shared<ConstantBufferObject>("DirectionalLightConstantBuffer",Dx12Ctrl::Instance().GetDev(),sizeof(DirectionalLightElement), 1);
+	mCbuffer = std::make_shared<ConstantBufferObject>("DirectionalLightConstantBuffer",Dx12Ctrl::Instance().GetDev(),static_cast<unsigned int>(sizeof(DirectionalLightElement)), 1U);
 
 	mCbuffer->WriteBuffer(&mElement, sizeof(mElement));
 }
@@ -43,7 +43,7 @@ DirectionalLight::DirectionalLight(float dirX, float dirY, float dirZ, float len
 	DirectX::XMMATRIX lightview = DirectX::XMMatrixLookAtLH(lightpos, target, upper);
 	DirectX::XMMATRIX lightprojection = DirectX::XMMatrixOrthographicLH(50, 50, 1.0f, 200.0f);//lightprojectionçsóÒ
 	XMStoreFloat4x4(&mElement.viewProj, lightview * lightprojection);
-	mCbuffer = std::make_shared<ConstantBufferObject>("DirectionalLightConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(DirectionalLightElement), 1);
+	mCbuffer = std::make_shared<ConstantBufferObject>("DirectionalLightConstantBuffer", Dx12Ctrl::Instance().GetDev(), static_cast<unsigned int>(sizeof(DirectionalLightElement)), 1);
 
 	mCbuffer->WriteBuffer(&mElement, sizeof(mElement));
 }

@@ -164,8 +164,8 @@ namespace Fbx
 		Fbx::FbxVertexesInfo vertexesInfo;
 		std::vector<Fbx::FbxMaterial> materials;
 		std::vector<Fbx::FbxBone> bones;
-		std::vector<Fbx::FbxSkeleton> skeltons;
-		std::vector<unsigned int> skeltonIndices;
+		std::vector<Fbx::FbxSkeleton> skeletons;
+		std::vector<unsigned int> skeletonIndices;
 	};
 
 	struct BoneFrameData
@@ -227,7 +227,7 @@ namespace Fbx
 
 	struct TmpBone
 	{
-		std::string skeltonName;
+		std::string skeletonName;
 	};
 
 	struct FbxTextureMaterial
