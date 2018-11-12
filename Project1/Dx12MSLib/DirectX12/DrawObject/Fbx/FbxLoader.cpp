@@ -217,8 +217,6 @@ std::shared_ptr<FbxMotionData> FbxLoader::LoadAnimation(const std::string& anima
 		NodeTree rNode;
 		rNode.nodeName = rootNode->GetName();
 		fbxsdk::FbxTime t = 0;
-		//rNode.globalPosition = GetGlobalPosition(rootNode, t, mPose, &dummy);
-		//rNode.globalOffsetPosition = rNode.globalPosition * GetGeometry(rootNode);
 		mNodeTree = rNode;
 		StackSearchNode(rootNode, FbxNodeAttribute::EType::eMesh, mNodeTree, [&](fbxsdk::FbxNode* node) {
 			mNodeDatas.push_back(node);
@@ -326,20 +324,12 @@ void FbxLoader::ReleaseAllAnimation()
 	mAnimationDatas.clear();
 }
 
-//テスト用ローカル関数
 void StoreFbxMatrixToXMMatrix(const fbxsdk::FbxAMatrix& fmat, DirectX::XMMATRIX& xmmat)
 {
-	//DirectXと同じ状態ならこう
 	xmmat.r[0].m128_f32[0] = static_cast<float>(fmat.Get(0, 0)); xmmat.r[0].m128_f32[1] = static_cast<float>(fmat.Get(0, 1)); xmmat.r[0].m128_f32[2] = static_cast<float>(fmat.Get(0, 2)); xmmat.r[0].m128_f32[3] = static_cast<float>(fmat.Get(0, 3));
 	xmmat.r[1].m128_f32[0] = static_cast<float>(fmat.Get(1, 0)); xmmat.r[1].m128_f32[1] = static_cast<float>(fmat.Get(1, 1)); xmmat.r[1].m128_f32[2] = static_cast<float>(fmat.Get(1, 2)); xmmat.r[1].m128_f32[3] = static_cast<float>(fmat.Get(1, 3));
 	xmmat.r[2].m128_f32[0] = static_cast<float>(fmat.Get(2, 0)); xmmat.r[2].m128_f32[1] = static_cast<float>(fmat.Get(2, 1)); xmmat.r[2].m128_f32[2] = static_cast<float>(fmat.Get(2, 2)); xmmat.r[2].m128_f32[3] = static_cast<float>(fmat.Get(2, 3));
 	xmmat.r[3].m128_f32[0] = static_cast<float>(fmat.Get(3, 0)); xmmat.r[3].m128_f32[1] = static_cast<float>(fmat.Get(3, 1)); xmmat.r[3].m128_f32[2] = static_cast<float>(fmat.Get(3, 2)); xmmat.r[3].m128_f32[3] = static_cast<float>(fmat.Get(3, 3));
-
-	//転置されているならこう
-	/*xmmat.r[0].m128_f32[0] = static_cast<float>(fmat.Get(0, 0)); xmmat.r[0].m128_f32[1] = static_cast<float>(fmat.Get(1, 0)); xmmat.r[0].m128_f32[2] = static_cast<float>(fmat.Get(2, 0)); xmmat.r[0].m128_f32[3] = static_cast<float>(fmat.Get(3, 0));
-	xmmat.r[1].m128_f32[0] = static_cast<float>(fmat.Get(0, 1)); xmmat.r[1].m128_f32[1] = static_cast<float>(fmat.Get(1, 1)); xmmat.r[1].m128_f32[2] = static_cast<float>(fmat.Get(2, 1)); xmmat.r[1].m128_f32[3] = static_cast<float>(fmat.Get(3, 1));
-	xmmat.r[2].m128_f32[0] = static_cast<float>(fmat.Get(0, 2)); xmmat.r[2].m128_f32[1] = static_cast<float>(fmat.Get(1, 2)); xmmat.r[2].m128_f32[2] = static_cast<float>(fmat.Get(2, 2)); xmmat.r[2].m128_f32[3] = static_cast<float>(fmat.Get(3, 2));
-	xmmat.r[3].m128_f32[0] = static_cast<float>(fmat.Get(0, 3)); xmmat.r[3].m128_f32[1] = static_cast<float>(fmat.Get(1, 3)); xmmat.r[3].m128_f32[2] = static_cast<float>(fmat.Get(2, 3)); xmmat.r[3].m128_f32[3] = static_cast<float>(fmat.Get(3, 3));*/
 }
 
 void FbxLoader::StackNode(fbxsdk::FbxNode* pNode, unsigned int type, std::vector<fbxsdk::FbxNode*>& nodeArray)
@@ -629,18 +619,21 @@ void CreateskeletonData(const NodeTree& skeletonTree,
 	std::vector<Fbx::FbxSkeleton>& skeletons,
 	unsigned int& skeletonIndex)
 {
-	unsigned int parentIndex = 0;
+	unsigned int parentIndex = skeletonIndex++;
 	//親ボーンの処理
 	Fbx::FbxSkeleton skl;
 	skeletonStore(skl, skeletonTree);
-	skeletons[parentIndex = skeletonIndex++] = skl;
+	skeletons[parentIndex] = skl;
 
 	//子ボーンの処理とインデックスの作成
 	for (unsigned int j = 0; j < static_cast<unsigned int>(skeletonTree.children.size()); ++j)
 	{
 		//インデックスの作成
-		skeletonIndices.push_back(parentIndex);
-		skeletonIndices.push_back(skeletonIndex);
+		if (skl.name != "" && skl.name != "root")
+		{
+			skeletonIndices.push_back(parentIndex);
+			skeletonIndices.push_back(skeletonIndex);
+		}
 
 		CreateskeletonData(skeletonTree.children[j], skeletonIndices, skeletons, skeletonIndex);
 	}
@@ -897,7 +890,9 @@ void FbxLoader::StackSearchNode(fbxsdk::FbxNode* parent, unsigned int searchtype
 		if (childNodeTree.attributeType == searchtype)
 		{
 			//http://help.autodesk.com/view/FBX/2019/ENU/?guid=FBX_Developer_Help_nodes_and_scene_graph_fbx_nodes_transformation_data_html
-			auto t_translation = childNode->LclTranslation.Get();
+			auto t_translation = childNode->EvaluateLocalTranslation();
+			/*auto globalMatrix = childNode->EvaluateLocalTransform().Inverse();
+			t_translation = globalMatrix.MultT(fbxsdk::FbxVector4(t_translation.mData[0], t_translation.mData[1], t_translation.mData[2]));*/
 			childNodeTree.translation = { static_cast<float>(t_translation.mData[0]), static_cast<float>(t_translation.mData[1]) , static_cast<float>(t_translation.mData[2]) };
 			childNodeTree.translation += parentTree.translation;
 			auto t_rotation = childNode->LclRotation.Get();
@@ -1025,13 +1020,6 @@ std::shared_ptr<Fbx::FbxModelData> FbxLoader::ConnectMeshes(std::vector<std::sha
 
 		ConnectSTLVectorData(rtn->materials, datas[i]->materials);
 
-		//endCount = static_cast<int>(rtn->bones.size());
-		//addCount = static_cast<int>(datas[i]->bones.size());
-		//rtn->bones.reserve(endCount + addCount);
-		//for (auto& b : datas[i]->bones)
-		//{
-		//	rtn->bones.push_back(b);
-		//}
 		ConnectClusters(rtn->bones, datas[i]->bones);
 	}
 

@@ -56,7 +56,7 @@ SwapChainObject::SwapChainObject(HWND& hwnd, Microsoft::WRL::ComPtr<ID3D12Device
 		cpuhandle.ptr += (mHeapIncrementsize);*/
 	}
 
-	mRtvDescriptorHeap.reset(new Dx12DescriptorHeapObject("SwapChainDescriptorHeap",device, mRenderTargets, D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+	mRtvDescriptorHeap = std::make_shared<Dx12DescriptorHeapObject>("SwapChainDescriptorHeap",device, mRenderTargets, D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuhandle = mRtvDescriptorHeap->GetCPUHeapHandleStart();
 
