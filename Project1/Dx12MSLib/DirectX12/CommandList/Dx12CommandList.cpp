@@ -89,7 +89,8 @@ HRESULT Dx12CommandList::SetGraphicsRootDescriptorTabel(std::shared_ptr<Dx12Desc
 
 HRESULT Dx12CommandList::SetGraphicsRootDescriptorTable(int rootparamaterIndex, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle) const
 {
-	return E_NOTIMPL;
+	mCmdList->SetGraphicsRootDescriptorTable(rootparamaterIndex, gpuHandle);
+	return GetDeviceRemoveReason();
 }
 
 HRESULT Dx12CommandList::TransitionBarrier(std::shared_ptr<Dx12BufferObject>& resource, D3D12_RESOURCE_STATES transitionState) const
