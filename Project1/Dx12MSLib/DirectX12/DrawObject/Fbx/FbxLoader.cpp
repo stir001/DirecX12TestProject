@@ -397,9 +397,7 @@ void FbxLoader::LoadVertexNormal(fbxsdk::FbxMesh* mesh)
 
 		fbxsdk::FbxLayerElementArrayTemplate<int>* normalArrayIndicesArray = &normalElement->GetIndexArray();//normalArrayに対応するIndexを格納している配列
 
-
 		int eIndexToDirectCount = 0;
-
 
 		switch (mappingMode)
 		{
@@ -408,7 +406,7 @@ void FbxLoader::LoadVertexNormal(fbxsdk::FbxMesh* mesh)
 		case fbxsdk::FbxLayerElement::eByControlPoint://コントロールポイントと1対1対応
 			switch (referenceMode)
 			{
-			case fbxsdk::FbxLayerElement::eDirect://eByControllPointの場合はイ頂点の順番に定義すればいいはず
+			case fbxsdk::FbxLayerElement::eDirect://eByControllPointの場合は頂点の順番に定義すればいいはず
 				for (int i = 0; i < static_cast<int>(mTmpVertices.size()); ++i)
 				{
 					mTmpVertices[i].normalandUV.resize(1);
@@ -418,7 +416,7 @@ void FbxLoader::LoadVertexNormal(fbxsdk::FbxMesh* mesh)
 					mTmpVertices[i].normalandUV[0].normal.y = static_cast<float>(t_normal[1]);
 					mTmpVertices[i].normalandUV[0].normal.z = static_cast<float>(t_normal[2]);
 					mTmpVertices[i].normalandUV[0].vertexNo = i;
-					}
+				}
 				break;
 			case fbxsdk::FbxLayerElement::eIndex:
 			case fbxsdk::FbxLayerElement::eIndexToDirect://おそらくこれは来ない？
@@ -440,10 +438,10 @@ void FbxLoader::LoadVertexNormal(fbxsdk::FbxMesh* mesh)
 				break;
 			}
 			break;
-		case fbxsdk::FbxLayerElement::eByPolygonVertex://ポリゴンごとのバーテックス情報と1対t1対応　インデックス配列分用意されている？
+		case fbxsdk::FbxLayerElement::eByPolygonVertex://ポリゴンごとの頂点情報と1対t1対応　インデックス配列分用意されている？
 			switch (referenceMode)
 			{
-			case fbxsdk::FbxLayerElement::eDirect://eByPolygonVertexの場合はPolygonVertexの順番でバーッてクスを定義すればいいはず
+			case fbxsdk::FbxLayerElement::eDirect://eByPolygonVertexの場合はPolygonVertexの順番で頂点を定義すればいいはず
 				for (int i = 0; i < polygonverticesCount; ++i)
 				{
 
@@ -478,10 +476,13 @@ void FbxLoader::LoadVertexNormal(fbxsdk::FbxMesh* mesh)
 			}
 			break;
 		case fbxsdk::FbxLayerElement::eByPolygon://ポリゴンごとに共通
+			assert(false);
 			break;
 		case fbxsdk::FbxLayerElement::eByEdge://よくわからん
+			assert(false);
 			break;
 		case fbxsdk::FbxLayerElement::eAllSame://全部一緒
+			assert(false);
 			break;
 		default:
 			break;
@@ -494,6 +495,7 @@ void FbxLoader::LoadVertexNormal(fbxsdk::FbxMesh* mesh)
 	}
 }
 
+//normalのrefaerncemode、mappingmodeと異なる場合には未対応
 void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 {
 	int* polygonvertices = mesh->GetPolygonVertices();
@@ -511,7 +513,12 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 	fbxsdk::FbxStringList t_UVSetNameList;
 	mesh->GetUVSetNames(t_UVSetNameList);
 	int uvSetCount = t_UVSetNameList.GetCount();
-	for (int uvSetIndex = 0; uvSetIndex < uvSetCount; ++uvSetIndex)
+	if (uvSetCount >= 2)
+	{
+		MessageBox(nullptr, L"Load Error uvSetが複数あるものには対応してません", L"FBXModelLoader", MB_OK);
+	}
+
+	for (int uvSetIndex = 0; uvSetIndex < 1; ++uvSetIndex)
 	{
 		const char* t_uvSetName = t_UVSetNameList.GetStringAt(uvSetIndex);
 
@@ -594,10 +601,13 @@ void FbxLoader::LoadVertexUV(fbxsdk::FbxMesh* mesh)
 			}
 			break;
 		case fbxsdk::FbxLayerElement::eByPolygon:
+			assert(false);
 			break;
 		case fbxsdk::FbxLayerElement::eByEdge:
+			assert(false);
 			break;
 		case fbxsdk::FbxLayerElement::eAllSame:
+			assert(false);
 			break;
 		default:
 			break;
@@ -1604,5 +1614,11 @@ void FbxLoader::LoadSkeletons()
 
 	CreateskeletonData(skeletonTree, mSkeletonIndices, mSkeletons, skeletonIndex);
 	mSkeletonIndices.shrink_to_fit();
+
+	if (skeletonNum <= 0U)
+	{
+		MessageBox(nullptr, L"Skeleton Error <not exist skeleton>", L"FBXModelLoader", MB_OK);
+	}
+
 	//END skeleton Load
 }

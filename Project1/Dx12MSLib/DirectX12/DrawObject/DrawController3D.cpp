@@ -9,7 +9,7 @@ using namespace DirectX;
 DrawController3D::DrawController3D(const std::string& modelName, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList): 
 	DrawObjectController(modelName +"Bundle", dev, cmdList), mScale(1.0f), mPos(0, 0, 0)
-	,mQuaternion{0,0,0,1}
+	,mQuaternion{0,0,0,1}, mSkeletonColor(1.0f,1.0f,1.0f,1.0f)
 	,mSkeletonRootsignature(std::make_shared<SkeletonRootSignature>(dev))
 	,mSkeletonPipelineState(std::make_shared<SkeletonPipelineState>(mSkeletonRootsignature, dev))
 {
@@ -18,6 +18,9 @@ DrawController3D::DrawController3D(const std::string& modelName, const Microsoft
 	std::string cbufferName = modelName;
 	cbufferName += "MatrixBuffer";
 	mModelMatrixBuffer = std::make_shared<ConstantBufferObject>(cbufferName, dev, sizeof(mModelMatrix), 1);
+	cbufferName = modelName + "SkeltonColorBuffer";
+	mSkeletonColorConstantBuffer = std::make_shared<ConstantBufferObject>(cbufferName, dev, sizeof(mSkeletonColor), 1);
+	UpdateSkeltonColor();
 	UpdateMatrix();
 }
 
@@ -61,6 +64,18 @@ void DrawController3D::SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion)
 	UpdateMatrix();
 }
 
+void DrawController3D::SetSkeletonColor(DirectX::XMFLOAT4 & color)
+{
+	mSkeletonColor = color;
+	UpdateSkeltonColor();
+}
+
+void DrawController3D::SetSkeletonColor(float r, float g, float b, float a)
+{
+	mSkeletonColor = {r, g, b, a};
+	UpdateSkeltonColor();
+}
+
 void DrawController3D::UpdateMatrix()
 {
 	XMMATRIX mat = XMMatrixIdentity();
@@ -72,5 +87,10 @@ void DrawController3D::UpdateMatrix()
 	DirectX::XMStoreFloat4x4(&mModelMatrix, mat);
 
 	mModelMatrixBuffer->WriteBuffer256Alignment(&mModelMatrix, sizeof(mModelMatrix), 1);
+}
+
+void DrawController3D::UpdateSkeltonColor()
+{
+	mSkeletonColorConstantBuffer->WriteBuffer256Alignment(&mSkeletonColor, sizeof(mSkeletonColor), 1);
 }
 

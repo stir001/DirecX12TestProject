@@ -15,6 +15,8 @@
 
 using namespace DirectX;
 
+const std::string FBX_MODEL_DIR = "3DModel/FBX/";
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	//Direct3D12の初期化
@@ -23,33 +25,43 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
 	{
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("Senpai_san/Senpai_san.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("kouhai/Kouhai_chan.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_MMD.FBX");//テキストベース
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("alicia/Alicia_solid_Unity.FBX");//テキストベース
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("shachiku/ShachikuChan_ver3.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti/Hutyakiti_hatON_lowVer.fbx");
-		auto fbxmodel = FbxLoader::Instance().LoadMesh("hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("douki/Douki_chan/Douki_chan.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh("Yuko'sRoom/Yuko'sRoom/Yuko'sRoom.fbx");
+		auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_MMD.FBX");//テキストベース
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_Unity.FBX");//テキストベース
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami/tyami_normalVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami_anim/tyami_animVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "douki/Douki_chan/Douki_chan.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_anim/Kagura_animeVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_low/kagura_lowVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kouhai/Kouhai_chan.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "shachiku/ShachikuChan_ver3.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_anim/Yuko_animeVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_low/YukoLowVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Yuko'sRoom/Yuko'sRoom/Yuko'sRoom.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
+
+		fbxmodel->SetSkeletonColor(1.0f, 0.0f, 0.0f);
 		float scale = 1.0f;
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
-			fbxmodel->AddRotaY(0.1f);
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
-			{
-				scale += 0.1f;
-				fbxmodel->SetScale(scale);
-			}
+			//fbxmodel->AddRotaY(0.1f);
+			//if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
+			//{
+			//	scale += 0.1f;
+			//	fbxmodel->SetScale(scale);
+			//}
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
-			{
-				scale -= 0.1f;
-				fbxmodel->SetScale(scale);
-			}
-			camera->DefaultMove(input);
-			fbxmodel->Draw();
-			fbxmodel->DrawSkeleton();
+			//if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
+			//{
+			//	scale -= 0.1f;
+			//	fbxmodel->SetScale(scale);
+			//}
+			//camera->DefaultMove(input);
+			//fbxmodel->Draw();
+			//fbxmodel->DrawSkeleton();
 		}
 	}
 	camera = nullptr;

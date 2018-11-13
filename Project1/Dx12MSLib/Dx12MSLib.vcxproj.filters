@@ -378,6 +378,18 @@
     <ClInclude Include="DirectX12\Rootsignature\SkeletonRootSignature.h">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\Rootsignature\BillboardRootSignature.h">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Rootsignature\Image2DRootSignature.h">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\Rootsignature\Image3DRootSignature.h">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX12\PipelineState\Image3DPipelineState.h">
+      <Filter>DirectX12\PipelineState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -644,6 +656,18 @@
     <ClCompile Include="DirectX12\Rootsignature\SkeletonRootSignature.cpp">
       <Filter>DirectX12\Rootsignature</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX12\Rootsignature\BillboardRootSignature.cpp">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Rootsignature\Image2DRootSignature.cpp">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Rootsignature\Image3DRootSignature.cpp">
+      <Filter>DirectX12\Rootsignature</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\PipelineState\Image3DPipelineState.cpp">
+      <Filter>DirectX12\PipelineState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DirectX12\Shader\CameraLightcBuffer.hlsl">
@@ -677,6 +701,9 @@
       <Filter>DirectX12\Shader\hlsl</Filter>
     </FxCompile>
     <FxCompile Include="DirectX12\Shader\SkeletonShader.hlsl">
+      <Filter>DirectX12\Shader\hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectX12\Shader\Billboard.hlsl">
       <Filter>DirectX12\Shader\hlsl</Filter>
     </FxCompile>
   </ItemGroup>

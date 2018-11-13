@@ -111,3 +111,12 @@ matrix simpleinverse(matrix m)
     return transpose(m);
 }
 
+matrix identity()
+{
+    return matrix(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	);
+}

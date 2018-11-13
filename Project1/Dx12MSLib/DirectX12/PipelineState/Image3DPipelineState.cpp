@@ -1,12 +1,14 @@
 #include "stdafx.h"
-#include "Image2DPipelineState.h"
+#include "Image3DPipelineState.h"
 #include "Rootsignature/RootSignatureObject.h"
+
 #include "d3dx12.h"
 
-Image2DPipelineState::Image2DPipelineState(std::shared_ptr<RootSignatureObject>& rootsignature, const Microsoft::WRL::ComPtr<ID3D12Device>& dev)
+Image3DPipelineState::Image3DPipelineState(std::shared_ptr<RootSignatureObject>& rootsignature, const Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	D3D12_INPUT_ELEMENT_DESC imageinputDescs[] = {
-		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+	D3D12_INPUT_ELEMENT_DESC image3dinputDescs[] = {
+		{ "POSITION",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
+		{ "NORMAL",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
 		{ "TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
 		{ "GAMMA",0,DXGI_FORMAT_R32_FLOAT,0,D3D12_APPEND_ALIGNED_ELEMENT,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0 },
 	};
@@ -28,13 +30,13 @@ Image2DPipelineState::Image2DPipelineState(std::shared_ptr<RootSignatureObject>&
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = {};
 	gpsDesc.BlendState = blendDesc;
-	gpsDesc.DepthStencilState.DepthEnable = false;
+	gpsDesc.DepthStencilState.DepthEnable = true;
 	gpsDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	gpsDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 	gpsDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	gpsDesc.DepthStencilState.StencilEnable = false;
-	gpsDesc.InputLayout.NumElements = sizeof(imageinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
-	gpsDesc.InputLayout.pInputElementDescs = imageinputDescs;
+	gpsDesc.InputLayout.NumElements = sizeof(image3dinputDescs) / sizeof(D3D12_INPUT_ELEMENT_DESC);
+	gpsDesc.InputLayout.pInputElementDescs = image3dinputDescs;
 	gpsDesc.pRootSignature = rootsignature->GetRootSignature().Get();
 	gpsDesc.RasterizerState = rastarizer;
 	gpsDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -46,10 +48,11 @@ Image2DPipelineState::Image2DPipelineState(std::shared_ptr<RootSignatureObject>&
 
 	SetShaders(gpsDesc, rootsignature->GetShaderDatas());
 
-	CreatePipelineState("Image2D", gpsDesc, dev);
+	CreatePipelineState("Image3D", gpsDesc, dev);
+
 }
 
 
-Image2DPipelineState::~Image2DPipelineState()
+Image3DPipelineState::~Image3DPipelineState()
 {
 }

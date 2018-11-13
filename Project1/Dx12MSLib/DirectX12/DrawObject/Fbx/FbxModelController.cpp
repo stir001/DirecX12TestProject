@@ -57,26 +57,36 @@ FbxModelController::FbxModelController(std::shared_ptr<FbxModel>& model,
 	UpdateMatrix();
 
 	//骨用のバッファ、ヒープの処理
-	std::vector<std::shared_ptr<Dx12BufferObject>> skeletonBuffers = {
-		mCameraBuffer,
-		mModelMatrixBuffer
-	};
-	mSkeletonHeap = std::make_shared<Dx12DescriptorHeapObject>("FbxSkeletonDescHeap", dev
-		, skeletonBuffers, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
 	unsigned int sklIndexSize, sklIndexNum = 0;
 	sklIndexSize = static_cast<unsigned int>(sizeof(mModel->mSkeletonIndices[0]));
 	sklIndexNum = static_cast<unsigned int>(mModel->mSkeletonIndices.size());
-	mSkeletonIndexBuffer = std::make_shared<IndexBufferObject>("FbxSkeletonIndexBuffer", dev
-		, sklIndexSize, sklIndexNum);
-	mSkeletonIndexBuffer->WriteBuffer(mModel->mSkeletonIndices.data(), sklIndexNum * sklIndexSize);
+	if (sklIndexNum > 0)
+	{
+		mSkeletonIndexBuffer = std::make_shared<IndexBufferObject>("FbxSkeletonIndexBuffer", dev
+			, sklIndexSize, sklIndexNum);
+		mSkeletonIndexBuffer->WriteBuffer(mModel->mSkeletonIndices.data(), sklIndexNum * sklIndexSize);
 
-	unsigned int sklVertexSize, sklVertexNum = 0;
-	sklVertexSize = static_cast<unsigned int>(sizeof(mModel->mSkeletonPos[0]));
-	sklVertexNum = static_cast<unsigned int>(mModel->mSkeletonPos.size());
-	mSkeletonVertexBuffer = std::make_shared<VertexBufferObject>("FbxSkeletonVertexBuffer", dev
-		, sklVertexSize, sklVertexNum);
-	mSkeletonVertexBuffer->WriteBuffer(mModel->mSkeletonPos.data(), sklVertexNum * sklVertexSize);
+		unsigned int sklVertexSize, sklVertexNum = 0;
+		sklVertexSize = static_cast<unsigned int>(sizeof(mModel->mSkeletonPos[0]));
+		sklVertexNum = static_cast<unsigned int>(mModel->mSkeletonPos.size());
+		mSkeletonVertexBuffer = std::make_shared<VertexBufferObject>("FbxSkeletonVertexBuffer", dev
+			, sklVertexSize, sklVertexNum);
+		mSkeletonVertexBuffer->WriteBuffer(mModel->mSkeletonPos.data(), sklVertexNum * sklVertexSize);
+
+		std::vector<std::shared_ptr<Dx12BufferObject>> skeletonBuffers = {
+			mCameraBuffer,
+			mModelMatrixBuffer,
+			mSkeletonColorConstantBuffer
+		};
+		mSkeletonHeap = std::make_shared<Dx12DescriptorHeapObject>("FbxSkeletonDescHeap", dev
+			, skeletonBuffers, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+		mSkeletonDraw = &FbxModelController::DrawColorSkeleton;
+	}
+	else
+	{
+		mSkeletonDraw = &FbxModelController::NonDrawSkeleton;
+	}
 	//骨用の処理終了
 }
 
@@ -99,18 +109,7 @@ void FbxModelController::Draw()
 
 void FbxModelController::DrawSkeleton()
 {
-	mCmdList->SetPipelineState(mSkeletonPipelineState->GetPipelineState().Get());
-	mCmdList->SetGraphicsRootSignature(mSkeletonRootsignature->GetRootSignature().Get());
-	mSkeletonIndexBuffer->SetBuffer(mCmdList);
-	mSkeletonVertexBuffer->SetBuffer(mCmdList);
-
-	mSkeletonHeap->SetDescriptorHeap(mCmdList);
-	mSkeletonHeap->SetGprahicsDescriptorTable(mCmdList, 0, 0);
-	mSkeletonHeap->SetGprahicsDescriptorTable(mCmdList, 1, 1);
-
-	mCmdList->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-
-	mCmdList->DrawIndexedInstanced(static_cast<unsigned int>(mModel->mSkeletonIndices.size()), 1, 0, 0, 0);
+	(this->*mSkeletonDraw)();
 }
 
 void FbxModelController::SetLight(std::shared_ptr<LightObject> dirlight)
@@ -244,4 +243,25 @@ void FbxModelController::UpdateDescriptorHeap()
 	std::string name = mModel->GetModelName();
 	name += "DescriptorHeap";
 	mDescHeap = std::make_shared<Dx12DescriptorHeapObject>(name, Dx12Ctrl::Instance().GetDev(), bufferObj, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+
+void FbxModelController::NonDrawSkeleton()
+{
+}
+
+void FbxModelController::DrawColorSkeleton()
+{
+	mCmdList->SetPipelineState(mSkeletonPipelineState->GetPipelineState().Get());
+	mCmdList->SetGraphicsRootSignature(mSkeletonRootsignature->GetRootSignature().Get());
+	mSkeletonIndexBuffer->SetBuffer(mCmdList);
+	mSkeletonVertexBuffer->SetBuffer(mCmdList);
+
+	mSkeletonHeap->SetDescriptorHeap(mCmdList);
+	mSkeletonHeap->SetGprahicsDescriptorTable(mCmdList, 0, 0);
+	mSkeletonHeap->SetGprahicsDescriptorTable(mCmdList, 1, 1);
+	mSkeletonHeap->SetGprahicsDescriptorTable(mCmdList, 2, 2);
+
+	mCmdList->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	mCmdList->DrawIndexedInstanced(static_cast<unsigned int>(mModel->mSkeletonIndices.size()), 1, 0, 0, 0);
 }

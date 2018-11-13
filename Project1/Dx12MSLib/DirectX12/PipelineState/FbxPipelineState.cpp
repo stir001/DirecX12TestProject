@@ -36,7 +36,7 @@ FbxPipelineState::FbxPipelineState(std::shared_ptr<RootSignatureObject>& rootsig
 
 	SetShaders(gpsDesc,shaderData);
 
-	CreatePipelineState("FbxPipelineState", gpsDesc, dev);
+	CreatePipelineState("Fbx", gpsDesc, dev);
 }
 
 FbxPipelineState::~FbxPipelineState()

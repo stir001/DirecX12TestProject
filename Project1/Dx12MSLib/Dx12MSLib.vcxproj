@@ -237,13 +237,17 @@
     <ClInclude Include="DirectX12\Master\NeedCall.h" />
     <ClInclude Include="DirectX12\PipelineState\FbxPipelineState.h" />
     <ClInclude Include="DirectX12\PipelineState\Image2DPipelineState.h" />
+    <ClInclude Include="DirectX12\PipelineState\Image3DPipelineState.h" />
     <ClInclude Include="DirectX12\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="DirectX12\PipelineState\PrimitivePipelineState.h" />
     <ClInclude Include="DirectX12\PipelineState\SkeletonPipelineState.h" />
     <ClInclude Include="DirectX12\RenderingPath\Base\RenderingPathObject.h" />
     <ClInclude Include="DirectX12\RenderingPath\FirstPathObject.h" />
     <ClInclude Include="DirectX12\RenderingPath\Manager\RenderingPathManager.h" />
+    <ClInclude Include="DirectX12\Rootsignature\BillboardRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\FbxRootSignature.h" />
+    <ClInclude Include="DirectX12\Rootsignature\Image2DRootSignature.h" />
+    <ClInclude Include="DirectX12\Rootsignature\Image3DRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\PrimitiveRootSignature.h" />
     <ClInclude Include="DirectX12\Rootsignature\RootSignatureObject.h" />
@@ -328,13 +332,17 @@
     <ClCompile Include="DirectX12\Master\NeedCall.cpp" />
     <ClCompile Include="DirectX12\PipelineState\FbxPipelineState.cpp" />
     <ClCompile Include="DirectX12\PipelineState\Image2DPipelineState.cpp" />
+    <ClCompile Include="DirectX12\PipelineState\Image3DPipelineState.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="DirectX12\PipelineState\PrimitivePipelineState.cpp" />
     <ClCompile Include="DirectX12\PipelineState\SkeletonPipelineState.cpp" />
     <ClCompile Include="DirectX12\RenderingPath\Base\RenderingPathObject.cpp" />
     <ClCompile Include="DirectX12\RenderingPath\FirstPathObject.cpp" />
     <ClCompile Include="DirectX12\RenderingPath\Manager\RenderingPathManager.cpp" />
+    <ClCompile Include="DirectX12\Rootsignature\BillboardRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\FbxRootSignature.cpp" />
+    <ClCompile Include="DirectX12\Rootsignature\Image2DRootSignature.cpp" />
+    <ClCompile Include="DirectX12\Rootsignature\Image3DRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveNormalMapRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\PrimitiveRootSignature.cpp" />
     <ClCompile Include="DirectX12\Rootsignature\RootSignatureObject.cpp" />
@@ -366,6 +374,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="DirectX12\Shader\Billboard.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="DirectX12\Shader\CameraLightcBuffer.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

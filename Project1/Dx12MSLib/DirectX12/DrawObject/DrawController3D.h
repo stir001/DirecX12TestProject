@@ -69,11 +69,27 @@ public:
 	*/
 	virtual void SetRotaQuaternion(const DirectX::XMFLOAT4& quaternion);
 
+	/**
+	*	@brief	ボーンの色を設定する
+	*	@param[in]	color	設定する色
+	*/
+	virtual void SetSkeletonColor(DirectX::XMFLOAT4& color);
+
+	/**
+	*	@brief	ボーンの色を設定する
+	*	@param[in]	color	設定する色
+	*/
+	virtual void SetSkeletonColor(float r, float g, float b, float a = 1.0f);
+
 protected:
 	/**
 	*	mModelMatrix(アフィン行列)を更新する
 	*/
 	void UpdateMatrix();
+
+	/**
+	*/
+	void UpdateSkeltonColor();
 
 	/**
 	*	アフィン行列を書き込むバッファ
@@ -106,6 +122,11 @@ protected:
 	DirectX::XMFLOAT4 mQuaternion;
 
 	/**
+	*	ボーンの色情報
+	*/
+	DirectX::XMFLOAT4 mSkeletonColor;
+
+	/**
 	*	骨を表示するときに使用するrootsignature
 	*/
 	std::shared_ptr<RootSignatureObject> mSkeletonRootsignature;
@@ -124,6 +145,11 @@ protected:
 	*	骨用の頂点バッファ
 	*/
 	std::shared_ptr<VertexBufferObject> mSkeletonVertexBuffer;
+
+	/**
+	*	骨用の色情報バッファ
+	*/
+	std::shared_ptr<ConstantBufferObject> mSkeletonColorConstantBuffer;
 
 	/**
 	*	骨用のDescriptorHeap

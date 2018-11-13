@@ -14,7 +14,7 @@ SkeletonPipelineState::SkeletonPipelineState(std::shared_ptr<RootSignatureObject
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = {};
 	gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	gpsDesc.DepthStencilState.DepthEnable = true;
+	gpsDesc.DepthStencilState.DepthEnable = false;
 	gpsDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	gpsDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 	gpsDesc.DepthStencilState.StencilEnable = false;
@@ -34,7 +34,7 @@ SkeletonPipelineState::SkeletonPipelineState(std::shared_ptr<RootSignatureObject
 
 	SetShaders(gpsDesc, shaderData);
 
-	CreatePipelineState("SkeletonPipelineState", gpsDesc, dev);
+	CreatePipelineState("Skeleton", gpsDesc, dev);
 }
 
 

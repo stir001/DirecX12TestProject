@@ -63,9 +63,12 @@ private:
 	std::vector<std::shared_ptr<ConstantBufferObject>> mAddConstantBuffers;
 
 	void (FbxModelController::*mBundleUpdate)();
+	void (FbxModelController::*mSkeletonDraw)();
 
 	void UpdateVertex();
 	void UpdateBundle();
 	void NonBundleUpdate();
 	void UpdateDescriptorHeap();
+	void NonDrawSkeleton();
+	void DrawColorSkeleton();
 };
