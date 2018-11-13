@@ -24,7 +24,7 @@ public:
 	*	@param[in]	height	バッファの縦幅
 	*	@param[in]	format	バッファの一要素に対応したDXGI_FORMAT
 	*/
-	RendertargetObject(const std::string& name, Microsoft::WRL::ComPtr<ID3D12Device>& dev, 
+	RendertargetObject(const std::string& name,const Microsoft::WRL::ComPtr<ID3D12Device>& dev, 
 		unsigned int width, unsigned int height, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	/**

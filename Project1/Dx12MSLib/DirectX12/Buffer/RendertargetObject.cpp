@@ -2,7 +2,7 @@
 #include "RendertargetObject.h"
 #include "Util/Dx12Getter.h"
 
-RendertargetObject::RendertargetObject(const std::string& name, Microsoft::WRL::ComPtr<ID3D12Device>& dev,
+RendertargetObject::RendertargetObject(const std::string& name,const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 	unsigned int width, unsigned int height, DXGI_FORMAT format)
 	:Dx12BufferObject(name)
 {
@@ -14,7 +14,7 @@ RendertargetObject::RendertargetObject(const std::string& name, Microsoft::WRL::
 	desc.Width = width;
 	desc.Height = height;
 	desc.DepthOrArraySize = 1;
-	desc.MipLevels = 0;
+	desc.MipLevels = 1;
 	desc.Format = format;
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;

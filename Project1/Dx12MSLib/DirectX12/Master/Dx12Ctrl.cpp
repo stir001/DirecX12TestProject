@@ -12,6 +12,7 @@
 #include "Shader/ShaderCompiler.h"
 #include "DrawObject/Primitive2D/Primitive2DManager.h"
 #include "DrawObject/Fbx/FbxLoader.h"
+#include "RenderingPath/FirstPathObject.h"
 
 #include <d3d12.h>
 #include <dxgi1_4.h>
@@ -190,7 +191,15 @@ void Dx12Ctrl::InitFirstPath()
 {
 	RenderingPathManager::Instance().Init(mDev, mFactory, mhWnd);
 
-	InitFunctionObject_t initfunc = [&](CmdListsArg_t cmdList, RTResourcesArg_t resource, RTDescHeapArg_t descHeap) {
+	std::shared_ptr<RenderingPathObject> fpath = std::make_shared<FirstPathObject>(
+		mDev, mDepthDescHeap, mWndWidth, mWndHeight);
+
+	unsigned int renderingPathIndex;
+	RenderingPathManager::Instance().AddRenderPath(fpath, renderingPathIndex);
+
+	fpath->FirstUpdate();
+
+	/*InitFunctionObject_t initfunc = [&](CmdListsArg_t cmdList, RTResourcesArg_t resource, RTDescHeapArg_t descHeap) {
 		cmdList[0]->ClearDepthStencilView(Dx12Ctrl::Instance().GetDepthCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, &mRect);
 		cmdList[0]->OMSetRenderTargets(1, &descHeap->GetCPUDescriptorHandleForHeapStart(), false, &Dx12Ctrl::Instance().GetDepthCpuHandle());
 		cmdList[0]->ClearRenderTargetView(descHeap->GetCPUDescriptorHandleForHeapStart(), mClrcolor, 0, &mRect);
@@ -204,16 +213,16 @@ void Dx12Ctrl::InitFirstPath()
 
 	};
 
-	RenderingPathManager::Instance().SetLastFunction(0, lastFunc);
+	RenderingPathManager::Instance().SetLastFunction(0, lastFunc);*/
 }
 
 void Dx12Ctrl::InitWindowCreate()
 {
 	WNDCLASSEX w = {};
 	w.lpfnWndProc = (WNDPROC)WindowProcedure;
-	w.lpszClassName = _T("Holojection");
+	w.lpszClassName = _T("DirectX12");
 	w.hInstance = mWinHInstance;
-	w.hIcon = LoadIcon(w.hInstance, _T("HOLOJECTION"));
+	w.hIcon = LoadIcon(w.hInstance, _T("DirectX12"));
 	w.cbSize = sizeof(WNDCLASSEX);
 	w.hCursor = LoadCursor(NULL, IDC_ARROW);
 	w.hIcon;
@@ -224,7 +233,7 @@ void Dx12Ctrl::InitWindowCreate()
 
 	const char* name = mWindowName.data();
 	std::string strName;
-	strName. reserve(mWindowName.size());
+	strName.reserve(mWindowName.size());
 	for (auto& s : mWindowName)
 	{
 		strName.push_back(s);

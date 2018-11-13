@@ -2,7 +2,7 @@
 #include "RenderingPathObject.h"
 #include <d3d12.h>
 
-RenderingPathObject::RenderingPathObject()
+RenderingPathObject::RenderingPathObject(const std::string& pathName): mPathName(pathName), mIsActive(true)
 {
 }
 
@@ -18,6 +18,11 @@ void RenderingPathObject::SetActive(bool isActive)
 bool RenderingPathObject::IsActive() const
 {
 	return mIsActive;
+}
+
+const std::string & RenderingPathObject::GetPathName() const
+{
+	return mPathName;
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> RenderingPathObject::GetRenderTarget()

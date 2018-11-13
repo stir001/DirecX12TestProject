@@ -58,7 +58,6 @@ Image3DController::Image3DController(std::shared_ptr<ImageObject> img,
 	DirectX::XMStoreFloat4x4(&mRotaMatrix, DirectX::XMMatrixIdentity());
 	UpdateMatrix();
 	UpdateBuffer();
-	mBundleCmdList->Close();
 }
 
 Image3DController::~Image3DController()
