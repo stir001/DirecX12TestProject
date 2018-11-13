@@ -5,7 +5,7 @@
 *
 *	@author 真鍋奨一郎
 *
-*	@par 最終更新日	2018/9/15
+*	@par 最終更新日	2018/11/13
 */
 
 #include "Shader/ShaderDatasStructure.h"
@@ -44,7 +44,7 @@ public:
 	*	@brief	2D画像をロードし、3Dとして操作するコントローラーを返す
 	*	@param[in]	path	ロードする2D画像パス
 	*/
-	std::shared_ptr<Image3DController> LoadImage3D(const std::string& path);
+	std::shared_ptr<Image3DController> LoadImage3D(const std::string& path, bool isBillboard = false);
 	
 	/**
 	*	@brief	指定されたファイルパスでロードしたオブジェクトの所有権を手放す
@@ -111,6 +111,16 @@ private:
 	*	2D画像を3Dとして描画するときに使用するrootsignature
 	*/
 	std::shared_ptr<PipelineStateObject> m3DPipelinestate;
+
+	/**
+	*	2D画像を3Dのビルボードとして描画するときに使用するrootsignature
+	*/
+	std::shared_ptr<RootSignatureObject> mBillboardRootsignature;
+
+	/**
+	*	2D画像を3Dのビルボードとして描画するときに使用するpipelinestate
+	*/
+	std::shared_ptr<PipelineStateObject> mBillboardPipelineState;
 
 	/**
 	*	2D画像描画用のシェーダー情報

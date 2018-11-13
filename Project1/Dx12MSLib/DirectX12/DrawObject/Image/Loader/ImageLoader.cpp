@@ -8,9 +8,11 @@
 #include "Rootsignature/RootSignatureObject.h"
 #include "Rootsignature/Image2DRootSignature.h"
 #include "Rootsignature/Image3DRootSignature.h"
+#include "Rootsignature/BillboardRootSignature.h"
 #include "PipelineState/PipelineStateObject.h"
 #include "PipelineState/Image2DPipelineState.h"
 #include "PipelineState//Image3DPipelineState.h"
+#include "PipelineState/BillboardPipelineState.h"
 #include "Shader/ShaderCompiler.h"
 #include "Texture/TextureLoader.h"
 #include "RenderingPath/Manager/RenderingPathManager.h"
@@ -55,7 +57,7 @@ std::shared_ptr<ImageController> ImageLoader::LoadImageData(const std::string& p
 	return imgCtrl;
 }
 
-std::shared_ptr<Image3DController> ImageLoader::LoadImage3D(const std::string& path)
+std::shared_ptr<Image3DController> ImageLoader::LoadImage3D(const std::string& path, bool isBillboard)
 {
 	std::shared_ptr<Image3DController> imgCtrl;
 	auto itr = mImages.find(path);
@@ -68,8 +70,14 @@ std::shared_ptr<Image3DController> ImageLoader::LoadImage3D(const std::string& p
 	std::shared_ptr<TextureObject> tObj = TextureLoader::Instance().LoadTexture(path);
 	std::shared_ptr<ImageObject> imgObj = ImageObject::Create(tObj->GetWidth(), tObj->GetHeight(), tObj);
 	mImages[path] = imgObj;
-	imgCtrl = std::make_shared<Image3DController>(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature);
-
+	if(isBillboard)
+	{ 
+		imgCtrl = std::make_shared<Image3DController>(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, mBillboardPipelineState, mBillboardRootsignature );
+	}
+	else
+	{
+		imgCtrl = std::make_shared<Image3DController>(imgObj, Dx12Ctrl::Instance().GetDev(), mCmdList, m3DPipelinestate, m3DRootsignature);
+	}
 	return imgCtrl;
 }
 
@@ -84,6 +92,8 @@ void ImageLoader::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	mPipelinestate = std::make_shared <Image2DPipelineState>(mRootsignature, dev);
 
 	m3DPipelinestate = std::make_shared<Image3DPipelineState>(m3DRootsignature, dev);
+
+	mBillboardPipelineState = std::make_shared<BillboardPipelineState>(mBillboardRootsignature, dev);
 }
 
 void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
@@ -91,4 +101,6 @@ void ImageLoader::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 	mRootsignature = std::make_shared<Image2DRootSignature>(dev);
 	
 	m3DRootsignature = std::make_shared<Image3DRootSignature>(dev);
+
+	mBillboardRootsignature = std::make_shared<BillboardRootSignature>(dev);
 }

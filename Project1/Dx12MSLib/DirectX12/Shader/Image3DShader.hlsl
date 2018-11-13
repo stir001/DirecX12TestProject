@@ -48,5 +48,6 @@ VSoutput Image3DVS(VSinput input)
 
 float4 Image3DPS(VSoutput vsout):SV_Target
 {
+    //return float4(1, 0, 0, 1);
     return pow(colortex.Sample(texsampler, vsout.uv), vsout.gamma);
 }

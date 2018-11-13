@@ -390,6 +390,9 @@
     <ClInclude Include="DirectX12\PipelineState\Image3DPipelineState.h">
       <Filter>DirectX12\PipelineState</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\PipelineState\BillboardPipelineState.h">
+      <Filter>DirectX12\PipelineState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -666,6 +669,9 @@
       <Filter>DirectX12\Rootsignature</Filter>
     </ClCompile>
     <ClCompile Include="DirectX12\PipelineState\Image3DPipelineState.cpp">
+      <Filter>DirectX12\PipelineState</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\PipelineState\BillboardPipelineState.cpp">
       <Filter>DirectX12\PipelineState</Filter>
     </ClCompile>
   </ItemGroup>
