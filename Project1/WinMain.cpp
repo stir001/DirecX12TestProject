@@ -46,17 +46,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
 
 		//auto img = ImageLoader::Instance().LoadImageData("dice.png");
-		auto img3d = ImageLoader::Instance().LoadImage3D("dice.png", true);
+		auto imgBill = ImageLoader::Instance().LoadImage3D("dice.png", true);
 
-		auto pri = PrimitiveCreator::Instance().CreateCube(10.f, "dice.png");
+		auto priCube = PrimitiveCreator::Instance().CreateCube(10.f, "dice.png");
+		auto priSph = PrimitiveCreator::Instance().CreateSphere(30.f, 10, "unity_chan.png");
 
 
 		//fbxmodel->SetSkeletonColor(1.0f, 0.0f, 0.0f);
 		float scale = 1.0f;
 
 		DirectX::XMFLOAT3 pos = { 0,0,10 };
-		img3d->SetCenterPos(pos);
-		img3d->SetScale(0.01f);
+		imgBill->SetCenterPos(pos);
+		imgBill->SetScale(0.01f);
 		//img->SetPos(pos);
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
@@ -64,14 +65,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
 			{
 				scale += 0.1f;
-				img3d->SetScale(scale);
+				imgBill->SetScale(scale);
 				//img->SetScale(scale);
 			}
 
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
 			{
 				scale -= 0.1f;
-				img3d->SetScale(scale);
+				imgBill->SetScale(scale);
 				//img->SetScale(scale);
 			}
 			camera->DefaultMove(input);
@@ -90,10 +91,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			//fbxmodel->DrawSkeleton();
 
 			//img->Draw();
-			img3d->SetCenterPos(pos);
-			img3d->Draw();
+			//imgBill->SetCenterPos(pos);
+			//imgBill->Draw();
 			//img->Draw();
-			pri->Draw();
+			//priCube->Draw();
+			priSph->Draw();
 
 			//camera->SetTarget(pos);
 		}

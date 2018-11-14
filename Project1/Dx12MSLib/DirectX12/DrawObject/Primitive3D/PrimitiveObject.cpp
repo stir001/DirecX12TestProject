@@ -6,7 +6,6 @@ PrimitiveObject::PrimitiveObject(const std::string& name): mName(name)
 {
 }
 
-
 PrimitiveObject::~PrimitiveObject()
 {
 }

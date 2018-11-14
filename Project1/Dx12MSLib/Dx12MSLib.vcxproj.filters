@@ -393,6 +393,9 @@
     <ClInclude Include="DirectX12\PipelineState\BillboardPipelineState.h">
       <Filter>DirectX12\PipelineState</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveSphere.h">
+      <Filter>DirectX12\DrawObject\Primitive3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -673,6 +676,9 @@
     </ClCompile>
     <ClCompile Include="DirectX12\PipelineState\BillboardPipelineState.cpp">
       <Filter>DirectX12\PipelineState</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveSphere.cpp">
+      <Filter>DirectX12\DrawObject\Primitive3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -226,6 +226,7 @@
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveCube.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.h" />
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.h" />
+    <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveSphere.h" />
     <ClInclude Include="DirectX12\DrawObject\Transform3DCalculator.h" />
     <ClInclude Include="DirectX12\DrawObject\TransformMatrixCalculator.h" />
     <ClInclude Include="DirectX12\Dx12MSLib.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveCube.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveObject.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitivePlane.cpp" />
+    <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveSphere.cpp" />
     <ClCompile Include="DirectX12\DrawObject\Transform3DCalculator.cpp" />
     <ClCompile Include="DirectX12\DrawObject\TransformMatrixCalculator.cpp" />
     <ClCompile Include="DirectX12\Input\DxInput.cpp" />

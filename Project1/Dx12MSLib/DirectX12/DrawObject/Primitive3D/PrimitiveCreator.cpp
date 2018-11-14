@@ -3,6 +3,7 @@
 #include "PrimitivePlane.h"
 #include "PrimitiveController.h"
 #include "PrimitiveCube.h"
+#include "PrimitiveSphere.h"
 #include "Master/Dx12Ctrl.h"
 #include "d3dx12.h"
 #include "Camera/Dx12Camera.h"
@@ -48,10 +49,19 @@ std::shared_ptr<PrimitiveController> PrimitiveCreator::CreateCube(float length, 
 
 std::shared_ptr<PrimitiveController> PrimitiveCreator::CreateCubeNormalMap(float length, const std::string & texPath)
 {
-	auto ret = CreateCube(length, texPath);
-	ret->SetRootSignature(mNormalMapRootsignature);
-	ret->SetPipelineState(mNormalMapPipelineState);
-	return ret;
+	auto rtn = CreateCube(length, texPath);
+	rtn->SetRootSignature(mNormalMapRootsignature);
+	rtn->SetPipelineState(mNormalMapPipelineState);
+	return rtn;
+}
+
+std::shared_ptr<PrimitiveController> PrimitiveCreator::CreateSphere(float radius, unsigned int div, const std::string& texPath)
+{
+	auto tex = TextureLoader::Instance().LoadTexture(texPath);
+	auto sph = std::make_shared<PrimitiveSphere>(radius, div);
+	auto rtn = CreateController(sph);
+	rtn->SetTexture(tex);
+	return rtn;
 }
 
 void PrimitiveCreator::SetParamaters(std::shared_ptr<PrimitiveController>& ctrl)
