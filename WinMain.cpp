@@ -1,5 +1,5 @@
 #include "Dx12MSLib.h"
-#include "NormalMapCube.h"
+#include "sample/NormalMapCube.h"
 #include "PipelineState/BillboardPipelineState.h"
 #include "Rootsignature/BillboardRootSignature.h"
 
@@ -12,8 +12,8 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "btBulletDynamicsCommon.h"
-#include "BulletlibLink.h"
+#include "bulletlib/src/btBulletDynamicsCommon.h"
+#include "bulletlib/src/BulletlibLink.h"
 
 using namespace DirectX;
 
@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	//Direct3D12ÇÃèâä˙âª
 	Dx12CtrlInit(hInst);
-	ShaderCompiler::Instance().SetShaderDirPath("DirectX12/Shaders/");
+	//ShaderCompiler::Instance().SetShaderDirPath("DirectX12/Shaders/");
 
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
