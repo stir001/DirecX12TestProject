@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project1", "Project1\Project1.vcxproj", "{709C6AD0-4034-4B95-AE88-FBF401484159}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dx12MSLib", "Project1\Dx12MSLib\Dx12MSLib.vcxproj", "{4F766985-FEB5-46C0-A31E-6033294EB592}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dx12MSLib", "..\..\DirectX12Library\Dx12MSLib\Dx12MSLib.vcxproj", "{4F766985-FEB5-46C0-A31E-6033294EB592}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
