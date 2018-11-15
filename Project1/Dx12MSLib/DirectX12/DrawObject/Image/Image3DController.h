@@ -5,10 +5,10 @@
 *
 *	@author 真鍋奨一郎
 *
-*	@par 最終更新日	2018/9/13
+*	@par 最終更新日	2018/11/15
 */
 
-#include "DrawObject/DrawObjectController.h"
+#include "DrawObject/DrawController3D.h"
 #include "ImageControllerStructure.h"
 #include <DirectXMath.h>
 
@@ -24,7 +24,7 @@ class Dx12DescriptorHeapObject;
 *	@brief 3D空間に存在するImageを操作するクラス
 */
 class Image3DController :
-	public DrawObjectController
+	public DrawController3D
 {
 public:
 	/**
@@ -54,7 +54,7 @@ public:
 	*	@brief	画像を平行移動させる
 	*	@param[in]	offset	平行移動成分
 	*/
-	void AddCenterPos(const DirectX::XMFLOAT3& offset);
+	void AddPosition(const DirectX::XMFLOAT3& offset);
 
 	/**
 	*	@brief	画像をすべての成分を追加で等倍に拡大縮小させる
@@ -108,13 +108,13 @@ public:
 	*	@param[in]	y		平行移動させるy座標
 	*	@param[in]	z		平行移動させるz座標
 	*/
-	void SetCenterPos(const float x, const float y, const float z);
+	void SetPosition(const float x, const float y, const float z);
 
 	/**
 	*	@brief	任意の座標へ画像の中心を平行移動させる
 	*	@param[in]	setPos	平行移動させる座標
 	*/
-	void SetCenterPos(const DirectX::XMFLOAT3& setPos);
+	void SetPosition(const DirectX::XMFLOAT3& setPos);
 
 	/**
 	*	@brief	画像の拡大率を等倍の倍率で設定する
@@ -252,11 +252,6 @@ private:
 	*	アフィン行列用のバッファ
 	*/
 	std::shared_ptr<ConstantBufferObject> mImageMatrixBuffer;
-
-	/**
-	*	カメラ行列用のバッファ
-	*/
-	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
 	
 	/**
 	*	画像内の切り抜きローカル座標矩形

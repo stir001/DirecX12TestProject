@@ -2,7 +2,7 @@
 #include "FbxRootSignature.h"
 #include "Shader/ShaderCompiler.h"
 
-const std::string FBX_SHADER_PATH = SHADERDIR_PATH + "FbxShader.hlsl";
+const std::string FBX_SHADER_PATH = ShaderCompiler::Instance().GetShaderDirPath() + "FbxShader.hlsl";
 const std::string FBX_VERTEXSHADER_NAME = "FbxVS";
 const std::string FBX_PIXCELSHADER_NAME = "FbxPS";
 const std::string FBX_GEOMETRYSHADER_NAME = "";

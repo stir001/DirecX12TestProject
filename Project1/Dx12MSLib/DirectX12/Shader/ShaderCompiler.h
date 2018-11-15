@@ -6,8 +6,6 @@
 #include <vector>
 #include <list>
 
-const static std::string SHADERDIR_PATH = "Dx12MSLib/DirectX12/Shader/";
-
 class ShaderCompiler
 {
 public:
@@ -58,6 +56,11 @@ public:
 	void AddDefineMacro(const std::string& name, const std::string& def);
 
 	void SetShaderModel(const std::string& shaderModel);
+
+	void SetShaderDirPath(std::string shaderDirPath);
+
+	const std::string& GetShaderDirPath() const;
+
 private:
 	ShaderCompiler();
 	ShaderCompiler(const ShaderCompiler&);
@@ -75,5 +78,6 @@ private:
 	std::vector<D3D_SHADER_MACRO> mMacros;
 	std::list<MacroData> mStrData;
 	std::string mShaderModel;
+	std::string mShaderDirPath;
 };
 

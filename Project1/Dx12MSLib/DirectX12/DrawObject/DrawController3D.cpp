@@ -3,6 +3,9 @@
 #include "Buffer/ConstantBufferObject.h"
 #include "Rootsignature/SkeletonRootSignature.h"
 #include "PipelineState/SkeletonPipelineState.h"
+#include "Camera/CameraHolder.h"
+#include "Camera/Dx12Camera.h"
+#include "Master/Dx12Ctrl.h"
 
 using namespace DirectX;
 
@@ -20,12 +23,18 @@ DrawController3D::DrawController3D(const std::string& modelName, const Microsoft
 	mModelMatrixBuffer = std::make_shared<ConstantBufferObject>(cbufferName, dev, sizeof(mModelMatrix), 1);
 	cbufferName = modelName + "SkeltonColorBuffer";
 	mSkeletonColorConstantBuffer = std::make_shared<ConstantBufferObject>(cbufferName, dev, sizeof(mSkeletonColor), 1);
+	mCameraBuffer = Dx12Ctrl::Instance().GetCamera()->GetCameraBuffer();
 	UpdateSkeltonColor();
 	UpdateMatrix();
 }
 
 DrawController3D::~DrawController3D()
 {
+}
+
+void DrawController3D::SetCameraBuffer(std::shared_ptr<ConstantBufferObject> cameraBuffer)
+{
+	mCameraBuffer = cameraBuffer;
 }
 
 void DrawController3D::SetPositon(const DirectX::XMFLOAT3& pos)

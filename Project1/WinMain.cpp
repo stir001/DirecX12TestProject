@@ -23,6 +23,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	//Direct3D12‚Ì‰Šú‰»
 	Dx12CtrlInit(hInst);
+	ShaderCompiler::Instance().SetShaderDirPath("DirectX12/Shaders/");
 
 	auto& camera = Dx12Ctrl::Instance().GetCamera();
 	DxInput input;
@@ -56,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		float scale = 1.0f;
 
 		DirectX::XMFLOAT3 pos = { 0,0,10 };
-		imgBill->SetCenterPos(pos);
+		imgBill->SetPosition(pos);
 		imgBill->SetScale(0.01f);
 		//img->SetPos(pos);
 		while (ProcessMessage()) {
@@ -92,10 +93,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 			//img->Draw();
 			//imgBill->SetCenterPos(pos);
-			//imgBill->Draw();
+			imgBill->Draw();
 			//img->Draw();
 			//priCube->Draw();
-			priSph->Draw();
+			//priSph->Draw();
 
 			//camera->SetTarget(pos);
 		}

@@ -52,7 +52,6 @@ protected:
 	std::shared_ptr<VertexBufferObject> mInstanceVertexBuffer;
 	std::shared_ptr<Dx12DescriptorHeapObject> mDescHeap;
 	std::shared_ptr<ConstantBufferObject> mLightBuffer;
-	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
 	std::shared_ptr<TextureObject> mTexObj;
 	void (PrimitiveController::*mInstanceUpdate)();
 	void (PrimitiveController::*mDescHeapCreate)();

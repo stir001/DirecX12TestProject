@@ -396,6 +396,9 @@
     <ClInclude Include="DirectX12\DrawObject\Primitive3D\PrimitiveSphere.h">
       <Filter>DirectX12\DrawObject\Primitive3D</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX12\Camera\CameraHolder.h">
+      <Filter>DirectX12\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -679,6 +682,9 @@
     </ClCompile>
     <ClCompile Include="DirectX12\DrawObject\Primitive3D\PrimitiveSphere.cpp">
       <Filter>DirectX12\DrawObject\Primitive3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX12\Camera\CameraHolder.cpp">
+      <Filter>DirectX12\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

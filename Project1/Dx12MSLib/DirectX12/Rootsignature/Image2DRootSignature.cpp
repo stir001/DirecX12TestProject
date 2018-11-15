@@ -5,7 +5,7 @@
 Image2DRootSignature::Image2DRootSignature(const Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
 	mShader = ShaderCompiler::Instance().CompileShader(
-		SHADERDIR_PATH + "ImageShader.hlsl",
+		ShaderCompiler::Instance().GetShaderDirPath() + "ImageShader.hlsl",
 		"ImageVS",
 		"ImagePS",
 		"",

@@ -20,7 +20,7 @@ PrimitiveController::PrimitiveController(std::shared_ptr<PrimitiveObject> primit
 	, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList
 	, std::shared_ptr<Dx12Camera>& camera)
 	: DrawController3D(primitive->GetName(),dev, cmdList)
-	, mPrimitive(primitive), mCameraBuffer(camera->GetCameraBuffer())
+	, mPrimitive(primitive)
 	, mInstanceUpdate(&PrimitiveController::UpdateInstanceVertexBuffer)
 {
 	const auto& indices = primitive->GetIndices();

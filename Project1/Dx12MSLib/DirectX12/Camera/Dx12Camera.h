@@ -6,12 +6,13 @@
 *
 *	@author 真鍋奨一郎
 *
-*	@par 最終更新日	2018/9/11
+*	@par 最終更新日	2018/11/15
 */
 
 #include <DirectXMath.h>
 #include <wrl.h	>
 #include <memory>
+#include <d3d12.h>
 
 class ConstantBufferObject;
 class DxInput;
@@ -117,14 +118,31 @@ public:
 	void TurnUpDown(float deg);
 
 	/**
-	*	ViewPortを設定する	未実装
+	*	@brief ViewPortを設定する 描画する画面内の大きさ
+	*	@param width	描画範囲の横幅
+	*	@param height	描画範囲の縦幅
+	*	@param topLX	描画範囲の左上X座標
+	*	@param topLY	描画範囲の左上Y座標
+	*	@param minDepth	深度の最小値
+	*	@param maxDepth	深度の最大値
 	*/
-	void SetViewPort();
+	void SetViewPort(float width, float height,
+		float topLX = 0.0f, float topLY = 0.0f,
+		float minDepth = 0.0f, float maxDepth = 1.0f);
 
 	/**
-	*	ScisorRectを設定する	未実装
+	*	@brief ScisorRectを設定する ViewPort内の切り抜き矩形
+	*	@param right	切り抜き矩形の右のX座標
+	*	@param bottom	切り抜き矩形の下Y座標
+	*	@param left		切り抜き矩形の左X座標
+	*	@param top		切り抜き矩形の上Y座標
 	*/
-	void SetScisorRect();
+	void SetScisorRect(int right, int bottom,
+		int left = 0.0f, int top = 0.0f );
+
+	D3D12_VIEWPORT GetViewPort() const;
+
+	D3D12_RECT GetScisorRect() const;
 
 	/**
 	*	@brief	あらかじめ提供されている移動でカメラを移動させる
@@ -211,6 +229,16 @@ private:
 	*	ConstantBufferのbyte単位のサイズ
 	*/
 	int mBuffersize;
+
+	/**
+	*	
+	*/
+	D3D12_VIEWPORT mViewPort;
+
+	/**
+	*	
+	*/
+	D3D12_RECT mScisorRect;
 
 	/**
 	*	@brief	カメラに回転行列を適応する

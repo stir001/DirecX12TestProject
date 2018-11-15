@@ -28,6 +28,8 @@ PMDController::PMDController(std::shared_ptr<PMDModel>& model, std::shared_ptr<D
 	mBoneMatrixBuffer->WriteBuffer(&mBoneMatrix[0], static_cast<unsigned int>(sizeof(DirectX::XMMATRIX) * mModel->mBoneDatas.size()));
 	mVmdPlayer = std::make_shared<VMDPlayer>(mModel->mBoneDatas, mModel->mBoneNode, mBoneMatrix,mBoneMatrixBuffer);
 
+	//mCameraBuffer = Dx12Ctrl::Instance().GetCamera()->GetCameraBuffer();
+
 	CreateDescriptorHeap(dev, name);
 }
 
@@ -138,7 +140,7 @@ void PMDController::CreateDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12Devi
 	{
 		buffers.push_back(tex->GetShaderResource());
 	}
-	buffers.push_back(Dx12Ctrl::Instance().GetCamera()->GetCameraBuffer());
+	buffers.push_back(mCameraBuffer);
 	buffers.push_back(mDirLight->GetLightBuffer());
 	buffers.push_back(mBoneMatrixBuffer);
 	buffers.push_back(mModelMatrixBuffer);

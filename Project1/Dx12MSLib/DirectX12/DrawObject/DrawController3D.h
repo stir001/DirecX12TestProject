@@ -5,7 +5,7 @@
 *
 *	@author 真鍋奨一郎
 *
-*	@par 最終更新日	2018/10/30
+*	@par 最終更新日	2018/11/15
 */
 #include "DrawObjectController.h"
 #include <DirectXMath.h>
@@ -32,6 +32,12 @@ public:
 	DrawController3D(const std::string& modelName, const Microsoft::WRL::ComPtr<ID3D12Device>& dev,
 		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList);
 	virtual ~DrawController3D();
+
+	/**
+	*	@brief カメラバッファを設定する
+	*	@param cameraBuffer	カメラ情報保持用バッファ
+	*/
+	virtual void SetCameraBuffer(std::shared_ptr<ConstantBufferObject> cameraBuffer);
 
 	/**
 	*	@brief	基準点を指定の場所に平行移動させる
@@ -155,5 +161,10 @@ protected:
 	*	骨用のDescriptorHeap
 	*/
 	std::shared_ptr<Dx12DescriptorHeapObject> mSkeletonHeap;
+
+	/**
+	*	カメラ用コンスタントバッファ
+	*/
+	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
 };
 

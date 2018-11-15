@@ -15,7 +15,7 @@ using Microsoft::WRL::ComPtr;
 
 ShaderCompiler* ShaderCompiler::mInstance = nullptr;
 
-ShaderCompiler::ShaderCompiler() : mShaderModel("5_0")
+ShaderCompiler::ShaderCompiler() : mShaderModel("5_0"), mShaderDirPath("Dx12MSLib/DirectX12/Shader/")
 {
 }
 
@@ -165,4 +165,14 @@ void ShaderCompiler::AddDefineMacro(const std::string & name, const std::string 
 void ShaderCompiler::SetShaderModel(const std::string& shaderModel)
 {
 	mShaderModel = shaderModel;
+}
+
+void ShaderCompiler::SetShaderDirPath(std::string shaderDirPath)
+{
+	mShaderDirPath = shaderDirPath;
+}
+
+const std::string & ShaderCompiler::GetShaderDirPath() const
+{
+	return mShaderDirPath;
 }

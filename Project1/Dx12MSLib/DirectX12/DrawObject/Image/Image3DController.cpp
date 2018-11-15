@@ -22,7 +22,7 @@ Image3DController::Image3DController(std::shared_ptr<ImageObject> img,
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& cmdList,
 	std::shared_ptr<PipelineStateObject>& pipelinestate,
 	std::shared_ptr<RootSignatureObject>& rootsignature)
-	:DrawObjectController(img->GetTextureName() + "Bundle",dev, cmdList),
+	:DrawController3D(img->GetTextureName() + "Bundle",dev, cmdList),
 	mImgObj(img)
 	, mVertex{ { { 0.f, img->GetImageSize().y, 0.f ,1.f}, {0.f,0.f,-1.f,0.f}, { 0.f, 0.f } , img->GetGamma() }/* v1 */,
 { { img->GetImageSize().x,img->GetImageSize().y, 0.f ,1.f}, { 0.f,0.f,-1.f,0.f }, { 1.f, 0.f }, img->GetGamma() }/* v2 */
@@ -35,7 +35,7 @@ Image3DController::Image3DController(std::shared_ptr<ImageObject> img,
 	mPipelinestate = pipelinestate;
 	mRootsignature = rootsignature;
 
-	mCameraBuffer = Dx12Ctrl::Instance().GetCamera()->GetCameraBuffer();
+	//mCameraBuffer = Dx12Ctrl::Instance().GetCamera()->GetCameraBuffer();
 	std::string name = mImgObj->GetTextureName();
 
 	name += "3DImageVertexBuffer";
@@ -73,7 +73,7 @@ void Image3DController::AddCenterPos(const float x, const float y, const float z
 	UpdateBuffer();
 }
 
-void Image3DController::AddCenterPos(const DirectX::XMFLOAT3& offset)
+void Image3DController::AddPosition(const DirectX::XMFLOAT3& offset)
 {
 	AddCenterPos(offset.x, offset.y, offset.z);
 }
@@ -128,7 +128,7 @@ void Image3DController::SetRect(const Rect& rc)
 	SetRect(rc.GetCenter(), rc.GetWidth(), rc.GetHeight());
 }
 
-void Image3DController::SetCenterPos(const float x, const float y, const float z)
+void Image3DController::SetPosition(const float x, const float y, const float z)
 {
 	mCenter.x = x;
 	mCenter.y = y;
@@ -138,9 +138,9 @@ void Image3DController::SetCenterPos(const float x, const float y, const float z
 	UpdateBuffer();
 }
 
-void Image3DController::SetCenterPos(const DirectX::XMFLOAT3& setPos)
+void Image3DController::SetPosition(const DirectX::XMFLOAT3& setPos)
 {
-	SetCenterPos(setPos.x, setPos.y, setPos.z);
+	SetPosition(setPos.x, setPos.y, setPos.z);
 }
 
 void Image3DController::SetScale(const float s)

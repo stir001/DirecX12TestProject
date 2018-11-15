@@ -5,7 +5,7 @@
 *
 *	@author 真鍋奨一郎
 *
-*	@par 最終更新日	2018/9/20
+*	@par 最終更新日	2018/11/15
 */
 #include "DrawObject/DrawController3D.h"
 #include "PMDDataStructure.h"

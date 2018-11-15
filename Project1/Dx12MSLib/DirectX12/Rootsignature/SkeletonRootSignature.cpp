@@ -4,7 +4,7 @@
 
 SkeletonRootSignature::SkeletonRootSignature(const Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mShader = ShaderCompiler::Instance().CompileShader(SHADERDIR_PATH + "SkeletonShader.hlsl",
+	mShader = ShaderCompiler::Instance().CompileShader(ShaderCompiler::Instance().GetShaderDirPath() + "SkeletonShader.hlsl",
 		"SklVS",
 		"SklPS",
 		"",

@@ -5,7 +5,7 @@
 BillboardRootSignature::BillboardRootSignature(const Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
 	mShader = ShaderCompiler::Instance().CompileShader(
-		SHADERDIR_PATH + "Billboard.hlsl",
+		ShaderCompiler::Instance().GetShaderDirPath() + "Billboard.hlsl",
 		"BillboardVS",
 		"BillboardPS",
 		"",

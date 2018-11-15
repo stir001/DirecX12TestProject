@@ -57,7 +57,6 @@ private:
 	std::shared_ptr<Fbx::FbxModel> mModel;
 
 	std::shared_ptr<ConstantBufferObject> mDirLightBuffer;
-	std::shared_ptr<ConstantBufferObject> mCameraBuffer;
 
 	std::shared_ptr<Dx12DescriptorHeapObject> mDescHeap;
 	std::vector<std::shared_ptr<ConstantBufferObject>> mAddConstantBuffers;

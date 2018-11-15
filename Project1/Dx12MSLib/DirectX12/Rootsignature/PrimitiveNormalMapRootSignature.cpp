@@ -4,7 +4,7 @@
 
 PrimitiveNormalMapRootSignature::PrimitiveNormalMapRootSignature(const Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
-	mShader = ShaderCompiler::Instance().CompileShader(SHADERDIR_PATH + "NormalmapShader.hlsl", "NormalMapVS", "NormalMapPS", "NormalMapGS", "", "", true);
+	mShader = ShaderCompiler::Instance().CompileShader(ShaderCompiler::Instance().GetShaderDirPath() + "NormalmapShader.hlsl", "NormalMapVS", "NormalMapPS", "NormalMapGS", "", "", true);
 	CreateRootSignature("NormalMapRootSignature",mShader.rootSignature.Get(), dev);
 }
 

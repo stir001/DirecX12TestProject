@@ -21,7 +21,7 @@ Dx12Camera::Dx12Camera(int wWidth,int wHeight):mWidth(wWidth),mHeight(wHeight)
 	DirectX::XMStoreFloat4x4(&mElement.world, DirectX::XMMatrixIdentity());
 	mWorldRotation = mElement.world;
 
-	mCameraBuffer.reset(new ConstantBufferObject("CameraConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(mElement), 1));
+	mCameraBuffer = std::make_shared<ConstantBufferObject>("CameraConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(mElement), 1);
 
 	UpdateBuffer();
 }
@@ -42,7 +42,7 @@ Dx12Camera::Dx12Camera(int wWidth, int wHeight, DirectX::XMFLOAT3& eye, DirectX:
 	mWorldRotation = mElement.world;
 	UpdateElement();
 
-	mCameraBuffer.reset(new ConstantBufferObject("CameraConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(mElement), 1));
+	mCameraBuffer = std::make_shared<ConstantBufferObject>("CameraConstantBuffer", Dx12Ctrl::Instance().GetDev(),sizeof(mElement), 1);
 
 	UpdateBuffer();
 }
@@ -180,6 +180,29 @@ void Dx12Camera::TurnUpDown(float deg)
 
 	UpdateElement();
 	UpdateBuffer();
+}
+
+void Dx12Camera::SetViewPort(float width, float height,
+	float topLX, float topLY,
+	float minDepth, float maxDepth)
+{
+	mViewPort = { topLX, topLY, width, height, minDepth, maxDepth };
+}
+
+void Dx12Camera::SetScisorRect(int right, int bottom,
+	int left, int top)
+{
+	mScisorRect = { left, top, right, bottom };
+}
+
+D3D12_VIEWPORT Dx12Camera::GetViewPort() const
+{
+	return mViewPort;
+}
+
+D3D12_RECT Dx12Camera::GetScisorRect() const
+{
+	return mScisorRect;
 }
 
 void Dx12Camera::DefaultMove(const DxInput& input)

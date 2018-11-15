@@ -67,7 +67,7 @@ void Primitive2DManager::CreatePipelineState(Microsoft::WRL::ComPtr<ID3D12Device
 void Primitive2DManager::CreateRootsignature(Microsoft::WRL::ComPtr<ID3D12Device>& dev)
 {
 	mShader = ShaderCompiler::Instance().CompileShader(
-		SHADERDIR_PATH + "Primitive2D.hlsl",
+		ShaderCompiler::Instance().GetShaderDirPath() + "Primitive2D.hlsl",
 		"Primitive2DVS",
 		"Primitive2DPS",
 		"",
