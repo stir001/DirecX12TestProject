@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	Dx12CtrlInit(hInst);
 	//ShaderCompiler::Instance().SetShaderDirPath("DirectX12/Shaders/");
 
-	auto& camera = Dx12Ctrl::Instance().GetCamera();
+	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
 	DxInput input;
 	{
 		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_MMD.FBX");//テキストベース
@@ -54,25 +54,25 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 
 		//fbxmodel->SetSkeletonColor(1.0f, 0.0f, 0.0f);
-		float scale = 1.0f;
+		float scale = 0.01f;
 
 		DirectX::XMFLOAT3 pos = { 0,0,10 };
-		imgBill->SetPosition(pos);
-		imgBill->SetScale(0.01f);
+		//imgBill->SetPosition(pos);
+		imgBill->SetScale(scale);
 		//img->SetPos(pos);
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 			//fbxmodel->AddRotaY(0.1f);
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
 			{
-				scale += 0.1f;
+				scale += 0.001f;
 				imgBill->SetScale(scale);
 				//img->SetScale(scale);
 			}
 
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
 			{
-				scale -= 0.1f;
+				scale -= 0.001f;
 				imgBill->SetScale(scale);
 				//img->SetScale(scale);
 			}
@@ -93,9 +93,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 			//img->Draw();
 			//imgBill->SetCenterPos(pos);
-			imgBill->Draw();
+			//imgBill->Draw();
 			//img->Draw();
-			//priCube->Draw();
+			priCube->Draw();
 			//priSph->Draw();
 
 			//camera->SetTarget(pos);
