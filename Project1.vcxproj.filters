@@ -5,12 +5,14 @@
     <ClCompile Include="sample\NormalMapCube.cpp">
       <Filter>Sample\NormalMap</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
       <Filter>Sample\NormalMap</Filter>
     </ClInclude>
     <ClInclude Include="bulletlib\src\BulletlibLink.h" />
+    <ClInclude Include="PhysicsSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
