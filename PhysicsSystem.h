@@ -1,5 +1,5 @@
 #pragma once
-#include "bulletlib/src/btBulletDynamicsCommon.h"
+#include <btBulletDynamicsCommon.h>
 #include <memory>
 
 class PhysicsSystem

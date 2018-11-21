@@ -75,12 +75,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectX12Library\DirectX12;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectX12Library\DirectX12;$(SolutionDir)DirectX12TestProject\sample;$(BULLET_DIR)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;Dx12MSLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)DirecX12TestProject\bulletlib\x86\debug;$(DX12LIB_DIR)\x86\debug;%(AdditionalLibraryDirectories);C:\Users\JBAba\Documents\bullet\bullet3-master\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BULLET_DIR)\x86\debug;$(DX12LIB_DIR)\x86\debug;%(AdditionalLibraryDirectories);C:\Users\JBAba\Documents\bullet\bullet3-master\bin</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -88,14 +88,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;C:\Users\JBAba\Documents\bullet\bullet3-master\src;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories);$(BULLET_DIR)\src;$(BULLET_DIR)\src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PreprocessorDefinitions>BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;Dx12MSLib.lib;libfbxsdk-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DX12LIB_DIR)\x64\debug;$(FBXSDK_DIR)lib\vs2015\x64\debug;%(AdditionalLibraryDirectories);C:\Users\JBAba\Documents\bullet\bullet3-master\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DX12LIB_DIR)\x64\debug;$(FBXSDK_DIR)lib\vs2015\x64\debug;%(AdditionalLibraryDirectories);$(BULLET_DIR)\x64\debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -106,14 +106,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectX12Library\DirectX12;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectX12Library\DirectX12;$(SolutionDir)DirectX12TestProject\sample;$(BULLET_DIR)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;Dx12MSLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)DirecX12TestProject\bulletlib\x86\release;$(DX12LIB_DIR)\x86\release;%(AdditionalLibraryDirectories);C:\Users\JBAba\Documents\bullet\bullet3-master\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BULLET_DIR)\x86\release;$(DX12LIB_DIR)\x86\release;%(AdditionalLibraryDirectories);C:\Users\JBAba\Documents\bullet\bullet3-master\bin</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -123,7 +123,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories);$(BULLET_DIR)\src;$(BULLET_DIR)\src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -131,7 +131,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;Dx12MSLib.lib;libfbxsdk-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)DirecX12TestProject\bulletlib\x64\release;$(DX12LIB_DIR)\x64\release;$(FBXSDK_DIR)lib\vs2015\x64\release;%(AdditionalLibraryDirectories);C:\Users\JBAba\Documents\bullet\bullet3-master\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BULLET_DIR)\x64\release;$(DX12LIB_DIR)\x64\release;$(FBXSDK_DIR)lib\vs2015\x64\release;%(AdditionalLibraryDirectories);C:\Users\JBAba\Documents\bullet\bullet3-master\bin</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
