@@ -8,10 +8,10 @@ public:
 	PhysicsSystem();
 	~PhysicsSystem();
 private:
-	btBroadphaseInterface*					mBroadphase;
-	btDefaultCollisionConfiguration*		mCollisionConfiguration;
-	btCollisionDispatcher*					mDispatcher;
-	btSequentialImpulseConstraintSolver*	mSolver;
-	btDiscreteDynamicsWorld*				mWorld;
+	std::shared_ptr<btBroadphaseInterface>					mBroadphase;
+	std::shared_ptr<btDefaultCollisionConfiguration>		mCollisionConfiguration;
+	std::shared_ptr<btCollisionDispatcher>					mDispatcher;
+	std::shared_ptr<btSequentialImpulseConstraintSolver>	mSolver;
+	std::shared_ptr<btDiscreteDynamicsWorld>				mWorld;
 };
 
