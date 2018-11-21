@@ -88,7 +88,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories);$(BULLET_DIR)\src;$(BULLET_DIR)\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PreprocessorDefinitions>BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
