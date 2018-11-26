@@ -1,4 +1,12 @@
 #pragma once
+/**
+*	@file	BulletDebugDrawDx.h
+*	@brief	bulletのデバッグ描画用クラス定義
+*
+*	@author 真鍋奨一郎
+*
+*	@par 最終更新日	2018/11/26
+*/
 #include <btBulletDynamicsCommon.h>
 #include <memory>
 #include <vector>
@@ -13,6 +21,10 @@ class IndexBufferObject;
 class ConstantBufferObject;
 class Dx12DescriptorHeapObject;
 
+/**
+*	@class BulletDebugDrawDx
+*	@brief デバッグ描画を定義する
+*/
 class BulletDebugDrawDx : public btIDebugDraw
 {
 public:

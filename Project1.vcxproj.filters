@@ -11,14 +11,20 @@
     <ClCompile Include="bullet\System\PhysicsSystem.cpp">
       <Filter>Bullet\System</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\Collider\SphereCollider.cpp">
-      <Filter>Bullet\Collider</Filter>
+    <ClCompile Include="bullet\RigidBody\SphereRigidBody.cpp">
+      <Filter>Bullet\RigidBody</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\Collider\CapsuleCollider.cpp">
-      <Filter>Bullet\Collider</Filter>
+    <ClCompile Include="bullet\RigidBody\BulletRigidBody.cpp">
+      <Filter>Bullet\RigidBody</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\Collider\Collider.cpp">
-      <Filter>Bullet\Collider</Filter>
+    <ClCompile Include="bullet\RigidBody\CapsuleRigidBody.cpp">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\RigidBody\PlaneRigidBody.cpp">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\RigidBody\BoxRigidBody.cpp">
+      <Filter>Bullet\RigidBody</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -32,14 +38,20 @@
     <ClInclude Include="bullet\System\BulletDebugDrawDx.h">
       <Filter>Bullet\System</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\Collider\SphereCollider.h">
-      <Filter>Bullet\Collider</Filter>
+    <ClInclude Include="bullet\RigidBody\CapsuleRigidBody.h">
+      <Filter>Bullet\RigidBody</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\Collider\CapsuleCollider.h">
-      <Filter>Bullet\Collider</Filter>
+    <ClInclude Include="bullet\RigidBody\SphereRigidBody.h">
+      <Filter>Bullet\RigidBody</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\Collider\Collider.h">
-      <Filter>Bullet\Collider</Filter>
+    <ClInclude Include="bullet\RigidBody\BulletRigidBody.h">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\RigidBody\PlaneRigidBody.h">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\RigidBody\BoxRigidBody.h">
+      <Filter>Bullet\RigidBody</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -58,8 +70,8 @@
     <Filter Include="Bullet\System">
       <UniqueIdentifier>{0fb669a7-1341-4205-be24-f2f1adc422de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Bullet\Collider">
-      <UniqueIdentifier>{b1e3c140-c807-4e3c-ba5c-8a8a9ed1378d}</UniqueIdentifier>
+    <Filter Include="Bullet\RigidBody">
+      <UniqueIdentifier>{fe988e8b-d72c-466e-9203-de277689c497}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -14,8 +14,10 @@
 #include <btBulletDynamicsCommon.h>
 #include "bullet/System/PhysicsSystem.h"
 #include "bullet/System/BulletDebugDrawDx.h"
-#include "bullet/Collider/SphereCollider.h"
-#include "bullet/Collider/CapsuleCollider.h"
+#include "bullet/RigidBody/SphereRigidBody.h"
+#include "bullet/RigidBody/CapsuleRigidBody.h"
+#include "bullet/RigidBody/PlaneRigidBody.h"
+#include "bullet/RigidBody/BoxRigidBody.h"
 
 using namespace DirectX;
 
@@ -31,11 +33,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DxInput input;
 	{
 		auto sys = std::make_shared<PhysicsSystem>();
-		auto colider = std::make_shared<SphereCollider>(1.0f);
-		auto capCol = std::make_shared<CapsuleCollider>(1.0f, 3.0f);
+		auto colider = std::make_shared<SphereRigidBody>(1.0f, DirectX::XMFLOAT3(4,0,0));
+		auto capCol = std::make_shared<CapsuleRigidBody>(1.0f, 3.0f, DirectX::XMFLOAT3(-4, 0, 0));
+		auto planeRigid = std::make_shared<PlaneRigidBody>(1.0f);
+		auto boxRigid = std::make_shared<BoxRigidBody>(1.f, DirectX::XMFLOAT3(0, 0, -4));
 
 		sys->AddRigidBody(colider);
 		sys->AddRigidBody(capCol);
+		sys->AddRigidBody(planeRigid);
+		sys->AddRigidBody(boxRigid);
 
 		auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 20.f, 20.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
 		priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
@@ -72,6 +78,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		}
 		sys->RemoveRigidBody(colider);
 		sys->RemoveRigidBody(capCol);
+		sys->RemoveRigidBody(planeRigid);
+		sys->RemoveRigidBody(boxRigid);
 		//sys.reset();
 	}
 

@@ -1,7 +1,7 @@
 #include "PhysicsSystem.h"
 #include "BulletDebugDrawDx.h"
 #include "Master/Dx12Ctrl.h"
-#include "bullet/Collider/Collider.h"
+#include "bullet/RigidBody/BulletRigidBody.h"
 #include <btBulletDynamicsCommon.h>
 #include <ctime>
 
@@ -23,9 +23,9 @@ PhysicsSystem::PhysicsSystem()
 	//d—Í‚ðÝ’è‚·‚é
 	mWorld->setGravity(btVector3(0.f, -9.8f, 0.f));	
 
-	mDebugDrawer = new BulletDebugDrawDx(Dx12Ctrl::Instance().GetDev());
+	mDebugDrawer = std::make_shared<BulletDebugDrawDx>(Dx12Ctrl::Instance().GetDev());
 	mDebugDrawer->setDebugMode(btIDebugDraw::DebugDrawModes::DBG_DrawWireframe);
-	mWorld->setDebugDrawer(mDebugDrawer);
+	mWorld->setDebugDrawer(mDebugDrawer.get());
 
 	mTime = clock();
 }
@@ -46,10 +46,9 @@ void PhysicsSystem::ClearDebugDraw()
 	mDebugDrawer->ClearLines();
 }
 
-void PhysicsSystem::AddRigidBody(std::shared_ptr<Collider> collider)
+void PhysicsSystem::AddRigidBody(std::shared_ptr<BulletRigidBody> collider)
 {
 	mWorld->addRigidBody(collider->GetRigidBody().get());
-	collider->SetPhysicsSystem(shared_from_this());
 }
 
 void PhysicsSystem::Simulation()
@@ -59,7 +58,7 @@ void PhysicsSystem::Simulation()
 	mTime = currentTime;
 }
 
-void PhysicsSystem::RemoveRigidBody(std::shared_ptr<Collider> collider)
+void PhysicsSystem::RemoveRigidBody(std::shared_ptr<BulletRigidBody> collider)
 {
 	mWorld->removeRigidBody(collider->GetRigidBody().get());
 }

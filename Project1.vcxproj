@@ -149,9 +149,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bullet\Collider\CapsuleCollider.cpp" />
-    <ClCompile Include="bullet\Collider\Collider.cpp" />
-    <ClCompile Include="bullet\Collider\SphereCollider.cpp" />
+    <ClCompile Include="bullet\RigidBody\BoxRigidBody.cpp" />
+    <ClCompile Include="bullet\RigidBody\BulletRigidBody.cpp" />
+    <ClCompile Include="bullet\RigidBody\CapsuleRigidBody.cpp" />
+    <ClCompile Include="bullet\RigidBody\PlaneRigidBody.cpp" />
+    <ClCompile Include="bullet\RigidBody\SphereRigidBody.cpp" />
     <ClCompile Include="bullet\System\BulletDebugDrawDx.cpp" />
     <ClCompile Include="bullet\System\PhysicsSystem.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
@@ -159,9 +161,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bulletlib\src\BulletlibLink.h" />
-    <ClInclude Include="bullet\Collider\CapsuleCollider.h" />
-    <ClInclude Include="bullet\Collider\Collider.h" />
-    <ClInclude Include="bullet\Collider\SphereCollider.h" />
+    <ClInclude Include="bullet\RigidBody\BoxRigidBody.h" />
+    <ClInclude Include="bullet\RigidBody\BulletRigidBody.h" />
+    <ClInclude Include="bullet\RigidBody\CapsuleRigidBody.h" />
+    <ClInclude Include="bullet\RigidBody\PlaneRigidBody.h" />
+    <ClInclude Include="bullet\RigidBody\SphereRigidBody.h" />
     <ClInclude Include="bullet\System\BulletDebugDrawDx.h" />
     <ClInclude Include="bullet\System\PhysicsSystem.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
