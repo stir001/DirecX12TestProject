@@ -68,7 +68,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -76,6 +87,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)DirectX12Library\DirectX12;$(SolutionDir)DirectX12TestProject\sample;$(BULLET_DIR)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -90,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -107,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)DirectX12Library\DirectX12;$(SolutionDir)DirectX12TestProject\sample;$(BULLET_DIR)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories);$(BULLET_DIR)\src;$(BULLET_DIR)\src</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,13 +149,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PhysicsSystem.cpp" />
+    <ClCompile Include="bullet\Collider\CapsuleCollider.cpp" />
+    <ClCompile Include="bullet\Collider\Collider.cpp" />
+    <ClCompile Include="bullet\Collider\SphereCollider.cpp" />
+    <ClCompile Include="bullet\System\BulletDebugDrawDx.cpp" />
+    <ClCompile Include="bullet\System\PhysicsSystem.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bulletlib\src\BulletlibLink.h" />
-    <ClInclude Include="PhysicsSystem.h" />
+    <ClInclude Include="bullet\Collider\CapsuleCollider.h" />
+    <ClInclude Include="bullet\Collider\Collider.h" />
+    <ClInclude Include="bullet\Collider\SphereCollider.h" />
+    <ClInclude Include="bullet\System\BulletDebugDrawDx.h" />
+    <ClInclude Include="bullet\System\PhysicsSystem.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

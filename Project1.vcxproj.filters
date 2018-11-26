@@ -5,14 +5,42 @@
     <ClCompile Include="sample\NormalMapCube.cpp">
       <Filter>Sample\NormalMap</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsSystem.cpp" />
+    <ClCompile Include="bullet\System\BulletDebugDrawDx.cpp">
+      <Filter>Bullet\System</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\System\PhysicsSystem.cpp">
+      <Filter>Bullet\System</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\Collider\SphereCollider.cpp">
+      <Filter>Bullet\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\Collider\CapsuleCollider.cpp">
+      <Filter>Bullet\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\Collider\Collider.cpp">
+      <Filter>Bullet\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
       <Filter>Sample\NormalMap</Filter>
     </ClInclude>
     <ClInclude Include="bulletlib\src\BulletlibLink.h" />
-    <ClInclude Include="PhysicsSystem.h" />
+    <ClInclude Include="bullet\System\PhysicsSystem.h">
+      <Filter>Bullet\System</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\System\BulletDebugDrawDx.h">
+      <Filter>Bullet\System</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Collider\SphereCollider.h">
+      <Filter>Bullet\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Collider\CapsuleCollider.h">
+      <Filter>Bullet\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Collider\Collider.h">
+      <Filter>Bullet\Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
@@ -23,6 +51,15 @@
     </Filter>
     <Filter Include="Sample\Game">
       <UniqueIdentifier>{f007b159-fec3-436f-ac62-aab8c0a009f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet">
+      <UniqueIdentifier>{e552e5ac-491e-4000-a597-7c8ee77ca297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet\System">
+      <UniqueIdentifier>{0fb669a7-1341-4205-be24-f2f1adc422de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet\Collider">
+      <UniqueIdentifier>{b1e3c140-c807-4e3c-ba5c-8a8a9ed1378d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
