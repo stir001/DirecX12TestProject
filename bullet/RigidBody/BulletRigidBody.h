@@ -109,5 +109,10 @@ protected:
 	*	Ž¿—Ê
 	*/
 	btScalar mMass;
+
+	/**
+	*	‚È‚º‚©‘å‚«‚³‚Ì®‡«‚ªŽæ‚ê‚È‚¢‚Ì‚ÅŽÀ‘•
+	*/
+	float mLocalScale;
 };
 

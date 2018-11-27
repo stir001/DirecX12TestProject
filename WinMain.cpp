@@ -13,6 +13,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include "bullet/System/PhysicsSystem.h"
+#include "bullet/RigidBody/BoxRigidBody.h"
 
 
 using namespace DirectX;
@@ -29,45 +30,58 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DxInput input;
 	{
 		auto sys = std::make_shared<PhysicsSystem>();
-		auto sphereRigid = sys->CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
-		auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
-		auto planeRigid = sys->CreateRigitBody(BulletShapeType::PLANE, { 1.0f,0.f,0.f });
-		auto boxRigid = sys->CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, -4));
-		auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
-		auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
+		//auto sphereRigid = sys->CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 0, 0, 0 });
+		//auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
+		auto planeRigid = sys->CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.5f });
+		auto boxRigid = sys->CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
+		//auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
+		//auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
 
-		auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
-		priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
+		//auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
+		//priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
 		
-		auto priSphere = PrimitiveCreator::Instance().CreateSphere(2, 10);
-		auto priCube = PrimitiveCreator::Instance().CreateCube(2);
+		auto priSphere = PrimitiveCreator::Instance().CreateSphere(1, 10);
+		priSphere->SetPosition({ 4.f, 1.f, 0.f });
+		float length = 1.0f;
+		auto priCube = PrimitiveCreator::Instance().CreateCube(length);
+		priCube->SetPosition({ 0, 0 ,0 });
+
+		std::vector<DirectX::XMFLOAT4X4> instanceMat(1);
+		instanceMat[0] = boxRigid->GetWorldTransform();
+		priCube->SetInstancingMatrix(instanceMat, 0, 0);
+
+		DirectX::XMFLOAT3 pos = { 0,0,0 };
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 			camera->DefaultMove(input);
 			sys->ClearDebugDraw();
 			sys->Simulation();
-
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
+			instanceMat[0] = boxRigid->GetWorldTransform();
+			priCube->SetInstancingMatrix(instanceMat, 0, 0);
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
 			{
-			
-			}
-
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
-			{
-			
+				pos.x += 0.1f;
 			}
 
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
 			{
-				
+				pos.x -= 0.1f;
 			}
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
 			{
-				
+				pos.z += 0.1f;
 			}
-			priPlane->Draw();
+
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+			{
+				pos.z -= 0.1f;
+			}
+
+			/*priCube->SetPosition(pos);
+			boxRigid->SetWorldTransform(priCube->GetMatrix());*/
+
 			//priSphere->Draw();
 			priCube->Draw();
 			sys->DebugDraw();

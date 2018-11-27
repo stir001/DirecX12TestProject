@@ -2,14 +2,14 @@
 #include "bullet/System/PhysicsSystem.h"
 
 
-BulletRigidBody::BulletRigidBody() : mMass(1.0f), mTag(-1)
+BulletRigidBody::BulletRigidBody() : mMass(1.0f), mTag(-1), mLocalScale(0.5f)
 {
 }
 
 BulletRigidBody::BulletRigidBody(std::shared_ptr<btCollisionShape> collisionShape
 	, const DirectX::XMFLOAT3& pos)
 	: mCollisionShape(collisionShape)
-	, mMass(1.0f), mTag(-1)
+	, mMass(1.0f), mTag(-1), mLocalScale(0.5f)
 {
 	CreateRigidBody();
 	Translate(pos.x, pos.y, pos.z);
@@ -50,10 +50,10 @@ DirectX::XMFLOAT4X4 BulletRigidBody::GetWorldTransform() const
 	btScalar mat[16];
 	transform.getOpenGLMatrix(mat);
 	DirectX::XMFLOAT4X4 rtn{
-		mat[0], mat[4], mat[8] , mat[12]
-		, mat[1], mat[5], mat[9], mat[13]
-		, mat[2], mat[6], mat[10], mat[14]
-		, mat[3], mat[7], mat[11], mat[15]
+		(float)mat[0], (float)mat[1], (float)mat[2] , (float)mat[3]
+		, (float)mat[4], (float)mat[5], (float)mat[6], (float)mat[7]
+		, (float)mat[8], (float)mat[9], (float)mat[10], (float)mat[11]
+		, (float)mat[12] / mLocalScale, (float)mat[13] / mLocalScale, (float)mat[14] / mLocalScale, (float)mat[15]
 	};
 
 	return rtn;
@@ -63,12 +63,13 @@ void BulletRigidBody::SetWorldTransform(const DirectX::XMFLOAT4X4& matrix)
 {
 	btScalar mat[16] =
 	{
-		matrix._11, matrix._21, matrix._31, matrix._41
-		, matrix._12, matrix._22, matrix._32, matrix._42
-		, matrix._13, matrix._23, matrix._33, matrix._43
-		, matrix._14, matrix._24, matrix._34, matrix._44
+		matrix._11, matrix._12, matrix._13, matrix._14
+		, matrix._21, matrix._22, matrix._23, matrix._24
+		, matrix._31, matrix._32, matrix._33, matrix._34
+		, matrix._41 * mLocalScale, matrix._42 * mLocalScale, matrix._43 * mLocalScale, matrix._44
 	};
 	btTransform transform;
+	transform.setOrigin(btVector3(matrix._41 * mLocalScale, matrix._42 * mLocalScale, matrix._43 * mLocalScale));
 	transform.setFromOpenGLMatrix(mat);
 	mMotionState->setWorldTransform(transform);
 }
@@ -80,6 +81,7 @@ int BulletRigidBody::GetTag() const
 
 void BulletRigidBody::CreateRigidBody()
 {
+	mCollisionShape->setLocalScaling(btVector3(mLocalScale, mLocalScale, mLocalScale));
 	mMotionState = std::make_shared<btDefaultMotionState>();
 	btVector3 bodyInertia;
 	mCollisionShape->calculateLocalInertia(mMass, bodyInertia);

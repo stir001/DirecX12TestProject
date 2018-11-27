@@ -18,7 +18,7 @@ class PlaneRigidBody :
 {
 public:
 	/**
-	*	@param[in]	constans	plane定数(謎)
+	*	@param[in]	constans	原点からの法線方向へのオフセット
 	*	@param[in]	normal		法線
 	*	@param[in]	pos			初期位置
 	*/

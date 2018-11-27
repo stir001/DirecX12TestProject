@@ -102,12 +102,12 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BT_THREADSAFE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;Dx12MSLib.lib;libfbxsdk-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DX12LIB_DIR)\x64\debug;$(FBXSDK_DIR)lib\vs2015\x64\debug;%(AdditionalLibraryDirectories);$(BULLET_DIR)\x64\debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DX12LIB_DIR)\x64\debug;$(FBXSDK_DIR)lib\vs2015\x64\debug;%(AdditionalLibraryDirectories);$(BULLET_DIR)\single_precision\x64\debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -133,7 +133,7 @@ std::shared_ptr<BulletRigidBody> PhysicsSystem::CreateRigitBody(const BulletShap
 		rtn = std::make_shared<CapsuleRigidBody>(data.x, data.y, pos);
 		break;
 	case BulletShapeType::PLANE:
-		rtn = std::make_shared<PlaneRigidBody>(data.x, DirectX::XMFLOAT3(0.f, 1.f, 0.f), pos);
+		rtn = std::make_shared<PlaneRigidBody>(0, data, pos);
 		break;
 	case BulletShapeType::CONE:
 		rtn = std::make_shared<ConeRigidBody>(data.x, data.y, pos);

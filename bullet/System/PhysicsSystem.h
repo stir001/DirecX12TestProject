@@ -80,7 +80,7 @@ public:
 			SPHERE		(radius, nan, nan)		x”¼Œa y–³‹	z–³‹
 			CYLINDER	(radius, height, nan)	x”¼Œa y‚‚³ z–³‹
 			CAPSULE		(radisu, height, nan)	x”¼Œa y‚‚³ z–³‹
-			PLANE		(constans, nan, nan)	x’è” y–³‹ z–³‹ ‚æ‚­‚í‚©‚ç‚È‚¢’è”‚ª‚ ‚é
+			PLANE		(x, y, z)				x–@ü y–@ü z–@ü 
 			CONE		(radius, height, nan)	x”¼Œa y‚‚³ z–³‹
 	*	@param[in]	pos		‰ŠúˆÊ’u
 	*/
