@@ -18,10 +18,12 @@ class PlaneRigidBody :
 {
 public:
 	/**
-	*	@param[in]	length	ˆê•Ó‚Ì’·‚³
-	*	@param[in]	pos		‰ŠúˆÊ’u
+	*	@param[in]	constans	plane’è”(“ä)
+	*	@param[in]	normal		–@ü
+	*	@param[in]	pos			‰ŠúˆÊ’u
 	*/
-	PlaneRigidBody(float length
+	PlaneRigidBody(float constans
+		, const DirectX::XMFLOAT3& normal = DirectX::XMFLOAT3(0.f, 1.f, 0.f)
 		, const DirectX::XMFLOAT3& pos = DirectX::XMFLOAT3(0.f, 0.f, 0.f));
 	~PlaneRigidBody();
 private:

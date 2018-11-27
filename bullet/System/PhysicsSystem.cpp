@@ -2,8 +2,16 @@
 #include "BulletDebugDrawDx.h"
 #include "Master/Dx12Ctrl.h"
 #include "bullet/RigidBody/BulletRigidBody.h"
+#include "bullet/RigidBody/BoxRigidBody.h"
+#include "bullet/RigidBody/SphereRigidBody.h"
+#include "bullet/RigidBody/CylinderRigidBody.h"
+#include "bullet/RigidBody/CapsuleRigidBody.h"
+#include "bullet/RigidBody/PlaneRigidBody.h"
+#include "bullet/RigidBody/ConeRigidBody.h"
+
 #include <btBulletDynamicsCommon.h>
 #include <ctime>
+#include <algorithm>
 
 PhysicsSystem::PhysicsSystem()
 {
@@ -33,6 +41,11 @@ PhysicsSystem::PhysicsSystem()
 
 PhysicsSystem::~PhysicsSystem()
 {
+	for (auto rigid : mRigidBodies)
+	{
+		mWorld->removeRigidBody(rigid.second->GetRigidBody().get());
+	}
+	mRigidBodies.clear();
 }
 
 void PhysicsSystem::DebugDraw()
@@ -46,9 +59,27 @@ void PhysicsSystem::ClearDebugDraw()
 	mDebugDrawer->ClearLines();
 }
 
-void PhysicsSystem::AddRigidBody(std::shared_ptr<BulletRigidBody> collider)
+void PhysicsSystem::AddRigidBody(std::shared_ptr<BulletRigidBody> rigid)
 {
-	mWorld->addRigidBody(collider->GetRigidBody().get());
+	if (rigid->GetTag() != -1) return;
+	int key = 0;
+
+	for (auto itr = mRigidBodies.begin(); itr != mRigidBodies.end(); ++itr)
+	{
+		if ((*itr).first != key)
+		{
+			auto fitr = std::find_if(itr, mRigidBodies.end(), [key](std::pair<const int, std::shared_ptr<BulletRigidBody>> data) { return data.first == key; });
+			if (fitr == mRigidBodies.end())
+			{
+				break;
+			}
+		}
+		++key;
+	}
+
+	mRigidBodies[key] = rigid;
+	rigid->mTag = key;
+	mWorld->addRigidBody(rigid->GetRigidBody().get());
 }
 
 void PhysicsSystem::Simulation()
@@ -58,7 +89,60 @@ void PhysicsSystem::Simulation()
 	mTime = currentTime;
 }
 
-void PhysicsSystem::RemoveRigidBody(std::shared_ptr<BulletRigidBody> collider)
+void PhysicsSystem::RemoveRigidBody(std::shared_ptr<BulletRigidBody> rigid)
 {
-	mWorld->removeRigidBody(collider->GetRigidBody().get());
+	if (rigid->GetTag() == -1)
+	{
+		return;
+	}
+	auto fitr = mRigidBodies.find(rigid->GetTag());
+	if (fitr == mRigidBodies.end())
+	{
+		return;
+	}
+	mRigidBodies.erase(fitr);
+	mWorld->removeRigidBody(rigid->GetRigidBody().get());
+}
+
+void PhysicsSystem::RemoveRigidBody(int tag)
+{
+	auto itr = mRigidBodies.find(tag);
+	if (itr == mRigidBodies.end())
+	{
+		return;
+	}
+	mRigidBodies.erase(itr);
+	mWorld->removeRigidBody((*itr).second->GetRigidBody().get());
+}
+
+std::shared_ptr<BulletRigidBody> PhysicsSystem::CreateRigitBody(const BulletShapeType type, const DirectX::XMFLOAT3& data, const DirectX::XMFLOAT3& pos)
+{
+	std::shared_ptr<BulletRigidBody> rtn;
+	switch (type)
+	{
+	case BulletShapeType::BOX:
+		rtn = std::make_shared<BoxRigidBody>(data, pos);
+		break;
+	case BulletShapeType::SPHERE:
+		rtn = std::make_shared<SphereRigidBody>(data.x, pos);
+		break;
+	case BulletShapeType::CYLINDER:
+		rtn = std::make_shared<CylinderRigidBody>(data.x, data.y, pos);
+		break;
+	case BulletShapeType::CAPSULE:
+		rtn = std::make_shared<CapsuleRigidBody>(data.x, data.y, pos);
+		break;
+	case BulletShapeType::PLANE:
+		rtn = std::make_shared<PlaneRigidBody>(data.x, DirectX::XMFLOAT3(0.f, 1.f, 0.f), pos);
+		break;
+	case BulletShapeType::CONE:
+		rtn = std::make_shared<ConeRigidBody>(data.x, data.y, pos);
+		break;
+	default:
+		break;
+	}
+
+	AddRigidBody(rtn);
+
+	return rtn;
 }

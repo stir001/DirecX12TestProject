@@ -26,6 +26,12 @@
     <ClCompile Include="bullet\RigidBody\BoxRigidBody.cpp">
       <Filter>Bullet\RigidBody</Filter>
     </ClCompile>
+    <ClCompile Include="bullet\RigidBody\CylinderRigidBody.cpp">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\RigidBody\ConeRigidBody.cpp">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -51,6 +57,12 @@
       <Filter>Bullet\RigidBody</Filter>
     </ClInclude>
     <ClInclude Include="bullet\RigidBody\BoxRigidBody.h">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\RigidBody\CylinderRigidBody.h">
+      <Filter>Bullet\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\RigidBody\ConeRigidBody.h">
       <Filter>Bullet\RigidBody</Filter>
     </ClInclude>
   </ItemGroup>

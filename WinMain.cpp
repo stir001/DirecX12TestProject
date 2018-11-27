@@ -13,11 +13,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include "bullet/System/PhysicsSystem.h"
-#include "bullet/System/BulletDebugDrawDx.h"
-#include "bullet/RigidBody/SphereRigidBody.h"
-#include "bullet/RigidBody/CapsuleRigidBody.h"
-#include "bullet/RigidBody/PlaneRigidBody.h"
-#include "bullet/RigidBody/BoxRigidBody.h"
+
 
 using namespace DirectX;
 
@@ -33,19 +29,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DxInput input;
 	{
 		auto sys = std::make_shared<PhysicsSystem>();
-		auto colider = std::make_shared<SphereRigidBody>(1.0f, DirectX::XMFLOAT3(4,0,0));
-		auto capCol = std::make_shared<CapsuleRigidBody>(1.0f, 3.0f, DirectX::XMFLOAT3(-4, 0, 0));
-		auto planeRigid = std::make_shared<PlaneRigidBody>(1.0f);
-		auto boxRigid = std::make_shared<BoxRigidBody>(1.f, DirectX::XMFLOAT3(0, 0, -4));
+		auto sphereRigid = sys->CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
+		auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
+		auto planeRigid = sys->CreateRigitBody(BulletShapeType::PLANE, { 1.0f,0.f,0.f });
+		auto boxRigid = sys->CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, -4));
+		auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
+		auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
 
-		sys->AddRigidBody(colider);
-		sys->AddRigidBody(capCol);
-		sys->AddRigidBody(planeRigid);
-		sys->AddRigidBody(boxRigid);
-
-		auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 20.f, 20.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
+		auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
 		priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
 		
+		auto priSphere = PrimitiveCreator::Instance().CreateSphere(2, 10);
+		auto priCube = PrimitiveCreator::Instance().CreateCube(2);
+
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 			camera->DefaultMove(input);
@@ -71,15 +67,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			{
 				
 			}
-
+			priPlane->Draw();
+			//priSphere->Draw();
+			priCube->Draw();
 			sys->DebugDraw();
 
-			//priPlane->Draw();
+			
 		}
-		sys->RemoveRigidBody(colider);
-		sys->RemoveRigidBody(capCol);
-		sys->RemoveRigidBody(planeRigid);
-		sys->RemoveRigidBody(boxRigid);
+
 		//sys.reset();
 	}
 
