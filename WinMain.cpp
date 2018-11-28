@@ -30,9 +30,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DxInput input;
 	{
 		auto sys = std::make_shared<PhysicsSystem>();
-		//auto sphereRigid = sys->CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 0, 0, 0 });
+		auto sphereRigid = sys->CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
 		//auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
-		auto planeRigid = sys->CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.5f });
+		auto planeRigid = sys->CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.f });
 		auto boxRigid = sys->CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
 		//auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
 		//auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
@@ -40,6 +40,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
 		//priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
 		
+
 		auto priSphere = PrimitiveCreator::Instance().CreateSphere(1, 10);
 		priSphere->SetPosition({ 4.f, 1.f, 0.f });
 		float length = 1.0f;
@@ -56,9 +57,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			input.UpdateKeyState();
 			camera->DefaultMove(input);
 			sys->ClearDebugDraw();
-			sys->Simulation();
-			instanceMat[0] = boxRigid->GetWorldTransform();
-			priCube->SetInstancingMatrix(instanceMat, 0, 0);
+			//instanceMat[0] = boxRigid->GetWorldTransform();
+			//priCube->SetInstancingMatrix(instanceMat, 0, 0);
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
 			{
 				pos.x += 0.1f;
@@ -79,8 +79,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				pos.z -= 0.1f;
 			}
 
-			/*priCube->SetPosition(pos);
-			boxRigid->SetWorldTransform(priCube->GetMatrix());*/
+			priCube->SetPosition(pos);
+			boxRigid->SetWorldTransform(priCube->GetMatrix());
+			sys->Simulation();
 
 			//priSphere->Draw();
 			priCube->Draw();

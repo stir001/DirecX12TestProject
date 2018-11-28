@@ -83,7 +83,7 @@ protected:
 	/**
 	*	btRigidBody‚ğì¬‚·‚é
 	*/
-	virtual void CreateRigidBody();
+	virtual void CreateRigidBody(bool isContlrable = false);
 
 	/**
 	*	rigidBody

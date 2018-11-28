@@ -79,7 +79,7 @@ int BulletRigidBody::GetTag() const
 	return mTag;
 }
 
-void BulletRigidBody::CreateRigidBody()
+void BulletRigidBody::CreateRigidBody(bool isContlrable)
 {
 	mCollisionShape->setLocalScaling(btVector3(mLocalScale, mLocalScale, mLocalScale));
 	mMotionState = std::make_shared<btDefaultMotionState>();
@@ -91,6 +91,11 @@ void BulletRigidBody::CreateRigidBody()
 	bodyCI.m_friction = 0.5f;
 
 	mRigidBody = std::make_shared<btRigidBody>(bodyCI);
+	if (isContlrable)
+	{
+		mRigidBody->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+		mRigidBody->setActivationState(DISABLE_DEACTIVATION);
+	}
 }
 
 
