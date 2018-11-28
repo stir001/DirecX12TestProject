@@ -12,6 +12,7 @@
 #include "BulletlibLink.h"
 
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "bullet/System/PhysicsSystem.h"
 #include "bullet/RigidBody/BoxRigidBody.h"
 
@@ -34,12 +35,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
 		auto planeRigid = sys->CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.f });
 		auto boxRigid = sys->CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
+		boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
 		//auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
 		//auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
 
 		//auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
 		//priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
+
 		
+
 
 		auto priSphere = PrimitiveCreator::Instance().CreateSphere(1, 10);
 		priSphere->SetPosition({ 4.f, 1.f, 0.f });
@@ -57,8 +61,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			input.UpdateKeyState();
 			camera->DefaultMove(input);
 			sys->ClearDebugDraw();
-			//instanceMat[0] = boxRigid->GetWorldTransform();
-			//priCube->SetInstancingMatrix(instanceMat, 0, 0);
+
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
 			{
 				pos.x += 0.1f;
@@ -79,9 +82,21 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				pos.z -= 0.1f;
 			}
 
+			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_RSHIFT))
+			{
+				boxRigid->SetCollisionState(BulletCollisionState::NON_CONTACT);
+			}
+
+			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_RCONTROL))
+			{
+				boxRigid->SetCollisionState(BulletCollisionState::KINEMATIC);
+			}
+
 			priCube->SetPosition(pos);
 			boxRigid->SetWorldTransform(priCube->GetMatrix());
 			sys->Simulation();
+			//instanceMat[0] = boxRigid->GetWorldTransform();
+			//priCube->SetInstancingMatrix(instanceMat, 0, 0);
 
 			//priSphere->Draw();
 			priCube->Draw();

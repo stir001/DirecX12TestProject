@@ -158,6 +158,7 @@
     <ClCompile Include="bullet\RigidBody\SphereRigidBody.cpp" />
     <ClCompile Include="bullet\System\BulletDebugDrawDx.cpp" />
     <ClCompile Include="bullet\System\PhysicsSystem.cpp" />
+    <ClCompile Include="CollisionAction.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="bullet\RigidBody\SphereRigidBody.h" />
     <ClInclude Include="bullet\System\BulletDebugDrawDx.h" />
     <ClInclude Include="bullet\System\PhysicsSystem.h" />
+    <ClInclude Include="CollisionAction.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

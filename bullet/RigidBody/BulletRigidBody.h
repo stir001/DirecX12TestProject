@@ -8,10 +8,19 @@
 *	@par 最終更新日	2018/11/26
 */
 #include <btBulletDynamicsCommon.h>
+#include <BulletDynamics/Character/btKinematicCharacterController.h>
 #include <memory>
 #include <DirectXMath.h>
 
 class PhysicsSystem;
+
+enum class BulletCollisionState
+{
+	STATIC = 1,			//!移動しない固定オブジェクト　物理計算なし　当たり判定あり
+	KINEMATIC = 2,		//!任意移動可能オブジェクト　物理計算なし	当たり判定あり
+	NON_CONTACT = 4,	//!任意移動不可オブジェクト	重力のみ?あり　当たり判定なし
+	CHARACTER = 16,		//!任意移動不可オブジェクト	物理計算あり	当たり判定あり
+};
 
 /**
 *	@class BulletRigidBody
@@ -79,11 +88,16 @@ public:
 	*	@return	設定されたタグ
 	*/
 	int GetTag() const;
+
+	/**
+	*	コリジョンの状態を変更する
+	*/
+	void SetCollisionState(BulletCollisionState state);
 protected:
 	/**
 	*	btRigidBodyを作成する
 	*/
-	virtual void CreateRigidBody(bool isContlrable = false);
+	virtual void CreateRigidBody();
 
 	/**
 	*	rigidBody
@@ -99,6 +113,8 @@ protected:
 	*	モーションステート	剛体との同期に必要
 	*/
 	std::shared_ptr<btMotionState> mMotionState;
+
+	std::shared_ptr<btKinematicCharacterController> mCtrl;
 
 	/**
 	*	タグ

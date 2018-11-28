@@ -69,9 +69,13 @@ void BulletRigidBody::SetWorldTransform(const DirectX::XMFLOAT4X4& matrix)
 		, matrix._41 * mLocalScale, matrix._42 * mLocalScale, matrix._43 * mLocalScale, matrix._44
 	};
 	btTransform transform;
+	mMotionState->getWorldTransform(transform);
 	transform.setOrigin(btVector3(matrix._41 * mLocalScale, matrix._42 * mLocalScale, matrix._43 * mLocalScale));
 	transform.setFromOpenGLMatrix(mat);
 	mMotionState->setWorldTransform(transform);
+	//mRigidBody->setWorldTransform(transform);
+	//mRigidBody->setCenterOfMassTransform(transform);
+	//mRigidBody->set
 }
 
 int BulletRigidBody::GetTag() const
@@ -79,23 +83,32 @@ int BulletRigidBody::GetTag() const
 	return mTag;
 }
 
-void BulletRigidBody::CreateRigidBody(bool isContlrable)
+void BulletRigidBody::SetCollisionState(BulletCollisionState state)
 {
+	mRigidBody->setCollisionFlags(static_cast<int>(state));
+	if (state == BulletCollisionState::KINEMATIC)
+	{
+		mRigidBody->setActivationState(ACTIVE_TAG);
+	}
+	else
+	{
+		mRigidBody->setActivationState(ACTIVE_TAG);
+	}
+}
+
+void BulletRigidBody::CreateRigidBody()
+{
+	btActionInterface;
 	mCollisionShape->setLocalScaling(btVector3(mLocalScale, mLocalScale, mLocalScale));
 	mMotionState = std::make_shared<btDefaultMotionState>();
 	btVector3 bodyInertia;
 	mCollisionShape->calculateLocalInertia(mMass, bodyInertia);
 	auto bodyCI = btRigidBody::btRigidBodyConstructionInfo(mMass, mMotionState.get(), mCollisionShape.get(), bodyInertia);
 
-	bodyCI.m_restitution = 1.0f;
-	bodyCI.m_friction = 0.5f;
+	bodyCI.m_restitution = 0.5f;
+	bodyCI.m_friction = 1.0f;
 
 	mRigidBody = std::make_shared<btRigidBody>(bodyCI);
-	if (isContlrable)
-	{
-		mRigidBody->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
-		mRigidBody->setActivationState(DISABLE_DEACTIVATION);
-	}
 }
 
 
