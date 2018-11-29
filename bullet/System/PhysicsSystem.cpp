@@ -8,12 +8,13 @@
 #include "bullet/RigidBody/CapsuleRigidBody.h"
 #include "bullet/RigidBody/PlaneRigidBody.h"
 #include "bullet/RigidBody/ConeRigidBody.h"
+#include "bullet/Ghost/BulletCollisionShape.h"
 
 #include <btBulletDynamicsCommon.h>
 #include <ctime>
 #include <algorithm>
 
-static PhysicsSystem* mInstance = nullptr;
+PhysicsSystem* PhysicsSystem::mInstance = nullptr;
 
 PhysicsSystem::PhysicsSystem()
 {
@@ -149,32 +150,34 @@ std::shared_ptr<BulletRigidBody> PhysicsSystem::CreateRigitBody(const BulletShap
 	return rtn;
 }
 
-std::shared_ptr<btCollisionShape> PhysicsSystem::CreateCollisionShape(const BulletShapeType type, const DirectX::XMFLOAT3 & data)
+std::shared_ptr<BulletCollisionShape> PhysicsSystem::CreateCollisionShape(const BulletShapeType type, const DirectX::XMFLOAT3 & data)
 {
-	std::shared_ptr<btCollisionShape> rtn = nullptr;
+	std::shared_ptr<btCollisionShape> collision = nullptr;
 	switch (type)
 	{
 	case BulletShapeType::BOX:
-		rtn = std::make_shared<btBoxShape>(btVector3(data.x * 0.5f, data.y * 0.5f, data.z * 0.5f));
+		collision = std::make_shared<btBoxShape>(btVector3(data.x * 0.5f, data.y * 0.5f, data.z * 0.5f));
 		break;
 	case BulletShapeType::SPHERE:
-		rtn = std::make_shared<btSphereShape>(data.x);
+		collision = std::make_shared<btSphereShape>(data.x);
 		break;
 	case BulletShapeType::CYLINDER:
-		rtn = std::make_shared<btCylinderShape>(data.x, data.y);
+		collision = std::make_shared<btCylinderShape>(btVector3(data.x, data.y, data.x));
 		break;
 	case BulletShapeType::CAPSULE:
-		rtn = std::make_shared<btCapsuleShape>(data.x, data.y);
+		collision = std::make_shared<btCapsuleShape>(data.x, data.y);
 		break;
 	case BulletShapeType::PLANE:
-		rtn = std::make_shared<btStaticPlaneShape>((btVector3(data.x,data.y,data.z),0));
+		collision = std::make_shared<btStaticPlaneShape>(btVector3(data.x,data.y,data.z), 0);
 		break;
 	case BulletShapeType::CONE:
-		rtn = std::make_shared<btConeShape>(data.x, data.y);
+		collision = std::make_shared<btConeShape>(data.x, data.y);
 		break;
 	default:
 		break;
 	}
+
+	std::shared_ptr<BulletCollisionShape> rtn = std::make_shared<BulletCollisionShape>(collision);
 
 	return rtn;
 }

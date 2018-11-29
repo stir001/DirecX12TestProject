@@ -14,6 +14,8 @@
 
 class BulletDebugDrawDx;
 class BulletRigidBody;
+class BulletCollisionShape;
+class CollisionAction;
 
 /**
 *	@enum	BulletShapeType
@@ -116,8 +118,10 @@ public:
 			PLANE		(x, y, z)				xñ@ê¸ yñ@ê¸ zñ@ê¸ 
 			CONE		(radius, height, nan)	xîºåa yçÇÇ≥ zñ≥éã
 	*/
-	std::shared_ptr<btCollisionShape> CreateCollisionShape(const BulletShapeType type
+	std::shared_ptr<BulletCollisionShape> CreateCollisionShape(const BulletShapeType type
 		, const DirectX::XMFLOAT3& data);
+
+	void AddAction(std::shared_ptr<CollisionAction> collision);
 private:
 	PhysicsSystem();
 	PhysicsSystem(const PhysicsSystem&) = delete;

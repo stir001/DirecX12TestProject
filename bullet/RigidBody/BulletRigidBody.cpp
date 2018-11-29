@@ -98,7 +98,6 @@ void BulletRigidBody::SetCollisionState(BulletCollisionState state)
 
 void BulletRigidBody::CreateRigidBody()
 {
-	btActionInterface;
 	mCollisionShape->setLocalScaling(btVector3(mLocalScale, mLocalScale, mLocalScale));
 	mMotionState = std::make_shared<btDefaultMotionState>();
 	btVector3 bodyInertia;

@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	DxInput input;
 	{
 		auto& sys = PhysicsSystem::Instance();
-		auto sphereRigid = sys.CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
+		//auto sphereRigid = sys.CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
 		//auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
 		auto planeRigid = sys.CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.f });
 		auto boxRigid = sys.CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));

@@ -1,16 +1,17 @@
 #pragma once
 #include <BulletDynamics/Dynamics/btActionInterface.h>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <btBulletDynamicsCommon.h>
 #include <memory>
 #include <list>
 
 enum class BulletShapeType;
+class BulletCollisionShape;
+class btGhostObject;
 
 class CollisionAction : public btActionInterface
 {
 public:
-	CollisionAction();
+	CollisionAction(std::shared_ptr<BulletCollisionShape> shape);
 	virtual ~CollisionAction();
 
 	virtual void Action(int tag) = 0;
@@ -25,10 +26,10 @@ public:
 
 	const std::list<int>& GetTargetTags() const;
 
-	void SetCollisionShape();
+	void SetCollisionShape(std::shared_ptr<BulletCollisionShape> shape);
 private:
 	std::shared_ptr<btGhostObject> mGhost;
-	std::shared_ptr<btCollisionShape>  mCollisionShape;
+	std::shared_ptr<BulletCollisionShape>  mCollisionShape;
 
 	std::list<int> mTargetTags;
 };
