@@ -1,7 +1,7 @@
 #include "CollisionAction.h"
 #include <algorithm>
 #include <btBulletDynamicsCommon.h>
-
+#include "bullet/System/PhysicsSystem.h"
 
 CollisionAction::CollisionAction()
 {
@@ -46,4 +46,9 @@ void CollisionAction::RemoveTargetTag(int target)
 const std::list<int>& CollisionAction::GetTargetTags() const
 {
 	return mTargetTags;
+}
+
+void CollisionAction::SetCollisionShape()
+{
+	mGhost = std::make_shared<btGhostObject>();
 }

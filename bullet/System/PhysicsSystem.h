@@ -36,8 +36,26 @@ enum class BulletShapeType
 class PhysicsSystem : public std::enable_shared_from_this<PhysicsSystem>
 {
 public:
-	PhysicsSystem();
 	~PhysicsSystem();
+
+	static PhysicsSystem* mInstance;
+
+	static PhysicsSystem& Instance()
+	{
+		if (mInstance == nullptr)
+		{
+			mInstance = new PhysicsSystem();
+		}
+		return *mInstance;
+	}
+
+	static void Destory()
+	{
+		if (mInstance != nullptr)
+		{
+			delete mInstance;
+		}
+	}
 
 	/**
 	*	デバッグ描画
@@ -86,7 +104,25 @@ public:
 	*/
 	std::shared_ptr<BulletRigidBody> CreateRigitBody(const BulletShapeType type
 		, const DirectX::XMFLOAT3& data , const DirectX::XMFLOAT3& pos = DirectX::XMFLOAT3(0.f,0.f,0.f));
+
+	/**
+	*	@brief	コリジョン形状を作成する
+	*	@param[in]	type	作成する形状
+	*	@param[in]	data	形状により異なる (x,y,z)
+			BOX			(x, y, z)				各方向の辺の長さ
+			SPHERE		(radius, nan, nan)		x半径 y無視	z無視
+			CYLINDER	(radius, height, nan)	x半径 y高さ z無視
+			CAPSULE		(radisu, height, nan)	x半径 y高さ z無視
+			PLANE		(x, y, z)				x法線 y法線 z法線 
+			CONE		(radius, height, nan)	x半径 y高さ z無視
+	*/
+	std::shared_ptr<btCollisionShape> CreateCollisionShape(const BulletShapeType type
+		, const DirectX::XMFLOAT3& data);
 private:
+	PhysicsSystem();
+	PhysicsSystem(const PhysicsSystem&) = delete;
+	PhysicsSystem(const PhysicsSystem&&) = delete;
+
 	/**
 	*	広域位相フェーズ
 	*/

@@ -32,7 +32,12 @@
     <ClCompile Include="bullet\RigidBody\ConeRigidBody.cpp">
       <Filter>Bullet\RigidBody</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionAction.cpp" />
+    <ClCompile Include="bullet\Ghost\CollisionAction.cpp">
+      <Filter>Bullet\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\Ghost\BulletCollisionShape.cpp">
+      <Filter>Bullet\Ghost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -66,7 +71,12 @@
     <ClInclude Include="bullet\RigidBody\ConeRigidBody.h">
       <Filter>Bullet\RigidBody</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionAction.h" />
+    <ClInclude Include="bullet\Ghost\CollisionAction.h">
+      <Filter>Bullet\Ghost</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Ghost\BulletCollisionShape.h">
+      <Filter>Bullet\Ghost</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">

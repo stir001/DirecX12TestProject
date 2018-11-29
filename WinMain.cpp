@@ -30,11 +30,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	
 	DxInput input;
 	{
-		auto sys = std::make_shared<PhysicsSystem>();
-		auto sphereRigid = sys->CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
+		auto& sys = PhysicsSystem::Instance();
+		auto sphereRigid = sys.CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
 		//auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
-		auto planeRigid = sys->CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.f });
-		auto boxRigid = sys->CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
+		auto planeRigid = sys.CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.f });
+		auto boxRigid = sys.CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
 		boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
 		//auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
 		//auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
@@ -60,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 			camera->DefaultMove(input);
-			sys->ClearDebugDraw();
+			sys.ClearDebugDraw();
 
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
 			{
@@ -94,13 +94,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 			priCube->SetPosition(pos);
 			boxRigid->SetWorldTransform(priCube->GetMatrix());
-			sys->Simulation();
+			sys.Simulation();
 			//instanceMat[0] = boxRigid->GetWorldTransform();
 			//priCube->SetInstancingMatrix(instanceMat, 0, 0);
 
 			//priSphere->Draw();
 			priCube->Draw();
-			sys->DebugDraw();
+			sys.DebugDraw();
 
 			
 		}

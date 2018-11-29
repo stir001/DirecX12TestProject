@@ -31,16 +31,39 @@ public:
 	BulletDebugDrawDx(const Microsoft::WRL::ComPtr<ID3D12Device>& dev);
 	~BulletDebugDrawDx();
 
+	/**
+	*	@brief	線を引く 主にバレット側が呼ぶ関数なので直接呼ぶ必要はない
+	*	@param[in]	from	起点
+	*	@param[in]	to		終点
+	*	@param[in]	color	描画色
+	*/
 	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);
 
+	/**
+	*	@brief	デバッグ描画モードを設定する
+	*	@param	デバッグモード
+	*/
 	void setDebugMode(int debugMode);
 
+	/**
+	*	@brief	現在のデバッグモードを取得する
+	*	@return	現在のデバッグモード
+	*/
 	int	getDebugMode() const;
 
+	/**
+	*	未実装　何もしない
+	*/
 	void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);
 
+	/**
+	*	未実装 何もしない
+	*/
 	void reportErrorWarning(const char* warningString);
 
+	/**
+	*	未実装　何もしない
+	*/
 	void draw3dText(const btVector3& location, const char* textString);
 
 	void ClearLines();

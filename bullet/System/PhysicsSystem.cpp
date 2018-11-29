@@ -13,6 +13,8 @@
 #include <ctime>
 #include <algorithm>
 
+static PhysicsSystem* mInstance = nullptr;
+
 PhysicsSystem::PhysicsSystem()
 {
 	//広域位相アルゴリズムの実装をインスタンス化
@@ -143,6 +145,36 @@ std::shared_ptr<BulletRigidBody> PhysicsSystem::CreateRigitBody(const BulletShap
 	}
 
 	AddRigidBody(rtn);
+
+	return rtn;
+}
+
+std::shared_ptr<btCollisionShape> PhysicsSystem::CreateCollisionShape(const BulletShapeType type, const DirectX::XMFLOAT3 & data)
+{
+	std::shared_ptr<btCollisionShape> rtn = nullptr;
+	switch (type)
+	{
+	case BulletShapeType::BOX:
+		rtn = std::make_shared<btBoxShape>(btVector3(data.x * 0.5f, data.y * 0.5f, data.z * 0.5f));
+		break;
+	case BulletShapeType::SPHERE:
+		rtn = std::make_shared<btSphereShape>(data.x);
+		break;
+	case BulletShapeType::CYLINDER:
+		rtn = std::make_shared<btCylinderShape>(data.x, data.y);
+		break;
+	case BulletShapeType::CAPSULE:
+		rtn = std::make_shared<btCapsuleShape>(data.x, data.y);
+		break;
+	case BulletShapeType::PLANE:
+		rtn = std::make_shared<btStaticPlaneShape>((btVector3(data.x,data.y,data.z),0));
+		break;
+	case BulletShapeType::CONE:
+		rtn = std::make_shared<btConeShape>(data.x, data.y);
+		break;
+	default:
+		break;
+	}
 
 	return rtn;
 }
