@@ -121,7 +121,7 @@ public:
 	std::shared_ptr<BulletCollisionShape> CreateCollisionShape(const BulletShapeType type
 		, const DirectX::XMFLOAT3& data);
 
-	void AddAction(std::shared_ptr<CollisionAction> collision);
+	void AddAction(std::shared_ptr<CollisionAction> action);
 private:
 	PhysicsSystem();
 	PhysicsSystem(const PhysicsSystem&) = delete;

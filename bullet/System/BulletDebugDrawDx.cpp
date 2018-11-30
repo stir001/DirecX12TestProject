@@ -55,7 +55,7 @@ void BulletDebugDrawDx::drawContactPoint(const btVector3 & PointOnB, const btVec
 void BulletDebugDrawDx::reportErrorWarning(const char * warningString)
 {
 	std::string str = warningString;
-	MessageBoxA(nullptr, "Error Report", "Error", MB_OK);
+	MessageBoxA(nullptr, warningString, "BulletDebugDrawDx error", MB_OK);
 }
 
 void BulletDebugDrawDx::draw3dText(const btVector3 & location, const char * textString)

@@ -1,14 +1,13 @@
 #include "CollisionAction.h"
 #include "bullet/System/PhysicsSystem.h"
-#include "bullet/Ghost/BulletCollisionShape.h"
+#include "bullet/Shape/BulletCollisionShape.h"
+#include "bullet/Ghost/BulletGhostObject.h"
 #include <algorithm>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
-CollisionAction::CollisionAction(std::shared_ptr<BulletCollisionShape> shape): mCollisionShape(shape)
+CollisionAction::CollisionAction(std::shared_ptr<BulletGhostObject> collision): mCollision(collision)
 {
-	mGhost = std::make_shared<btGhostObject>();
-	mGhost->setCollisionShape(mCollisionShape->GetShape().get());
 }
 
 
@@ -18,10 +17,10 @@ CollisionAction::~CollisionAction()
 
 void CollisionAction::updateAction(btCollisionWorld * collisionWorld, btScalar deltaTimeStep)
 {
-	int num = mGhost->getNumOverlappingObjects();
+	int num = mCollision->GetGhostObject()->getNumOverlappingObjects();
 	for (int i = 0; i < num; ++i)
 	{
-		int tag = mGhost->getOverlappingObject(i)->getIslandTag();
+		int tag = mCollision->GetGhostObject()->getOverlappingObject(i)->getIslandTag();
 		auto fitr =std::find_if(mTargetTags.begin(), mTargetTags.end(), [tag](int value) {return tag == value; });
 		if (fitr != mTargetTags.end())
 		{
@@ -57,8 +56,7 @@ const std::list<int>& CollisionAction::GetTargetTags() const
 	return mTargetTags;
 }
 
-void CollisionAction::SetCollisionShape(std::shared_ptr<BulletCollisionShape> shape)
+void CollisionAction::SetCollisionObject(std::shared_ptr<BulletGhostObject> shape)
 {
-	mCollisionShape = shape;
-	mGhost->setCollisionShape(mCollisionShape->GetShape().get());
+	mCollision = shape;
 }

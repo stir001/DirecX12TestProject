@@ -2,13 +2,14 @@
 #include "BulletDebugDrawDx.h"
 #include "Master/Dx12Ctrl.h"
 #include "bullet/RigidBody/BulletRigidBody.h"
-#include "bullet/RigidBody/BoxRigidBody.h"
-#include "bullet/RigidBody/SphereRigidBody.h"
-#include "bullet/RigidBody/CylinderRigidBody.h"
-#include "bullet/RigidBody/CapsuleRigidBody.h"
-#include "bullet/RigidBody/PlaneRigidBody.h"
-#include "bullet/RigidBody/ConeRigidBody.h"
-#include "bullet/Ghost/BulletCollisionShape.h"
+#include "bullet/Shape/BulletCollisionShape.h"
+#include "bullet/Shape/SphereCollisionShape.h"
+#include "bullet/Shape/BoxCollisionShape.h"
+#include "bullet/Shape/StaticPlaneShape.h"
+#include "bullet/Shape/CapsuleCollisionShape.h"
+#include "bullet/Shape/ConeCollisionShape.h"
+#include "bullet/Shape/CylinderCollisionShape.h"
+#include "bullet/Action/CollisionAction.h"
 
 #include <btBulletDynamicsCommon.h>
 #include <ctime>
@@ -120,64 +121,46 @@ void PhysicsSystem::RemoveRigidBody(int tag)
 
 std::shared_ptr<BulletRigidBody> PhysicsSystem::CreateRigitBody(const BulletShapeType type, const DirectX::XMFLOAT3& data, const DirectX::XMFLOAT3& pos)
 {
-	std::shared_ptr<BulletRigidBody> rtn;
-	switch (type)
-	{
-	case BulletShapeType::BOX:
-		rtn = std::make_shared<BoxRigidBody>(data, pos);
-		break;
-	case BulletShapeType::SPHERE:
-		rtn = std::make_shared<SphereRigidBody>(data.x, pos);
-		break;
-	case BulletShapeType::CYLINDER:
-		rtn = std::make_shared<CylinderRigidBody>(data.x, data.y, pos);
-		break;
-	case BulletShapeType::CAPSULE:
-		rtn = std::make_shared<CapsuleRigidBody>(data.x, data.y, pos);
-		break;
-	case BulletShapeType::PLANE:
-		rtn = std::make_shared<PlaneRigidBody>(0, data, pos);
-		break;
-	case BulletShapeType::CONE:
-		rtn = std::make_shared<ConeRigidBody>(data.x, data.y, pos);
-		break;
-	default:
-		break;
-	}
+	std::shared_ptr<BulletCollisionShape> shape;
+	
+	auto rigidBody = std::make_shared<BulletRigidBody>(CreateCollisionShape(type, data), pos);
 
-	AddRigidBody(rtn);
+	AddRigidBody(rigidBody);
 
-	return rtn;
+	return rigidBody;
 }
 
-std::shared_ptr<BulletCollisionShape> PhysicsSystem::CreateCollisionShape(const BulletShapeType type, const DirectX::XMFLOAT3 & data)
+std::shared_ptr<BulletCollisionShape> PhysicsSystem::CreateCollisionShape(const BulletShapeType type, const DirectX::XMFLOAT3& data)
 {
-	std::shared_ptr<btCollisionShape> collision = nullptr;
+	std::shared_ptr<BulletCollisionShape> shape;
 	switch (type)
 	{
 	case BulletShapeType::BOX:
-		collision = std::make_shared<btBoxShape>(btVector3(data.x * 0.5f, data.y * 0.5f, data.z * 0.5f));
+		shape = std::make_shared<BoxCollisionShape>(data);
 		break;
 	case BulletShapeType::SPHERE:
-		collision = std::make_shared<btSphereShape>(data.x);
+		shape = std::make_shared<SphereCollisionShape>(data.x);
 		break;
 	case BulletShapeType::CYLINDER:
-		collision = std::make_shared<btCylinderShape>(btVector3(data.x, data.y, data.x));
+		shape = std::make_shared<CylinderCollisionShape>(data.x, data.y);
 		break;
 	case BulletShapeType::CAPSULE:
-		collision = std::make_shared<btCapsuleShape>(data.x, data.y);
+		shape = std::make_shared<CapsuleCollisionShape>(data.x, data.y);
 		break;
 	case BulletShapeType::PLANE:
-		collision = std::make_shared<btStaticPlaneShape>(btVector3(data.x,data.y,data.z), 0);
+		shape = std::make_shared<StaticPlaneShape>(0, data);
 		break;
 	case BulletShapeType::CONE:
-		collision = std::make_shared<btConeShape>(data.x, data.y);
+		shape = std::make_shared<ConeCollisionShape>(data.x, data.y);
 		break;
 	default:
 		break;
 	}
 
-	std::shared_ptr<BulletCollisionShape> rtn = std::make_shared<BulletCollisionShape>(collision);
+	return shape;
+}
 
-	return rtn;
+void PhysicsSystem::AddAction(std::shared_ptr<CollisionAction> action)
+{
+	mWorld->addAction(action.get());
 }

@@ -149,34 +149,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bullet\Ghost\BulletCollisionShape.cpp" />
-    <ClCompile Include="bullet\Ghost\CollisionAction.cpp" />
-    <ClCompile Include="bullet\RigidBody\BoxRigidBody.cpp" />
+    <ClCompile Include="bullet\Ghost\BulletGhostObject.cpp" />
+    <ClCompile Include="bullet\Action\CollisionAction.cpp" />
     <ClCompile Include="bullet\RigidBody\BulletRigidBody.cpp" />
-    <ClCompile Include="bullet\RigidBody\CapsuleRigidBody.cpp" />
-    <ClCompile Include="bullet\RigidBody\ConeRigidBody.cpp" />
-    <ClCompile Include="bullet\RigidBody\CylinderRigidBody.cpp" />
-    <ClCompile Include="bullet\RigidBody\PlaneRigidBody.cpp" />
-    <ClCompile Include="bullet\RigidBody\SphereRigidBody.cpp" />
+    <ClCompile Include="bullet\Shape\BoxCollisionShape.cpp" />
+    <ClCompile Include="bullet\Shape\BulletCollisionShape.cpp" />
+    <ClCompile Include="bullet\Shape\CapsuleCollisionShape.cpp" />
+    <ClCompile Include="bullet\Shape\ConeCollisionShape.cpp" />
+    <ClCompile Include="bullet\Shape\CylinderCollisionShape.cpp" />
     <ClCompile Include="bullet\System\BulletDebugDrawDx.cpp" />
     <ClCompile Include="bullet\System\PhysicsSystem.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
+    <ClCompile Include="bullet\Shape\StaticPlaneShape.cpp" />
+    <ClCompile Include="bullet\Shape\SphereCollisionShape.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bullet\Ghost\BulletGhostObject.h" />
     <ClInclude Include="bulletlib\src\BulletlibLink.h" />
-    <ClInclude Include="bullet\Ghost\BulletCollisionShape.h" />
-    <ClInclude Include="bullet\Ghost\CollisionAction.h" />
-    <ClInclude Include="bullet\RigidBody\BoxRigidBody.h" />
+    <ClInclude Include="bullet\Action\CollisionAction.h" />
     <ClInclude Include="bullet\RigidBody\BulletRigidBody.h" />
-    <ClInclude Include="bullet\RigidBody\CapsuleRigidBody.h" />
-    <ClInclude Include="bullet\RigidBody\ConeRigidBody.h" />
-    <ClInclude Include="bullet\RigidBody\CylinderRigidBody.h" />
-    <ClInclude Include="bullet\RigidBody\PlaneRigidBody.h" />
-    <ClInclude Include="bullet\RigidBody\SphereRigidBody.h" />
+    <ClInclude Include="bullet\Shape\BoxCollisionShape.h" />
+    <ClInclude Include="bullet\Shape\BulletCollisionShape.h" />
+    <ClInclude Include="bullet\Shape\CapsuleCollisionShape.h" />
+    <ClInclude Include="bullet\Shape\ConeCollisionShape.h" />
+    <ClInclude Include="bullet\Shape\CylinderCollisionShape.h" />
     <ClInclude Include="bullet\System\BulletDebugDrawDx.h" />
     <ClInclude Include="bullet\System\PhysicsSystem.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
+    <ClInclude Include="bullet\Shape\StaticPlaneShape.h" />
+    <ClInclude Include="bullet\Shape\SphereCollisionShape.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

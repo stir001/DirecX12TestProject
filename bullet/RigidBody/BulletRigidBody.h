@@ -8,13 +8,14 @@
 *	@par 最終更新日	2018/11/26
 */
 #include <btBulletDynamicsCommon.h>
-#include <BulletDynamics/Character/btKinematicCharacterController.h>
 #include <memory>
 #include <DirectXMath.h>
 
+class BulletCollisionObject;
 class PhysicsSystem;
+class BulletCollisionShape;
 
-enum class BulletCollisionState
+enum class BulletCollisionState 
 {
 	STATIC = 1,			//!移動しない固定オブジェクト　物理計算なし　当たり判定あり
 	KINEMATIC = 2,		//!任意移動可能オブジェクト　物理計算なし	当たり判定あり
@@ -40,7 +41,7 @@ public:
 	*	@param[in]	collisionShape	rigidBodyに設定する形状
 	*	@param[in]	pos		初期位置
 	*/
-	BulletRigidBody(std::shared_ptr<btCollisionShape> collisionShape
+	BulletRigidBody(std::shared_ptr<BulletCollisionShape> collisionShape
 		, const DirectX::XMFLOAT3& pos = DirectX::XMFLOAT3(0.f, 0.f, 0.f));
 	virtual ~BulletRigidBody();
 
@@ -89,6 +90,14 @@ public:
 	*/
 	int GetTag() const;
 
+
+	/**
+	*	@brief	任意のタグを設定する
+				コリジョンの判定時にオブジェクトを判別するためのタグ
+	*	@param[in]	tag		設定するタグ
+	*/
+	void SetTag(int tag);
+
 	/**
 	*	コリジョンの状態を変更する
 	*/
@@ -107,14 +116,12 @@ protected:
 	/**
 	*	collisionの形状
 	*/
-	std::shared_ptr<btCollisionShape> mCollisionShape;
+	std::shared_ptr<BulletCollisionShape> mCollisionShape;
 
 	/**
 	*	モーションステート	剛体との同期に必要
 	*/
 	std::shared_ptr<btMotionState> mMotionState;
-
-	std::shared_ptr<btKinematicCharacterController> mCtrl;
 
 	/**
 	*	タグ
@@ -125,10 +132,5 @@ protected:
 	*	質量
 	*/
 	btScalar mMass;
-
-	/**
-	*	なぜか大きさの整合性が取れないので実装
-	*/
-	float mLocalScale;
 };
 

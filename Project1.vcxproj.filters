@@ -11,31 +11,34 @@
     <ClCompile Include="bullet\System\PhysicsSystem.cpp">
       <Filter>Bullet\System</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\RigidBody\SphereRigidBody.cpp">
-      <Filter>Bullet\RigidBody</Filter>
-    </ClCompile>
     <ClCompile Include="bullet\RigidBody\BulletRigidBody.cpp">
       <Filter>Bullet\RigidBody</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\RigidBody\CapsuleRigidBody.cpp">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClCompile Include="bullet\Shape\BulletCollisionShape.cpp">
+      <Filter>Bullet\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\RigidBody\PlaneRigidBody.cpp">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClCompile Include="bullet\Shape\BoxCollisionShape.cpp">
+      <Filter>Bullet\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\RigidBody\BoxRigidBody.cpp">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClCompile Include="bullet\Shape\CapsuleCollisionShape.cpp">
+      <Filter>Bullet\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\RigidBody\CylinderRigidBody.cpp">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClCompile Include="bullet\Shape\ConeCollisionShape.cpp">
+      <Filter>Bullet\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\RigidBody\ConeRigidBody.cpp">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClCompile Include="bullet\Shape\CylinderCollisionShape.cpp">
+      <Filter>Bullet\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\Ghost\CollisionAction.cpp">
-      <Filter>Bullet\Ghost</Filter>
+    <ClCompile Include="bullet\Shape\SphereCollisionShape.cpp">
+      <Filter>Bullet\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="bullet\Ghost\BulletCollisionShape.cpp">
+    <ClCompile Include="bullet\Shape\StaticPlaneShape.cpp">
+      <Filter>Bullet\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\Action\CollisionAction.cpp">
+      <Filter>Bullet\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet\Ghost\BulletGhostObject.cpp">
       <Filter>Bullet\Ghost</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,31 +53,34 @@
     <ClInclude Include="bullet\System\BulletDebugDrawDx.h">
       <Filter>Bullet\System</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\RigidBody\CapsuleRigidBody.h">
-      <Filter>Bullet\RigidBody</Filter>
-    </ClInclude>
-    <ClInclude Include="bullet\RigidBody\SphereRigidBody.h">
-      <Filter>Bullet\RigidBody</Filter>
-    </ClInclude>
     <ClInclude Include="bullet\RigidBody\BulletRigidBody.h">
       <Filter>Bullet\RigidBody</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\RigidBody\PlaneRigidBody.h">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClInclude Include="bullet\Shape\BulletCollisionShape.h">
+      <Filter>Bullet\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\RigidBody\BoxRigidBody.h">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClInclude Include="bullet\Shape\BoxCollisionShape.h">
+      <Filter>Bullet\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\RigidBody\CylinderRigidBody.h">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClInclude Include="bullet\Shape\CapsuleCollisionShape.h">
+      <Filter>Bullet\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\RigidBody\ConeRigidBody.h">
-      <Filter>Bullet\RigidBody</Filter>
+    <ClInclude Include="bullet\Shape\ConeCollisionShape.h">
+      <Filter>Bullet\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\Ghost\CollisionAction.h">
-      <Filter>Bullet\Ghost</Filter>
+    <ClInclude Include="bullet\Shape\CylinderCollisionShape.h">
+      <Filter>Bullet\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="bullet\Ghost\BulletCollisionShape.h">
+    <ClInclude Include="bullet\Shape\SphereCollisionShape.h">
+      <Filter>Bullet\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Shape\StaticPlaneShape.h">
+      <Filter>Bullet\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Action\CollisionAction.h">
+      <Filter>Bullet\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Ghost\BulletGhostObject.h">
       <Filter>Bullet\Ghost</Filter>
     </ClInclude>
   </ItemGroup>
@@ -97,8 +103,14 @@
     <Filter Include="Bullet\RigidBody">
       <UniqueIdentifier>{fe988e8b-d72c-466e-9203-de277689c497}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Bullet\Ghost">
+    <Filter Include="Bullet\Shape">
+      <UniqueIdentifier>{8c69074c-b037-4ab0-9d25-dacda90640ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet\Action">
       <UniqueIdentifier>{d0358ad0-fc65-4505-a582-a19a852d45ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet\Ghost">
+      <UniqueIdentifier>{52cd3124-be76-412c-9d1c-89af68769d92}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

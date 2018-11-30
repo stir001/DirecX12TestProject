@@ -5,13 +5,12 @@
 #include <list>
 
 enum class BulletShapeType;
-class BulletCollisionShape;
-class btGhostObject;
+class BulletGhostObject;
 
 class CollisionAction : public btActionInterface
 {
 public:
-	CollisionAction(std::shared_ptr<BulletCollisionShape> shape);
+	CollisionAction(std::shared_ptr<BulletGhostObject> shape);
 	virtual ~CollisionAction();
 
 	virtual void Action(int tag) = 0;
@@ -26,10 +25,9 @@ public:
 
 	const std::list<int>& GetTargetTags() const;
 
-	void SetCollisionShape(std::shared_ptr<BulletCollisionShape> shape);
+	void SetCollisionObject(std::shared_ptr<BulletGhostObject> shape);
 private:
-	std::shared_ptr<btGhostObject> mGhost;
-	std::shared_ptr<BulletCollisionShape>  mCollisionShape;
+	std::shared_ptr<BulletGhostObject> mCollision;
 
 	std::list<int> mTargetTags;
 };

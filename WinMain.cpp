@@ -14,7 +14,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "bullet/System/PhysicsSystem.h"
-#include "bullet/RigidBody/BoxRigidBody.h"
+#include "bullet/RigidBody/BulletRigidBody.h"
 
 
 using namespace DirectX;
@@ -34,6 +34,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto sphereRigid = sys.CreateRigitBody(BulletShapeType::SPHERE, { 1.0f,0.0f,0.0f }, { 4, 0, 0 });
 		//auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
 		auto planeRigid = sys.CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.f });
+		planeRigid->SetCollisionState(BulletCollisionState::STATIC);
 		auto boxRigid = sys.CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
 		boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
 		//auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
@@ -41,9 +42,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		//auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
 		//priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
-
-		
-
 
 		auto priSphere = PrimitiveCreator::Instance().CreateSphere(1, 10);
 		priSphere->SetPosition({ 4.f, 1.f, 0.f });
@@ -84,7 +82,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_RSHIFT))
 			{
-				boxRigid->SetCollisionState(BulletCollisionState::NON_CONTACT);
+				boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
 			}
 
 			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_RCONTROL))

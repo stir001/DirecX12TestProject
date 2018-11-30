@@ -5,12 +5,12 @@
 class BulletCollisionShape
 {
 public:
+	BulletCollisionShape();
 	BulletCollisionShape(std::shared_ptr<btCollisionShape> collision);
 	virtual ~BulletCollisionShape();
 
 	std::shared_ptr<btCollisionShape> GetShape() const;
-
-private:
+protected:
 	std::shared_ptr<btCollisionShape> mCollisionShape;
 };
 

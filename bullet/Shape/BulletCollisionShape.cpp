@@ -2,6 +2,10 @@
 
 
 
+BulletCollisionShape::BulletCollisionShape()
+{
+}
+
 BulletCollisionShape::BulletCollisionShape(std::shared_ptr<btCollisionShape> collision)
 	: mCollisionShape(collision)
 {
