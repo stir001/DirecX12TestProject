@@ -162,6 +162,7 @@
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="bullet\Shape\StaticPlaneShape.cpp" />
     <ClCompile Include="bullet\Shape\SphereCollisionShape.cpp" />
+    <ClCompile Include="bullet\Action\TestAction.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +180,7 @@
     <ClInclude Include="sample\NormalMapCube.h" />
     <ClInclude Include="bullet\Shape\StaticPlaneShape.h" />
     <ClInclude Include="bullet\Shape\SphereCollisionShape.h" />
+    <ClInclude Include="bullet\Action\TestAction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

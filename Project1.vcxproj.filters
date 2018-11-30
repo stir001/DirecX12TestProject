@@ -41,6 +41,9 @@
     <ClCompile Include="bullet\Ghost\BulletGhostObject.cpp">
       <Filter>Bullet\Ghost</Filter>
     </ClCompile>
+    <ClCompile Include="bullet\Action\TestAction.cpp">
+      <Filter>Bullet\Action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="bullet\Ghost\BulletGhostObject.h">
       <Filter>Bullet\Ghost</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet\Action\TestAction.h">
+      <Filter>Bullet\Action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,7 @@ class BulletDebugDrawDx;
 class BulletRigidBody;
 class BulletCollisionShape;
 class CollisionAction;
+class BulletGhostObject;
 
 /**
 *	@enum	BulletShapeType
@@ -121,7 +122,17 @@ public:
 	std::shared_ptr<BulletCollisionShape> CreateCollisionShape(const BulletShapeType type
 		, const DirectX::XMFLOAT3& data);
 
+	/**
+	*	@brief	アクションを追加する
+	*	@param[in]	action	追加するアクション
+	*/
 	void AddAction(std::shared_ptr<CollisionAction> action);
+
+	/**
+	*	@brief	ゴーストを追加する
+		@param[in]	ghost	追加するゴースト
+	*/
+	void AddGhost(std::shared_ptr<BulletGhostObject> ghost);
 private:
 	PhysicsSystem();
 	PhysicsSystem(const PhysicsSystem&) = delete;

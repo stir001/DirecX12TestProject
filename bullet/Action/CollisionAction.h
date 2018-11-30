@@ -6,18 +6,19 @@
 
 enum class BulletShapeType;
 class BulletGhostObject;
+class BulletCollisionShape;
 
 class CollisionAction : public btActionInterface
 {
 public:
-	CollisionAction(std::shared_ptr<BulletGhostObject> shape);
+	CollisionAction();
 	virtual ~CollisionAction();
 
 	virtual void Action(int tag) = 0;
 
 	void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
 
-	void debugDraw(btIDebugDraw* debugDrawer);
+	virtual void debugDraw(btIDebugDraw* debugDrawer);
 
 	void AddTargetTag(int target);
 
@@ -25,8 +26,14 @@ public:
 
 	const std::list<int>& GetTargetTags() const;
 
-	void SetCollisionObject(std::shared_ptr<BulletGhostObject> shape);
-private:
+	void SetCollisionObject(std::shared_ptr<BulletGhostObject> ghost);
+
+	void SetShape(std::shared_ptr<BulletCollisionShape> shape);
+
+	void SetCollisionState(int state);
+
+	void Translate(float x, float y, float z);
+protected:
 	std::shared_ptr<BulletGhostObject> mCollision;
 
 	std::list<int> mTargetTags;

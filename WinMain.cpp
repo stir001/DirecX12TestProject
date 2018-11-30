@@ -15,6 +15,8 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "bullet/System/PhysicsSystem.h"
 #include "bullet/RigidBody/BulletRigidBody.h"
+#include "bullet/Action/TestAction.h"
+#include "bullet/Ghost/BulletGhostObject.h"
 
 
 using namespace DirectX;
@@ -35,13 +37,34 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto capCol = sys->CreateRigitBody(BulletShapeType::CAPSULE, { 1.0f, 2.0f, 0.0f }, { -4,0,0 });
 		auto planeRigid = sys.CreateRigitBody(BulletShapeType::PLANE, { 0.0f, 1.f, 0.f });
 		planeRigid->SetCollisionState(BulletCollisionState::STATIC);
+		planeRigid->SetTag(1);
 		auto boxRigid = sys.CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
 		boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
+		boxRigid->SetTag(2);
+		//boxRigid->SetTag(1);
+		boxRigid->Translate({0,10,0});
 		//auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
 		//auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
 
 		//auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
 		//priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
+
+		/*auto ghost = std::make_shared<BulletGhostObject>();
+		ghost->SetCollisionShape(sys.CreateCollisionShape(BulletShapeType::SPHERE, { 1,1,1 }));
+		sys.AddGhost(ghost);*/
+
+		auto subction = std::make_shared <TestAction>();
+		subction->Translate(0, 0, 1);
+		sys.AddAction(subction);
+		
+
+		auto tAction = std::make_shared<TestAction>();
+		tAction->Translate(0, 0, 1.5);
+		tAction->AddTargetTag(1);
+		sys.AddAction(tAction);
+	
+
+		
 
 		auto priSphere = PrimitiveCreator::Instance().CreateSphere(1, 10);
 		priSphere->SetPosition({ 4.f, 1.f, 0.f });

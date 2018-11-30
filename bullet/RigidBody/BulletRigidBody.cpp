@@ -83,7 +83,7 @@ int BulletRigidBody::GetTag() const
 void BulletRigidBody::SetTag(int tag)
 {
 	mTag = tag;
-	mRigidBody->setIslandTag(tag);
+	mRigidBody->setUserIndex(tag);
 }
 
 void BulletRigidBody::SetCollisionState(BulletCollisionState state)

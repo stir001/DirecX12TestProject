@@ -10,7 +10,9 @@
 #include "bullet/Shape/ConeCollisionShape.h"
 #include "bullet/Shape/CylinderCollisionShape.h"
 #include "bullet/Action/CollisionAction.h"
+#include "bullet/Ghost/BulletGhostObject.h"
 
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <btBulletDynamicsCommon.h>
 #include <ctime>
 #include <algorithm>
@@ -163,4 +165,10 @@ std::shared_ptr<BulletCollisionShape> PhysicsSystem::CreateCollisionShape(const 
 void PhysicsSystem::AddAction(std::shared_ptr<CollisionAction> action)
 {
 	mWorld->addAction(action.get());
+}
+
+void PhysicsSystem::AddGhost(std::shared_ptr<BulletGhostObject> ghost)
+{
+	auto col = ghost->GetGhostObject();
+	mWorld->addCollisionObject(col.get(), 1);
 }

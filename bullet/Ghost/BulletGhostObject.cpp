@@ -6,6 +6,7 @@
 BulletGhostObject::BulletGhostObject()
 {
 	mGhost = std::make_shared<btGhostObject>();
+	mGhost->setUserIndex(3);
 }
 
 BulletGhostObject::~BulletGhostObject()
