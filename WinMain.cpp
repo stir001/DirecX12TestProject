@@ -30,6 +30,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
 	
+	camera->SetPos({ 10, 5, 0 });
+	DirectX::XMFLOAT3 targetPos(0,5,0);
+	camera->SetTarget(targetPos);
+
 	DxInput input;
 	{
 		auto& sys = PhysicsSystem::Instance();
@@ -39,9 +43,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		planeRigid->SetCollisionState(BulletCollisionState::STATIC);
 		planeRigid->SetTag(1);
 		auto boxRigid = sys.CreateRigitBody(BulletShapeType::BOX, DirectX::XMFLOAT3( 1.f, 1.f, 1.f), DirectX::XMFLOAT3(0, 0, 0));
-		boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
+		//boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
 		boxRigid->SetTag(2);
-		//boxRigid->SetTag(1);
 		boxRigid->Translate({0,10,0});
 		//auto cylinderRigid = sys->CreateRigitBody(BulletShapeType::CYLINDER, { 1.0f, 1.0f, 0 }, DirectX::XMFLOAT3(0, 0, 4));
 		//auto coneRigid = sys->CreateRigitBody(BulletShapeType::CONE, { 1.0f, 2.0f, 0 });
@@ -49,18 +52,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto priPlane = PrimitiveCreator::Instance().CreatePlane(DirectX::XMFLOAT3(0.f, 0.f, 0.f), 10.f, 10.f, DirectX::XMFLOAT3(0.f, 1.f, 0.f));
 		//priPlane->SetColor(DirectX::XMFLOAT4(0.8f,0.5f,0.0f,1.0f));
 
-		/*auto ghost = std::make_shared<BulletGhostObject>();
-		ghost->SetCollisionShape(sys.CreateCollisionShape(BulletShapeType::SPHERE, { 1,1,1 }));
-		sys.AddGhost(ghost);*/
+		//auto ghost = std::make_shared<BulletGhostObject>();
+		//ghost->SetCollisionShape(sys.CreateCollisionShape(BulletShapeType::SPHERE, { 1,1,1 }));
+		//sys.AddGhost(ghost);
 
-		auto subction = std::make_shared <TestAction>();
-		subction->Translate(0, 0, 1);
-		sys.AddAction(subction);
+		//auto subction = std::make_shared <TestAction>();
+		//subction->Translate(0, 2, 0);
+		//sys.AddAction(subction);
 		
 
 		auto tAction = std::make_shared<TestAction>();
-		tAction->Translate(0, 0, 1.5);
-		tAction->AddTargetTag(1);
+		tAction->Translate(targetPos.x,targetPos.y,targetPos.z);
 		sys.AddAction(tAction);
 	
 
@@ -73,7 +75,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		priCube->SetPosition({ 0, 0 ,0 });
 
 		std::vector<DirectX::XMFLOAT4X4> instanceMat(1);
-		instanceMat[0] = boxRigid->GetWorldTransform();
+		//instanceMat[0] = boxRigid->GetWorldTransform();
 		priCube->SetInstancingMatrix(instanceMat, 0, 0);
 
 		DirectX::XMFLOAT3 pos = { 0,0,0 };
@@ -105,22 +107,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_RSHIFT))
 			{
-				boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
+				//boxRigid->SetCollisionState(BulletCollisionState::CHARACTER);
 			}
 
 			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_RCONTROL))
 			{
-				boxRigid->SetCollisionState(BulletCollisionState::KINEMATIC);
+				//boxRigid->SetCollisionState(BulletCollisionState::KINEMATIC);
 			}
 
 			priCube->SetPosition(pos);
-			boxRigid->SetWorldTransform(priCube->GetMatrix());
+			//boxRigid->SetWorldTransform(priCube->GetMatrix());
 			sys.Simulation();
 			//instanceMat[0] = boxRigid->GetWorldTransform();
 			//priCube->SetInstancingMatrix(instanceMat, 0, 0);
 
 			//priSphere->Draw();
-			priCube->Draw();
+			//priCube->Draw();
 			sys.DebugDraw();
 
 			

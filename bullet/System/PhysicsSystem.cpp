@@ -23,7 +23,9 @@ PhysicsSystem::PhysicsSystem()
 {
 	//広域位相アルゴリズムの実装をインスタンス化
 	mBroadphase = std::make_shared<btDbvtBroadphase>();
-	
+	mGhostCallBack = std::make_shared<btGhostPairCallback>();
+	mBroadphase->getOverlappingPairCache()->setInternalGhostPairCallback(mGhostCallBack.get());
+
 	//狭域位相アルゴリズムの実装をインスタンス化
 	mCollisionConfiguration = std::make_shared<btDefaultCollisionConfiguration>();
 	mDispatcher = std::make_shared<btCollisionDispatcher>(mCollisionConfiguration.get());
@@ -50,6 +52,10 @@ PhysicsSystem::~PhysicsSystem()
 	for (auto rigid : mRigidBodies)
 	{
 		mWorld->removeRigidBody(rigid.second->GetRigidBody().get());
+	}
+	for (auto ghost : mGhosts)
+	{
+		mWorld->removeCollisionObject(ghost.second->GetGhostObject().get());
 	}
 	mRigidBodies.clear();
 }
@@ -91,7 +97,7 @@ void PhysicsSystem::AddRigidBody(std::shared_ptr<BulletRigidBody> rigid)
 void PhysicsSystem::Simulation()
 {
 	long currentTime = clock();
-	mWorld->stepSimulation(currentTime - mTime);
+	mWorld->stepSimulation(1.0 / 60.0f, 2);
 	mTime = currentTime;
 }
 
@@ -106,8 +112,8 @@ void PhysicsSystem::RemoveRigidBody(std::shared_ptr<BulletRigidBody> rigid)
 	{
 		return;
 	}
-	mRigidBodies.erase(fitr);
 	mWorld->removeRigidBody(rigid->GetRigidBody().get());
+	mRigidBodies.erase(fitr);
 }
 
 void PhysicsSystem::RemoveRigidBody(int tag)
@@ -117,8 +123,8 @@ void PhysicsSystem::RemoveRigidBody(int tag)
 	{
 		return;
 	}
-	mRigidBodies.erase(itr);
 	mWorld->removeRigidBody((*itr).second->GetRigidBody().get());
+	mRigidBodies.erase(itr);
 }
 
 std::shared_ptr<BulletRigidBody> PhysicsSystem::CreateRigitBody(const BulletShapeType type, const DirectX::XMFLOAT3& data, const DirectX::XMFLOAT3& pos)
@@ -165,10 +171,42 @@ std::shared_ptr<BulletCollisionShape> PhysicsSystem::CreateCollisionShape(const 
 void PhysicsSystem::AddAction(std::shared_ptr<CollisionAction> action)
 {
 	mWorld->addAction(action.get());
+	AddGhost(action->GetGhostObject());
+	//mWorld->addCollisionObject(action->GetGhostObject()->GetGhostObject().get());
 }
 
 void PhysicsSystem::AddGhost(std::shared_ptr<BulletGhostObject> ghost)
 {
+	if (ghost->GetWorldID() != -1) return;
+	int index = 0;
+	for (auto gID = mGhosts.begin(); gID != mGhosts.end(); ++gID)
+	{
+		if ((*gID).first < index)
+		{
+			if(std::find_if(gID, mGhosts.end(), [index](std::pair<int, std::shared_ptr<BulletGhostObject>> value) 
+			{
+				return value.first == index;
+			})
+			 == mGhosts.end())
+			break;
+		}
+		index = (*gID).first;
+		++index;
+	}
+	mGhosts[index] = ghost;
+	ghost->mWorldID = index;
 	auto col = ghost->GetGhostObject();
-	mWorld->addCollisionObject(col.get(), 1);
+	mWorld->addCollisionObject(col.get());
+}
+
+void PhysicsSystem::RemoveGhost(int index)
+{
+	if (index == -1)return;
+	auto fitr = std::find_if(mGhosts.begin(), mGhosts.end(), [index](std::pair<int, std::shared_ptr<BulletGhostObject>> value)
+	{
+		return index == value.first;
+	});
+	if (fitr == mGhosts.end()) return;
+	mWorld->removeCollisionObject((*fitr).second->GetGhostObject().get());
+	mGhosts.erase(fitr);
 }

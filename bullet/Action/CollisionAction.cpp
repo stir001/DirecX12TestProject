@@ -8,14 +8,17 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 CollisionAction::CollisionAction()
-	: mCollision(std::make_shared<BulletGhostObject>())
+	: mGhost(std::make_shared<BulletGhostObject>())
 {
-	auto trans = mCollision->GetGhostObject()->getWorldTransform();
-	trans.setOrigin(btVector3(0, 0, 10));
-	mCollision->GetGhostObject()->setWorldTransform(trans);
-	int num = mCollision->GetGhostObject()->getCollisionFlags();
+	auto trans = mGhost->GetGhostObject()->getWorldTransform();
+	trans.setIdentity();
+	trans.setOrigin(btVector3(0, 0, 0));
+	mGhost->GetGhostObject()->setWorldTransform(trans);
+	int num = mGhost->GetGhostObject()->getCollisionFlags();
 	//mCollision->GetGhostObject()->setActivationState(DISABLE_DEACTIVATION);
-	//mCollision->GetGhostObject()->setCollisionFlags(num | btCollisionObject::CollisionFlags::CF);
+	mGhost->GetGhostObject()->setCollisionFlags(num | 
+		btCollisionObject::CollisionFlags::CF_NO_CONTACT_RESPONSE | 
+		btCollisionObject::CollisionFlags::CF_STATIC_OBJECT);
 }
 
 
@@ -25,31 +28,29 @@ CollisionAction::~CollisionAction()
 
 void CollisionAction::updateAction(btCollisionWorld * collisionWorld, btScalar deltaTimeStep)
 {
-	int dnum = collisionWorld->getDispatcher()->getNumManifolds();
-
-	for (int i = 0; i < dnum; ++i)
-	{
-		auto manifold = collisionWorld->getDispatcher()->getManifoldByIndexInternal(i);
-		auto objA = manifold->getBody0();
-		auto objB = manifold->getBody1();
-
-		auto tag0 = objA->getUserIndex();
-		auto tag1 = objB->getUserIndex();
-		
-		if (manifold->getNumContacts() > 0)
-		{
-			int a = 0;
-		}
-	}
-
-	int num = mCollision->GetGhostObject()->getNumOverlappingObjects();
+	int num = mGhost->GetGhostObject()->getNumOverlappingObjects();
 	for (int i = 0; i < num; ++i)
 	{
-		int tag = mCollision->GetGhostObject()->getOverlappingObject(i)->getIslandTag();
-		auto fitr =std::find_if(mTargetTags.begin(), mTargetTags.end(), [tag](int value) {return tag == value; });
-		if (fitr != mTargetTags.end())
+		auto pairCollision = mGhost->GetGhostObject()->getOverlappingObject(i);
+		auto findPair = collisionWorld->getPairCache()->findPair(mGhost->GetGhostObject()->getBroadphaseHandle()
+			, pairCollision->getBroadphaseHandle());
+		if (!findPair) continue;
+		int tag = pairCollision->getUserIndex();
+		btManifoldArray manifoldArray;
+		findPair->m_algorithm->getAllContactManifolds(manifoldArray);
+		int arraySize = manifoldArray.size();
+		for (int i = 0; i < arraySize; ++i)
 		{
-			Action(*fitr);
+			int contactNum = manifoldArray[i]->getNumContacts();
+			for (int point = 0; point < contactNum; ++point)
+			{
+				auto p = manifoldArray[i]->getContactPoint(point);
+				if (p.getDistance() < 0)
+				{
+					Action(tag);
+					break;
+				}
+			}
 		}
 	}
 }
@@ -58,48 +59,34 @@ void CollisionAction::debugDraw(btIDebugDraw* debugDrawer)
 {
 }
 
-void CollisionAction::AddTargetTag(int target)
-{
-	auto itr = std::find_if(mTargetTags.begin(), mTargetTags.end(), [target](int value) {return value == target; });
-	if (itr == mTargetTags.end())
-	{
-		mTargetTags.push_back(target);
-	}
-}
-
-void CollisionAction::RemoveTargetTag(int target)
-{
-	auto itr = std::find_if(mTargetTags.begin(), mTargetTags.end(), [target](int value) {return value == target; });
-	if (itr == mTargetTags.end())
-	{
-		mTargetTags.erase(itr);
-	}
-}
-
-const std::list<int>& CollisionAction::GetTargetTags() const
-{
-	return mTargetTags;
-}
-
 void CollisionAction::SetCollisionObject(std::shared_ptr<BulletGhostObject> shape)
 {
-	mCollision = shape;
+	mGhost = shape;
 }
 
 void CollisionAction::SetShape(std::shared_ptr<BulletCollisionShape> shape)
 {
-	mCollision->SetCollisionShape(shape);
+	mGhost->SetCollisionShape(shape);
 }
 
 void CollisionAction::SetCollisionState(int state)
 {
-	mCollision->GetGhostObject()->setCollisionFlags(state);
-
+	mGhost->GetGhostObject()->setCollisionFlags(state);
 }
 
 void CollisionAction::Translate(float x, float y, float z)
 {
-	auto trans = mCollision->GetGhostObject()->getWorldTransform();
+	auto trans = mGhost->GetGhostObject()->getWorldTransform();
 	trans.setOrigin({ x,y,z });
-	mCollision->GetGhostObject()->setWorldTransform(trans);
+	mGhost->GetGhostObject()->setWorldTransform(trans);
+}
+
+std::shared_ptr<BulletGhostObject> CollisionAction::GetGhostObject()
+{
+	return mGhost;
+}
+
+btGhostObject* CollisionAction::GetbtGhostPtr()
+{
+	return mGhost->GetGhostObject().get();
 }

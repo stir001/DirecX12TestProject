@@ -8,6 +8,7 @@
 *	@par 最終更新日	2018/11/27
 */
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <memory>
 #include <DirectXMath.h>
 #include <map>
@@ -133,6 +134,8 @@ public:
 		@param[in]	ghost	追加するゴースト
 	*/
 	void AddGhost(std::shared_ptr<BulletGhostObject> ghost);
+
+	void RemoveGhost(int index);
 private:
 	PhysicsSystem();
 	PhysicsSystem(const PhysicsSystem&) = delete;
@@ -172,10 +175,17 @@ private:
 	*	剛体保持
 	*/
 	std::map<int, std::shared_ptr<BulletRigidBody>>			mRigidBodies;
+	
+	/**
+	*	ゴースト保持
+	*/
+	std::map<int, std::shared_ptr<BulletGhostObject>> mGhosts;
 
 	/**
 	*	現在の時間
 	*/
 	long mTime;
+
+	std::shared_ptr<btGhostPairCallback> mGhostCallBack;
 };
 
