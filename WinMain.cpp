@@ -8,7 +8,6 @@
 #include <random>
 
 #define BT_NO_SIMD_OPERATOR_OVERLOADS
-#include "BulletlibLink.h"
 
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
@@ -24,13 +23,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	//Direct3D12‚Ì‰Šú‰»
 	Dx12CtrlInit(hInst);
+
+	auto size = Dx12Ctrl::Instance().GetWindowSize();
 	
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
+	Dx12Ctrl::Instance().GetCameraHolder()->CreateCamera({ 0,40,100 }, { 0,30,0 }, { 0,0,size.x * 0.5f,size.y * 0.5f,0,1 }, { 0,0,(LONG)(size.x * 0.5), (LONG)(size.y * 0.5) });
 	camera->SetPos({ 0, 40, -100 });
 	camera->SetTarget({ 0, 30, 0 });
 
 	float cubeLength = 5.0f;
-	auto nCube = std::make_shared<NormalMapCube>(cubeLength, "sample/Normalmap/NormalMap.png");
+	auto nCube = std::make_shared<NormalMapCube>(cubeLength, "sample/normalmap1.png");
 	auto plane = PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::PLANE, { 0,1,0 });
 	plane->SetCollisionState(BulletCollisionState::STATIC);
 
