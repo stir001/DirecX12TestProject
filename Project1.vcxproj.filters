@@ -5,11 +5,13 @@
     <ClCompile Include="sample\NormalMapCube.cpp">
       <Filter>Sample\NormalMap</Filter>
     </ClCompile>
+    <ClCompile Include="TestAction2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
       <Filter>Sample\NormalMap</Filter>
     </ClInclude>
+    <ClInclude Include="TestAction2.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">

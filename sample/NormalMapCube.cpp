@@ -27,7 +27,7 @@ void NormalMapCube::AsyncRigidBody()
 		auto mat = mRigidBody[i]->GetWorldTransform();
 		mInstanceMatrix[i] = mat;
 	}
-	mCubeCtrl->SetInstancingMatrix(mInstanceMatrix, 0, mInstanceMatrix.size() - 1);
+	mCubeCtrl->SetInstancingMatrix(mInstanceMatrix, 0, static_cast<unsigned int>(mInstanceMatrix.size() - 1));
 }
 
 void NormalMapCube::Roatation(DxInput & input)
@@ -85,5 +85,5 @@ void NormalMapCube::Create(float length)
 	mRigidBody.back()->SetCollisionState(BulletCollisionState::CHARACTER);
 	std::vector<DirectX::XMFLOAT3> dummyPos(mInstanceMatrix.size());
 	mCubeCtrl->Instancing(dummyPos);
-	mCubeCtrl->SetColor({ 1,1,1,0 }, mInstanceMatrix.size() - 1);
+	mCubeCtrl->SetColor({ 1,1,1,0 }, static_cast<int>(mInstanceMatrix.size() - 1));
 }
