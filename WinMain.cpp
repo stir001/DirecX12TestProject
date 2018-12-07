@@ -34,9 +34,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		float cubeLength = 5.0f;
 
-		auto plane = PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::PLANE, { 0,1,0 });
+		/*auto plane = PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::PLANE, { 0,1,0 });
 		plane->SetCollisionState(BulletCollisionState::STATIC);
-		plane->SetTag(0);
+		plane->SetTag(0);*/
 
 		std::random_device seed_generator;
 		std::mt19937 engin(seed_generator());
@@ -48,9 +48,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		DirectX::XMFLOAT3 s1Pos = { 0,0,1 };
 		auto test = std::make_shared<TestAction2>(shape, 1);
 		auto test2 = std::make_shared<TestAction2>(shape2, 2);
-		auto test3 = std::make_shared<TestAction2>(shape2, 3);
-		auto test4 = std::make_shared<TestAction2>(shape2, 4);
 		test->Translate(s1Pos);
+		test2->Translate(s2Pos);
+
+		float vel = 0.0f;
 
 		DxInput input;
 		{
@@ -63,17 +64,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
 				{
 					s2Pos.z += 0.1f;
-					test2 = nullptr;
-					test3 = nullptr;
-					test4 = nullptr;
 				}
 
 				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
 				{
 					s2Pos.z -= 0.1f;
+					vel = -0.1f;
 				}
-
-				test->Translate(s2Pos);
+				s2Pos.z += vel;
+				test2->Translate(s2Pos);
 
 				PhysicsSystem::Instance().DebugDraw();
 			}

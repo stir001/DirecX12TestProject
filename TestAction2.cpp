@@ -12,10 +12,18 @@ TestAction2::~TestAction2()
 {
 }
 
-void TestAction2::Action(int tag)
+void TestAction2::OnAction(int tag)
 {
-	if (tag != -1)
+}
+
+void TestAction2::StayAction(int tag)
+{
+	if (tag == 2)
 	{
-		int a = 0;
+		bool isHit = true;
 	}
+}
+
+void TestAction2::ExitAction(int tag)
+{
 }
