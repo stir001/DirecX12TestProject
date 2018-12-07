@@ -52,25 +52,20 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		auto test4 = std::make_shared<TestAction2>(shape2, 4);
 		test->Translate(s1Pos);
 
-
-
-		
-
 		DxInput input;
 		{
-
-
 			while (ProcessMessage()) {
 				input.UpdateKeyState();
 				camera->DefaultMove(input);
 				PhysicsSystem::Instance().ClearDebugDraw();
-
-
 				PhysicsSystem::Instance().Simulation();
 
 				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
 				{
 					s2Pos.z += 0.1f;
+					test2 = nullptr;
+					test3 = nullptr;
+					test4 = nullptr;
 				}
 
 				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
@@ -82,13 +77,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 				PhysicsSystem::Instance().DebugDraw();
 			}
-			
 		}
 		PhysicsSystem::Destory();
 	}
 	
-
-
 	Dx12Ctrl::Instance().Release();
 	Dx12Ctrl::Destroy();
 }
