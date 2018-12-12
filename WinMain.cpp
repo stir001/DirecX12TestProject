@@ -48,6 +48,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		DirectX::XMFLOAT3 s1Pos = { 0,0,1 };
 		auto test = std::make_shared<TestAction2>(shape, 1);
 		auto test2 = std::make_shared<TestAction2>(shape2, 2);
+		test->SetTag2(0);
 		test->Translate(s1Pos);
 		test2->Translate(s2Pos);
 

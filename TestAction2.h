@@ -14,18 +14,18 @@ public:
 	*	@brief	衝突した最初に呼び出される関数
 	*	@brief	tag		衝突したコリジョンのタグ
 	*/
-	void OnAction(int tag);
+	void OnAction(int tag1, int tag2);
 
 	/**
 	*	@brief	衝突している間OnActionの後ずっと呼び出される関数
 	*	@param[in]	tag		衝突したコリジョンのタグ
 	*/
-	void StayAction(int tag);
+	void StayAction(int tag1, int tag2);
 
 	/**
 	*	@brief	衝突しなくなった時に飛び出される関数
 	*	@param[in]	tag		衝突したコリジョンのタグ
 	*/
-	void ExitAction(int tag);
+	void ExitAction(int tag, int tag2);
 };
 
