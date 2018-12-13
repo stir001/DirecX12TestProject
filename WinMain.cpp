@@ -41,6 +41,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Yuko'sRoom/Yuko'sRoom/Yuko'sRoom.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
+		
+		auto img3D = ImageLoader::Instance().LoadImage3D("dice.png");
 
 		PMDLoader loader;
 		VMDLoader vmdLoader;
@@ -55,6 +57,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		DirectX::XMFLOAT3 pos = { 0,0,10 };
 
+		//auto img = ImageLoader::Instance().LoadImageData("dice.png");
 
 		
 		while (ProcessMessage()) {
@@ -86,8 +89,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				pos.x += 0.1f;
 			}
 
+			img3D->AddRotaY(1.f);
+
 			model->Draw();
 			//model->DrawSkeleton();
+			img3D->Draw();
 
 		}
 	}
