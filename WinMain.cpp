@@ -34,9 +34,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		float cubeLength = 5.0f;
 
-		/*auto plane = PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::PLANE, { 0,1,0 });
+		auto plane = PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::PLANE, { 0,1,0 });
 		plane->SetCollisionState(BulletCollisionState::STATIC);
-		plane->SetTag(0);*/
+		plane->SetTag1(0);
 
 		std::random_device seed_generator;
 		std::mt19937 engin(seed_generator());
@@ -44,35 +44,55 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		auto shape = PhysicsSystem::Instance().CreateCollisionShape(BulletShapeType::BOX, { 1.0f,1.0f,1.0f });
 		auto shape2 = PhysicsSystem::Instance().CreateCollisionShape(BulletShapeType::SPHERE, { 1.0f,0,0 });
 
-		DirectX::XMFLOAT3 s2Pos = { 0,0,5 };
+		DirectX::XMFLOAT3 s2Pos = { 0,0,0 };
 		DirectX::XMFLOAT3 s1Pos = { 0,0,1 };
 		auto test = std::make_shared<TestAction2>(shape, 1);
 		auto test2 = std::make_shared<TestAction2>(shape2, 2);
 		test->Translate(s1Pos);
 		test2->Translate(s2Pos);
 
+		DirectX::XMFLOAT3 boxPos = { 0,0,0 };
+		auto box = PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::BOX, { 1,1,1 }, {1,2,0});
+		box->SetTag1(3);
+		box->SetTag2(4);
+		box->SetIgnoreAction(test);
+		box->SetAcnglerFactor(0);
+		//box->SetIgnoreAction(test2);
 		float vel = 0.0f;
+
+		float force = 10.f;
 
 		DxInput input;
 		{
 			while (ProcessMessage()) {
 				input.UpdateKeyState();
 				camera->DefaultMove(input);
-				PhysicsSystem::Instance().ClearDebugDraw();
 				PhysicsSystem::Instance().Simulation();
 
 				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
 				{
-					s2Pos.z += 0.1f;
+					box->AddForce(0, 0, force);
 				}
 
 				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
 				{
-					s2Pos.z -= 0.1f;
-					vel = -0.1f;
+					box->AddForce(0, 0, -force);
 				}
-				s2Pos.z += vel;
-				test2->Translate(s2Pos);
+
+				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+				{
+					box->AddForce(-force, 0, 0);
+				}
+
+				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+				{
+					box->AddForce(force, 0, 0);
+				}
+
+				if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD5))
+				{
+					box->AddForce(0, force, 0);
+				}
 
 				PhysicsSystem::Instance().DebugDraw();
 			}
