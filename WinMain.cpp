@@ -29,12 +29,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami/tyami_normalVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami_anim/tyami_animVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "douki/Douki_chan/Douki_chan.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_anim/Kagura_animeVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_low/kagura_lowVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kouhai/Kouhai_chan.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
+		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "shachiku/ShachikuChan_ver3.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_anim/Yuko_animeVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_low/YukoLowVer.fbx");
@@ -42,7 +42,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
 		
-		auto img3D = ImageLoader::Instance().LoadImage3D("dice.png");
+		auto img3D = ImageLoader::Instance().LoadImage3D("dice.png" , true);
 
 		PMDLoader loader;
 		VMDLoader vmdLoader;
@@ -57,8 +57,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		DirectX::XMFLOAT3 pos = { 0,0,10 };
 
-		//auto img = ImageLoader::Instance().LoadImageData("dice.png");
-
+		auto plane = PrimitiveCreator::Instance().CreatePlane({ 0,0,0 }, 100, 100, { 0,1,0 });
 		
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
@@ -66,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			{
 				scale += 0.001f;
 				fbxScale += 0.1f;
-				model->SetScale(fbxScale);
+				//model->SetScale(fbxScale);
 			}
 
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
@@ -74,7 +73,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				scale -= 0.001f;
 
 				fbxScale -= 0.1f;
-				model->SetScale(fbxScale);
+				//model->SetScale(fbxScale);
 			}
 			camera->DefaultMove(input);
 
@@ -89,11 +88,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				pos.x += 0.1f;
 			}
 
-			img3D->AddRotaY(1.f);
+			//img3D->AddRotaY(1.f);
 
 			model->Draw();
 			//model->DrawSkeleton();
-			img3D->Draw();
+			//img3D->Draw();
+			//fbxmodel->Draw();
+			plane->Draw();
 
 		}
 	}
