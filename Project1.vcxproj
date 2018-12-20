@@ -123,7 +123,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library\DirectX12;%(AdditionalIncludeDirectories);$(BULLET_DIR)\src;$(BULLET_DIR)\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -135,10 +135,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

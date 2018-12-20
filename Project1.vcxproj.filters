@@ -5,10 +5,16 @@
     <ClCompile Include="sample\NormalMapCube.cpp">
       <Filter>Sample\NormalMap</Filter>
     </ClCompile>
+    <ClCompile Include="sample\RigidCube.cpp">
+      <Filter>Sample\RigidCube</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
       <Filter>Sample\NormalMap</Filter>
+    </ClInclude>
+    <ClInclude Include="sample\RigidCube.h">
+      <Filter>Sample\RigidCube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -20,6 +26,9 @@
     </Filter>
     <Filter Include="Sample\Game">
       <UniqueIdentifier>{f007b159-fec3-436f-ac62-aab8c0a009f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sample\RigidCube">
+      <UniqueIdentifier>{12c183f7-8f27-4394-92dd-1f407c4bbb01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
