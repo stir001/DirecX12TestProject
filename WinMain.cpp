@@ -19,7 +19,7 @@
 #include <memory>
 
 #define BT_NO_SIMD_OPERATOR_OVERLOADS
-#include "BulletlibLink.h"
+//#include "BulletlibLink.h"
 #include "BulletInclude.h"
 
 #include <btBulletDynamicsCommon.h>
@@ -115,6 +115,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		std::list<std::shared_ptr<RigidCube>> cubes;
 
+		float friction = 1.0f;
+
+		auto primitive = PrimitiveCreator::Instance().CreateCube(10);
+
+		auto quaternion = CreateQuoternionXMFloat4({ 1,0,0 }, 60);
+
+		
+
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
@@ -145,16 +153,26 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				pos.x += 0.1f;
 			}
 
-			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_ENTER))
+			//if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_ENTER))
+			//{
+			//	cubes.push_back(CreateRigidCube(shadowmapPass));
+			//}
+
+			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_K))
 			{
-				cubes.push_back(CreateRigidCube(shadowmapPass));
+				friction = 0.0f;
+			}
+			else if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_J))
+			{
+				friction = 1.0f;
 			}
 
-			for (auto cube : cubes)
-			{
-				cube->AsyncTransform();
-				cube->Draw();
-			}
+			//for (auto cube : cubes)
+			//{
+			//	cube->SetFriction(friction);
+			//	cube->AsyncTransform();
+			//	cube->Draw();
+			//}
 			//img3D->AddRotaY(1.f);
 
 			//model->Draw();
@@ -167,6 +185,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			plane->DrawShadowmap();
 			plane->DrawShadow();
 			PhysicsSystem::Instance().DebugDraw();
+
+			primitive->Draw();
 
 		}
 	}
