@@ -60,6 +60,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
 
+		auto anim = FbxLoader::Instance().LoadAnimation("0110/chara2Walk.fbx");
+
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 		}
