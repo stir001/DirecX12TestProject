@@ -30,10 +30,6 @@ using namespace DirectX;
 
 const std::string FBX_MODEL_DIR = "3DModel/FBX/";
 
-void SetShadowProperty(std::shared_ptr<PrimitiveController> ctrl, std::shared_ptr<ShadowmapPass> pass);
-
-std::shared_ptr<RigidCube> CreateRigidCube(std::shared_ptr<ShadowmapPass> pass);
-
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	//Direct3D12‚Ì‰Šú‰»
