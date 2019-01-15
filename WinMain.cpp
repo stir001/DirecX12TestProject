@@ -1,30 +1,11 @@
 #include "Dx12MSLib.h"
 #include "sample/NormalMapCube.h"
-#include "DirectX12/RenderingPass/ShadowmapPass.h"
-#include "DirectX12/Rootsignature/PMDBasicShadowRootSignature.h"
-#include "DirectX12/Rootsignature/PMDShadowRootSignature.h"
-#include "DirectX12/Rootsignature/PMDToonShadowRootSignature.h"
-#include "DirectX12/PipelineState/PMDBasicShadowPipelineState.h"
-#include "DirectX12/PipelineState/PMDShadowPipelineState.h"
-#include "DirectX12/PipelineState/PMDToonShadowPipelineState.h"
-#include "DirectX12/Rootsignature/PrimitiveShadowRootSignature.h"
-#include "DirectX12/Rootsignature/PrimitiveShadowRenderRootSignature.h"
-#include "DirectX12/PipelineState/PrimitiveShadowPipelineState.h"
-#include "DirectX12/PipelineState/PrimitiveShadowRenderPipelineState.h"
 
 #include <Windows.h>
 #include <DirectXMath.h>
 #include <vector>
 #include <map>
 #include <memory>
-
-#define BT_NO_SIMD_OPERATOR_OVERLOADS
-//#include "BulletlibLink.h"
-#include "BulletInclude.h"
-
-#include <btBulletDynamicsCommon.h>
-
-#include "sample/RigidCube.h"
 
 using namespace DirectX;
 
@@ -57,9 +38,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
 
 		auto anim = FbxLoader::Instance().LoadAnimation("0110/chara2Walk.fbx");
-
+		auto fbx = FbxLoader::Instance().LoadMesh("0110/chara2.fbx");
+		fbx->SetMotion(anim);
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
+			fbx->Draw();
+			camera->DefaultMove(input);
 		}
 	}
 	camera = nullptr;
