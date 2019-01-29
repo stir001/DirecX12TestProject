@@ -8,7 +8,18 @@
     <ClCompile Include="sample\RigidCube.cpp">
       <Filter>Sample\RigidCube</Filter>
     </ClCompile>
-    <ClCompile Include="CollidableObject.cpp" />
+    <ClCompile Include="Collision\CollidableObject.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\CollisionChecker.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\CapsuleCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\SphereCollider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -17,7 +28,18 @@
     <ClInclude Include="sample\RigidCube.h">
       <Filter>Sample\RigidCube</Filter>
     </ClInclude>
-    <ClInclude Include="CollidableObject.h" />
+    <ClInclude Include="Collision\CollidableObject.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\CollisionChecker.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\CapsuleCollider.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\SphereCollider.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
@@ -31,6 +53,9 @@
     </Filter>
     <Filter Include="Sample\RigidCube">
       <UniqueIdentifier>{12c183f7-8f27-4394-92dd-1f407c4bbb01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{2223eae3-179a-44c4-9dbb-54775cbb16b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
