@@ -1,11 +1,9 @@
 #include "Dx12MSLib.h"
+#include "BulletInclude.h"
 #include "sample/NormalMapCube.h"
 
 #include <Windows.h>
 #include <DirectXMath.h>
-#include <vector>
-#include <map>
-#include <memory>
 
 using namespace DirectX;
 
@@ -24,12 +22,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami/tyami_normalVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami_anim/tyami_animVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "douki/Douki_chan/Douki_chan.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
+		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
+		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_anim/Kagura_animeVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_low/kagura_lowVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kouhai/Kouhai_chan.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
+		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "shachiku/ShachikuChan_ver3.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_anim/Yuko_animeVer.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_low/YukoLowVer.fbx");
@@ -37,16 +35,31 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
 		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
 
-		auto fbx = FbxLoader::Instance().LoadMesh("0110/chara2.fbx");
-		auto anim = FbxLoader::Instance().LoadAnimation("0110/chara2Walk.fbx");
-
-		fbx->SetMotion(anim);
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 
-			fbx->Draw();
-			fbx->DrawSkeleton();
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+			{
+				
+			}
+			
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+			{
+				
+			}
+
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+			{
+				
+			}
+
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+			{
+				
+			}
+
+
 			camera->DefaultMove(input);
 		}
 	}
