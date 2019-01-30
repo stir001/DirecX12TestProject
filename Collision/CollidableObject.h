@@ -21,10 +21,13 @@ public:
 	void Draw();
 	void DefaultMove(const DxInput& input);
 	void SetPos(const DirectX::XMFLOAT3& pos);
+	void AddPos(const DirectX::XMFLOAT3& offset);
 	void SetVel(const DirectX::XMFLOAT3& vel);
 	void AddRotateY(float deg);
 	void AddRotateX(float deg);
 	void AddRotateZ(float deg);
+	void SetColor(const DirectX::XMFLOAT3& color);
+	DirectX::XMFLOAT3 GetPos() const;
 protected:
 	std::shared_ptr<PrimitiveController> mPrimitive;
 	DirectX::XMFLOAT3 mPos;

@@ -1,9 +1,9 @@
 #include "CollidableObject.h"
 #include <Dx12MSLib.h>
 
-CollidableObject::CollidableObject() : mPos(0.0f, 0.0f, 0.0f), mVel(1.0f, 1.0f, 1.0f)
+CollidableObject::CollidableObject() : mPos(0.0f, 0.0f, 0.0f), mVel(0.5f, 0.5f, 0.5f)
 {
-	mPrimitive->SetPosition(mPos);
+
 }
 
 CollidableObject::~CollidableObject()
@@ -17,19 +17,19 @@ void CollidableObject::Draw()
 
 void CollidableObject::DefaultMove(const DxInput & input)
 {
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_UP))
+	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_W))
 	{
 		mPos.z += mVel.z;
 	}
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_DOWN))
+	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_S))
 	{
 		mPos.z -= mVel.z;
 	}
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_RIGHT))
+	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_D))
 	{
 		mPos.x += mVel.x;
 	}
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_LEFT))
+	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_A))
 	{
 		mPos.x -= mVel.x;
 	}
@@ -40,6 +40,12 @@ void CollidableObject::SetPos(const DirectX::XMFLOAT3 & pos)
 {
 	mPos = pos;
 	mPrimitive->SetPosition(pos);
+}
+
+void CollidableObject::AddPos(const DirectX::XMFLOAT3 & offset)
+{
+	mPos += offset;
+	mPrimitive->SetPosition(mPos);
 }
 
 void CollidableObject::SetVel(const DirectX::XMFLOAT3 & vel)
@@ -60,5 +66,15 @@ void CollidableObject::AddRotateX(float deg)
 void CollidableObject::AddRotateZ(float deg)
 {
 	mPrimitive->AddRotaZ(deg);
+}
+
+void CollidableObject::SetColor(const DirectX::XMFLOAT3 & color)
+{
+	mPrimitive->SetColor(ConvertXMFloat3ToXMFloat4(color));
+}
+
+DirectX::XMFLOAT3 CollidableObject::GetPos() const
+{
+	return mPos;
 }
 

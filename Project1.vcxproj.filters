@@ -20,6 +20,7 @@
     <ClCompile Include="Collision\SphereCollider.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
+    <ClCompile Include="RandomGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -40,6 +41,7 @@
     <ClInclude Include="Collision\SphereCollider.h">
       <Filter>Collision</Filter>
     </ClInclude>
+    <ClInclude Include="RandomGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">

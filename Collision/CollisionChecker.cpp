@@ -1,5 +1,8 @@
 #include "CollisionChecker.h"
 #include "CollidableObject.h"
+#include "CapsuleCollider.h"
+#include "SphereCollider.h"
+#include <Dx12MSLib.h>
 
 
 CollisionChecker::CollisionChecker()
@@ -61,17 +64,45 @@ bool CollisionChecker::IsCollide(const SphereCollider& sph1, const SphereCollide
 	return IsSphereSphereCollide(sph1, sph2);
 }
 
-bool CollisionChecker::IsCapsuleSphereCollide(const CapsuleCollider & cap, const SphereCollider & sph) const
+bool CollisionChecker::IsCapsuleSphereCollide(const CapsuleCollider& cap, const SphereCollider& sph) const
+{
+	bool isCollide = false;
+
+	auto capData = cap.GetCapsuleData();
+	auto sphData = sph.GetSphereData();
+
+	auto capVec = capData.pos1 - capData.pos2;
+	auto capLength = GetLengthXMFloat3(capVec);
+	auto capToSphVec = sphData.origin - capData.pos2;
+
+	auto capVecUnit = NormalizeXMFloat3(capVec);
+
+	auto projRatio = DotXMFloat3(capVecUnit, capToSphVec);
+
+	float length = 0.0f;
+
+	if (projRatio / capLength < 0.0f)
+	{
+		length = GetLengthXMFloat3(sphData.origin - capData.pos2);
+	}
+	else if (projRatio / capLength > 1.0f)
+	{
+		length = GetLengthXMFloat3(sphData.origin - capData.pos1);
+	}
+	else
+	{
+		length = GetLengthXMFloat3(projRatio * capVecUnit - capToSphVec);
+	}
+
+	return length < sphData.radius + capData.radius;
+}
+
+bool CollisionChecker::IsCapsuleCapsuleCollide(const CapsuleCollider& cap1, const CapsuleCollider& cap2) const
 {
 	return false;
 }
 
-bool CollisionChecker::IsCapsuleCapsuleCollide(const CapsuleCollider & cap1, const CapsuleCollider & cap2) const
-{
-	return false;
-}
-
-bool CollisionChecker::IsSphereSphereCollide(const SphereCollider & sph1, const SphereCollider & sph2) const
+bool CollisionChecker::IsSphereSphereCollide(const SphereCollider& sph1, const SphereCollider& sph2) const
 {
 	return false;
 }

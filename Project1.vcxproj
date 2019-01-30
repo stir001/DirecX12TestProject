@@ -138,6 +138,7 @@
     <ClCompile Include="Collision\CapsuleCollider.cpp" />
     <ClCompile Include="Collision\CollidableObject.cpp" />
     <ClCompile Include="Collision\CollisionChecker.cpp" />
+    <ClCompile Include="RandomGenerator.cpp" />
     <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="Collision\SphereCollider.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Collision\CapsuleCollider.h" />
     <ClInclude Include="Collision\CollidableObject.h" />
     <ClInclude Include="Collision\CollisionChecker.h" />
+    <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
     <ClInclude Include="Collision\SphereCollider.h" />

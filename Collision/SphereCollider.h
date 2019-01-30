@@ -4,7 +4,7 @@ class SphereCollider :
 	public CollidableObject
 {
 public:
-	SphereCollider();
+	SphereCollider(float radius);
 	~SphereCollider();
 
 	virtual bool IsCollide(const std::shared_ptr<const CollisionChecker>& checker, const std::shared_ptr<const CollidableObject> collision) const;

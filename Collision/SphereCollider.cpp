@@ -2,8 +2,9 @@
 #include "CollisionChecker.h"
 #include <Dx12MSLib.h>
 
-SphereCollider::SphereCollider()
+SphereCollider::SphereCollider(float radius) : mData(radius, {0.0f, 0.0f, 0.0f})
 {
+	mPrimitive = PrimitiveCreator::Instance().CreateSphere(radius, 100);
 }
 
 
