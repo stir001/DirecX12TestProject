@@ -12,6 +12,9 @@ using namespace DirectX;
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	//Direct3D12‚Ì‰Šú‰»
+#ifndef _DEBUG
+	ShaderCompiler::Instance().SetShaderDirPath("Shader/");
+#endif
 	Dx12CtrlInit(hInst,"1601295_^“ç§ˆê˜Y");
 	
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
@@ -29,7 +32,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			capsules.back()->SetPos({ generator->GetValue(-50.0f, 50.0f), 0.0f, generator->GetValue(-50.0f, 100.0f) });
 		}
 
-		auto sph = std::make_shared<SphereCollider>(10);
+		auto sph = std::make_shared<SphereCollider>(10.0f);
 
 		DirectX::XMFLOAT3 cameraTarget = sph->GetSphereData().origin;
 		DirectX::XMFLOAT3 cameraPos = { 0.0f, 30.0f, -70.0f };
@@ -70,7 +73,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			for (auto& c : capsules)
 			{
 				c->AddRotateX(generator->GetValue(0.0f, 5.0f));
-				c->AddRotateZ(generator->GetValue(0.0f, 5.0f));
+				//c->AddRotateZ(generator->GetValue(0.0f, 5.0f));
 				c->AddRotateY(generator->GetValue(0.0f, 5.0f));
 				c->AddPos({ 0.0f, 0.0f, -2.0f });
 				if (c->GetPos().z < resetZLine)
