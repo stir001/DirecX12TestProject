@@ -1,14 +1,13 @@
 #include <Dx12MSLib.h>
 #include <Windows.h>
-#include <vector>
 
-#include "Collision/CollisionTestApp.h"
+#include "MoveRestrictionApp.h"
 
 using namespace DirectX;
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
-	CollisionTestApp app;
+	MoveRestrictionApp app;
 	app.Initialize(hInst);
 	app.Run();
 }

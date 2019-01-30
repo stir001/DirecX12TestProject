@@ -24,6 +24,7 @@
     <ClCompile Include="Collision\CollisionTestApp.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
+    <ClCompile Include="MoveRestrictionApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -48,6 +49,7 @@
     <ClInclude Include="Collision\CollisionTestApp.h">
       <Filter>Collision</Filter>
     </ClInclude>
+    <ClInclude Include="MoveRestrictionApp.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
