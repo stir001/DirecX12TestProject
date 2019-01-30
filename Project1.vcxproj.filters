@@ -21,6 +21,9 @@
       <Filter>Collision</Filter>
     </ClCompile>
     <ClCompile Include="RandomGenerator.cpp" />
+    <ClCompile Include="Collision\CollisionTestApp.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -42,6 +45,9 @@
       <Filter>Collision</Filter>
     </ClInclude>
     <ClInclude Include="RandomGenerator.h" />
+    <ClInclude Include="Collision\CollisionTestApp.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">

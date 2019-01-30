@@ -104,5 +104,8 @@ bool CollisionChecker::IsCapsuleCapsuleCollide(const CapsuleCollider& cap1, cons
 
 bool CollisionChecker::IsSphereSphereCollide(const SphereCollider& sph1, const SphereCollider& sph2) const
 {
-	return false;
+	auto sph1Data = sph1.GetSphereData();
+	auto sph2Data = sph2.GetSphereData();
+
+	return GetLengthXMFloat3(sph1Data.origin - sph2Data.origin) < sph1Data.radius + sph2Data.radius;
 }
