@@ -24,7 +24,10 @@
     <ClCompile Include="Collision\CollisionTestApp.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="MoveRestrictionApp.cpp" />
+    <ClCompile Include="MoveRestrictionApp.cpp">
+      <Filter>MoveRestriction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -49,7 +52,10 @@
     <ClInclude Include="Collision\CollisionTestApp.h">
       <Filter>Collision</Filter>
     </ClInclude>
-    <ClInclude Include="MoveRestrictionApp.h" />
+    <ClInclude Include="MoveRestrictionApp.h">
+      <Filter>MoveRestriction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCharacter.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
@@ -66,6 +72,9 @@
     </Filter>
     <Filter Include="Collision">
       <UniqueIdentifier>{2223eae3-179a-44c4-9dbb-54775cbb16b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoveRestriction">
+      <UniqueIdentifier>{4d4cfd36-824a-42c7-9071-092adbe1962c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

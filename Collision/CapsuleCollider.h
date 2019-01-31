@@ -4,7 +4,7 @@ class CapsuleCollider :
 	public CollidableObject
 {
 public:
-	CapsuleCollider(float radius, float length);
+	CapsuleCollider(float radius, float length, unsigned int div = 30U);
 	~CapsuleCollider();
 
 	virtual bool IsCollide(const std::shared_ptr<const CollisionChecker>& checker, const std::shared_ptr<const CollidableObject> collision) const;

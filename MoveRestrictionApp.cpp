@@ -1,4 +1,5 @@
 #include "MoveRestrictionApp.h"
+#include "PlayerCharacter.h"
 #include <Dx12MSLib.h>
 
 
@@ -16,18 +17,15 @@ void MoveRestrictionApp::Run()
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
 	DxInput input;
 	{
-		auto cone = PrimitiveCreator::Instance().CreateCone();
+		auto player = std::make_shared<PlayerCharacter>();
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 
-			cone->Draw();
-
 			camera->DefaultMove(input);
+			player->Draw();
 
 		}
-
-
 	}
 	camera = nullptr;
 

@@ -2,9 +2,9 @@
 #include "CollisionChecker.h"
 #include <Dx12MSLib.h>
 
-CapsuleCollider::CapsuleCollider(float radius, float length) : mData(radius, DirectX::XMFLOAT3(0.0f, length * 0.5f, 0.0f) , DirectX::XMFLOAT3( 0.0f, -length * 0.5f, 0.0f))
+CapsuleCollider::CapsuleCollider(float radius, float length, unsigned int div) : mData(radius, DirectX::XMFLOAT3(0.0f, length * 0.5f, 0.0f) , DirectX::XMFLOAT3( 0.0f, -length * 0.5f, 0.0f))
 {
-	mPrimitive = PrimitiveCreator::Instance().CreateCapsule(radius, length);
+	mPrimitive = PrimitiveCreator::Instance().CreateCapsule(radius, length, div);
 }
 
 
