@@ -17,12 +17,12 @@ void MoveRestrictionApp::Run()
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
 	DxInput input;
 	{
-		auto player = std::make_shared<PlayerCharacter>();
+		auto player = std::make_shared<PlayerCharacter>(camera);
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 
-			camera->DefaultMove(input);
+			player->Move(input);
 			player->Draw();
 
 		}

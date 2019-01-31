@@ -4,11 +4,12 @@
 
 class PrimitiveController;
 class DxInput;
+class Dx12Camera;
 
 class PlayerCharacter
 {
 public:
-	PlayerCharacter();
+	PlayerCharacter(std::shared_ptr<Dx12Camera> camera);
 	~PlayerCharacter();
 
 	void Draw();
@@ -19,5 +20,8 @@ private:
 	std::shared_ptr<PrimitiveController> mSphere;
 	DirectX::XMFLOAT3 mSphereOffset;
 	DirectX::XMFLOAT3 mPos;
+	DirectX::XMFLOAT3 mVel;
+	DirectX::XMFLOAT3 mCameraOffset;
+	std::shared_ptr<Dx12Camera> mCamera;
 };
 
