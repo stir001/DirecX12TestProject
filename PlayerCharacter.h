@@ -15,6 +15,7 @@ public:
 	void Draw();
 	void Move(const DxInput& input);
 	void SetPosition(const DirectX::XMFLOAT3& pos);
+	DirectX::XMFLOAT3 GetPos() const;
 private:
 	std::shared_ptr<PrimitiveController> mCone;
 	std::shared_ptr<PrimitiveController> mSphere;

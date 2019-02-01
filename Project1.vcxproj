@@ -139,12 +139,17 @@
     <ClCompile Include="Collision\CapsuleCollider.cpp" />
     <ClCompile Include="Collision\CollidableObject.cpp" />
     <ClCompile Include="Collision\CollisionChecker.cpp" />
+    <ClCompile Include="HitRepulsionApp.cpp" />
+    <ClCompile Include="MoveRestriction3DApp.cpp" />
+    <ClCompile Include="MoveRestrictionMesh.cpp" />
     <ClCompile Include="MoveRestrictionApp.cpp" />
+    <ClCompile Include="PlaneCollisionCheckerXZ.cpp" />
     <ClCompile Include="PlayerCharacter.cpp" />
     <ClCompile Include="RandomGenerator.cpp" />
     <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="Collision\SphereCollider.cpp" />
+    <ClCompile Include="ThrowHitSimulator.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,12 +157,18 @@
     <ClInclude Include="Collision\CapsuleCollider.h" />
     <ClInclude Include="Collision\CollidableObject.h" />
     <ClInclude Include="Collision\CollisionChecker.h" />
+    <ClInclude Include="HitRepulsionApp.h" />
+    <ClInclude Include="MoveRestriction3DApp.h" />
+    <ClInclude Include="MoveRestrictionMesh.h" />
     <ClInclude Include="MoveRestrictionApp.h" />
+    <ClInclude Include="PlaneCollisionCheckerXZ.h" />
     <ClInclude Include="PlayerCharacter.h" />
     <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
     <ClInclude Include="Collision\SphereCollider.h" />
+    <ClInclude Include="ThrowHitSimulator.h" />
+    <ClInclude Include="TriangleDef.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

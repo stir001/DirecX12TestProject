@@ -28,6 +28,11 @@
       <Filter>MoveRestriction</Filter>
     </ClCompile>
     <ClCompile Include="PlayerCharacter.cpp" />
+    <ClCompile Include="MoveRestrictionMesh.cpp" />
+    <ClCompile Include="PlaneCollisionCheckerXZ.cpp" />
+    <ClCompile Include="ThrowHitSimulator.cpp" />
+    <ClCompile Include="HitRepulsionApp.cpp" />
+    <ClCompile Include="MoveRestriction3DApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -56,6 +61,12 @@
       <Filter>MoveRestriction</Filter>
     </ClInclude>
     <ClInclude Include="PlayerCharacter.h" />
+    <ClInclude Include="MoveRestrictionMesh.h" />
+    <ClInclude Include="PlaneCollisionCheckerXZ.h" />
+    <ClInclude Include="ThrowHitSimulator.h" />
+    <ClInclude Include="HitRepulsionApp.h" />
+    <ClInclude Include="MoveRestriction3DApp.h" />
+    <ClInclude Include="TriangleDef.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
