@@ -2,14 +2,14 @@
 #include <Dx12MSLib.h>
 
 PlayerCharacter::PlayerCharacter(std::shared_ptr<Dx12Camera> camera) 
-	: mPos(0.0f, 0.0f, 0.0f), mCamera(camera), mVel(0.1f, 0.1f, 0.1f), mCameraOffset(0.0f, 5.0f, -6.0f)
+	: mPos(0.0f, 0.0f, 0.0f), mCamera(camera), mVel(1.0f, 1.0f, 1.0f), mCameraOffset(0.0f, 50.0f, -60.0f)
 {
-	float coneR = 0.2f;
-	float coneHeight = 0.50f;
+	float coneR = 1.0f;
+	float coneHeight = coneR * 3.0f;
 	unsigned int div = 20U;
 	mCone = PrimitiveCreator::Instance().CreateCone(coneR, coneHeight, div);
 
-	float sphereR = 0.15f;
+	float sphereR = coneR * 0.9f;
 	mSphere = PrimitiveCreator::Instance().CreateSphere(sphereR, div);
 	mSphereOffset = { 0.0f, coneHeight + sphereR, 0.0f };
 

@@ -5,7 +5,7 @@
 #include "TriangleDef.h"
 #include <Dx12MSLib.h>
 
-const unsigned int POLYGON_LENGTH = 10.0f;
+const float POLYGON_LENGTH = 10.0f;
 
 MoveRestriction3DApp::MoveRestriction3DApp()
 {
@@ -52,10 +52,10 @@ void MoveRestriction3DApp::CreateGround()
 {
 	RandomGenerator generator;
 
-	float heightRange = 10.0f;
+	float heightRange = 5.0f;
 
-	unsigned int xVertNum = 4;
-	unsigned int zVertNum = 4;
+	unsigned int xVertNum = 20;
+	unsigned int zVertNum = 20;
 	unsigned int vertAmountNum = xVertNum * zVertNum;
 	std::vector<float> heightData(vertAmountNum);
 	float pivotHeight = 0.0f;
@@ -183,15 +183,15 @@ void MoveRestriction3DApp::CalYPosition()
 				if (isP1Pivot == true)
 				{
 					pivot = tri.pos1;
-					zGrad = (tri.pos3 - tri.pos1).y;
-					xGrad = (tri.pos2 - tri.pos1).y;
+					zGrad = (tri.pos3 - tri.pos1).y / (tri.pos3 - tri.pos1).z;
+					xGrad = (tri.pos2 - tri.pos1).y / (tri.pos2 - tri.pos1).x;
 
 				}
 				else
 				{
 					pivot = tri.pos2;
-					zGrad = (tri.pos3 - tri.pos2).y;
-					xGrad = (tri.pos2 - tri.pos2).y;
+					zGrad = (tri.pos3 - tri.pos2).y / (tri.pos3 - tri.pos2).z;
+					xGrad = (tri.pos2 - tri.pos2).y / (tri.pos2 - tri.pos2).x;
 				}
 			}
 			else if (p1p3.z == 0.0f)
@@ -200,8 +200,8 @@ void MoveRestriction3DApp::CalYPosition()
 				{
 					pivot = tri.pos1;
 
-					zGrad = (tri.pos2 - tri.pos1).y;
-					xGrad = (tri.pos3 - tri.pos1).y;
+					zGrad = (tri.pos2 - tri.pos1).y / (tri.pos2 - tri.pos1).z;
+					xGrad = (tri.pos3 - tri.pos1).y / (tri.pos3 - tri.pos1).x;
 
 
 				}
@@ -209,8 +209,8 @@ void MoveRestriction3DApp::CalYPosition()
 				{
 					pivot = tri.pos3;
 					
-					zGrad = (tri.pos2 - tri.pos3).y;
-					xGrad = (tri.pos1 - tri.pos3).y;
+					zGrad = (tri.pos2 - tri.pos3).y / (tri.pos2 - tri.pos3).z;
+					xGrad = (tri.pos1 - tri.pos3).y / (tri.pos1 - tri.pos3).x;
 					
 				}
 
@@ -221,25 +221,22 @@ void MoveRestriction3DApp::CalYPosition()
 				{
 					pivot = tri.pos2;
 					
-					zGrad = (tri.pos1 - tri.pos2).y;
-					xGrad = (tri.pos3 - tri.pos2).y;
+					zGrad = (tri.pos1 - tri.pos2).y / (tri.pos1 - tri.pos2).z;
+					xGrad = (tri.pos3 - tri.pos2).y / (tri.pos3 - tri.pos2).x;
 					
 				}
 				else
 				{
 					pivot = tri.pos3;
 
-					zGrad = (tri.pos1 - tri.pos3).y;
-					xGrad = (tri.pos2 - tri.pos3).y;
+					zGrad = (tri.pos1 - tri.pos3).y / (tri.pos1 - tri.pos3).z;
+					xGrad = (tri.pos2 - tri.pos3).y / (tri.pos2 - tri.pos3).x;
 					
 				}
 			}
 
-			zGrad /= POLYGON_LENGTH;
-			xGrad /= POLYGON_LENGTH;
-
 			auto sub = pos - pivot;
-			float height = pivot.y + sub.z * xGrad + sub.x * zGrad;
+			float height = pivot.y + sub.x * xGrad  + sub.z * zGrad ;
 			
 			pos.y = height;
 

@@ -15,11 +15,13 @@ PlaneCollisionCheckerXZ::~PlaneCollisionCheckerXZ()
 
 bool PlaneCollisionCheckerXZ::IsInTriangle(const DirectX::XMFLOAT3& point, const PRIMITIVE::Triangle & triangle) const
 {
-	auto p1Sine = Sign(CrossXZ(point - triangle.pos1, triangle.pos2 - triangle.pos1));
-	auto p2Sine = Sign(CrossXZ(point - triangle.pos2, triangle.pos3 - triangle.pos2));
-	auto p3Sine = Sign(CrossXZ(point - triangle.pos3, triangle.pos1 - triangle.pos3));
+	auto p1Sign = Sign(CrossXZ(point - triangle.pos1, triangle.pos2 - triangle.pos1));
+	auto p2Sign = Sign(CrossXZ(point - triangle.pos2, triangle.pos3 - triangle.pos2));
+	auto p3Sign = Sign(CrossXZ(point - triangle.pos3, triangle.pos1 - triangle.pos3));
 
-	return p1Sine == p2Sine && p2Sine == p3Sine;
+	bool isIn = p1Sign == p2Sign && p2Sign == p3Sign;
+
+	return isIn;
 }
 
 float PlaneCollisionCheckerXZ::CrossXZ(const DirectX::XMFLOAT3 & val1, const DirectX::XMFLOAT3 & val2) const
@@ -34,7 +36,7 @@ int PlaneCollisionCheckerXZ::Sign(float value) const
 	{
 		rtn = -1;
 	}
-	else if (value > 0)
+	else if (value >= 0)
 	{
 		rtn = 1;
 	}
