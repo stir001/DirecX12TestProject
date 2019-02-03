@@ -20,7 +20,7 @@ void MoveRestrictionApp::Run()
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
 	DxInput input;
 	{
-		auto player = std::make_shared<PlayerCharacter>(camera);
+		auto player = std::make_shared<PlayerCharacter>(camera, 10.0f);
 		unsigned int div = 20;
 		auto custumMesh = std::make_shared<MoveRestrictionMesh>(div);
 		auto checker = std::make_shared<PlaneCollisionCheckerXZ>();

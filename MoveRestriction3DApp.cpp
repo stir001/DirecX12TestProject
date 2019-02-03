@@ -24,7 +24,7 @@ void MoveRestriction3DApp::Initialize(HINSTANCE hInst)
 	Dx12CtrlInit(hInst, "1601295_^“ç§ˆê˜Y");
 
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
-	mPlayer = std::make_shared<PlayerCharacter>(camera);
+	mPlayer = std::make_shared<PlayerCharacter>(camera, 1.0f);
 	CreateGround();
 }
 

@@ -1,10 +1,10 @@
 #include "PlayerCharacter.h"
 #include <Dx12MSLib.h>
 
-PlayerCharacter::PlayerCharacter(std::shared_ptr<Dx12Camera> camera) 
+PlayerCharacter::PlayerCharacter(std::shared_ptr<Dx12Camera> camera, float size) 
 	: mPos(0.0f, 0.0f, 0.0f), mCamera(camera), mVel(1.0f, 1.0f, 1.0f), mCameraOffset(0.0f, 50.0f, -60.0f)
 {
-	float coneR = 1.0f;
+	float coneR = size;
 	float coneHeight = coneR * 3.0f;
 	unsigned int div = 20U;
 	mCone = PrimitiveCreator::Instance().CreateCone(coneR, coneHeight, div);
@@ -59,6 +59,11 @@ void PlayerCharacter::SetPosition(const DirectX::XMFLOAT3 & pos)
 	mPos = pos;
 	mCone->SetPosition(mPos);
 	mSphere->SetPosition(mPos + mSphereOffset);
+}
+
+void PlayerCharacter::SetCameraOffset(const DirectX::XMFLOAT3 & offset)
+{
+	mCameraOffset = offset;
 }
 
 DirectX::XMFLOAT3 PlayerCharacter::GetPos() const

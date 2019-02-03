@@ -9,12 +9,13 @@ class Dx12Camera;
 class PlayerCharacter
 {
 public:
-	PlayerCharacter(std::shared_ptr<Dx12Camera> camera);
+	PlayerCharacter(std::shared_ptr<Dx12Camera> camera, float size);
 	~PlayerCharacter();
 
 	void Draw();
 	void Move(const DxInput& input);
 	void SetPosition(const DirectX::XMFLOAT3& pos);
+	void SetCameraOffset(const DirectX::XMFLOAT3& offset);
 	DirectX::XMFLOAT3 GetPos() const;
 private:
 	std::shared_ptr<PrimitiveController> mCone;
