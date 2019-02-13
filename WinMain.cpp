@@ -12,102 +12,148 @@ const std::string FBX_MODEL_DIR = "3DModel/FBX/";
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
 	//Direct3D12の初期化
-	Dx12CtrlInit(hInst);
+	Dx12CtrlInit(hInst, "1601295_真鍋奨一郎");
 	
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
 	DxInput input;
 	{
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_MMD.FBX");//テキストベース
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_Unity.FBX");//テキストベース
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami/tyami_normalVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami_anim/tyami_animVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "douki/Douki_chan/Douki_chan.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_anim/Kagura_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_low/kagura_lowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kouhai/Kouhai_chan.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "shachiku/ShachikuChan_ver3.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_anim/Yuko_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_low/YukoLowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Yuko'sRoom/Yuko'sRoom/Yuko'sRoom.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
+
+		//FbxLoader::Create();
+		//auto modelData = FbxLoader::Instance()->LoadMesh(FBX_MODEL_PATH2);
+
+		//PrimitiveCreator mgr;
 
 
-		//auto rightWall = sys.CreateRigidBody(BulletShapeType::PLANE, { -1,0,0 });
-		//rightWall->SetCollisionState(BulletCollisionState::STATIC);
-		//sys.AddRigidBody(rightWall);
-		//rightWall->SetOrigin({ 20,0,0 });
+		std::shared_ptr<PMDLoader> loader(new PMDLoader());
+		std::shared_ptr<PMDController> pmdContrl = loader->Load("3DModel/PMD/博麗霊夢/reimu_F01.pmd");
+		std::shared_ptr<DirectionalLight> dirLight(new DirectionalLight(1, -1, 1));
+		VMDLoader vmdloader;
+		//std::shared_ptr<VMDMotion> motion = vmdloader.LoadMotion("博麗霊夢/reimu_walk.vmd");
+		//pmdContrl->SetMotion(motion);
+		//pmdContrl->PlayMotion(true);
 
-		//auto leftWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 1,0,0 });
-		//sys.AddRigidBody(leftWall);
-		//leftWall->SetOrigin({ -20,0,0 });
-		//leftWall->SetCollisionState(BulletCollisionState::STATIC);
+		//PrimitiveCreator priCreater;
 
-		/*auto upWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 0,-1,0 });
-		upWall->SetCollisionState(BulletCollisionState::STATIC);
-		sys.AddRigidBody(upWall);
-		upWall->SetOrigin({ 0,40,0 });*/
+		float length = 20.f;
+		std::shared_ptr<PrimitiveController> primitiveCtrl = PrimitiveCreator::Instance().CreateCube(length, "img/cube_tex.png");
 
-		//auto backWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 0,0,1 });
-		//sys.AddRigidBody(backWall);
-		//backWall->SetOrigin({ 0,0,-20 });
-		//backWall->SetCollisionState(BulletCollisionState::STATIC);
+		unsigned int xNum = 100;
+		unsigned int zNum = 100;
+		unsigned int yNum = 10;
+		std::vector<DirectX::XMFLOAT3> offsets(xNum * zNum * yNum);
+		for (int y = 0; y < yNum; ++y)
+		{
+			for (int z = 0; z < zNum; ++z)
+			{
+				for (int x = 0; x < xNum; ++x)
+				{
+					offsets[x + z * xNum + y * xNum * zNum] = DirectX::XMFLOAT3(x * length, -y * length, z * length);
+				}
+			}
+		}
+		float deg = -1.0f;
 
-		//auto frontWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 0,0,-1 });
-		//sys.AddRigidBody(frontWall);
-		//frontWall->SetOrigin({ 0,0,20 });
-		//frontWall->SetCollisionState(BulletCollisionState::STATIC);
+		primitiveCtrl->Instancing(offsets);
+		for (unsigned int i = 0; i < xNum * zNum * yNum; ++i)
+		{
+			primitiveCtrl->SetColor({ 0.0f,0.0f,0.0f,1.0f }, i);
+		}
 
-		//auto fbx = FbxLoader::Instance().LoadMesh("0123/chara_1/chara_1.fbx");
-		//auto fbx = FbxLoader::Instance().LoadMesh("0123/chara_2/chara_2.fbx");
-		//auto fbx = FbxLoader::Instance().LoadFMD("0123/chara_3/chara_3.fmd");
-		//auto fbx = FbxLoader::Instance().LoadMesh("0123/chara_4/chara_4.fbx");
-		//auto fbx = FbxLoader::Instance().LoadMesh("0122_19/chara.fbx");
-		//auto anim = FbxLoader::Instance().LoadAnimation("0123/Stand.fbx");
+		pmdContrl->SetLight(dirLight);
 
-		//fbx->SetMotion(anim);
+		XMFLOAT3 pos = { 0,0,0 };
+		XMFLOAT3 normal = { 0,1,0 };
 
-		auto cap = PrimitiveCreator::Instance().CreateCapsule(5, 10);
+		Transform3DCalculator calculator;
+
+		XMFLOAT4X4 matrix = IdentityXMFloat4x4();
+
+		std::vector<DirectX::XMFLOAT4X4> instanceMatrix(xNum * zNum);
+
+		auto& camera = Dx12Ctrl::Instance().GetCamera(0);
+		DxInput input;
+
+		DirectX::XMFLOAT3 zVec = { 0, 0, 1 };
+		DirectX::XMFLOAT3 xVec = { 1, 0, 0 };
+		DirectX::XMFLOAT3 vel = { 0 ,0, 0 };
+		float velLength = 2.0f;
+		DirectX::XMFLOAT3 pmdPos = { 0, 0, 0 };
+		DirectX::XMFLOAT3 initDir = { 0, 0, -1 };
+		float zvecRota = 90;//-z
+		float xvecRota = 180;//-x
+
+		float modelrota = 0;
+		unsigned int rotaCount = 0;
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+			camera->DefaultMove(input);
+
+			calculator.AddPositon(DirectX::XMFLOAT3(0, length * 0.5f, length * 0.5f));
+			calculator.AddRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(1, 0, 0), deg));
+			calculator.AddPositon(DirectX::XMFLOAT3(0, -length * 0.5f, -length * 0.5f));
+			matrix = calculator.GetAMatrix();
+			for (auto& mat : instanceMatrix)
 			{
-				
+				mat = matrix;
 			}
-			
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
-			{
-				
-			}
+			primitiveCtrl->SetInstancingMatrix(instanceMatrix, 0, xNum * zNum - 1);
+
+			vel = { 0,0,0 };
+			modelrota = 0.0f;
+			rotaCount = 0;
 
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
 			{
-				
+				vel += -xVec;
+			}
+
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+			{
+				vel += zVec;
 			}
 
 			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
 			{
-				
+				vel += xVec;
 			}
 
+			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+			{
+				vel += -zVec;
+			}
 
-			camera->DefaultMove(input);
+			if (vel != DirectX::XMFLOAT3(0, 0, 0))
+			{
+				vel = NormalizeXMFloat3(vel);
+				float c = DotXMFloat3(vel, initDir);
+				float rad = 0.0f;
+				if (vel.x > 0)
+				{
+					rad = -acosf(c);
+				}
+				else
+				{
+					rad = acosf(c);
+				}
+				pmdPos += vel * velLength;
+
+				pmdContrl->SetRotaQuaternion(CreateQuoternionXMFloat4(DirectX::XMFLOAT3(0, 1, 0), DirectX::XMConvertToDegrees(rad)));
+			}
+
+			pmdContrl->SetPosition(pmdPos);
+			//pmdContrl->Draw();
+
+			primitiveCtrl->Draw();
 		}
 
-		//sys.RemoveRigidBody(ground);
-		//sys.RemoveRigidBody(rightWall);
-		//sys.RemoveRigidBody(leftWall);
-		//sys.RemoveRigidBody(upWall);
-		//sys.RemoveRigidBody(backWall);
-		//sys.RemoveRigidBody(frontWall);
+		camera = nullptr;
+		dirLight = nullptr;
+		pmdContrl = nullptr;
+		loader = nullptr;
 	}
-	camera = nullptr;
-	
+
 	Dx12Ctrl::Instance().Release();
 	Dx12Ctrl::Destroy();
 }
