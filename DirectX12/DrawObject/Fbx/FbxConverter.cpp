@@ -1,0 +1,299 @@
+#include "stdafx.h"
+#include "FbxConverter.h"
+#include "Dx12MSLib.h"
+#include "DirectX12/PipelineState/FbxPipelineState.h"
+#include "DirectX12/Rootsignature/FbxRootSignature.h"
+#include "FMDdata.h"
+#include "FMDLoader.h"
+
+FbxConverter* FbxConverter::mInstance = nullptr;
+
+FbxConverter::FbxConverter() 
+	: mIsConverting(false)
+	, mConvertModel(nullptr)
+	, mDataConverter(std::make_shared<FbxModelDataConverter>())
+	, mWriteFilePath("FMD/")
+	, mFmdLoader(std::make_shared<Fmd::FMDLoader>())
+{
+}
+
+FbxConverter::~FbxConverter()
+{
+}
+
+void FbxConverter::Initialize()
+{
+	auto device = Dx12Ctrl::Instance().GetDev();
+
+	mRootsignature = std::make_shared<FbxRootSignature>(device);
+	mPipelineState = std::make_shared<FbxPipelineState>(mRootsignature, device);
+	mWorldLight = std::make_shared<DirectionalLight>(0.5f, -1.0f, 1.0f);
+}
+
+void FbxConverter::ConvertFile()
+{
+	if (mIsConverting == false && mFilePath.size() != 0)
+	{
+		FbxLoader::Instance().ReleaseAllModel();
+		mConvertModel = nullptr;
+		mIsConverting = true;
+		(this->*mConvertFunc)();
+		//mIsConverting = false;
+	}
+}
+
+void FbxConverter::ConvertAnimation()
+{
+	if (mFilePath.size() == 0) return;
+	auto data = FbxLoader::Instance().LoadAnimation(mFilePath);
+	if (data == nullptr) return;
+	WriteFADFile(data);
+}
+
+void FbxConverter::ConvertFmd()
+{
+	auto fmd = mFmdLoader->LoadFMD(mFilePath);
+	CreateController(fmd);
+}
+
+void FbxConverter::SetLoadFilePath(const std::string& path)
+{
+	mIsConverting = false;
+	mFilePath.clear();
+	auto little =  path.rfind(".fbx");
+	auto big = path.rfind(".FBX");
+	auto fmd = path.rfind(".fmd");
+	auto index = little < big ? little : big;
+	if (index != 0 && index != std::string::npos)
+	{
+		mFilePath = path;
+		mConvertFunc = &FbxConverter::ConvertFbx;
+	}
+	else if (fmd != std::string::npos)
+	{
+		mFilePath = path;
+		mConvertFunc = &FbxConverter::ConvertFmd;
+	}
+	for (auto& c : mFilePath)
+	{
+		if (c == '\\')
+		{
+			c = '/';
+		}
+	}
+}
+
+void FbxConverter::Draw()
+{
+	if (mConvertModel != nullptr)
+	{
+		mConvertModel->Draw();
+		mConvertModel->DrawSkeleton();
+	}
+}
+
+void FbxConverter::ConvertFbx()
+{
+	auto modelData = FbxLoader::Instance().GetMeshData(mFilePath);
+
+	if (modelData == nullptr)
+	{
+		mIsConverting = false;
+		return;
+	}
+
+	WriteFMDFile(modelData);
+
+	//GetConvertFileName(modelData->modelPath);
+
+	CreateController(modelData);
+}
+
+void FbxConverter::CreateController(std::shared_ptr<Fbx::FbxModelData> modelData)
+{
+	auto model = mDataConverter->ConvertToFbxModel(modelData);
+	auto cmdList = RenderingPassManager::Instance().GetRenderingPassCommandList(static_cast<unsigned int>(DefaultPass::Model));
+	auto device = Dx12Ctrl::Instance().GetDev();
+	mConvertModel = std::make_shared<FbxModelController>(model, device, cmdList, mPipelineState, mRootsignature);
+	mConvertModel->SetLight(mWorldLight);
+}
+
+void FbxConverter::CreateController(Fmd::FMDFileData & data)
+{
+	auto model = mDataConverter->ConvertToFbxModel(data);
+	auto cmdList = RenderingPassManager::Instance().GetRenderingPassCommandList(static_cast<unsigned int>(DefaultPass::Model));
+	auto device = Dx12Ctrl::Instance().GetDev();
+	mConvertModel = std::make_shared<FbxModelController>(model, device, cmdList, mPipelineState, mRootsignature);
+	mConvertModel->SetLight(mWorldLight);
+}
+
+std::string FbxConverter::GetConvertFileName(const std::string & modelPath) const
+{
+	auto slashFind = modelPath.rfind('/') % std::string::npos;
+	auto yenFind = modelPath.rfind('\\') % std::string::npos;
+	auto findpos = (slashFind < yenFind ? yenFind : slashFind);
+	if (findpos == std::string::npos)
+	{
+		findpos = 0;
+	}
+	else
+	{
+		++findpos;
+	}
+	std::string convertFileName(modelPath.begin() + findpos, modelPath.end());
+	auto finddot = convertFileName.rfind('.');
+	convertFileName.erase(convertFileName.begin() + finddot, convertFileName.end());
+	convertFileName += ".fmd";
+	return  convertFileName;
+}
+
+void FbxConverter::WriteFMDFile(const std::shared_ptr<Fbx::FbxModelData>& modelData)
+{
+	char FMD_FILE_HEADER[4] = "FMD";
+
+	auto filePath = CreateWriteFilePath(modelData->modelPath);
+	
+	std::ofstream filestream(filePath, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+	if (!filestream)
+	{
+		filestream.close();//デストラクタで呼ばれるから呼ばなくてもいいっぽい
+		return; //ファイルオープン失敗
+	}
+	filestream.write(FMD_FILE_HEADER, 4);
+
+	WriteVertices(filestream, modelData);
+	WriteIndices(filestream, modelData);
+	WriteMaterials(filestream, modelData);
+	WriteSkeleton(filestream, modelData);
+
+	filestream.close();
+}
+
+std::string FbxConverter::CreateWriteFilePath(const std::string & modelPath) const
+{
+	auto slashpos = modelPath.rfind('/');
+	if (slashpos == std::string::npos)
+	{
+		slashpos = 0;
+	}
+	else
+	{
+		++slashpos;
+	}
+
+	auto dotpos = modelPath.rfind('.');
+	std::string writeFilePath(modelPath.begin() + slashpos, modelPath.begin() + dotpos);
+	writeFilePath = mWriteFilePath + writeFilePath + ".fmd";
+	return writeFilePath;
+}
+
+void FbxConverter::WriteVertices(std::ofstream & stream, const std::shared_ptr<Fbx::FbxModelData>& modelData)
+{
+	auto& vertices = modelData->vertexesInfo.vertexes;
+	int vertexNum = static_cast<int>(vertices.size());
+	stream.write(reinterpret_cast<const char*>(&vertexNum), sizeof(vertexNum));
+	
+	int vertexPNTsize = sizeof(DirectX::XMFLOAT4) + sizeof(DirectX::XMFLOAT4) + sizeof(DirectX::XMFLOAT2);
+
+	for (int i = 0; i < vertexNum; ++i)
+	{
+		Fmd::FMDVertexEffectBone bone;
+		stream.write(reinterpret_cast<const char*>(&vertices[i]), vertexPNTsize);
+		int boneNum = static_cast<int>(vertices[i].boneIndex.size());
+		stream.write(reinterpret_cast<const char*>(&boneNum), sizeof(boneNum));
+		for (int j = 0; j < boneNum; ++j)
+		{
+			bone.boneIndex = vertices[i].boneIndex[j];
+			bone.boneWeight = vertices[i].boneWeight[j];
+			stream.write(reinterpret_cast<const char*>(&bone), sizeof(bone));
+		}
+	}
+}
+
+void FbxConverter::WriteIndices(std::ofstream & stream, const std::shared_ptr<Fbx::FbxModelData>& modelData)
+{
+	int indexNum = static_cast<int>(modelData->indexes.indexes.size());
+	stream.write(reinterpret_cast<const char*>(&indexNum), sizeof(indexNum));
+	stream.write(reinterpret_cast<const char*>(modelData->indexes.indexes.data()), sizeof(modelData->indexes.indexes[0]) * indexNum);
+}
+
+void FbxConverter::WriteMaterials(std::ofstream & stream, const std::shared_ptr<Fbx::FbxModelData>& modelData)
+{
+	auto& materials = modelData->materials;
+	int materialNum = static_cast<int>(materials.size());
+	stream.write(reinterpret_cast<const char*>(&materialNum), sizeof(materialNum));
+
+	Fmd::FMDMaterials mats(materialNum);
+	Fmd::FMDTextures tex(materialNum);
+	for (int i = 0; i < materialNum; ++i)
+	{
+		mats[i] = materials[i];
+		tex[i] = materials[i];
+	}
+
+	stream.write(reinterpret_cast<const char*>(mats.data()), sizeof(mats[0]) * materialNum);
+
+	for (int i = 0; i < materialNum; ++i)
+	{
+		auto& t = tex[i];
+		stream.write(reinterpret_cast<const char*>(t.pathSizeTable)
+			, sizeof(t.pathSizeTable[0]) * static_cast<int>(Fmd::FMDTexture::FMDTextureTable::tableMax));
+		auto alldata = t.GetAllData();
+		stream.write(reinterpret_cast<const char*>(alldata.data()), sizeof(char) * alldata.size());
+	}
+}
+
+void FbxConverter::WriteSkeleton(std::ofstream & stream, const std::shared_ptr<Fbx::FbxModelData>& modelData)
+{
+	auto& skeletons = modelData->skeletons;
+	auto& sklIndices = modelData->skeletonIndices;
+	int skeletonNum = static_cast<int>(skeletons.size());
+	stream.write(reinterpret_cast<const char*>(&skeletonNum), sizeof(skeletonNum));
+	Fmd::FMDSkeleton s;
+	int dataSize = Fmd::SKELETON_CONSTANT_DATA_SIZE;
+	auto writeFunc = [&stream, dataSize](Fmd::FMDSkeleton& s, const Fbx::FbxSkeleton& skl)
+	{
+		s = skl;
+		s.nameSize = static_cast<int>(s.name.size());
+		stream.write(reinterpret_cast<const char*>(&s), dataSize);
+		stream.write(reinterpret_cast<const char*>(s.name.data()), sizeof(char) * s.nameSize);
+	};
+
+	for (int i = 0; i < static_cast<int>(skeletons.size()); ++i)
+	{
+		writeFunc(s, skeletons[i]);
+	}
+}
+
+void FbxConverter::WriteFADFile(const std::shared_ptr<FbxMotionData>& motionData)
+{
+	auto path = CreateWriteFilePath(mFilePath);
+	auto dotPoint = path.rfind('.');
+	path.erase(path.begin() + dotPoint, path.end());
+	path += ".fad";
+
+	std::ofstream filestream(path, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+	if (!filestream)
+	{
+		filestream.close();//デストラクタで呼ばれるから呼ばなくてもいいっぽい
+		return; //ファイルオープン失敗
+	}
+
+	char FAD_FILE_HEADER[4] = "FAD";
+
+	filestream.write(FAD_FILE_HEADER, 4);
+
+	filestream.write(reinterpret_cast<const char*>(&motionData->mMaxFrame), sizeof(motionData->mMaxFrame));
+	unsigned int dataNum = static_cast<unsigned int>(motionData->mAnimData.size());
+	filestream.write(reinterpret_cast<const char*>(&dataNum), sizeof(dataNum));
+
+	for (auto& data : motionData->mAnimData)
+	{
+		unsigned int boneNameLength =static_cast<unsigned int>(data.boneName.size());
+		filestream.write(reinterpret_cast<const char*>(&boneNameLength), sizeof(boneNameLength));
+		filestream.write(reinterpret_cast<const char*>(data.boneName.data()), sizeof(data.boneName[0]) * boneNameLength);
+		unsigned int frameDataNum = static_cast<unsigned int>(data.frameData.size());
+		filestream.write(reinterpret_cast<const char*>(&frameDataNum), sizeof(frameDataNum));
+		filestream.write(reinterpret_cast<const char*>(data.frameData.data()), sizeof(data.frameData[0]) * frameDataNum);
+	}
+}

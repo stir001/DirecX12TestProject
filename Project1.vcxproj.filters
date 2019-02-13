@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{4dae7c9b-36a8-45c6-9fde-5a05db813eb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{97024e43-ec72-4a90-b9e2-0d021a95fc8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action">
+      <UniqueIdentifier>{2f1a0cd9-d0d8-4e64-a361-971c5c6035a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject">
+      <UniqueIdentifier>{bafb3dde-ab38-485f-b424-042bdba6675c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\HeadUpDisplay">
+      <UniqueIdentifier>{d1a85456-12a4-497d-91db-466a3d4947a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\BackGround">
+      <UniqueIdentifier>{a48c27b7-d945-4001-ba38-5f45832745e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor">
+      <UniqueIdentifier>{869b3fb3-8b22-4857-b582-3dc9ab2aa8ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Player">
+      <UniqueIdentifier>{ba2e4c71-2105-4e8f-90b2-2bf976fff933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Base">
+      <UniqueIdentifier>{ace3b135-881a-45ec-bc73-55c221893293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\Base">
+      <UniqueIdentifier>{b0710344-d73e-4983-b442-4adb2bdbf849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy">
+      <UniqueIdentifier>{d29dac57-4b83-40e1-8334-0d506887d917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy\Base">
+      <UniqueIdentifier>{dfc276c9-a699-420c-9fed-c64e7d96a773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy\DeadMan">
+      <UniqueIdentifier>{55d73d0b-c203-44d1-b857-00c6772cf4a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CollisionDetector">
+      <UniqueIdentifier>{109ebb55-5ce7-45bc-b03e-8733b373d711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\2DCamera">
+      <UniqueIdentifier>{49c9e15a-49b3-4afc-8d7d-93bd8759277d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\EnemyCreator">
+      <UniqueIdentifier>{27cb4a11-1995-4b46-874c-f002f71f2369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Stage">
+      <UniqueIdentifier>{f8b6aace-4692-4179-b7ac-83b23da537a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DrawObject\ICharactor\Enemy\Bat">
+      <UniqueIdentifier>{6855efd4-0fc2-49c5-8f83-02a235d32042}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ActionLoader.cpp">
+      <Filter>Game\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionDetector.cpp">
+      <Filter>Game\CollisionDetector</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BackGround.cpp">
+      <Filter>Game\DrawObject\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\IDrawableObject.cpp">
+      <Filter>Game\DrawObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HeadUpDisplay.cpp">
+      <Filter>Game\DrawObject\HeadUpDisplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ICharactor.cpp">
+      <Filter>Game\DrawObject\ICharactor\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy.cpp">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\DeadMan.cpp">
+      <Filter>Game\DrawObject\ICharactor\Enemy\DeadMan</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PlayerSH.cpp">
+      <Filter>Game\DrawObject\ICharactor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera2D.cpp">
+      <Filter>Game\2DCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EnemyCreator.cpp">
+      <Filter>Game\EnemyCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageData.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageLoader.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Bat.cpp">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Bat</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ActionStructs.h">
+      <Filter>Game\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ActionLoader.h">
+      <Filter>Game\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionDetector.h">
+      <Filter>Game\CollisionDetector</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGround.h">
+      <Filter>Game\DrawObject\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\IDrawableObject.h">
+      <Filter>Game\DrawObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HeadUpDisplay.h">
+      <Filter>Game\DrawObject\HeadUpDisplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ICharactor.h">
+      <Filter>Game\DrawObject\ICharactor\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy.h">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\DeadMan.h">
+      <Filter>Game\DrawObject\ICharactor\Enemy\DeadMan</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PlayerSH.h">
+      <Filter>Game\DrawObject\ICharactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera2D.h">
+      <Filter>Game\2DCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyCreator.h">
+      <Filter>Game\EnemyCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyActionPathDefine.h">
+      <Filter>Game\EnemyCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageLoader.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageData.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Bat.h">
+      <Filter>Game\DrawObject\ICharactor\Enemy\Bat</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
