@@ -17,19 +17,19 @@ void CollidableObject::Draw()
 
 void CollidableObject::DefaultMove(const DxInput & input)
 {
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_W))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_W))
 	{
 		mPos.z += mVel.z;
 	}
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_S))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_S))
 	{
 		mPos.z -= mVel.z;
 	}
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_D))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_D))
 	{
 		mPos.x += mVel.x;
 	}
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_A))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_A))
 	{
 		mPos.x -= mVel.x;
 	}

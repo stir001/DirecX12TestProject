@@ -68,19 +68,19 @@ void CollisionTestApp::Run()
 
 			camera->DefaultMove(input);
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_W))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_W))
 			{
 				cameraPos.z += cameraVel;
 			}
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_S))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_S))
 			{
 				cameraPos.z -= cameraVel;
 			}
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_D))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_D))
 			{
 				cameraPos.x += cameraVel;
 			}
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_A))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_A))
 			{
 				cameraPos.x -= cameraVel;
 			}

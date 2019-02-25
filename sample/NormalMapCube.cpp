@@ -16,22 +16,22 @@ NormalMapCube::~NormalMapCube()
 
 void NormalMapCube::Roatation(DxInput & input)
 {
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD4))
 	{
 		mCalculator->AddRotaY(mRotaDeg);
 	}
 
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD8))
 	{
 		mCalculator->AddRotaX(mRotaDeg);
 	}
 
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD6))
 	{
 		mCalculator->AddRotaY(-mRotaDeg);
 	}
 
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD2))
 	{
 		mCalculator->AddRotaX(-mRotaDeg);
 	}
