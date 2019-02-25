@@ -75,22 +75,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD8))
 			{
 				
 			}
 			
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD2))
 			{
 				
 			}
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD4))
 			{
 				
 			}
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD6))
 			{
 				
 			}
