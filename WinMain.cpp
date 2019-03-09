@@ -7,107 +7,53 @@
 
 using namespace DirectX;
 
-const std::string FBX_MODEL_DIR = "3DModel/FBX/";
+const float INIT_ROTA_Y = 180.0f;
+const float INIT_SCALE = 5.0f;
+const DirectX::XMFLOAT3 INIT_TARGET = { 0.0f, 10.0f, 0.0f };
+const float ROTATE = 1.0f;
+const std::string MODEL_PATH = "3DModel/FBX/hutyakiti_anim/Hutyakiti_hatON_animeVer.fmd";
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
-	//Direct3D12の初期化
 	Dx12CtrlInit(hInst);
-	
-	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
-	DxInput input;
+
 	{
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_MMD.FBX");//テキストベース
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_Unity.FBX");//テキストベース
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami/tyami_normalVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami_anim/tyami_animVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "douki/Douki_chan/Douki_chan.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_anim/Kagura_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_low/kagura_lowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kouhai/Kouhai_chan.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "shachiku/ShachikuChan_ver3.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_anim/Yuko_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_low/YukoLowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Yuko'sRoom/Yuko'sRoom/Yuko'sRoom.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
-
-
-		//auto rightWall = sys.CreateRigidBody(BulletShapeType::PLANE, { -1,0,0 });
-		//rightWall->SetCollisionState(BulletCollisionState::STATIC);
-		//sys.AddRigidBody(rightWall);
-		//rightWall->SetOrigin({ 20,0,0 });
-
-		//auto leftWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 1,0,0 });
-		//sys.AddRigidBody(leftWall);
-		//leftWall->SetOrigin({ -20,0,0 });
-		//leftWall->SetCollisionState(BulletCollisionState::STATIC);
-
-		/*auto upWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 0,-1,0 });
-		upWall->SetCollisionState(BulletCollisionState::STATIC);
-		sys.AddRigidBody(upWall);
-		upWall->SetOrigin({ 0,40,0 });*/
-
-		//auto backWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 0,0,1 });
-		//sys.AddRigidBody(backWall);
-		//backWall->SetOrigin({ 0,0,-20 });
-		//backWall->SetCollisionState(BulletCollisionState::STATIC);
-
-		//auto frontWall = sys.CreateRigidBody(BulletShapeType::PLANE, { 0,0,-1 });
-		//sys.AddRigidBody(frontWall);
-		//frontWall->SetOrigin({ 0,0,20 });
-		//frontWall->SetCollisionState(BulletCollisionState::STATIC);
-
-		//auto fbx = FbxLoader::Instance().LoadMesh("0123/chara_1/chara_1.fbx");
-		//auto fbx = FbxLoader::Instance().LoadMesh("0123/chara_2/chara_2.fbx");
-		//auto fbx = FbxLoader::Instance().LoadFMD("0123/chara_3/chara_3.fmd");
-		//auto fbx = FbxLoader::Instance().LoadMesh("0123/chara_4/chara_4.fbx");
-		//auto fbx = FbxLoader::Instance().LoadMesh("0122_19/chara.fbx");
-		//auto anim = FbxLoader::Instance().LoadAnimation("0123/Stand.fbx");
-
-		//fbx->SetMotion(anim);
-
-		auto cap = PrimitiveCreator::Instance().CreateCapsule(5, 10);
-
+		auto& camera = GetCamera(0);
+		camera->SetTarget(INIT_TARGET);
+		//auto fbxmodel = FbxLoader::Instance().LoadFMD(MODEL_PATH);
+		//fbxmodel->AddRotaY(INIT_ROTA_Y);
+		//fbxmodel->SetScale(INIT_SCALE);
+		auto image = ImageLoader::Instance().LoadImage2D("dice.png");
+		image->SetScale(0.5f);
+		DxInput input;
+		bool isDraw = false;
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
-
-			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD8))
-			{
-				
-			}
-			
-			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD2))
-			{
-				
-			}
 
 			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD4))
 			{
 				
+				//fbxmodel->AddRotaY(ROTATE);
 			}
 
-			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD6))
+			if (input.IsKeyTrigger(VIRTUAL_KEY_INDEX::KEY_NUMPAD6))
 			{
-				
+				//fbxmodel->AddRotaY(-ROTATE);
+			
+				isDraw = true;
 			}
 
+			//fbxmodel->Draw();
+			image->SetPos({ -100.0f,100.0f,0.0f });
+			image->Draw();
 
-			camera->DefaultMove(input);
+			image->SetRect({ 0.0f, 0.0f, 0.0f }, 250.0f, 250.0f);
+			image->SetPos({ 100.0f,-100.0f,0.0f });
+			image->Draw();
 		}
 
-		//sys.RemoveRigidBody(ground);
-		//sys.RemoveRigidBody(rightWall);
-		//sys.RemoveRigidBody(leftWall);
-		//sys.RemoveRigidBody(upWall);
-		//sys.RemoveRigidBody(backWall);
-		//sys.RemoveRigidBody(frontWall);
+		camera = nullptr;
 	}
-	camera = nullptr;
 	
-	Dx12Ctrl::Instance().Release();
-	Dx12Ctrl::Destroy();
+	Dx12CtrlEnd();
 }
