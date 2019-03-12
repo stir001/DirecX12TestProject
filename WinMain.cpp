@@ -1,42 +1,41 @@
 #include "Dx12MSLib.h"
+#include "BulletInclude.h"
 #include "sample/NormalMapCube.h"
+
 #include "DirectX12/RenderingPass/ShadowmapPass.h"
 #include "DirectX12/Rootsignature/PMDBasicShadowRootSignature.h"
 #include "DirectX12/Rootsignature/PMDShadowRootSignature.h"
 #include "DirectX12/Rootsignature/PMDToonShadowRootSignature.h"
+
 #include "DirectX12/PipelineState/PMDBasicShadowPipelineState.h"
 #include "DirectX12/PipelineState/PMDShadowPipelineState.h"
 #include "DirectX12/PipelineState/PMDToonShadowPipelineState.h"
-#include "DirectX12/Rootsignature/PrimitiveShadowRootSignature.h"
+
 #include "DirectX12/Rootsignature/PrimitiveShadowRenderRootSignature.h"
+#include "DirectX12/Rootsignature/PrimitiveShadowRootSignature.h"
 #include "DirectX12/PipelineState/PrimitiveShadowPipelineState.h"
 #include "DirectX12/PipelineState/PrimitiveShadowRenderPipelineState.h"
 
+#include "sample/RigidCube.h"
+
 #include <Windows.h>
 #include <DirectXMath.h>
-#include <vector>
-#include <map>
-#include <memory>
-
-#define BT_NO_SIMD_OPERATOR_OVERLOADS
-#include "BulletlibLink.h"
-#include "BulletInclude.h"
-
-#include <btBulletDynamicsCommon.h>
-
-#include "sample/RigidCube.h"
 
 using namespace DirectX;
 
-const std::string FBX_MODEL_DIR = "3DModel/FBX/";
+const float INIT_ROTA_Y = 180.0f;
+const float INIT_SCALE = 5.0f;
+const DirectX::XMFLOAT3 INIT_TARGET = { 0.0f, 10.0f, 0.0f };
+const float ROTATE = 1.0f;
+const std::string MODEL_PATH = "3DModel/FBX/hutyakiti_anim/Hutyakiti_hatON_animeVer.fmd";
 
 void SetShadowProperty(std::shared_ptr<PrimitiveController> ctrl, std::shared_ptr<ShadowmapPass> pass);
 
 std::shared_ptr<RigidCube> CreateRigidCube(std::shared_ptr<ShadowmapPass> pass);
 
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 {
-	//Direct3D12ÇÃèâä˙âª
 	Dx12CtrlInit(hInst);
 	
 	auto shadowmapPass = std::make_shared<ShadowmapPass>(Dx12Ctrl::Instance().GetDev());
@@ -107,13 +106,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			{
 				scale -= 0.001f;
 			}
-			camera->DefaultMove(input);
 
 			PhysicsSystem::Instance().Simulation();
 
 			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD4))
 			{
-				pos.x -= 0.1f;
+				//fbxmodel->AddRotaY(-ROTATE);
+			
 			}
 
 			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD6))
@@ -137,14 +136,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 			
 			plane->DrawShadowmap();
 			plane->DrawShadow();
-			//PhysicsSystem::Instance().DebugDraw();
-
 		}
+
+		camera = nullptr;
 	}
-	camera = nullptr;
 	
-	Dx12Ctrl::Instance().Release();
-	Dx12Ctrl::Destroy();
+	Dx12CtrlEnd();
 }
 
 void SetShadowProperty(std::shared_ptr<PrimitiveController> ctrl, std::shared_ptr<ShadowmapPass> pass)

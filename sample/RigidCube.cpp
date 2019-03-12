@@ -36,7 +36,14 @@ void RigidCube::Draw()
 	mCubeCtrl->DrawShadow();
 }
 
+void RigidCube::SetFriction(float friction)
+{
+	mRigidBody->SetFriction(friction);
+}
+
 std::shared_ptr<PrimitiveController> RigidCube::GetCtrl()
 {
 	return mCubeCtrl;
 }
+
+

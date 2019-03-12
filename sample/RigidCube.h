@@ -14,6 +14,8 @@ public:
 
 	void Draw();
 
+	void SetFriction(float friction);
+
 	std::shared_ptr<PrimitiveController> GetCtrl();
 private:
 	std::shared_ptr<PrimitiveController> mCubeCtrl;
