@@ -40,34 +40,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	Dx12CtrlInit(hInst);
 	
 	auto shadowmapPass = std::make_shared<ShadowmapPass>(Dx12Ctrl::Instance().GetDev());
+	ImageLoader::Instance().SetUIPassCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(DefaultPass::UI));
+	ImageLoader::Instance().Set3DPassCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(DefaultPass::Model));
+	ImageLoader::Instance().SetBackGroundPassCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(DefaultPass::BackGround));
+	//FbxLoader::Instance().SetRenderingCommnadList(RenderingPassManager::Instance().GetRenderingPassCommandList(2));
+	PrimitiveCreator::Instance().SetRenderingCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(DefaultPass::Model));
+	PhysicsSystem::Instance().SetRenderCommnadList(RenderingPassManager::Instance().GetRenderingPassCommandList(DefaultPass::Model));
 	std::shared_ptr<RenderingPassObject> pass = shadowmapPass;
 	RenderingPassManager::Instance().InsertRenderingPass(pass, 0);
-	ImageLoader::Instance().SetUIPassCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(1));
-	ImageLoader::Instance().Set3DPassCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(2));
-	ImageLoader::Instance().SetBackGroundPassCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(3));
-	FbxLoader::Instance().SetRenderingCommnadList(RenderingPassManager::Instance().GetRenderingPassCommandList(2));
-	PrimitiveCreator::Instance().SetRenderingCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(2));
-	PhysicsSystem::Instance().SetRenderCommnadList(RenderingPassManager::Instance().GetRenderingPassCommandList(2));
 	auto& camera = Dx12Ctrl::Instance().GetCameraHolder()->GetCamera(0);
 	DxInput input;
 	{
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_MMD.FBX");//テキストベース
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "alicia/Alicia_solid_Unity.FBX");//テキストベース
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami/tyami_normalVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "chami_anim/tyami_animVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "douki/Douki_chan/Douki_chan.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti/Hutyakiti_hatON_lowVer.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "hutyakiti_anim/Hutyakiti_hatON_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_anim/Kagura_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kagura_low/kagura_lowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "kouhai/Kouhai_chan.fbx");
-		//auto fbxmodel = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Senpai_san/Senpai_san.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "shachiku/ShachikuChan_ver3.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_anim/Yuko_animeVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "yuko_low/YukoLowVer.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "Yuko'sRoom/Yuko'sRoom/Yuko'sRoom.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx");
-		//auto model = FbxLoader::Instance().LoadMesh(FBX_MODEL_DIR + "CandyRockStar/CandyRockStar.fbx");
 
 		auto device = Dx12Ctrl::Instance().GetDev();
 		std::shared_ptr<RootSignatureObject> pmdBSRS = std::make_shared<PMDBasicShadowRootSignature>(device);
@@ -82,12 +65,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		auto img3D = ImageLoader::Instance().LoadImage3D("dice.png" , true);
 
 		PMDLoader loader;
-		loader.SetRenderingCommnadList(RenderingPassManager::Instance().GetRenderingPassCommandList(2));
+		loader.SetRenderingCommnadList(RenderingPassManager::Instance().GetRenderingPassCommandList(3));
 		VMDLoader vmdLoader;
-		auto vmd = vmdLoader.LoadMotion("3DModel/PMD/博麗霊夢/モーション/ヤゴコロダンス.vmd");
+		auto vmd = vmdLoader.LoadAnimation("3DModel/PMD/博麗霊夢/モーション/ヤゴコロダンス.vmd");
 		auto model = loader.Load("3DModel/PMD/博麗霊夢/reimu_F01.pmd");
-		model->SetMotion(vmd);
-		model->PlayMotion(true);
+		model->SetAnimation(vmd);
+		model->PlayAnimation(true);
 		model->SetSkeletonColor(1.0f, 0.0f, 0.0f);
 		model->SetShadowmap(shadowmapPass->GetShadowmap());
 		model->CreateShadowRenderDescHeap(Dx12Ctrl::Instance().GetDev(),"ShadowmapDescHeap");
@@ -99,8 +82,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		model->SetShadowRenderPipelineState(pmdTSPS);
 		model->SetShadowRenderRootsignature(pmdTSRS);
 		float scale = 0.01f;
-
-		float fbxScale = 1.0f;
 
 		DirectX::XMFLOAT3 pos = { 0,0,10 };
 
@@ -117,35 +98,30 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_Z))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_Z))
 			{
 				scale += 0.001f;
-				fbxScale += 0.1f;
-				//model->SetScale(fbxScale);
 			}
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_X))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_X))
 			{
 				scale -= 0.001f;
-
-				fbxScale -= 0.1f;
-				//model->SetScale(fbxScale);
 			}
 			camera->DefaultMove(input);
 
 			PhysicsSystem::Instance().Simulation();
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD4))
 			{
 				pos.x -= 0.1f;
 			}
 
-			if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD6))
 			{
 				pos.x += 0.1f;
 			}
 
-			if (input.IsKeyTrigger(eVIRTUAL_KEY_INDEX_ENTER))
+			if (input.IsKeyTrigger(VIRTUAL_KEY_INDEX::KEY_ENTER))
 			{
 				cubes.push_back(CreateRigidCube(shadowmapPass));
 			}
@@ -155,18 +131,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				cube->AsyncTransform();
 				cube->Draw();
 			}
-			//img3D->AddRotaY(1.f);
 
-			//model->Draw();
 			model->DrawShadowmap();
 			model->DrawShadow();
-			//model->DrawSkeleton();
-			//img3D->Draw();
-			//fbxmodel->Draw();
 			
 			plane->DrawShadowmap();
 			plane->DrawShadow();
-			PhysicsSystem::Instance().DebugDraw();
+			//PhysicsSystem::Instance().DebugDraw();
 
 		}
 	}
