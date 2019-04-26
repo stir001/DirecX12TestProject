@@ -135,13 +135,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BreakSphere.cpp" />
+    <ClCompile Include="PrimitiveCutter.cpp" />
     <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
+    <ClCompile Include="Game\StarBreakApp.cpp" />
+    <ClCompile Include="Game\StarGenerator.cpp" />
+    <ClCompile Include="Game\Star.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BreakSphere.h" />
+    <ClInclude Include="PrimitiveCutter.h" />
     <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
+    <ClInclude Include="Game\StarBreakApp.h" />
+    <ClInclude Include="Game\StarGenerator.h" />
+    <ClInclude Include="Game\Star.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

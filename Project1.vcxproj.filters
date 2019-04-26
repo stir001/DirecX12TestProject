@@ -8,6 +8,17 @@
     <ClCompile Include="sample\RigidCube.cpp">
       <Filter>Sample\RigidCube</Filter>
     </ClCompile>
+    <ClCompile Include="Game\StarBreakApp.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StarGenerator.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Star.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakSphere.cpp" />
+    <ClCompile Include="PrimitiveCutter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -16,6 +27,17 @@
     <ClInclude Include="sample\RigidCube.h">
       <Filter>Sample\RigidCube</Filter>
     </ClInclude>
+    <ClInclude Include="Game\StarBreakApp.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StarGenerator.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Star.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakSphere.h" />
+    <ClInclude Include="PrimitiveCutter.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
@@ -29,6 +51,9 @@
     </Filter>
     <Filter Include="Sample\RigidCube">
       <UniqueIdentifier>{12c183f7-8f27-4394-92dd-1f407c4bbb01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{4f54bc19-cb01-427a-97a2-c5863a11569e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
