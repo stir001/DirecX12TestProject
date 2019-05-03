@@ -9,7 +9,7 @@ NormalMapCube::NormalMapCube(float length, const std::string& normalMapPath) :
 	mRotaDeg(1.0f), mNormalMap(normalMapPath), mLength(length)
 {
 	mInstanceMatrix.push_back(ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity()));
-	mRigidBody.push_back(PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::BOX, { length,length,length }));
+	mRigidBody.push_back(PhysicsSystem::Instance().CreateRigidBody(BulletShapeType::BOX, { length,length,length }));
 	mRigidBody[0]->SetCollisionState(BulletCollisionState::CHARACTER);
 	mRigidBody[0]->Translate(0, 10, 0);
 }
@@ -32,22 +32,22 @@ void NormalMapCube::AsyncRigidBody()
 
 void NormalMapCube::Roatation(DxInput & input)
 {
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD4))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD4))
 	{
 		mCalculator->AddRotaY(mRotaDeg);
 	}
 
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD8))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD8))
 	{
 		mCalculator->AddRotaX(mRotaDeg);
 	}
 
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD6))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD6))
 	{
 		mCalculator->AddRotaY(-mRotaDeg);
 	}
 
-	if (input.IsKeyDown(eVIRTUAL_KEY_INDEX_NUMPAD2))
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_NUMPAD2))
 	{
 		mCalculator->AddRotaX(-mRotaDeg);
 	}
@@ -81,7 +81,7 @@ void NormalMapCube::Draw()
 void NormalMapCube::Create(float length)
 {
 	mInstanceMatrix.push_back(ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity()));
-	mRigidBody.push_back(PhysicsSystem::Instance().CreateRigitBody(BulletShapeType::BOX, { length,length,length }));
+	mRigidBody.push_back(PhysicsSystem::Instance().CreateRigidBody(BulletShapeType::BOX, { length,length,length }));
 	mRigidBody.back()->SetCollisionState(BulletCollisionState::CHARACTER);
 	std::vector<DirectX::XMFLOAT3> dummyPos(mInstanceMatrix.size());
 	mCubeCtrl->Instancing(dummyPos);
