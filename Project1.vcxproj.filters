@@ -17,8 +17,8 @@
     <ClCompile Include="Game\Star.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="BreakSphere.cpp" />
-    <ClCompile Include="PrimitiveCutter.cpp" />
+    <ClCompile Include="Game\BreakSphere.cpp" />
+    <ClCompile Include="Game\PrimitiveCutter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -36,8 +36,8 @@
     <ClInclude Include="Game\Star.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="BreakSphere.h" />
-    <ClInclude Include="PrimitiveCutter.h" />
+    <ClInclude Include="Game\BreakSphere.h" />
+    <ClInclude Include="Game\PrimitiveCutter.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">

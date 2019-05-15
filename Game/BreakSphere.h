@@ -1,7 +1,7 @@
 #pragma once
 #include "Dx12MSLib.h"
 
-class BreakSphere : public PrimitiveSphere
+class BreakSphere : public PrimitiveObject
 {
 public:
 	BreakSphere();

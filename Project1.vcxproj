@@ -91,6 +91,7 @@
       <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BULLET_DIR)\src;$(FBXSDK_DIR)include;$(SolutionDir)DirectX12TestProject\sample;$(SolutionDir)DirectX12TestProject\bulletlib\src;$(SolutionDir)DirectX12TestProject\Game;$(SolutionDir)DirectX12Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,8 +137,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BreakSphere.cpp" />
-    <ClCompile Include="PrimitiveCutter.cpp" />
+    <ClCompile Include="Game\BreakSphere.cpp" />
+    <ClCompile Include="Game\PrimitiveCutter.cpp" />
     <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="Game\StarBreakApp.cpp" />
@@ -145,8 +147,8 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BreakSphere.h" />
-    <ClInclude Include="PrimitiveCutter.h" />
+    <ClInclude Include="Game\BreakSphere.h" />
+    <ClInclude Include="Game\PrimitiveCutter.h" />
     <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
     <ClInclude Include="Game\StarBreakApp.h" />
