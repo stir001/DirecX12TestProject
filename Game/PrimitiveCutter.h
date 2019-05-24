@@ -170,7 +170,7 @@ private:
 	*	@param	cut		切断した頂点を保存する
 	*	@param	data	切断するための情報
 	*/
-	void BlockCutFace(CutVerts& cut, const CutData& data);
+	void CoverCutFace(CutVerts& cut, const CutData& data);
 
 	/**
 	*	@brief	グルーピングごとに面を張る
@@ -182,5 +182,11 @@ private:
 	*/
 	std::vector<PrimitiveVertex> GetGroupVerts(std::vector<PrimitiveVertex>& verts
 		, unsigned int pivoitIndex, std::vector<int>& vertexGroupID, const int groupID);
+
+	/**
+	*	@brief	面を構成するためのインデックスを作成する
+	*			その際新規頂点を一つ追加する
+	*/
+	std::vector<unsigned int> CreateFaceIndex(std::vector<PrimitiveVertex>& verts, const DirectX::XMFLOAT3& normal, const unsigned int indexOffset);
 };
 

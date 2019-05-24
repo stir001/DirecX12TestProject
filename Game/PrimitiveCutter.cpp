@@ -23,8 +23,14 @@ PrimitiveCutter::CutVerts PrimitiveCutter::CutPrimitive(const CutData& data)
 	cut.minus.indices.reserve(indxNum);
 	cut.plus.verts.reserve(vertNum);
 	cut.plus.indices.reserve(indxNum);
+	mMadeMinusVertex.clear();
+	mMadePlusVertex.clear();
+	mOriginPlusVertNo.clear();
+	mOriginMinusVertNo.clear();
 
 	CutByFace(cut, data);
+
+	CoverCutFace(cut, data);
 
 	return cut;
 }
@@ -112,7 +118,6 @@ void PrimitiveCutter::CutByFace(CutVerts& cut, const CutData& data)
 
 void PrimitiveCutter::CutTriangle(CutVerts& cutVerts, const CutData& data, int index, int offset, bool isSingleVertPlus)
 {
-	//if (!isSingleVertPlus) return;
 	//オリジナルプリミティブの頂点番号
 	int singleVertNo = data.primitive.indices[index + offset];
 	auto& singleOriginVertNo = isSingleVertPlus ? mOriginPlusVertNo : mOriginMinusVertNo;
@@ -140,8 +145,8 @@ void PrimitiveCutter::CutTriangle(CutVerts& cutVerts, const CutData& data, int i
 	AddTriangle(singleAddVert, singleOriginVertNo, amountVertNum,
 		newVert1, amountVertNum + 1, newVert2, singleVertNo, data.primitive.verts[singleVertNo]);
 
-	madeSingleVertex.push_back(newVert1);
 	madeSingleVertex.push_back(newVert2);
+	madeSingleVertex.push_back(newVert1);
 
 	amountVertNum = getAmountVertsNum();
 	AddTriangle(otherAddVert, otherOriginVertNo,
@@ -253,31 +258,47 @@ int PrimitiveCutter::GetSingleVertOffset(int v1Val, int v2Val, int v3Val)
 	return offset;
 }
 
-void PrimitiveCutter::BlockCutFace(CutVerts & cut, const CutData & data)
+void PrimitiveCutter::CoverCutFace(CutVerts& cut, const CutData& data)
 {
+	CreateGroupFace(cut.plus, mMadePlusVertex, -data.face.normal);
+	CreateGroupFace(cut.minus, mMadeMinusVertex, data.face.normal);
 }
 
 void PrimitiveCutter::CreateGroupFace(Primitive& primitive, std::vector<PrimitiveVertex>& madeVertex, const DirectX::XMFLOAT3 & normal)
 {
-	const unsigned int indexOffset = static_cast<unsigned int>(primitive.verts.size() - 1);
 	const unsigned int vertexNum = static_cast<unsigned int>(madeVertex.size());
 	unsigned int group = 0;
-	struct VertSet
-	{
-		PrimitiveVertex v1;
-		PrimitiveVertex v2;
-	};
-	std::vector<PrimitiveVertex> groupVerts;
 	std::vector<int> groupID(vertexNum);
 	std::fill(groupID.begin(), groupID.end(), -1);
-	groupVerts.resize(vertexNum);
-	groupVerts.emplace_back(PrimitiveVertex(ConvertXMFloat4ToXMFloat3(madeVertex[0].pos), normal, madeVertex[0].uv));
-	groupVerts.emplace_back(PrimitiveVertex(ConvertXMFloat4ToXMFloat3(madeVertex[1].pos), normal, madeVertex[1].uv));
-	groupID[0] = group;
-	groupID[1] = group;
-	for (unsigned int i = 2U; i < vertexNum; i += 2)
+
+	for(unsigned int i = 0; i < vertexNum;++i)
 	{
-		
+		unsigned int pivot = UINT_MAX;
+		for (unsigned int j= 0;j < vertexNum;++j)
+		{
+			if (groupID[j] == -1)
+			{
+				pivot = j;
+				break;
+			}
+		}
+
+		if (pivot == UINT_MAX)
+		{
+			break;
+		}
+
+		auto groupVerts = GetGroupVerts(madeVertex, pivot, groupID, group++);
+		const unsigned int indexOffset = static_cast<unsigned int>(primitive.verts.size());
+		auto indices = CreateFaceIndex(groupVerts, normal, indexOffset);
+
+		auto primitiveVertsNum = primitive.verts.size();
+		primitive.verts.resize(primitiveVertsNum + groupVerts.size());
+		std::copy(groupVerts.begin(), groupVerts.end(), primitive.verts.begin() + primitiveVertsNum);
+
+		auto primitiveIndexNum = primitive.indices.size();
+		primitive.indices.resize(primitiveIndexNum + indices.size());
+		std::copy(indices.begin(), indices.end(), primitive.indices.begin() + primitiveIndexNum);
 	}
 }
 
@@ -292,11 +313,90 @@ std::vector<PrimitiveVertex> PrimitiveCutter::GetGroupVerts(std::vector<Primitiv
 		VertexSet(const PrimitiveVertex& v1, const PrimitiveVertex& v2) 
 			: vert1(v1), vert2(v2) {}
 	};
-	if (vertexGroupID[pivoitIndex] != -1) return std::vector<PrimitiveVertex>();
+	if (vertexGroupID[pivoitIndex] != -1)
+	{
+		return std::vector<PrimitiveVertex>();
+	}
 
-	VertexSet set;
+	VertexSet set = VertexSet(verts[pivoitIndex],verts[pivoitIndex + 1]);
+	vertexGroupID[pivoitIndex] = groupID;
+	vertexGroupID[pivoitIndex + 1] = groupID;
 
-	return std::vector<PrimitiveVertex>();
+	unsigned int vertexNum = static_cast<unsigned int>(verts.size());
+	std::vector<PrimitiveVertex> groupVert;
+	groupVert.reserve(vertexNum);
+	groupVert.push_back(set.vert1);
+	groupVert.push_back(set.vert2);
+
+	const float epsilon = 0.0001f;
+
+	std::function equalEpsilon = [epsilon](const DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT4& rval)->bool
+	{
+		return std::fabsf(lval.x - rval.x) < epsilon 
+			&& std::fabsf(lval.y - rval.y) < epsilon 
+			&& std::fabsf(lval.z - rval.z) < epsilon 
+			&& std::fabsf(lval.w - rval.w) < epsilon;
+	};
+
+	for (int i = 0; i < static_cast<int>(vertexNum); i+= 2)
+	{
+		const unsigned int v1Index = i;
+		const unsigned int v2Index = i + 1;
+		if (vertexGroupID[v1Index] != -1 || vertexGroupID[v2Index] != -1)
+		{
+			continue;
+		}
+
+		if (equalEpsilon(set.vert1.pos, verts[v1Index].pos)
+			|| equalEpsilon(set.vert2.pos, verts[v1Index].pos)
+			|| equalEpsilon(set.vert1.pos, verts[v2Index].pos)
+			|| equalEpsilon(set.vert2.pos, verts[v2Index].pos))
+		{
+
+			vertexGroupID[v1Index] = groupID;
+			vertexGroupID[v2Index] = groupID;
+			set.vert1 = verts[v1Index];
+			set.vert2 = verts[v2Index];
+			groupVert.push_back(set.vert1);
+			groupVert.push_back(set.vert2);
+			i = -2;
+		}
+
+	}
+
+	return groupVert;
+}
+
+std::vector<unsigned int> PrimitiveCutter::CreateFaceIndex(std::vector<PrimitiveVertex>& verts, const DirectX::XMFLOAT3& normal, const unsigned int indexOffset)
+{
+	DirectX::XMFLOAT4 avePos = { 0.0f,0.0f,0.0f,0.0f };
+	DirectX::XMFLOAT2 aveUV = { 0.0f,0.0f };
+	unsigned int vertsNum = static_cast<unsigned int>(verts.size());
+	std::vector<unsigned int> indices(vertsNum + vertsNum / 2U);
+
+	const auto n = ConvertXMFloat3ToXMFloat4(normal);
+	for (unsigned int i = 0; i < vertsNum; i += 2)
+	{
+		avePos += verts[i].pos;
+		aveUV += verts[i].uv;
+		verts[i].normal = n;
+
+		avePos += verts[i + 1].pos;
+		aveUV += verts[i + 1].uv;
+		verts[i + 1].normal = n;
+
+		unsigned int index = (i / 2U) * 3U;
+		indices[index] = i + indexOffset;
+		indices[index + 1] = i + 1 + indexOffset;
+		indices[index + 2] = vertsNum + indexOffset;
+	}
+
+	avePos /= static_cast<float>(vertsNum);
+	aveUV /= static_cast<float>(vertsNum);
+	auto aveVert = PrimitiveVertex(ConvertXMFloat4ToXMFloat3(avePos), normal, aveUV);
+	verts.push_back(aveVert);
+
+	return indices;
 }
 
 PrimitiveCutter::Triangle::Triangle():vert1No(-1),vert2No(-1),vert3No(-1)

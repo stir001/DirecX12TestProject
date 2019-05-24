@@ -17,8 +17,24 @@
     <ClCompile Include="Game\Star.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\BreakSphere.cpp" />
-    <ClCompile Include="Game\PrimitiveCutter.cpp" />
+    <ClCompile Include="Game\CoverFaceCreator.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PrimitiveCutter.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FreePrimitive.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameScene.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RandomGenerator.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -36,8 +52,24 @@
     <ClInclude Include="Game\Star.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\BreakSphere.h" />
-    <ClInclude Include="Game\PrimitiveCutter.h" />
+    <ClInclude Include="Game\CoverFaceCreator.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PrimitiveCutter.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\FreePrimitive.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameScene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RandomGenerator.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
