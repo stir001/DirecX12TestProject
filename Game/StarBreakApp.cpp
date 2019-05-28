@@ -13,6 +13,9 @@ StarBreakApp::~StarBreakApp()
 
 void StarBreakApp::Initialize(HINSTANCE hInst)
 {
+#ifndef _DEBUG
+	SetShaderDir("Shader/");
+#endif
 	Dx12CtrlInit(hInst, "CutCutCut");
 	mScene = std::make_shared<GameScene>(GameScene::PrimitiveType::CUBE);
 	mScene->Initialize();
