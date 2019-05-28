@@ -16,6 +16,7 @@ void StarBreakApp::Initialize(HINSTANCE hInst)
 	Dx12CtrlInit(hInst, "CutCutCut");
 	mScene = std::make_shared<GameScene>(GameScene::PrimitiveType::CUBE);
 	mScene->Initialize();
+	mImg = LoadImage2D("Game/resource/BackBlack.png");
 }
 
 void StarBreakApp::Terminate()
@@ -34,6 +35,7 @@ void StarBreakApp::Run()
 		input.UpdateKeyState();
 		DemoUpdate(input);
 		mScene->Update(input);
+		mImg->BackDraw();
 		mScene->Draw();
 	}
 }

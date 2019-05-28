@@ -4,6 +4,7 @@
 
 class Scene;
 class DxInput;
+class ImageController;
 
 class StarBreakApp
 {
@@ -17,5 +18,5 @@ private:
 	void DemoUpdate(const DxInput& input);
 
 	std::shared_ptr<Scene> mScene;
+	std::shared_ptr<ImageController> mImg;
 };
-
