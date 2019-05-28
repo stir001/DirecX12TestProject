@@ -1,5 +1,5 @@
 #pragma once
-#include "Dx12MSLib.h"
+#include <Dx12MSLib.h>
 
 class FreePrimitive : public PrimitiveObject
 {

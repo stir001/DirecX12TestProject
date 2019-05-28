@@ -3,6 +3,7 @@
 #include <memory>
 
 class Scene;
+class DxInput;
 
 class StarBreakApp
 {
@@ -13,6 +14,8 @@ public:
 	void Terminate();
 	void Run();
 private:
+	void DemoUpdate(const DxInput& input);
+
 	std::shared_ptr<Scene> mScene;
 };
 

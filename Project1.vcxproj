@@ -137,31 +137,45 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\ChosePhase.cpp" />
+    <ClCompile Include="Game\GameObject.cpp" />
     <ClCompile Include="Game\GameScene.cpp" />
     <ClCompile Include="Game\CoverFaceCreator.cpp" />
     <ClCompile Include="Game\FreePrimitive.cpp" />
     <ClCompile Include="Game\PrimitiveCutter.cpp" />
     <ClCompile Include="Game\RandomGenerator.cpp" />
+    <ClCompile Include="Game\Phase.cpp" />
+    <ClCompile Include="Game\PhaseChanger.cpp" />
+    <ClCompile Include="Game\MovePrimitivePhase.cpp" />
+    <ClCompile Include="Game\LerpCalculator.cpp" />
     <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="Game\StarBreakApp.cpp" />
     <ClCompile Include="Game\StarGenerator.cpp" />
     <ClCompile Include="Game\Star.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
+    <ClCompile Include="Game\WaitCutPhase.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\ChosePhase.h" />
+    <ClInclude Include="Game\GameObject.h" />
     <ClInclude Include="Game\GameScene.h" />
     <ClInclude Include="Game\CoverFaceCreator.h" />
     <ClInclude Include="Game\FreePrimitive.h" />
     <ClInclude Include="Game\PrimitiveCutter.h" />
     <ClInclude Include="Game\RandomGenerator.h" />
+    <ClInclude Include="Game\Phase.h" />
+    <ClInclude Include="Game\PhaseChanger.h" />
+    <ClInclude Include="Game\MovePrimitivePhase.h" />
+    <ClInclude Include="Game\LerpCalculator.h" />
     <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
     <ClInclude Include="Game\StarBreakApp.h" />
     <ClInclude Include="Game\StarGenerator.h" />
     <ClInclude Include="Game\Star.h" />
     <ClInclude Include="Game\Scene.h" />
+    <ClInclude Include="Game\WaitCutPhase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

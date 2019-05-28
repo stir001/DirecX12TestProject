@@ -35,6 +35,27 @@
     <ClCompile Include="Game\Scene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameObject.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Phase.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WaitCutPhase.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PhaseChanger.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MovePrimitivePhase.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\LerpCalculator.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ChosePhase.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -68,6 +89,27 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Phase.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WaitCutPhase.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PhaseChanger.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MovePrimitivePhase.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LerpCalculator.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ChosePhase.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
