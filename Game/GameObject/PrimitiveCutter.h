@@ -188,5 +188,7 @@ private:
 	*			‚»‚ÌÛV‹K’¸“_‚ğˆê‚Â’Ç‰Á‚·‚é
 	*/
 	std::vector<unsigned int> CreateFaceIndex(std::vector<PrimitiveVertex>& verts, const DirectX::XMFLOAT3& normal, const unsigned int indexOffset);
+
+	void ReSearchGourpVerts();
 };
 

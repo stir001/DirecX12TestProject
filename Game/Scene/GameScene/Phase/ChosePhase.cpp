@@ -1,8 +1,8 @@
 #include "ChosePhase.h"
 #include "PhaseChanger.h"
 #include "WaitCutPhase.h"
-#include "GameObject.h"
-#include "LerpCalculator.h"
+#include <Game/GameObject/GameObject.h>
+#include <Game/Utillity/LerpCalculator.h>
 #include <Dx12MSLib.h>
 
 ChosePhase::ChosePhase(PhaseChanger& changer, std::shared_ptr<GameObject> base

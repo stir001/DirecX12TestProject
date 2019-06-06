@@ -1,8 +1,8 @@
 #include "WaitCutPhase.h"
-#include "PrimitiveCutter.h"
-#include "FreePrimitive.h"
-#include "GameObject.h"
-#include "RandomGenerator.h"
+#include <Game/GameObject/PrimitiveCutter.h>
+#include <Game/GameObject/FreePrimitive.h>
+#include <Game/GameObject/GameObject.h>
+#include <Game/Utillity/RandomGenerator.h>
 #include "PhaseChanger.h"
 #include "MovePrimitivePhase.h"
 #include <Dx12MSLib.h>
@@ -22,7 +22,7 @@ WaitCutPhase::~WaitCutPhase()
 void WaitCutPhase::Update(const DxInput & input)
 {
 	auto camera = GetCamera();
-	//camera->DefaultMove(input);
+	camera->DefaultMove(input);
 
 	if (input.IsKeyTrigger(VIRTUAL_KEY_INDEX::KEY_ENTER))
 	{
@@ -38,10 +38,18 @@ void WaitCutPhase::Update(const DxInput & input)
 void WaitCutPhase::Draw()
 {
 	mBase->Draw();
+	mXAxis->Draw();
+	mYAxis->Draw();
+	mZAxis->Draw();
 }
 
 void WaitCutPhase::Initialize()
 {
+	mXAxis = LoadImage3D("Game/resource/XAxis.png");
+	mXAxis->AddRotaY(DirectX::XM_PIDIV2);
+	mYAxis = LoadImage3D("Game/resource/YAxis.png");
+	mYAxis->AddRotaX(DirectX::XM_PIDIV2);
+	mZAxis = LoadImage3D("Game/resource/ZAxis.png");
 }
 
 void WaitCutPhase::Terminate()
@@ -95,4 +103,8 @@ std::tuple<DirectX::XMFLOAT3, DirectX::XMFLOAT3> WaitCutPhase::GetCutFace() cons
 	normal = NormalizeXMFloat3(normal);
 	auto origin = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	return { origin, normal };
+}
+
+void WaitCutPhase::ChoseNormal(const DxInput & input)
+{
 }

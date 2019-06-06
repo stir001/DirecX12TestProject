@@ -319,6 +319,7 @@ std::vector<PrimitiveVertex> PrimitiveCutter::GetGroupVerts(std::vector<Primitiv
 	}
 
 	VertexSet set = VertexSet(verts[pivoitIndex],verts[pivoitIndex + 1]);
+	const VertexSet firstSet = set;
 	vertexGroupID[pivoitIndex] = groupID;
 	vertexGroupID[pivoitIndex + 1] = groupID;
 
@@ -352,7 +353,6 @@ std::vector<PrimitiveVertex> PrimitiveCutter::GetGroupVerts(std::vector<Primitiv
 			|| equalEpsilon(set.vert1.pos, verts[v2Index].pos)
 			|| equalEpsilon(set.vert2.pos, verts[v2Index].pos))
 		{
-
 			vertexGroupID[v1Index] = groupID;
 			vertexGroupID[v2Index] = groupID;
 			set.vert1 = verts[v1Index];
@@ -361,7 +361,6 @@ std::vector<PrimitiveVertex> PrimitiveCutter::GetGroupVerts(std::vector<Primitiv
 			groupVert.push_back(set.vert2);
 			i = -2;
 		}
-
 	}
 
 	return groupVert;

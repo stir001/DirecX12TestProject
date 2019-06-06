@@ -1,8 +1,8 @@
 #include "GameScene.h"
-#include "GameObject.h"
-#include "Phase.h"
-#include "WaitCutPhase.h"
-#include "PhaseChanger.h"
+#include <Game/GameObject/GameObject.h>
+#include "Phase/Phase.h"
+#include "Phase/WaitCutPhase.h"
+#include "Phase/PhaseChanger.h"
 #include <Dx12MSLib.h>
 
 GameScene::GameScene(const PrimitiveType type) 

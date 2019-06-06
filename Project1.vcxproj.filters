@@ -11,51 +11,46 @@
     <ClCompile Include="Game\StarBreakApp.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\StarGenerator.cpp">
+    <ClCompile Include="Game\Scene\Scene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Star.cpp">
+    <ClCompile Include="Game\Scene\GameScene\Phase\ChosePhase.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CoverFaceCreator.cpp">
+    <ClCompile Include="Game\Scene\GameScene\Phase\MovePrimitivePhase.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\PrimitiveCutter.cpp">
+    <ClCompile Include="Game\Scene\GameScene\Phase\Phase.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\FreePrimitive.cpp">
+    <ClCompile Include="Game\Scene\GameScene\Phase\PhaseChanger.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameScene.cpp">
+    <ClCompile Include="Game\Scene\GameScene\Phase\WaitCutPhase.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\RandomGenerator.cpp">
+    <ClCompile Include="Game\Scene\GameScene\GameScene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene.cpp">
+    <ClCompile Include="Game\GameObject\GameObject.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject.cpp">
+    <ClCompile Include="Game\GameObject\PrimitiveCutter.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Phase.cpp">
+    <ClCompile Include="Game\GameObject\FreePrimitive.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\WaitCutPhase.cpp">
+    <ClCompile Include="Game\GameObject\CoverFaceCreator.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\PhaseChanger.cpp">
+    <ClCompile Include="Game\Utillity\LerpCalculator.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\MovePrimitivePhase.cpp">
+    <ClCompile Include="Game\Utillity\RandomGenerator.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\LerpCalculator.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\ChosePhase.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
+    <ClCompile Include="Game\RenderingPass\TransParencyPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -67,51 +62,47 @@
     <ClInclude Include="Game\StarBreakApp.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\StarGenerator.h">
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Game\Scene\Scene.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Star.h">
+    <ClInclude Include="Game\Scene\GameScene\Phase\ChosePhase.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CoverFaceCreator.h">
+    <ClInclude Include="Game\Scene\GameScene\Phase\MovePrimitivePhase.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\PrimitiveCutter.h">
+    <ClInclude Include="Game\Scene\GameScene\Phase\Phase.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\FreePrimitive.h">
+    <ClInclude Include="Game\Scene\GameScene\Phase\PhaseChanger.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameScene.h">
+    <ClInclude Include="Game\Scene\GameScene\Phase\WaitCutPhase.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\RandomGenerator.h">
+    <ClInclude Include="Game\Scene\GameScene\GameScene.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene.h">
+    <ClInclude Include="Game\GameObject\GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameObject.h">
+    <ClInclude Include="Game\GameObject\PrimitiveCutter.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Phase.h">
+    <ClInclude Include="Game\GameObject\FreePrimitive.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\WaitCutPhase.h">
+    <ClInclude Include="Game\GameObject\CoverFaceCreator.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\PhaseChanger.h">
+    <ClInclude Include="Game\Utillity\RandomGenerator.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\MovePrimitivePhase.h">
+    <ClInclude Include="Game\Utillity\LerpCalculator.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\LerpCalculator.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ChosePhase.h">
-      <Filter>Game</Filter>
-    </ClInclude>
+    <ClInclude Include="Game\RenderingPass\TransParencyPass.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
@@ -129,5 +120,11 @@
     <Filter Include="Game">
       <UniqueIdentifier>{4f54bc19-cb01-427a-97a2-c5863a11569e}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 #include "MovePrimitivePhase.h"
-#include "GameObject.h"
+#include <Game/GameObject/GameObject.h>
 #include "ChosePhase.h"
 #include "PhaseChanger.h"
-#include "LerpCalculator.h"
+#include <Game/Utillity/LerpCalculator.h>
 
 MovePrimitivePhase::MovePrimitivePhase(PhaseChanger& changer, std::shared_ptr<GameObject>& base
 	, std::shared_ptr<GameObject>& plus, std::shared_ptr<GameObject>& minus)

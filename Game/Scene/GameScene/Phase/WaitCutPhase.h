@@ -7,6 +7,7 @@
 class GameObject;
 class PrimitiveCutter;
 struct PrimitiveVertex;
+class Image3DController;
 
 /**
 *	切断するためのフェーズ
@@ -58,9 +59,28 @@ private:
 	*/
 	std::tuple<DirectX::XMFLOAT3, DirectX::XMFLOAT3> GetCutFace() const;
 
+	/**
+	*	@brief	入力により角度を決定する
+	*/
+	void ChoseNormal(const DxInput& input);
+
 	std::shared_ptr<GameObject> mBase;
 	std::shared_ptr<GameObject> mPlus;
 	std::shared_ptr<GameObject> mMinus;
 	std::unique_ptr<PrimitiveCutter> mCutter;
+
+	std::shared_ptr<Image3DController> mXAxis;
+	std::shared_ptr<Image3DController> mYAxis;
+	std::shared_ptr<Image3DController> mZAxis;
+
+	/**
+	*	法線
+	*/
+	DirectX::XMFLOAT3 mNormal;
+
+	/**
+	*	基準点
+	*/
+	DirectX::XMFLOAT3 mOrigin;
 };
 

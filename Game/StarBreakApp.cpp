@@ -1,6 +1,7 @@
 #include "StarBreakApp.h"
-#include "GameScene.h"
+#include "Game/Scene/GameScene/GameScene.h"
 #include <Dx12MSLib.h>
+#include <Windows.h>
 
 
 StarBreakApp::StarBreakApp()
@@ -16,6 +17,7 @@ void StarBreakApp::Initialize(HINSTANCE hInst)
 #ifndef _DEBUG
 	SetShaderDir("Shader/");
 #endif
+	SetIcon("IDI_ICON1\0");
 	Dx12CtrlInit(hInst, "CutCutCut");
 	mScene = std::make_shared<GameScene>(GameScene::PrimitiveType::CUBE);
 	mScene->Initialize();
