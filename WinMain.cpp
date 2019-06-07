@@ -7,14 +7,15 @@
 #include "DirectX12/Rootsignature/PMDShadowRootSignature.h"
 #include "DirectX12/Rootsignature/PMDToonShadowRootSignature.h"
 
-#include "DirectX12/PipelineState/PMDBasicShadowPipelineState.h"
-#include "DirectX12/PipelineState/PMDShadowPipelineState.h"
-#include "DirectX12/PipelineState/PMDToonShadowPipelineState.h"
+#include "DirectX12/PipelineState/NotCullPipelineState.h"
+//#include "DirectX12/PipelineState/PMDBasicShadowPipelineState.h"
+//#include "DirectX12/PipelineState/PMDShadowPipelineState.h"
+//#include "DirectX12/PipelineState/PMDToonShadowPipelineState.h"
 
 #include "DirectX12/Rootsignature/PrimitiveShadowRenderRootSignature.h"
 #include "DirectX12/Rootsignature/PrimitiveShadowRootSignature.h"
-#include "DirectX12/PipelineState/PrimitiveShadowPipelineState.h"
-#include "DirectX12/PipelineState/PrimitiveShadowRenderPipelineState.h"
+#include "DirectX12/PipelineState/DefaultPipelineState.h"
+//#include "DirectX12/PipelineState/PrimitiveShadowRenderPipelineState.h"
 
 #include "sample/RigidCube.h"
 
@@ -56,12 +57,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 		std::shared_ptr<RootSignatureObject> pmdSRS = std::make_shared<PMDShadowRootSignature>(device);
 		std::shared_ptr<RootSignatureObject> pmdTSRS = std::make_shared<PMDToonShadowRootSignature>(device);
 		
-		std::shared_ptr<PipelineStateObject> pmdBSPS = std::make_shared<PMDBasicShadowPipelineState>(pmdBSRS, device);
-		std::shared_ptr<PipelineStateObject> pmdSPS = std::make_shared<PMDShadowPipelineState>(pmdSRS, device);
-		std::shared_ptr<PipelineStateObject> pmdTSPS = std::make_shared<PMDToonShadowPipelineState>(pmdTSRS, device);
+		std::shared_ptr<PipelineStateObject> pmdBSPS = std::make_shared<NotCullPipelineState>("PMDBasicShadow", pmdBSRS, device);
+		std::shared_ptr<PipelineStateObject> pmdSPS = std::make_shared<NotCullPipelineState>("PMDShadow", pmdSRS, device);
+		std::shared_ptr<PipelineStateObject> pmdTSPS = std::make_shared<NotCullPipelineState>("PMDToonShadow", pmdTSRS, device);
 
 
-		auto img3D = ImageLoader::Instance().LoadImage3D("dice.png" , true);
+		auto img3D = ImageLoader::Instance().LoadImage3D("dice.png" , false);
+		auto img2D = LoadImage2D("dice.png");
 
 		PMDLoader loader;
 		loader.SetRenderingCommnadList(RenderingPassManager::Instance().GetRenderingPassCommandList(3));
@@ -97,6 +99,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 
 		while (ProcessMessage()) {
 			input.UpdateKeyState();
+
+			camera->DefaultMove(input);
 			if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_Z))
 			{
 				scale += 0.001f;
@@ -131,11 +135,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 				cube->Draw();
 			}
 
+
 			model->DrawShadowmap();
 			model->DrawShadow();
 			
 			plane->DrawShadowmap();
 			plane->DrawShadow();
+			img3D->Draw();
 		}
 
 		camera = nullptr;
@@ -150,8 +156,8 @@ void SetShadowProperty(std::shared_ptr<PrimitiveController> ctrl, std::shared_pt
 	std::shared_ptr<RootSignatureObject> prvSRS = std::make_shared<PrimitiveShadowRootSignature>(device);
 	std::shared_ptr<RootSignatureObject> prvSRRS = std::make_shared<PrimitiveShadowRenderRootSignature>(device);
 
-	std::shared_ptr<PipelineStateObject> prvSPS = std::make_shared<PrimitiveShadowPipelineState>(prvSRS, device);
-	std::shared_ptr<PipelineStateObject> prvSRPS = std::make_shared<PrimitiveShadowRenderPipelineState>(prvSRRS, device);
+	std::shared_ptr<PipelineStateObject> prvSPS = std::make_shared<DefaultPipelineState>("PrimitiveShadow",prvSRS, device);
+	std::shared_ptr<PipelineStateObject> prvSRPS = std::make_shared<DefaultPipelineState>("PrimitiveShadowRender",prvSRRS, device);
 
 	ctrl->SetShadowmapCommandList(RenderingPassManager::Instance().GetRenderingPassCommandList(0));
 	ctrl->SetShadowmapRootSignature(prvSRRS);
