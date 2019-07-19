@@ -2,7 +2,6 @@
 #include <Game/Scene/Scene.h>
 #include <memory>
 #include <DirectXMath.h>
-#include <vector>
 
 class GameObject;
 class Phase;
@@ -45,7 +44,11 @@ public:
 	*/
 	void Draw();
 private:
+	void MoveCamera(const DxInput& input);
+
 	std::shared_ptr<GameObject> mBase;
 	std::shared_ptr<Phase> mPhase;
 	std::shared_ptr<PhaseChanger> mChanger;
+
+	DirectX::XMFLOAT2 mMousePos;
 };

@@ -35,6 +35,11 @@ PrimitiveCutter::CutVerts PrimitiveCutter::CutPrimitive(const CutData& data)
 	return cut;
 }
 
+std::vector<PrimitiveVertex> PrimitiveCutter::GetCutLineVertex() const
+{
+	return mMadePlusVertex;
+}
+
 int PrimitiveCutter::Sign(const float val)
 {
 	int rtn = 0;
@@ -76,15 +81,24 @@ void PrimitiveCutter::CutByFace(CutVerts& cut, const CutData& data)
 			else
 			{
 				AddTriangle(cut.plus, tri, mOriginPlusVertNo);
+				mMadePlusVertex.push_back(tri.vert1);
+				mMadePlusVertex.push_back(tri.vert2);
+				mMadePlusVertex.push_back(tri.vert3);
+
 				AddTriangle(cut.minus, tri, mOriginMinusVertNo);
+				mMadeMinusVertex.push_back(tri.vert1);
+				mMadeMinusVertex.push_back(tri.vert2);
+				mMadeMinusVertex.push_back(tri.vert3);
 			}
 		}
 		else
 		{
 			int offset = GetSingleVertOffset(val1, val2, val3);
+
 			const unsigned int VALUE_NUM = 3U;
 			int values[VALUE_NUM] = { val1, val2, val3 };
 			bool isPlus = values[offset] > 0;
+
 
 			if (values[offset] == 0)
 			{
@@ -102,10 +116,14 @@ void PrimitiveCutter::CutByFace(CutVerts& cut, const CutData& data)
 				if (isPlus)
 				{
 					AddTriangle(cut.plus, tri, mOriginPlusVertNo);
+					mMadePlusVertex.push_back(tri.GetVertex((offset + 1) % 3));
+					mMadePlusVertex.push_back(tri.GetVertex((offset + 2) % 3));
 				}
 				else
 				{
 					AddTriangle(cut.minus, tri, mOriginMinusVertNo);
+					mMadeMinusVertex.push_back(tri.GetVertex((offset + 1) % 3));
+					mMadeMinusVertex.push_back(tri.GetVertex((offset + 2) % 3));
 				}
 			}
 			else
@@ -245,14 +263,26 @@ int PrimitiveCutter::GetSingleVertOffset(int v1Val, int v2Val, int v3Val)
 	if (v1Val == v2Val)
 	{
 		offset = 2;
+		return offset;
 	}
 	else if (v1Val == v3Val)
 	{
 		offset = 1;
+		return offset;
 	}
-	else
+	else if(v2Val == v3Val)
 	{
 		offset = 0;
+		return offset;
+	}
+
+	if (v1Val != 0)
+	{
+		offset = 0;
+	}
+	else if (v2Val != 0)
+	{
+		offset = 1;
 	}
 
 	return offset;
@@ -305,6 +335,10 @@ void PrimitiveCutter::CreateGroupFace(Primitive& primitive, std::vector<Primitiv
 std::vector<PrimitiveVertex> PrimitiveCutter::GetGroupVerts(std::vector<PrimitiveVertex>& verts, unsigned int pivoitIndex, std::vector<int>& vertexGroupID, const int groupID)
 {
 	if((pivoitIndex % 2) != 0) return std::vector<PrimitiveVertex>();
+	if (vertexGroupID[pivoitIndex] != -1)
+	{
+		return std::vector<PrimitiveVertex>();
+	}
 	struct VertexSet
 	{
 		PrimitiveVertex vert1;
@@ -313,11 +347,7 @@ std::vector<PrimitiveVertex> PrimitiveCutter::GetGroupVerts(std::vector<Primitiv
 		VertexSet(const PrimitiveVertex& v1, const PrimitiveVertex& v2) 
 			: vert1(v1), vert2(v2) {}
 	};
-	if (vertexGroupID[pivoitIndex] != -1)
-	{
-		return std::vector<PrimitiveVertex>();
-	}
-
+	
 	VertexSet set = VertexSet(verts[pivoitIndex],verts[pivoitIndex + 1]);
 	const VertexSet firstSet = set;
 	vertexGroupID[pivoitIndex] = groupID;
@@ -329,37 +359,43 @@ std::vector<PrimitiveVertex> PrimitiveCutter::GetGroupVerts(std::vector<Primitiv
 	groupVert.push_back(set.vert1);
 	groupVert.push_back(set.vert2);
 
-	const float epsilon = 0.0001f;
-
-	std::function equalEpsilon = [epsilon](const DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT4& rval)->bool
+	while (true)
 	{
-		return std::fabsf(lval.x - rval.x) < epsilon 
-			&& std::fabsf(lval.y - rval.y) < epsilon 
-			&& std::fabsf(lval.z - rval.z) < epsilon 
-			&& std::fabsf(lval.w - rval.w) < epsilon;
-	};
-
-	for (int i = 0; i < static_cast<int>(vertexNum); i+= 2)
-	{
-		const unsigned int v1Index = i;
-		const unsigned int v2Index = i + 1;
-		if (vertexGroupID[v1Index] != -1 || vertexGroupID[v2Index] != -1)
+		for (int i = 0; i < static_cast<int>(vertexNum); i += 2)
 		{
-			continue;
+			const unsigned int v1Index = i;
+			const unsigned int v2Index = i + 1;
+			if (vertexGroupID[v1Index] != -1 || vertexGroupID[v2Index] != -1)
+			{
+				continue;
+			}
+
+			if (EpualPairVertexPos({ set.vert1,set.vert2 }, { verts[v1Index], verts[v2Index] }))
+			{
+				vertexGroupID[v1Index] = groupID;
+				vertexGroupID[v2Index] = groupID;
+				set.vert1 = verts[v1Index];
+				set.vert2 = verts[v2Index];
+				groupVert.push_back(set.vert1);
+				groupVert.push_back(set.vert2);
+				i = -2;
+			}
 		}
 
-		if (equalEpsilon(set.vert1.pos, verts[v1Index].pos)
-			|| equalEpsilon(set.vert2.pos, verts[v1Index].pos)
-			|| equalEpsilon(set.vert1.pos, verts[v2Index].pos)
-			|| equalEpsilon(set.vert2.pos, verts[v2Index].pos))
+		unsigned int groupvertNum = static_cast<unsigned int>(groupVert.size());
+		if (!EpualPairVertexPos({ groupVert[0], groupVert[1] }, { groupVert[groupvertNum - 1], groupVert[groupvertNum - 2] }))
 		{
-			vertexGroupID[v1Index] = groupID;
-			vertexGroupID[v2Index] = groupID;
-			set.vert1 = verts[v1Index];
-			set.vert2 = verts[v2Index];
-			groupVert.push_back(set.vert1);
-			groupVert.push_back(set.vert2);
-			i = -2;
+			int vertNum = ReSearchGourpVerts(vertexGroupID, groupID, groupVert, verts);
+			if(vertNum == INT_MAX)
+			{
+				break;
+			}
+			set.vert1 = verts[vertNum];
+			set.vert2 = verts[vertNum + 1];
+		}
+		else
+		{
+			break;
 		}
 	}
 
@@ -398,6 +434,48 @@ std::vector<unsigned int> PrimitiveCutter::CreateFaceIndex(std::vector<Primitive
 	return indices;
 }
 
+int PrimitiveCutter::ReSearchGourpVerts(std::vector<int>& vertexGroupID, int groupID
+	, std::vector<PrimitiveVertex>& groupVerts
+	, const std::vector<PrimitiveVertex>& originalVerts)
+{
+	const int groupVertsNum = static_cast<int>(groupVerts.size());
+	const int originVertNum = static_cast<int>(originalVerts.size());
+	//0‚ÆÅŒã‚É’Ç‰Á‚³‚ê‚½’¸“_ˆÈŠO‚ÌgroupVerts‚Ì’†‚ÅÀ•W‚ªˆê’v‚·‚é’¸“_‚ð’T‚·
+	for (int i = groupVertsNum - 1; i > 0; i -= 2)
+	{
+		for (int j = 0; j < originVertNum; j += 2)
+		{
+			if (vertexGroupID[j] != -1)
+			{
+				continue;
+			}
+
+			if (EpualPairVertexPos({ groupVerts[i], groupVerts[i - 1] }, { originalVerts[j], originalVerts[j + 1] }))
+			{
+				return j;
+			}
+		}
+	}
+
+	return INT_MAX;
+}
+
+bool PrimitiveCutter::EqualEpsilon(const DirectX::XMFLOAT4 & lval, const DirectX::XMFLOAT4 & rval, const float epsilon)
+{
+	return std::fabsf(lval.x - rval.x) < epsilon
+		&& std::fabsf(lval.y - rval.y) < epsilon
+		&& std::fabsf(lval.z - rval.z) < epsilon
+		&& std::fabsf(lval.w - rval.w) < epsilon;
+}
+
+bool PrimitiveCutter::EpualPairVertexPos(const std::pair<PrimitiveVertex, PrimitiveVertex>& pair1, const std::pair<PrimitiveVertex, PrimitiveVertex>& pair2)
+{
+	return EqualEpsilon(pair1.first.pos, pair2.first.pos)
+		|| EqualEpsilon(pair1.first.pos, pair2.second.pos)
+		|| EqualEpsilon(pair1.second.pos, pair2.first.pos)
+		|| EqualEpsilon(pair1.second.pos, pair2.second.pos);
+}
+
 PrimitiveCutter::Triangle::Triangle():vert1No(-1),vert2No(-1),vert3No(-1)
 {
 }
@@ -413,4 +491,20 @@ PrimitiveCutter::Triangle::Triangle(const CutData& data, int index)
 	, vert2No(data.primitive.indices[index + 1]), vert2(data.primitive.verts[vert2No])
 	, vert3No(data.primitive.indices[index + 2]), vert3(data.primitive.verts[vert3No])
 {
+}
+
+PrimitiveVertex PrimitiveCutter::Triangle::GetVertex(unsigned int vertexNo) const
+{
+	switch (vertexNo)
+	{
+	case 0:
+		return vert1;
+	case 1:
+		return vert2;
+	case 2:
+		return vert3;
+	default:
+		break;
+	}
+	return PrimitiveVertex();
 }

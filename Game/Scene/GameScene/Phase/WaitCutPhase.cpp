@@ -1,3 +1,4 @@
+
 #include "WaitCutPhase.h"
 #include <Game/GameObject/PrimitiveCutter.h>
 #include <Game/GameObject/FreePrimitive.h>
@@ -5,13 +6,22 @@
 #include <Game/Utillity/RandomGenerator.h>
 #include "PhaseChanger.h"
 #include "MovePrimitivePhase.h"
+#include <Game/GameObject/AxisViewer.h>
 #include <Dx12MSLib.h>
+#include <Game/Extend/VertexCustumController.h>
+#include "Game/GameObject/ScreenRayCast.h"
 
 
 WaitCutPhase::WaitCutPhase(PhaseChanger& changer,std::shared_ptr<GameObject>& baseObj)
 	: Phase(changer), mBase(baseObj), mCutter(std::make_unique<PrimitiveCutter>())
-	, mPlus(nullptr), mMinus(nullptr)
+	, mPlus(nullptr), mMinus(nullptr), mAxisViewer(std::make_unique<AxisViewer>())
+	, mCustumController(std::make_unique<VertexCustumController>())
+	, mNormal{ 1.0f, 0.0f, 0.0f}, mOrigin{ 0.0f, 0.0f, 0.0f}
+	, mUpdateState(&WaitCutPhase::UpdateCatchAxis)
 {
+	Cut(mOrigin, mNormal);
+	float lineScale = 1.0025f;
+	mCustumController->SetScale(lineScale);
 }
 
 
@@ -21,35 +31,18 @@ WaitCutPhase::~WaitCutPhase()
 
 void WaitCutPhase::Update(const DxInput & input)
 {
-	auto camera = GetCamera();
-	camera->DefaultMove(input);
-
-	if (input.IsKeyTrigger(VIRTUAL_KEY_INDEX::KEY_ENTER))
-	{
-		auto[origin, normal] = GetCutFace();
-		Cut(origin, normal);
-		mPlus->SetVelocity(normal);
-		mMinus->SetVelocity(-normal);
-		auto phase = std::make_shared<MovePrimitivePhase>(mChanger, mBase, mPlus, mMinus);
-		mChanger.ChangePhase(phase);
-	}
+	(this->*mUpdateState)(input);
 }
 
 void WaitCutPhase::Draw()
 {
 	mBase->Draw();
-	mXAxis->Draw();
-	mYAxis->Draw();
-	mZAxis->Draw();
+	mCustumController->Draw();
+	mAxisViewer->Draw();
 }
 
 void WaitCutPhase::Initialize()
 {
-	mXAxis = LoadImage3D("Game/resource/XAxis.png");
-	mXAxis->AddRotaY(DirectX::XM_PIDIV2);
-	mYAxis = LoadImage3D("Game/resource/YAxis.png");
-	mYAxis->AddRotaX(DirectX::XM_PIDIV2);
-	mZAxis = LoadImage3D("Game/resource/ZAxis.png");
 }
 
 void WaitCutPhase::Terminate()
@@ -78,21 +71,34 @@ void WaitCutPhase::Cut(const DirectX::XMFLOAT3& origin, const DirectX::XMFLOAT3 
 
 	mPlus->SetPos(offsetPlus);
 	mMinus->SetPos(offsetMinus);
+
+	auto vert = mCutter->GetCutLineVertex();
+	unsigned int vertNum = static_cast<unsigned int>(vert.size());
+	mCustumController->SetVerts(mCutter->GetCutLineVertex());
+
 }
 
 DirectX::XMFLOAT3 WaitCutPhase::RePlaceVertsPos(std::vector<PrimitiveVertex>& verts)
 {
-	DirectX::XMFLOAT4 avePos = { 0.0f,0.0f,0.0f,1.0f };
+	DirectX::XMFLOAT4 maxPos = { FLT_MIN, FLT_MIN, FLT_MIN, 1.0f };
+	DirectX::XMFLOAT4 minPos = { FLT_MAX, FLT_MAX, FLT_MAX, 1.0f };
 	for (auto& v : verts)
 	{
-		avePos += v.pos;
+		maxPos.x = maxPos.x <= v.pos.x ? v.pos.x : maxPos.x;
+		maxPos.y = maxPos.y <= v.pos.y ? v.pos.y : maxPos.y;
+		maxPos.z = maxPos.z <= v.pos.z ? v.pos.z : maxPos.z;
+		minPos.x = minPos.x >= v.pos.x ? v.pos.x : minPos.x;
+		minPos.y = minPos.y >= v.pos.y ? v.pos.y : minPos.y;
+		minPos.z = minPos.z >= v.pos.z ? v.pos.z : minPos.z;
 	}
-	avePos /= static_cast<float>(verts.size());
+	
+	auto center = (maxPos + minPos) / 2.0f;
+
 	for (auto& v : verts)
 	{
-		v.pos -= avePos;
+		v.pos -= center;
 	}
-	return ConvertXMFloat4ToXMFloat3(avePos);
+	return ConvertXMFloat4ToXMFloat3(center);
 }
 
 std::tuple<DirectX::XMFLOAT3, DirectX::XMFLOAT3> WaitCutPhase::GetCutFace() const
@@ -105,6 +111,77 @@ std::tuple<DirectX::XMFLOAT3, DirectX::XMFLOAT3> WaitCutPhase::GetCutFace() cons
 	return { origin, normal };
 }
 
-void WaitCutPhase::ChoseNormal(const DxInput & input)
+void WaitCutPhase::ChoseNormal(const DxInput& input)
 {
+}
+
+void WaitCutPhase::UpdateRotaAxis(const DxInput& input)
+{
+	if (input.IsKeyUp(VIRTUAL_KEY_INDEX::KEY_LBUTTON))
+	{
+		mAxisViewer->ReleaseUI();
+		mUpdateState = &WaitCutPhase::UpdateCatchAxis;
+		return;
+	}
+
+	auto mousePos = input.GetMousePos();
+	DirectX::XMFLOAT3 origin = { 0.0f,0.0f,0.0f };
+
+	auto hit = ScreenRayCast::RayCastPlane(mousePos, origin, mRotaAxis).hitPos;
+
+	auto hitVec = NormalizeXMFloat3(hit - origin);
+	auto preVec = NormalizeXMFloat3(mHitPos - origin);
+
+	if (hitVec == preVec)
+	{
+		return;
+	}
+
+	auto rad = -acosf(DotXMFloat3(hitVec, preVec));
+	auto axis = NormalizeXMFloat3(CrossXMFloat3(hitVec, preVec));
+	auto mat = CreateQuoternion(axis, rad);
+
+	mNormal *= mat;
+	mHitPos = hit;
+	Cut(mOrigin, mNormal);
+}
+
+void WaitCutPhase::UpdateCatchAxis(const DxInput & input)
+{
+	if (input.IsKeyTrigger(VIRTUAL_KEY_INDEX::KEY_LBUTTON))
+	{
+		auto axis = mAxisViewer->CatchAxisUI(input.GetMousePos());
+		if (axis != AxisViewer::HoldAxis::NONE)
+		{
+			switch (axis)
+			{
+			case AxisViewer::HoldAxis::NONE:
+				return;
+				break;
+			case AxisViewer::HoldAxis::X:
+				mRotaAxis = { 1.0f,0.0f,0.0f };
+				break;
+			case AxisViewer::HoldAxis::Y:
+				mRotaAxis = { 0.0f,1.0f,0.0f };
+				break;
+			case AxisViewer::HoldAxis::Z:
+				mRotaAxis = { 0.0f,0.0f,1.0f };
+				break;
+			default:
+				return;
+				break;
+			}
+			mHitPos = mAxisViewer->GetRayHitPos();
+			mUpdateState = &WaitCutPhase::UpdateRotaAxis;
+		}
+	}
+
+	if (input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_LBUTTON) && input.IsKeyDown(VIRTUAL_KEY_INDEX::KEY_RBUTTON))
+	{
+		auto normal = mNormal;
+		mPlus->SetVelocity(normal);
+		mMinus->SetVelocity(-normal);
+		auto phase = std::make_shared<MovePrimitivePhase>(mChanger, mBase, mPlus, mMinus);
+		mChanger.ChangePhase(phase);
+	}
 }

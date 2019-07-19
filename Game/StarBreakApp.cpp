@@ -40,7 +40,7 @@ void StarBreakApp::Run()
 		input.UpdateKeyState();
 		DemoUpdate(input);
 		mScene->Update(input);
-		mImg->BackDraw();
+		//mImg->BackDraw();
 		mScene->Draw();
 	}
 }

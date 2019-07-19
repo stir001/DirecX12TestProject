@@ -8,6 +8,8 @@ class GameObject;
 class PrimitiveCutter;
 struct PrimitiveVertex;
 class Image3DController;
+class AxisViewer;
+class VertexCustumController;
 
 /**
 *	切断するためのフェーズ
@@ -64,14 +66,20 @@ private:
 	*/
 	void ChoseNormal(const DxInput& input);
 
+	void UpdateRotaAxis(const DxInput& input);
+
+	void UpdateCatchAxis(const DxInput& input);
+
+	void (WaitCutPhase::*mUpdateState)(const DxInput& input);
+
 	std::shared_ptr<GameObject> mBase;
 	std::shared_ptr<GameObject> mPlus;
 	std::shared_ptr<GameObject> mMinus;
 	std::unique_ptr<PrimitiveCutter> mCutter;
+	
+	std::unique_ptr<AxisViewer> mAxisViewer;
+	std::unique_ptr<VertexCustumController> mCustumController;
 
-	std::shared_ptr<Image3DController> mXAxis;
-	std::shared_ptr<Image3DController> mYAxis;
-	std::shared_ptr<Image3DController> mZAxis;
 
 	/**
 	*	法線
@@ -82,5 +90,15 @@ private:
 	*	基準点
 	*/
 	DirectX::XMFLOAT3 mOrigin;
+
+	/**
+	*	つかんだ座標
+	*/
+	DirectX::XMFLOAT3 mHitPos;
+
+	/**
+	*	回転する際の基準軸
+	*/
+	DirectX::XMFLOAT3 mRotaAxis;
 };
 

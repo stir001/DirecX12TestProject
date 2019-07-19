@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\GameObject\AxisViewer.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Phase\ChosePhase.cpp" />
     <ClCompile Include="Game\GameObject\GameObject.cpp" />
     <ClCompile Include="Game\Scene\GameScene\GameScene.cpp" />
@@ -148,15 +149,20 @@
     <ClCompile Include="Game\Scene\GameScene\Phase\PhaseChanger.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Phase\MovePrimitivePhase.cpp" />
     <ClCompile Include="Game\Utillity\LerpCalculator.cpp" />
+    <ClCompile Include="Game\Extend\PrimitiveLine3DRootSignature.cpp" />
+    <ClCompile Include="ObbCollision.cpp" />
     <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="Game\StarBreakApp.cpp" />
     <ClCompile Include="Game\Scene\Scene.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Phase\WaitCutPhase.cpp" />
     <ClCompile Include="Game\RenderingPass\TransParencyPass.cpp" />
+    <ClCompile Include="Game\Extend\VertexCustumController.cpp" />
+    <ClCompile Include="Game\GameObject\ScreenRayCast.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\GameObject\AxisViewer.h" />
     <ClInclude Include="Game\Scene\GameScene\Phase\ChosePhase.h" />
     <ClInclude Include="Game\GameObject\GameObject.h" />
     <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
@@ -168,6 +174,8 @@
     <ClInclude Include="Game\Scene\GameScene\Phase\PhaseChanger.h" />
     <ClInclude Include="Game\Scene\GameScene\Phase\MovePrimitivePhase.h" />
     <ClInclude Include="Game\Utillity\LerpCalculator.h" />
+    <ClInclude Include="Game\Extend\PrimitiveLine3DRootSignature.h" />
+    <ClInclude Include="ObbCollision.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />
@@ -175,6 +183,8 @@
     <ClInclude Include="Game\Scene\Scene.h" />
     <ClInclude Include="Game\Scene\GameScene\Phase\WaitCutPhase.h" />
     <ClInclude Include="Game\RenderingPass\TransParencyPass.h" />
+    <ClInclude Include="Game\Extend\VertexCustumController.h" />
+    <ClInclude Include="Game\GameObject\ScreenRayCast.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project1.rc" />

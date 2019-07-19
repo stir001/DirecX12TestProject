@@ -61,10 +61,12 @@ public:
 			int v2No, const PrimitiveVertex& v2,
 			int v3No, const PrimitiveVertex& v3);
 		Triangle(const CutData& data, int index);
+		PrimitiveVertex GetVertex(unsigned int vertexNo) const;
 	};
 
 	CutVerts CutPrimitive(const CutData& data);
 
+	std::vector<PrimitiveVertex> GetCutLineVertex() const;
 private:
 	std::vector<PrimitiveVertex> mMadePlusVertex;
 	std::vector<PrimitiveVertex> mMadeMinusVertex;
@@ -189,6 +191,18 @@ private:
 	*/
 	std::vector<unsigned int> CreateFaceIndex(std::vector<PrimitiveVertex>& verts, const DirectX::XMFLOAT3& normal, const unsigned int indexOffset);
 
-	void ReSearchGourpVerts();
+	/**
+	*	@brief	最後の頂点セットの中に最初の頂点セットと合致するものがあなった場合に再検索する際の関数
+	*/
+	int ReSearchGourpVerts(std::vector<int>& vertexGroupID, int groupID
+		, std::vector<PrimitiveVertex>& groupVerts
+		, const std::vector<PrimitiveVertex>& originalVerts);
+
+	bool EqualEpsilon(const DirectX::XMFLOAT4& lval, const DirectX::XMFLOAT4& rval, const float epsilon = 0.0001f);
+
+	bool EpualPairVertexPos(const std::pair<PrimitiveVertex,PrimitiveVertex>& pair1,
+		const std::pair<PrimitiveVertex, PrimitiveVertex>& pair2);
+
+	//void CreateGroupVert(std::vector<PrimitiveVertex>& groupVert, std::vector<vertexGroupID>);
 };
 

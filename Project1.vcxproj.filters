@@ -50,7 +50,16 @@
     <ClCompile Include="Game\Utillity\RandomGenerator.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\RenderingPass\TransParencyPass.cpp" />
+    <ClCompile Include="Game\GameObject\AxisViewer.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RenderingPass\TransParencyPass.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Extend\VertexCustumController.cpp" />
+    <ClCompile Include="Game\Extend\PrimitiveLine3DRootSignature.cpp" />
+    <ClCompile Include="Game\GameObject\ScreenRayCast.cpp" />
+    <ClCompile Include="ObbCollision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -102,7 +111,16 @@
     <ClInclude Include="Game\Utillity\LerpCalculator.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\RenderingPass\TransParencyPass.h" />
+    <ClInclude Include="Game\GameObject\AxisViewer.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RenderingPass\TransParencyPass.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Extend\VertexCustumController.h" />
+    <ClInclude Include="Game\Extend\PrimitiveLine3DRootSignature.h" />
+    <ClInclude Include="Game\GameObject\ScreenRayCast.h" />
+    <ClInclude Include="ObbCollision.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">
