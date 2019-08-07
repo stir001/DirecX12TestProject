@@ -59,7 +59,10 @@
     <ClCompile Include="Game\Extend\VertexCustumController.cpp" />
     <ClCompile Include="Game\Extend\PrimitiveLine3DRootSignature.cpp" />
     <ClCompile Include="Game\GameObject\ScreenRayCast.cpp" />
-    <ClCompile Include="ObbCollision.cpp" />
+    <ClCompile Include="Game\Scene\FreeCutScene\FreeCutScene.cpp" />
+    <ClCompile Include="Game\GameObject\ReMeshConverter.cpp" />
+    <ClCompile Include="Game\DataLoader\GameDataLoader.cpp" />
+    <ClCompile Include="Game\Scene\ChoseModeScene\ChoceModeScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sample\NormalMapCube.h">
@@ -120,7 +123,10 @@
     <ClInclude Include="Game\Extend\VertexCustumController.h" />
     <ClInclude Include="Game\Extend\PrimitiveLine3DRootSignature.h" />
     <ClInclude Include="Game\GameObject\ScreenRayCast.h" />
-    <ClInclude Include="ObbCollision.h" />
+    <ClInclude Include="Game\Scene\FreeCutScene\FreeCutScene.h" />
+    <ClInclude Include="Game\GameObject\ReMeshConverter.h" />
+    <ClInclude Include="Game\DataLoader\GameDataLoader.h" />
+    <ClInclude Include="Game\Scene\ChoseModeScene\ChoceModeScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sample">

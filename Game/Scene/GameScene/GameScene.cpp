@@ -19,10 +19,10 @@ GameScene::GameScene(const PrimitiveType type)
 		data = creater.GetCube(radius);
 		break;
 	case GameScene::PrimitiveType::SPHERE:
-		data = creater.GetSphere(radius, div);
+		data = creater.GetSphere(radius / 2.0f, div);
 		break;
 	case GameScene::PrimitiveType::CAPSULE:
-		data = creater.GetCapsule(radius / 2.0f, height, div);
+		data = creater.GetCapsule(radius / 3.0f, height / 1.5f, div);
 		break;
 	case GameScene::PrimitiveType::CONE:
 		data = creater.GetCone(radius / 1.5f, height / 1.5f, div);
@@ -79,7 +79,7 @@ void GameScene::MoveCamera(const DxInput & input)
 		auto mouseVec = mousePos - mMousePos;
 		DirectX::XMFLOAT3 upper = { 0.0f,1.0f,0.0f };
 
-		auto rad = DotXMFloat3(upper, NormalizeXMFloat3(target - cameraPos));
+		auto rad = Dot(upper, Normalize(target - cameraPos));
 
 		auto size = Dx12Ctrl::Instance().GetWindowSize();
 
@@ -90,8 +90,8 @@ void GameScene::MoveCamera(const DxInput & input)
 		auto yAxisRota = mouseVec.x / unit.x * 2.0f * pi;
 		auto sideAxisRota = -mouseVec.y / unit.y * 2.0f * pi;
 
-		auto yMatrix = ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixRotationY(yAxisRota));
-		auto rotaAxis = NormalizeXMFloat3(CrossXMFloat3(-NormalizeXMFloat3(ConvertXMFloat4ToXMFloat3(cameraPos)), { 0.0f,1.0f,0.0f }));
+		auto yMatrix = ConvertToXMFloat4x4(DirectX::XMMatrixRotationY(yAxisRota));
+		auto rotaAxis = Normalize(Cross(-Normalize(ConvertToXMFloat3(cameraPos)), { 0.0f,1.0f,0.0f }));
 		auto rotaMat = CreateQuoternion(rotaAxis, sideAxisRota);
 		
 		cameraPos *= yMatrix * rotaMat;
@@ -100,4 +100,3 @@ void GameScene::MoveCamera(const DxInput & input)
 		mMousePos = mousePos;
 	}
 }
-

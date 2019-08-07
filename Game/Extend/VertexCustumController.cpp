@@ -6,6 +6,7 @@ VertexCustumController::VertexCustumController()
 	: DrawController3D("CustumVert"
 		, Dx12Ctrl::Instance().GetDev()
 		, RenderingPassManager::Instance().GetRenderingPassCommandList(DefaultPass::Model))
+		, mDrawState(&VertexCustumController::DrawNone)
 {
 	mBuffer.color = { 1.0f,1.0f,1.0f,1.0f };
 
@@ -13,7 +14,6 @@ VertexCustumController::VertexCustumController()
 		Dx12Ctrl::Instance().GetDev(), static_cast<unsigned int>(sizeof(mBuffer)), 1);
 
 	mConstantBuffer->WriteBuffer256Alignment(&mBuffer, sizeof(mBuffer), 1);
-
 
 	mRootsignature = std::make_shared<PrimitiveLine3DRootSignature>();
 	mPipelinestate = std::make_shared<WireFramePipelineState>(mRootsignature, Dx12Ctrl::Instance().GetDev());
@@ -33,6 +33,7 @@ void VertexCustumController::SetVerts(std::vector<PrimitiveVertex>& verts)
 		sizeof(mVerts.front()), static_cast<unsigned int>(mVerts.size()));
 	mVertexBuffer->WriteBuffer(mVerts.data(), static_cast<unsigned int>(sizeof(mVerts.front()) * mVerts.size()));
 	mUpdateDescHeap = &VertexCustumController::UpdateDescHeap;
+	mDrawState = &VertexCustumController::DrawVertex;
 }
 
 void VertexCustumController::SetIndices(std::vector<unsigned int>& indices)
@@ -47,9 +48,7 @@ void VertexCustumController::SetIndices(std::vector<unsigned int>& indices)
 
 void VertexCustumController::Draw()
 {
-	(this->*mUpdateDescHeap)();
-	mCmdList->SetDescriptorHeap(mDescHeap);
-	mCmdList->ExecuteBundle(mBundleCmdList);
+	(this->*mDrawState)();
 }
 
 void VertexCustumController::UpdateDescriptorHeap()
@@ -92,5 +91,16 @@ void VertexCustumController::UpdateDescHeap()
 }
 
 void VertexCustumController::NonUpdate()
+{
+}
+
+void VertexCustumController::DrawVertex()
+{
+	(this->*mUpdateDescHeap)();
+	mCmdList->SetDescriptorHeap(mDescHeap);
+	mCmdList->ExecuteBundle(mBundleCmdList);
+}
+
+void VertexCustumController::DrawNone()
 {
 }

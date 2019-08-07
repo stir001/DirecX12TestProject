@@ -56,12 +56,6 @@ private:
 	DirectX::XMFLOAT3 RePlaceVertsPos(std::vector<PrimitiveVertex>& verts);
 
 	/**
-	*	@brief	切断するための原点と法線を取得する
-	*	@return	原点、法線
-	*/
-	std::tuple<DirectX::XMFLOAT3, DirectX::XMFLOAT3> GetCutFace() const;
-
-	/**
 	*	@brief	入力により角度を決定する
 	*/
 	void ChoseNormal(const DxInput& input);

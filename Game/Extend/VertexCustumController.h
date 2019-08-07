@@ -44,6 +44,9 @@ private:
 	void UpdateDescHeap();
 	void NonUpdate();
 
+	void DrawVertex();
+	void DrawNone();
+
 	std::vector<PrimitiveVertex> mVerts;
 	std::vector<unsigned int> mIndices;
 	std::shared_ptr<Dx12DescriptorHeapObject> mDescHeap;
@@ -52,6 +55,7 @@ private:
 	std::shared_ptr<ConstantBufferObject> mConstantBuffer;
 
 	void (VertexCustumController::*mUpdateDescHeap)();
+	void (VertexCustumController::*mDrawState)();
 	CBuffer mBuffer;
 };
 

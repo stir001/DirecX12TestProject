@@ -137,6 +137,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Scene\ChoseModeScene\ChoceModeScene.cpp" />
+    <ClCompile Include="Game\DataLoader\GameDataLoader.cpp" />
+    <ClCompile Include="Game\Scene\FreeCutScene\FreeCutScene.cpp" />
     <ClCompile Include="Game\GameObject\AxisViewer.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Phase\ChosePhase.cpp" />
     <ClCompile Include="Game\GameObject\GameObject.cpp" />
@@ -150,7 +153,10 @@
     <ClCompile Include="Game\Scene\GameScene\Phase\MovePrimitivePhase.cpp" />
     <ClCompile Include="Game\Utillity\LerpCalculator.cpp" />
     <ClCompile Include="Game\Extend\PrimitiveLine3DRootSignature.cpp" />
-    <ClCompile Include="ObbCollision.cpp" />
+    <ClCompile Include="Game\GameObject\ReMeshConverter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="sample\RigidCube.cpp" />
     <ClCompile Include="sample\NormalMapCube.cpp" />
     <ClCompile Include="Game\StarBreakApp.cpp" />
@@ -162,6 +168,9 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Scene\ChoseModeScene\ChoceModeScene.h" />
+    <ClInclude Include="Game\DataLoader\GameDataLoader.h" />
+    <ClInclude Include="Game\Scene\FreeCutScene\FreeCutScene.h" />
     <ClInclude Include="Game\GameObject\AxisViewer.h" />
     <ClInclude Include="Game\Scene\GameScene\Phase\ChosePhase.h" />
     <ClInclude Include="Game\GameObject\GameObject.h" />
@@ -175,7 +184,10 @@
     <ClInclude Include="Game\Scene\GameScene\Phase\MovePrimitivePhase.h" />
     <ClInclude Include="Game\Utillity\LerpCalculator.h" />
     <ClInclude Include="Game\Extend\PrimitiveLine3DRootSignature.h" />
-    <ClInclude Include="ObbCollision.h" />
+    <ClInclude Include="Game\GameObject\ReMeshConverter.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="sample\RigidCube.h" />
     <ClInclude Include="sample\NormalMapCube.h" />

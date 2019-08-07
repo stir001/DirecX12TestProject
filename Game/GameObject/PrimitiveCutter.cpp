@@ -56,7 +56,7 @@ int PrimitiveCutter::Sign(const float val)
 
 float PrimitiveCutter::DotNormal(const DirectX::XMFLOAT3& normal, const PrimitiveVertex& verts, const DirectX::XMFLOAT3& origin)
 {
-	return DotXMFloat3(normal, ConvertXMFloat4ToXMFloat3(verts.pos) - origin);
+	return Dot(normal, ConvertToXMFloat3(verts.pos) - origin);
 }
 
 void PrimitiveCutter::CutByFace(CutVerts& cut, const CutData& data)
@@ -224,8 +224,8 @@ std::tuple<PrimitiveVertex, PrimitiveVertex> PrimitiveCutter::GetNewVerts(const 
 	, const PrimitiveVertex & v1, const PrimitiveVertex & v2, const CutFace & face)
 {
 	//ç¿ïWÇÃïœâªó 
-	auto vec1 = ConvertXMFloat4ToXMFloat3(v1.pos - single.pos);
-	auto vec2 = ConvertXMFloat4ToXMFloat3(v2.pos - single.pos);
+	auto vec1 = ConvertToXMFloat3(v1.pos - single.pos);
+	auto vec2 = ConvertToXMFloat3(v2.pos - single.pos);
 
 	//uvÇÃïœâªó 
 	auto uv1vec = v1.uv - single.uv;
@@ -235,21 +235,21 @@ std::tuple<PrimitiveVertex, PrimitiveVertex> PrimitiveCutter::GetNewVerts(const 
 	auto normal1Vec = v1.normal - single.normal;
 	auto normal2Vec = v2.normal - single.normal;
 
-	auto singleLen = std::fabsf(DotXMFloat3(face.normal, face.origin - single.pos));
-	auto v1Len = std::fabsf(DotXMFloat3(face.normal, face.origin - v1.pos));
-	auto v2Len = std::fabsf(DotXMFloat3(face.normal, face.origin - v2.pos));
+	auto singleLen = std::fabsf(Dot(face.normal, face.origin - single.pos));
+	auto v1Len = std::fabsf(Dot(face.normal, face.origin - v1.pos));
+	auto v2Len = std::fabsf(Dot(face.normal, face.origin - v2.pos));
 
 	auto singleV1faceRate = singleLen / (singleLen + v1Len);
 	auto singleV2faceRate = singleLen / (singleLen + v2Len);
 
-	auto newVertPos1 = ConvertXMFloat4ToXMFloat3(single.pos + vec1 * singleV1faceRate);
-	auto newVertPos2 = ConvertXMFloat4ToXMFloat3(single.pos + vec2 * singleV2faceRate);
+	auto newVertPos1 = ConvertToXMFloat3(single.pos + vec1 * singleV1faceRate);
+	auto newVertPos2 = ConvertToXMFloat3(single.pos + vec2 * singleV2faceRate);
 
 	auto newVertUV1 = single.uv + uv1vec * singleV1faceRate;
 	auto newVertUV2 = single.uv + uv2vec * singleV2faceRate;
 
-	auto newNormal1 = ConvertXMFloat4ToXMFloat3(single.normal + normal1Vec * singleV1faceRate);
-	auto newNormal2 = ConvertXMFloat4ToXMFloat3(single.normal + normal2Vec * singleV2faceRate);
+	auto newNormal1 = ConvertToXMFloat3(single.normal + normal1Vec * singleV1faceRate);
+	auto newNormal2 = ConvertToXMFloat3(single.normal + normal2Vec * singleV2faceRate);
 
 	//êVãKí∏ì_ÇçÏê¨
 	auto newVert1 = PrimitiveVertex(newVertPos1, newNormal1, newVertUV1);
@@ -409,7 +409,7 @@ std::vector<unsigned int> PrimitiveCutter::CreateFaceIndex(std::vector<Primitive
 	unsigned int vertsNum = static_cast<unsigned int>(verts.size());
 	std::vector<unsigned int> indices(vertsNum + vertsNum / 2U);
 
-	const auto n = ConvertXMFloat3ToXMFloat4(normal);
+	const auto n = ConvertToXMFloat4(normal);
 	for (unsigned int i = 0; i < vertsNum; i += 2)
 	{
 		avePos += verts[i].pos;
@@ -428,7 +428,7 @@ std::vector<unsigned int> PrimitiveCutter::CreateFaceIndex(std::vector<Primitive
 
 	avePos /= static_cast<float>(vertsNum);
 	aveUV /= static_cast<float>(vertsNum);
-	auto aveVert = PrimitiveVertex(ConvertXMFloat4ToXMFloat3(avePos), normal, aveUV);
+	auto aveVert = PrimitiveVertex(ConvertToXMFloat3(avePos), normal, aveUV);
 	verts.push_back(aveVert);
 
 	return indices;

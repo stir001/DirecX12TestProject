@@ -7,7 +7,7 @@ NormalMapCube::NormalMapCube(float length, const std::string& normalMapPath) :
 	mCubeCtrl(PrimitiveCreator::Instance().CreateCubeNormalMap(length, normalMapPath)),
 	mRotaDeg(1.0f)
 {
-	mInstanceMatrix.push_back(ConvertXMMATRIXToXMFloat4x4(DirectX::XMMatrixIdentity()));
+	mInstanceMatrix.push_back(ConvertToXMFloat4x4(DirectX::XMMatrixIdentity()));
 }
 
 NormalMapCube::~NormalMapCube()

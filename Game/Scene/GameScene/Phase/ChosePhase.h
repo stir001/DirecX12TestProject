@@ -6,6 +6,7 @@
 class PhaseChanger;
 class GameObject;
 class LerpCalculator;
+class VertexCustumController;
 
 class ChosePhase :
 	public Phase
@@ -42,6 +43,7 @@ private:
 	std::shared_ptr<GameObject> mPlus;
 	std::shared_ptr<GameObject> mMinus;
 	std::unique_ptr<LerpCalculator> mLerp;
+	std::unique_ptr<VertexCustumController> mCustumCtrl;
 	DirectX::XMFLOAT3 mFirstVal;
 	unsigned int mFrameCounter;
 	unsigned int mGoalFrame;
@@ -52,6 +54,9 @@ private:
 	void UpdateChose(const DxInput& input);
 	void UpdateMoveOrigin(const DxInput& input);
 	void ChangeMoveOrigin();
+	void SetRayLine(const DxInput& input);
+	bool IsHitTriangle(const std::shared_ptr<GameObject>& gameObject, const DirectX::XMFLOAT2& screenPos);
+	bool IsHitSphare(const std::shared_ptr<GameObject>& gameObject, const DirectX::XMFLOAT2& screenPos, const float raidus);
 
 	void DrawChose();
 	void DrawMoveOrigin();

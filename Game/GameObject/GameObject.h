@@ -71,11 +71,32 @@ public:
 	*	@param[in]	data	再設定するPrimitiveObject
 	*/
 	void Reset(const std::shared_ptr<PrimitiveController>& ctrl, const std::shared_ptr<PrimitiveObject>& data);
+
+	/**
+	*	@brief	色を設定する
+	*	@param[in]	設定する色
+	*/
+	void SetColor(const DirectX::XMFLOAT3& color);
+
+	/**
+	*	当たり判定用の球の半径を取得する
+	*/
+	float GetCollisionRadius() const;
 private:
+	/**
+	*	当たり判定用球の半径を設定する
+	*/
+	void SetCollisionRadius();
+
 	std::shared_ptr<PrimitiveController> mCtrl;
 	std::shared_ptr<PrimitiveObject> mData;
 
 	DirectX::XMFLOAT3 mVel;
 	DirectX::XMFLOAT3 mPos;
+
+	/**
+	*	大まかな当たり判定時に用いる全体を囲む円の半径
+	*/
+	float mCollisionRadius;
 };
 

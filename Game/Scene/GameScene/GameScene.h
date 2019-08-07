@@ -2,10 +2,12 @@
 #include <Game/Scene/Scene.h>
 #include <memory>
 #include <DirectXMath.h>
+#include <string>
 
 class GameObject;
 class Phase;
 class PhaseChanger;
+class ImageController;
 
 class GameScene :
 	public Scene

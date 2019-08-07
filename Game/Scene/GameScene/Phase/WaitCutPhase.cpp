@@ -64,8 +64,6 @@ void WaitCutPhase::Cut(const DirectX::XMFLOAT3& origin, const DirectX::XMFLOAT3 
 	auto plusData = std::make_shared<FreePrimitive>(cutVerts.plus.verts, cutVerts.plus.indices);
 	auto minusData = std::make_shared<FreePrimitive>(cutVerts.minus.verts, cutVerts.minus.indices);
 
-	const float length = 5.0f;
-
 	mPlus = std::make_shared<GameObject>(PrimitiveCreator::Instance().CreateCustumPrimitve(plusData), plusData);
 	mMinus = std::make_shared<GameObject>(PrimitiveCreator::Instance().CreateCustumPrimitve(minusData), minusData);
 
@@ -98,17 +96,7 @@ DirectX::XMFLOAT3 WaitCutPhase::RePlaceVertsPos(std::vector<PrimitiveVertex>& ve
 	{
 		v.pos -= center;
 	}
-	return ConvertXMFloat4ToXMFloat3(center);
-}
-
-std::tuple<DirectX::XMFLOAT3, DirectX::XMFLOAT3> WaitCutPhase::GetCutFace() const
-{
-	//TODO:‰¼‚Ìƒ‰ƒ“ƒ_ƒ€ŽÀ‘•‚È‚Ì‚Å“ü—Í‚©‚ç’l‚ð“¾‚é‚æ‚¤‚É‚·‚é‚±‚Æ
-	auto random = RandomGenerator(-1.0f, 1.0f);
-	DirectX::XMFLOAT3 normal = { random.Get(),random.Get(),random.Get() };
-	normal = NormalizeXMFloat3(normal);
-	auto origin = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-	return { origin, normal };
+	return ConvertToXMFloat3(center);
 }
 
 void WaitCutPhase::ChoseNormal(const DxInput& input)
@@ -129,21 +117,31 @@ void WaitCutPhase::UpdateRotaAxis(const DxInput& input)
 
 	auto hit = ScreenRayCast::RayCastPlane(mousePos, origin, mRotaAxis).hitPos;
 
-	auto hitVec = NormalizeXMFloat3(hit - origin);
-	auto preVec = NormalizeXMFloat3(mHitPos - origin);
+	auto hitVec = Normalize(hit - origin);
+	auto preVec = Normalize(mHitPos - origin);
 
-	if (hitVec == preVec)
+	if (abs(Dot(hitVec, preVec)) > 0.99f)
 	{
 		return;
 	}
 
-	auto rad = -acosf(DotXMFloat3(hitVec, preVec));
-	auto axis = NormalizeXMFloat3(CrossXMFloat3(hitVec, preVec));
+	auto div = 16.0f;
+	auto piDiv = DirectX::XM_PI / div;
+
+	auto rad = acosf(Dot(preVec, hitVec));
+
+	rad = piDiv * static_cast<float>(static_cast<int>((rad / piDiv)));
+	if (rad == 0.0f)
+	{
+		return;
+	}
+
+	auto axis = Normalize(Cross(preVec, hitVec));
 	auto mat = CreateQuoternion(axis, rad);
 
 	mNormal *= mat;
 	mHitPos = hit;
-	Cut(mOrigin, mNormal);
+	Cut(origin, mNormal);
 }
 
 void WaitCutPhase::UpdateCatchAxis(const DxInput & input)

@@ -57,15 +57,15 @@ AxisViewer::HoldAxis AxisViewer::CatchAxisUI(const DirectX::XMFLOAT2& mousePos)
 
 	auto xNormal = DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f);
 	auto xHit = ScreenRayCast::RayCastPlane(mousePos, origin, xNormal);
-	float xRadius = GetLengthXMFloat3(xHit.hitPos - origin);
+	float xRadius = GetLength(xHit.hitPos - origin);
 
 	auto yNormal = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 	auto yHit = ScreenRayCast::RayCastPlane(mousePos, origin, yNormal);
-	float yRadius = GetLengthXMFloat3(yHit.hitPos - origin);
+	float yRadius = GetLength(yHit.hitPos - origin);
 
 	auto zNormal = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
 	auto zHit = ScreenRayCast::RayCastPlane(mousePos, origin, zNormal);
-	float zRadius = GetLengthXMFloat3(zHit.hitPos - origin);
+	float zRadius = GetLength(zHit.hitPos - origin);
 
 	float length = FLT_MAX;
 	const float unit = 20.0f;
